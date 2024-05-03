@@ -1,0 +1,1314 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		340AAFF12BA0A5CC00EB69F4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340AAFF02BA0A5CC00EB69F4 /* NotificationService.swift */; };
+		340AAFF52BA0A5CC00EB69F4 /* NotificationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 340AAFEE2BA0A5CB00EB69F4 /* NotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		340AAFFB2BA2406D00EB69F4 /* APIRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340AAFFA2BA2406C00EB69F4 /* APIRequestor.swift */; };
+		340AAFFD2BA37E8C00EB69F4 /* RTSPPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340AAFFC2BA37E8C00EB69F4 /* RTSPPlayer.swift */; };
+		340AAFFF2BA38A4D00EB69F4 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AAFFE2BA38A4D00EB69F4 /* AudioToolbox.framework */; };
+		340AB0012BA38A5800EB69F4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0002BA38A5800EB69F4 /* AVFoundation.framework */; };
+		340AB0032BA38A6300EB69F4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0022BA38A6300EB69F4 /* CFNetwork.framework */; };
+		340AB0052BA38A6D00EB69F4 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0042BA38A6D00EB69F4 /* CoreFoundation.framework */; };
+		340AB0072BA38A7700EB69F4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0062BA38A7700EB69F4 /* CoreGraphics.framework */; };
+		340AB0092BA38A8300EB69F4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0082BA38A8200EB69F4 /* CoreMedia.framework */; };
+		340AB00B2BA38A8E00EB69F4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB00A2BA38A8E00EB69F4 /* CoreText.framework */; };
+		340AB00D2BA38A9900EB69F4 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB00C2BA38A9900EB69F4 /* CoreVideo.framework */; };
+		340AB00F2BA38AA600EB69F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB00E2BA38AA600EB69F4 /* Foundation.framework */; };
+		340AB0112BA38AB200EB69F4 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0102BA38AB200EB69F4 /* libbz2.tbd */; };
+		340AB0132BA38ABF00EB69F4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0122BA38ABF00EB69F4 /* libc++.tbd */; };
+		340AB0152BA38AC900EB69F4 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0142BA38AC900EB69F4 /* libiconv.tbd */; };
+		340AB0172BA38AD300EB69F4 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0162BA38AD300EB69F4 /* libxml2.tbd */; };
+		340AB0192BA38ADD00EB69F4 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0182BA38ADD00EB69F4 /* OpenGLES.framework */; };
+		340AB01B2BA38AE900EB69F4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB01A2BA38AE900EB69F4 /* QuartzCore.framework */; };
+		340AB01D2BA38AF300EB69F4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB01C2BA38AF300EB69F4 /* Security.framework */; };
+		340AB01F2BA38AFF00EB69F4 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB01E2BA38AFF00EB69F4 /* VideoToolbox.framework */; };
+		340AB0212BA38B0900EB69F4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0202BA38B0900EB69F4 /* UIKit.framework */; };
+		343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343676B82BA3C48400BD765F /* HLSPlayer.swift */; };
+		34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34640F2B2BA4D3430085F726 /* AVResource.swift */; };
+		346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542DF2B9783860037BA1D /* ViewEventsHistory.swift */; };
+		346542E22B982EAD0037BA1D /* ViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542E12B982EAD0037BA1D /* ViewTest.swift */; };
+		346542E42B983CE60037BA1D /* ViewEventInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542E32B983CE60037BA1D /* ViewEventInformation.swift */; };
+		348333A22BB8AB9700ED1DF2 /* RTSPPlayer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333A12BB8AB9700ED1DF2 /* RTSPPlayer2.swift */; };
+		348333C02BB8DFC600ED1DF2 /* ViewLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333BF2BB8DFC600ED1DF2 /* ViewLive.swift */; };
+		348333D42BBB1ACB00ED1DF2 /* NVRConfigurationCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333D32BBB1ACA00ED1DF2 /* NVRConfigurationCall.swift */; };
+		348333D72BBB241E00ED1DF2 /* ViewNVRDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333D62BBB241E00ED1DF2 /* ViewNVRDetails.swift */; };
+		348333D92BBCAF9300ED1DF2 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333D82BBCAF9300ED1DF2 /* Helpers.swift */; };
+		348333DB2BC04CCD00ED1DF2 /* ViewCameraDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333DA2BC04CCD00ED1DF2 /* ViewCameraDetails.swift */; };
+		348AB7B82BA54B33001ADE6C /* ViewEventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */; };
+		348AB7BA2BA55E58001ADE6C /* ViewEventUpdateDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348AB7B92BA55E58001ADE6C /* ViewEventUpdateDetails.swift */; };
+		348C50AC2BB1ED7900A15446 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 348C50AB2BB1ED7900A15446 /* .gitignore */; };
+		34BBA4762BAB449C00A6004E /* ViewFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4752BAB449C00A6004E /* ViewFilter.swift */; };
+		34BBA4782BAB45C300A6004E /* EventFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4772BAB45C300A6004E /* EventFilter.swift */; };
+		34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4792BABC40C00A6004E /* AppDelegate.swift */; };
+		34BBA47F2BAE164400A6004E /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA47E2BAE164400A6004E /* DataController.swift */; };
+		34BBA4812BAE3A9000A6004E /* EventStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4802BAE3A9000A6004E /* EventStorage.swift */; };
+		34BBA48E2BAEA14F00A6004E /* ViewEventSlideShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA48D2BAEA14F00A6004E /* ViewEventSlideShow.swift */; };
+		34D5EFD62B92AB1F002A84B0 /* NVR_ViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFD52B92AB1F002A84B0 /* NVR_ViewerApp.swift */; };
+		34D5EFD82B92AB1F002A84B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFD72B92AB1F002A84B0 /* ContentView.swift */; };
+		34D5EFDA2B92AB22002A84B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D5EFD92B92AB22002A84B0 /* Assets.xcassets */; };
+		34D5EFDD2B92AB22002A84B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D5EFDC2B92AB22002A84B0 /* Preview Assets.xcassets */; };
+		34D5EFE72B92AB76002A84B0 /* ViewEventListHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFE62B92AB75002A84B0 /* ViewEventListHome.swift */; };
+		34D5EFE92B92ABA4002A84B0 /* ViewCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFE82B92ABA4002A84B0 /* ViewCamera.swift */; };
+		34D5EFEB2B92ABDC002A84B0 /* ViewSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFEA2B92ABDC002A84B0 /* ViewSettings.swift */; };
+		34D5EFED2B92AC0C002A84B0 /* ViewConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFEC2B92AC0C002A84B0 /* ViewConnection.swift */; };
+		34D5EFF12B92B1CB002A84B0 /* MQTTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFF02B92B1CB002A84B0 /* MQTTManager.swift */; };
+		34D5EFF32B92B1DF002A84B0 /* MQTTState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFF22B92B1DF002A84B0 /* MQTTState.swift */; };
+		34D5EFF92B92B374002A84B0 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFF82B92B374002A84B0 /* Extension.swift */; };
+		34D5EFFB2B92B3DB002A84B0 /* ViewEventDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFFA2B92B3DB002A84B0 /* ViewEventDetail.swift */; };
+		34D5EFFD2B92B3FD002A84B0 /* ViewLiveEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFFC2B92B3FD002A84B0 /* ViewLiveEvent.swift */; };
+		34D5EFFF2B92B419002A84B0 /* ViewPlayVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFFE2B92B419002A84B0 /* ViewPlayVideo.swift */; };
+		34D5F0012B92B442002A84B0 /* ViewUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0002B92B442002A84B0 /* ViewUIImage.swift */; };
+		34D5F0032B92B453002A84B0 /* ViewUIImageFull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0022B92B453002A84B0 /* ViewUIImageFull.swift */; };
+		34D5F0052B92B490002A84B0 /* APIBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0042B92B490002A84B0 /* APIBuilder.swift */; };
+		34D5F0072B92B4C3002A84B0 /* TopicFrigateEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */; };
+		34D5F0092B92B4FA002A84B0 /* EndpointOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0082B92B4FA002A84B0 /* EndpointOptions.swift */; };
+		34D5F00C2B92B57A002A84B0 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F00B2B92B57A002A84B0 /* Enums.swift */; };
+		34D5F0132B950F34002A84B0 /* MQTTConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0122B950F34002A84B0 /* MQTTConfig.swift */; };
+		34D5F0152B9510AC002A84B0 /* NVRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0142B9510AB002A84B0 /* NVRConfig.swift */; };
+		34D5F0172B963F07002A84B0 /* ImageContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0162B963F06002A84B0 /* ImageContainer.swift */; };
+		34D5F0192B968EEF002A84B0 /* ViewUIImageByData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0182B968EEF002A84B0 /* ViewUIImageByData.swift */; };
+		34D925282BB48FC70005DB70 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925272BB48FC70005DB70 /* SQLite */; };
+		34D9253D2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 34D9253C2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion */; };
+		34D9253F2BB770B10005DB70 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 34D9253E2BB770B10005DB70 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		34D925412BB770B10005DB70 /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925402BB770B10005DB70 /* FirebaseAppDistribution-Beta */; };
+		34D925432BB770B10005DB70 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925422BB770B10005DB70 /* FirebaseAuthCombine-Community */; };
+		34D925452BB770B10005DB70 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925442BB770B10005DB70 /* FirebaseDatabase */; };
+		34D925472BB770B10005DB70 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925462BB770B10005DB70 /* FirebaseDatabaseSwift */; };
+		34D925492BB770B10005DB70 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925482BB770B10005DB70 /* FirebaseDynamicLinks */; };
+		34D9254B2BB770B10005DB70 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 34D9254A2BB770B10005DB70 /* FirebaseFirestore */; };
+		34D9254D2BB770B10005DB70 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 34D9254C2BB770B10005DB70 /* FirebaseFirestoreCombine-Community */; };
+		34D9254F2BB770B10005DB70 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34D9254E2BB770B10005DB70 /* FirebaseFirestoreSwift */; };
+		34D925512BB770B10005DB70 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925502BB770B10005DB70 /* FirebaseFunctions */; };
+		34D925532BB770B10005DB70 /* FirebaseFunctionsCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925522BB770B10005DB70 /* FirebaseFunctionsCombine-Community */; };
+		34D925552BB770B10005DB70 /* FirebaseInstallations in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925542BB770B10005DB70 /* FirebaseInstallations */; };
+		34D925572BB770B10005DB70 /* FirebaseMLModelDownloader in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925562BB770B10005DB70 /* FirebaseMLModelDownloader */; };
+		34D925592BB770B10005DB70 /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 34D925582BB770B10005DB70 /* FirebasePerformance */; };
+		34E544EF2B9A721300137F34 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E544EE2B9A721300137F34 /* NotificationHandler.swift */; };
+		34E544F32B9ABD8C00137F34 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E544F22B9ABD8C00137F34 /* NotificationManager.swift */; };
+		34E545632B9ADA0800137F34 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34E545622B9ADA0800137F34 /* GoogleService-Info.plist */; };
+		34F1D7652BE40D4300FE14CD /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7642BE40D4300FE14CD /* FirebaseAnalytics */; };
+		34F1D7672BE40D4300FE14CD /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7662BE40D4300FE14CD /* FirebaseAnalyticsOnDeviceConversion */; };
+		34F1D7692BE40D4300FE14CD /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7682BE40D4300FE14CD /* FirebaseAnalyticsSwift */; };
+		34F1D76B2BE40D4300FE14CD /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D76A2BE40D4300FE14CD /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		34F1D76D2BE40D4300FE14CD /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D76C2BE40D4300FE14CD /* FirebaseAppCheck */; };
+		34F1D76F2BE40D4300FE14CD /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D76E2BE40D4300FE14CD /* FirebaseAppDistribution-Beta */; };
+		34F1D7712BE40D4300FE14CD /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7702BE40D4300FE14CD /* FirebaseAuth */; };
+		34F1D7732BE40D4300FE14CD /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7722BE40D4300FE14CD /* FirebaseAuthCombine-Community */; };
+		34F1D7752BE40D4300FE14CD /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7742BE40D4300FE14CD /* FirebaseCrashlytics */; };
+		34F1D7772BE40D4300FE14CD /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7762BE40D4300FE14CD /* FirebaseDatabase */; };
+		34F1D7792BE40D4300FE14CD /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7782BE40D4300FE14CD /* FirebaseDatabaseSwift */; };
+		34F1D77B2BE40D4300FE14CD /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D77A2BE40D4300FE14CD /* FirebaseDynamicLinks */; };
+		34F1D77D2BE40D4300FE14CD /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D77C2BE40D4300FE14CD /* FirebaseFirestore */; };
+		34F1D77F2BE40D4300FE14CD /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D77E2BE40D4300FE14CD /* FirebaseFirestoreCombine-Community */; };
+		34F1D7812BE40D4300FE14CD /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7802BE40D4300FE14CD /* FirebaseFirestoreSwift */; };
+		34F1D7832BE40D4300FE14CD /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7822BE40D4300FE14CD /* FirebaseFunctions */; };
+		34F1D7852BE40D4300FE14CD /* FirebaseFunctionsCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7842BE40D4300FE14CD /* FirebaseFunctionsCombine-Community */; };
+		34F1D7872BE40D4300FE14CD /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7862BE40D4300FE14CD /* FirebaseInAppMessaging-Beta */; };
+		34F1D7892BE40D4300FE14CD /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7882BE40D4300FE14CD /* FirebaseInAppMessagingSwift-Beta */; };
+		34F1D78B2BE40D4300FE14CD /* FirebaseInstallations in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D78A2BE40D4300FE14CD /* FirebaseInstallations */; };
+		34F1D78D2BE40D4300FE14CD /* FirebaseMLModelDownloader in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D78C2BE40D4300FE14CD /* FirebaseMLModelDownloader */; };
+		34F1D78F2BE40D4300FE14CD /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D78E2BE40D4300FE14CD /* FirebaseMessaging */; };
+		34F1D7912BE40D4300FE14CD /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7902BE40D4300FE14CD /* FirebasePerformance */; };
+		34F1D7932BE40D4300FE14CD /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7922BE40D4300FE14CD /* FirebaseRemoteConfig */; };
+		34F1D7952BE40D4300FE14CD /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7942BE40D4300FE14CD /* FirebaseRemoteConfigSwift */; };
+		34F1D7972BE40D4300FE14CD /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7962BE40D4300FE14CD /* FirebaseStorage */; };
+		34F1D7992BE40D4300FE14CD /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7982BE40D4300FE14CD /* FirebaseStorageCombine-Community */; };
+		4273E5C51ED170CAF443AAE4 /* Pods_NVR_Viewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		340AAFF32BA0A5CC00EB69F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34D5EFCA2B92AB1F002A84B0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 340AAFED2BA0A5CB00EB69F4;
+			remoteInfo = NotificationExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		340AAFF62BA0A5CC00EB69F4 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				340AAFF52BA0A5CC00EB69F4 /* NotificationExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0F4C41C96EEF1EA69ED88916 /* Pods-NVR Viewer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NVR Viewer.release.xcconfig"; path = "Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer.release.xcconfig"; sourceTree = "<group>"; };
+		340AAFEE2BA0A5CB00EB69F4 /* NotificationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		340AAFF02BA0A5CC00EB69F4 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		340AAFF22BA0A5CC00EB69F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		340AAFFA2BA2406C00EB69F4 /* APIRequestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequestor.swift; sourceTree = "<group>"; };
+		340AAFFC2BA37E8C00EB69F4 /* RTSPPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTSPPlayer.swift; sourceTree = "<group>"; };
+		340AAFFE2BA38A4D00EB69F4 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		340AB0002BA38A5800EB69F4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		340AB0022BA38A6300EB69F4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		340AB0042BA38A6D00EB69F4 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		340AB0062BA38A7700EB69F4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		340AB0082BA38A8200EB69F4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		340AB00A2BA38A8E00EB69F4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		340AB00C2BA38A9900EB69F4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		340AB00E2BA38AA600EB69F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		340AB0102BA38AB200EB69F4 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
+		340AB0122BA38ABF00EB69F4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		340AB0142BA38AC900EB69F4 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		340AB0162BA38AD300EB69F4 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		340AB0182BA38ADD00EB69F4 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		340AB01A2BA38AE900EB69F4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		340AB01C2BA38AF300EB69F4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		340AB01E2BA38AFF00EB69F4 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		340AB0202BA38B0900EB69F4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		343676B82BA3C48400BD765F /* HLSPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlayer.swift; sourceTree = "<group>"; };
+		34640F2B2BA4D3430085F726 /* AVResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVResource.swift; sourceTree = "<group>"; };
+		346542DF2B9783860037BA1D /* ViewEventsHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventsHistory.swift; sourceTree = "<group>"; };
+		346542E12B982EAD0037BA1D /* ViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTest.swift; sourceTree = "<group>"; };
+		346542E32B983CE60037BA1D /* ViewEventInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventInformation.swift; sourceTree = "<group>"; };
+		346542E52B9982D70037BA1D /* NVR-Viewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "NVR-Viewer-Info.plist"; sourceTree = SOURCE_ROOT; };
+		348333A12BB8AB9700ED1DF2 /* RTSPPlayer2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTSPPlayer2.swift; sourceTree = "<group>"; };
+		348333BF2BB8DFC600ED1DF2 /* ViewLive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLive.swift; sourceTree = "<group>"; };
+		348333D32BBB1ACA00ED1DF2 /* NVRConfigurationCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVRConfigurationCall.swift; sourceTree = "<group>"; };
+		348333D62BBB241E00ED1DF2 /* ViewNVRDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewNVRDetails.swift; sourceTree = "<group>"; };
+		348333D82BBCAF9300ED1DF2 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		348333DA2BC04CCD00ED1DF2 /* ViewCameraDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCameraDetails.swift; sourceTree = "<group>"; };
+		348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventCard.swift; sourceTree = "<group>"; };
+		348AB7B92BA55E58001ADE6C /* ViewEventUpdateDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventUpdateDetails.swift; sourceTree = "<group>"; };
+		348C50AB2BB1ED7900A15446 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		349E9F432B9BC5EC002F83C5 /* NVR Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "NVR Viewer.entitlements"; sourceTree = "<group>"; };
+		34BBA4752BAB449C00A6004E /* ViewFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFilter.swift; sourceTree = "<group>"; };
+		34BBA4772BAB45C300A6004E /* EventFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFilter.swift; sourceTree = "<group>"; };
+		34BBA4792BABC40C00A6004E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		34BBA47E2BAE164400A6004E /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		34BBA4802BAE3A9000A6004E /* EventStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStorage.swift; sourceTree = "<group>"; };
+		34BBA48D2BAEA14F00A6004E /* ViewEventSlideShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventSlideShow.swift; sourceTree = "<group>"; };
+		34D5EFD22B92AB1F002A84B0 /* NVR Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NVR Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D5EFD52B92AB1F002A84B0 /* NVR_ViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVR_ViewerApp.swift; sourceTree = "<group>"; };
+		34D5EFD72B92AB1F002A84B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		34D5EFD92B92AB22002A84B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		34D5EFDC2B92AB22002A84B0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		34D5EFE62B92AB75002A84B0 /* ViewEventListHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventListHome.swift; sourceTree = "<group>"; };
+		34D5EFE82B92ABA4002A84B0 /* ViewCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCamera.swift; sourceTree = "<group>"; };
+		34D5EFEA2B92ABDC002A84B0 /* ViewSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSettings.swift; sourceTree = "<group>"; };
+		34D5EFEC2B92AC0C002A84B0 /* ViewConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConnection.swift; sourceTree = "<group>"; };
+		34D5EFF02B92B1CB002A84B0 /* MQTTManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTManager.swift; sourceTree = "<group>"; };
+		34D5EFF22B92B1DF002A84B0 /* MQTTState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTState.swift; sourceTree = "<group>"; };
+		34D5EFF82B92B374002A84B0 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		34D5EFFA2B92B3DB002A84B0 /* ViewEventDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventDetail.swift; sourceTree = "<group>"; };
+		34D5EFFC2B92B3FD002A84B0 /* ViewLiveEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLiveEvent.swift; sourceTree = "<group>"; };
+		34D5EFFE2B92B419002A84B0 /* ViewPlayVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPlayVideo.swift; sourceTree = "<group>"; };
+		34D5F0002B92B442002A84B0 /* ViewUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUIImage.swift; sourceTree = "<group>"; };
+		34D5F0022B92B453002A84B0 /* ViewUIImageFull.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUIImageFull.swift; sourceTree = "<group>"; };
+		34D5F0042B92B490002A84B0 /* APIBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIBuilder.swift; sourceTree = "<group>"; };
+		34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicFrigateEvent.swift; sourceTree = "<group>"; };
+		34D5F0082B92B4FA002A84B0 /* EndpointOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointOptions.swift; sourceTree = "<group>"; };
+		34D5F00B2B92B57A002A84B0 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		34D5F0122B950F34002A84B0 /* MQTTConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTConfig.swift; sourceTree = "<group>"; };
+		34D5F0142B9510AB002A84B0 /* NVRConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVRConfig.swift; sourceTree = "<group>"; };
+		34D5F0162B963F06002A84B0 /* ImageContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainer.swift; sourceTree = "<group>"; };
+		34D5F0182B968EEF002A84B0 /* ViewUIImageByData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUIImageByData.swift; sourceTree = "<group>"; };
+		34E544EE2B9A721300137F34 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		34E544F22B9ABD8C00137F34 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		34E545622B9ADA0800137F34 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		86AA419A5283043C2EB5342F /* Pods-NVR Viewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NVR Viewer.debug.xcconfig"; path = "Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer.debug.xcconfig"; sourceTree = "<group>"; };
+		BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NVR_Viewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		340AAFEB2BA0A5CB00EB69F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34D5EFCF2B92AB1F002A84B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34F1D7832BE40D4300FE14CD /* FirebaseFunctions in Frameworks */,
+				34D925592BB770B10005DB70 /* FirebasePerformance in Frameworks */,
+				34D9253F2BB770B10005DB70 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				34F1D76F2BE40D4300FE14CD /* FirebaseAppDistribution-Beta in Frameworks */,
+				34F1D7912BE40D4300FE14CD /* FirebasePerformance in Frameworks */,
+				34F1D7732BE40D4300FE14CD /* FirebaseAuthCombine-Community in Frameworks */,
+				340AB0212BA38B0900EB69F4 /* UIKit.framework in Frameworks */,
+				34F1D7812BE40D4300FE14CD /* FirebaseFirestoreSwift in Frameworks */,
+				34F1D77D2BE40D4300FE14CD /* FirebaseFirestore in Frameworks */,
+				34F1D7752BE40D4300FE14CD /* FirebaseCrashlytics in Frameworks */,
+				34D925412BB770B10005DB70 /* FirebaseAppDistribution-Beta in Frameworks */,
+				340AB01F2BA38AFF00EB69F4 /* VideoToolbox.framework in Frameworks */,
+				34D9254F2BB770B10005DB70 /* FirebaseFirestoreSwift in Frameworks */,
+				34D9254B2BB770B10005DB70 /* FirebaseFirestore in Frameworks */,
+				340AB01D2BA38AF300EB69F4 /* Security.framework in Frameworks */,
+				34F1D76D2BE40D4300FE14CD /* FirebaseAppCheck in Frameworks */,
+				34D925282BB48FC70005DB70 /* SQLite in Frameworks */,
+				34D925512BB770B10005DB70 /* FirebaseFunctions in Frameworks */,
+				340AB01B2BA38AE900EB69F4 /* QuartzCore.framework in Frameworks */,
+				34F1D7772BE40D4300FE14CD /* FirebaseDatabase in Frameworks */,
+				34D925552BB770B10005DB70 /* FirebaseInstallations in Frameworks */,
+				34F1D7872BE40D4300FE14CD /* FirebaseInAppMessaging-Beta in Frameworks */,
+				34F1D7692BE40D4300FE14CD /* FirebaseAnalyticsSwift in Frameworks */,
+				34F1D76B2BE40D4300FE14CD /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				34F1D77F2BE40D4300FE14CD /* FirebaseFirestoreCombine-Community in Frameworks */,
+				340AB0192BA38ADD00EB69F4 /* OpenGLES.framework in Frameworks */,
+				340AB0172BA38AD300EB69F4 /* libxml2.tbd in Frameworks */,
+				340AB0152BA38AC900EB69F4 /* libiconv.tbd in Frameworks */,
+				34F1D78F2BE40D4300FE14CD /* FirebaseMessaging in Frameworks */,
+				34F1D78D2BE40D4300FE14CD /* FirebaseMLModelDownloader in Frameworks */,
+				34F1D7712BE40D4300FE14CD /* FirebaseAuth in Frameworks */,
+				340AB0132BA38ABF00EB69F4 /* libc++.tbd in Frameworks */,
+				34D925472BB770B10005DB70 /* FirebaseDatabaseSwift in Frameworks */,
+				340AB0112BA38AB200EB69F4 /* libbz2.tbd in Frameworks */,
+				34D9253D2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				34F1D7972BE40D4300FE14CD /* FirebaseStorage in Frameworks */,
+				340AB00F2BA38AA600EB69F4 /* Foundation.framework in Frameworks */,
+				34D925492BB770B10005DB70 /* FirebaseDynamicLinks in Frameworks */,
+				34D925532BB770B10005DB70 /* FirebaseFunctionsCombine-Community in Frameworks */,
+				34F1D7672BE40D4300FE14CD /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				340AB00D2BA38A9900EB69F4 /* CoreVideo.framework in Frameworks */,
+				34D925572BB770B10005DB70 /* FirebaseMLModelDownloader in Frameworks */,
+				340AB00B2BA38A8E00EB69F4 /* CoreText.framework in Frameworks */,
+				34F1D7792BE40D4300FE14CD /* FirebaseDatabaseSwift in Frameworks */,
+				340AB0092BA38A8300EB69F4 /* CoreMedia.framework in Frameworks */,
+				34F1D7652BE40D4300FE14CD /* FirebaseAnalytics in Frameworks */,
+				34F1D7932BE40D4300FE14CD /* FirebaseRemoteConfig in Frameworks */,
+				340AB0072BA38A7700EB69F4 /* CoreGraphics.framework in Frameworks */,
+				34F1D77B2BE40D4300FE14CD /* FirebaseDynamicLinks in Frameworks */,
+				34F1D78B2BE40D4300FE14CD /* FirebaseInstallations in Frameworks */,
+				340AB0052BA38A6D00EB69F4 /* CoreFoundation.framework in Frameworks */,
+				340AB0032BA38A6300EB69F4 /* CFNetwork.framework in Frameworks */,
+				340AB0012BA38A5800EB69F4 /* AVFoundation.framework in Frameworks */,
+				340AAFFF2BA38A4D00EB69F4 /* AudioToolbox.framework in Frameworks */,
+				34F1D7852BE40D4300FE14CD /* FirebaseFunctionsCombine-Community in Frameworks */,
+				34D9254D2BB770B10005DB70 /* FirebaseFirestoreCombine-Community in Frameworks */,
+				34D925452BB770B10005DB70 /* FirebaseDatabase in Frameworks */,
+				4273E5C51ED170CAF443AAE4 /* Pods_NVR_Viewer.framework in Frameworks */,
+				34F1D7992BE40D4300FE14CD /* FirebaseStorageCombine-Community in Frameworks */,
+				34F1D7952BE40D4300FE14CD /* FirebaseRemoteConfigSwift in Frameworks */,
+				34F1D7892BE40D4300FE14CD /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
+				34D925432BB770B10005DB70 /* FirebaseAuthCombine-Community in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		340AAFEF2BA0A5CC00EB69F4 /* NotificationExtension */ = {
+			isa = PBXGroup;
+			children = (
+				340AAFF02BA0A5CC00EB69F4 /* NotificationService.swift */,
+				340AAFF22BA0A5CC00EB69F4 /* Info.plist */,
+			);
+			path = NotificationExtension;
+			sourceTree = "<group>";
+		};
+		34640F2D2BA4DB870085F726 /* NotUsed */ = {
+			isa = PBXGroup;
+			children = (
+				348AB7B92BA55E58001ADE6C /* ViewEventUpdateDetails.swift */,
+				346542E32B983CE60037BA1D /* ViewEventInformation.swift */,
+				34D5F0182B968EEF002A84B0 /* ViewUIImageByData.swift */,
+			);
+			path = NotUsed;
+			sourceTree = "<group>";
+		};
+		348333BE2BB8DFB600ED1DF2 /* Live */ = {
+			isa = PBXGroup;
+			children = (
+				348333BF2BB8DFC600ED1DF2 /* ViewLive.swift */,
+			);
+			path = Live;
+			sourceTree = "<group>";
+		};
+		348333D52BBB240900ED1DF2 /* NVR */ = {
+			isa = PBXGroup;
+			children = (
+				348333D62BBB241E00ED1DF2 /* ViewNVRDetails.swift */,
+				348333DA2BC04CCD00ED1DF2 /* ViewCameraDetails.swift */,
+			);
+			path = NVR;
+			sourceTree = "<group>";
+		};
+		348C50AD2BB2445A00A15446 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				34BBA4792BABC40C00A6004E /* AppDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		349924CC2BA7483200251309 /* Subs */ = {
+			isa = PBXGroup;
+			children = (
+				34D5F0022B92B453002A84B0 /* ViewUIImageFull.swift */,
+				34D5F0002B92B442002A84B0 /* ViewUIImage.swift */,
+			);
+			path = Subs;
+			sourceTree = "<group>";
+		};
+		34D5EFC92B92AB1F002A84B0 = {
+			isa = PBXGroup;
+			children = (
+				348C50AB2BB1ED7900A15446 /* .gitignore */,
+				34D5EFD42B92AB1F002A84B0 /* NVR Viewer */,
+				340AAFEF2BA0A5CC00EB69F4 /* NotificationExtension */,
+				34D5EFD32B92AB1F002A84B0 /* Products */,
+				C4942406091A6E8B2305FF72 /* Pods */,
+				3D31F0A831BCC9F625F7166E /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		34D5EFD32B92AB1F002A84B0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34D5EFD22B92AB1F002A84B0 /* NVR Viewer.app */,
+				340AAFEE2BA0A5CB00EB69F4 /* NotificationExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34D5EFD42B92AB1F002A84B0 /* NVR Viewer */ = {
+			isa = PBXGroup;
+			children = (
+				349E9F432B9BC5EC002F83C5 /* NVR Viewer.entitlements */,
+				34E545622B9ADA0800137F34 /* GoogleService-Info.plist */,
+				346542E52B9982D70037BA1D /* NVR-Viewer-Info.plist */,
+				348C50AD2BB2445A00A15446 /* Delegates */,
+				34D5F00A2B92B56E002A84B0 /* Enum */,
+				34D5EFEF2B92B190002A84B0 /* Extension */,
+				34D5EFE52B92AB33002A84B0 /* ViewModel */,
+				34D5EFE42B92AB2D002A84B0 /* Model */,
+				34D5EFE32B92AB29002A84B0 /* View */,
+				34D5EFD52B92AB1F002A84B0 /* NVR_ViewerApp.swift */,
+				34D5EFD72B92AB1F002A84B0 /* ContentView.swift */,
+				34D5EFD92B92AB22002A84B0 /* Assets.xcassets */,
+				34D5EFDB2B92AB22002A84B0 /* Preview Content */,
+			);
+			path = "NVR Viewer";
+			sourceTree = "<group>";
+		};
+		34D5EFDB2B92AB22002A84B0 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				34D5EFDC2B92AB22002A84B0 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		34D5EFE32B92AB29002A84B0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				348333D52BBB240900ED1DF2 /* NVR */,
+				348333BE2BB8DFB600ED1DF2 /* Live */,
+				34D5F00E2B940DFF002A84B0 /* Camera */,
+				34D5F0102B940E23002A84B0 /* Connection */,
+				34D5F0112B940E31002A84B0 /* Events */,
+				34D5F00F2B940E0E002A84B0 /* Settings */,
+				346542E12B982EAD0037BA1D /* ViewTest.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		34D5EFE42B92AB2D002A84B0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				34BBA4772BAB45C300A6004E /* EventFilter.swift */,
+				34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */,
+				34D5F0082B92B4FA002A84B0 /* EndpointOptions.swift */,
+				34D5F0162B963F06002A84B0 /* ImageContainer.swift */,
+				34BBA47E2BAE164400A6004E /* DataController.swift */,
+				34BBA4802BAE3A9000A6004E /* EventStorage.swift */,
+				348333D32BBB1ACA00ED1DF2 /* NVRConfigurationCall.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		34D5EFE52B92AB33002A84B0 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				34D5F0042B92B490002A84B0 /* APIBuilder.swift */,
+				34D5EFF02B92B1CB002A84B0 /* MQTTManager.swift */,
+				34D5EFF22B92B1DF002A84B0 /* MQTTState.swift */,
+				34D5F0122B950F34002A84B0 /* MQTTConfig.swift */,
+				34D5F0142B9510AB002A84B0 /* NVRConfig.swift */,
+				34E544EE2B9A721300137F34 /* NotificationHandler.swift */,
+				34E544F22B9ABD8C00137F34 /* NotificationManager.swift */,
+				340AAFFA2BA2406C00EB69F4 /* APIRequestor.swift */,
+				340AAFFC2BA37E8C00EB69F4 /* RTSPPlayer.swift */,
+				348333A12BB8AB9700ED1DF2 /* RTSPPlayer2.swift */,
+				343676B82BA3C48400BD765F /* HLSPlayer.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		34D5EFEF2B92B190002A84B0 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				34D5EFF82B92B374002A84B0 /* Extension.swift */,
+				348333D82BBCAF9300ED1DF2 /* Helpers.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		34D5F00A2B92B56E002A84B0 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				34D5F00B2B92B57A002A84B0 /* Enums.swift */,
+			);
+			path = Enum;
+			sourceTree = "<group>";
+		};
+		34D5F00E2B940DFF002A84B0 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				34D5EFFE2B92B419002A84B0 /* ViewPlayVideo.swift */,
+				34D5EFE82B92ABA4002A84B0 /* ViewCamera.swift */,
+				34640F2B2BA4D3430085F726 /* AVResource.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		34D5F00F2B940E0E002A84B0 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				34D5EFEA2B92ABDC002A84B0 /* ViewSettings.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		34D5F0102B940E23002A84B0 /* Connection */ = {
+			isa = PBXGroup;
+			children = (
+				34D5EFEC2B92AC0C002A84B0 /* ViewConnection.swift */,
+			);
+			path = Connection;
+			sourceTree = "<group>";
+		};
+		34D5F0112B940E31002A84B0 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				349924CC2BA7483200251309 /* Subs */,
+				34640F2D2BA4DB870085F726 /* NotUsed */,
+				34D5EFE62B92AB75002A84B0 /* ViewEventListHome.swift */,
+				34D5EFFC2B92B3FD002A84B0 /* ViewLiveEvent.swift */,
+				346542DF2B9783860037BA1D /* ViewEventsHistory.swift */,
+				348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */,
+				34D5EFFA2B92B3DB002A84B0 /* ViewEventDetail.swift */,
+				34BBA4752BAB449C00A6004E /* ViewFilter.swift */,
+				34BBA48D2BAEA14F00A6004E /* ViewEventSlideShow.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+		3D31F0A831BCC9F625F7166E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				340AB0202BA38B0900EB69F4 /* UIKit.framework */,
+				340AB01E2BA38AFF00EB69F4 /* VideoToolbox.framework */,
+				340AB01C2BA38AF300EB69F4 /* Security.framework */,
+				340AB01A2BA38AE900EB69F4 /* QuartzCore.framework */,
+				340AB0182BA38ADD00EB69F4 /* OpenGLES.framework */,
+				340AB0162BA38AD300EB69F4 /* libxml2.tbd */,
+				340AB0142BA38AC900EB69F4 /* libiconv.tbd */,
+				340AB0122BA38ABF00EB69F4 /* libc++.tbd */,
+				340AB0102BA38AB200EB69F4 /* libbz2.tbd */,
+				340AB00E2BA38AA600EB69F4 /* Foundation.framework */,
+				340AB00C2BA38A9900EB69F4 /* CoreVideo.framework */,
+				340AB00A2BA38A8E00EB69F4 /* CoreText.framework */,
+				340AB0082BA38A8200EB69F4 /* CoreMedia.framework */,
+				340AB0062BA38A7700EB69F4 /* CoreGraphics.framework */,
+				340AB0042BA38A6D00EB69F4 /* CoreFoundation.framework */,
+				340AB0022BA38A6300EB69F4 /* CFNetwork.framework */,
+				340AB0002BA38A5800EB69F4 /* AVFoundation.framework */,
+				340AAFFE2BA38A4D00EB69F4 /* AudioToolbox.framework */,
+				BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C4942406091A6E8B2305FF72 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				86AA419A5283043C2EB5342F /* Pods-NVR Viewer.debug.xcconfig */,
+				0F4C41C96EEF1EA69ED88916 /* Pods-NVR Viewer.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		340AAFED2BA0A5CB00EB69F4 /* NotificationExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 340AAFF92BA0A5CC00EB69F4 /* Build configuration list for PBXNativeTarget "NotificationExtension" */;
+			buildPhases = (
+				340AAFEA2BA0A5CB00EB69F4 /* Sources */,
+				340AAFEB2BA0A5CB00EB69F4 /* Frameworks */,
+				340AAFEC2BA0A5CB00EB69F4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotificationExtension;
+			productName = NotificationExtension;
+			productReference = 340AAFEE2BA0A5CB00EB69F4 /* NotificationExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		34D5EFD12B92AB1F002A84B0 /* NVR Viewer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34D5EFE02B92AB22002A84B0 /* Build configuration list for PBXNativeTarget "NVR Viewer" */;
+			buildPhases = (
+				B1F10167B78112AC880CCB4D /* [CP] Check Pods Manifest.lock */,
+				34D5EFCE2B92AB1F002A84B0 /* Sources */,
+				34D5EFCF2B92AB1F002A84B0 /* Frameworks */,
+				34D5EFD02B92AB1F002A84B0 /* Resources */,
+				72A9F37307DEBB984E7B9A9E /* [CP] Embed Pods Frameworks */,
+				340AAFF62BA0A5CC00EB69F4 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				340AAFF42BA0A5CC00EB69F4 /* PBXTargetDependency */,
+			);
+			name = "NVR Viewer";
+			packageProductDependencies = (
+				34D925272BB48FC70005DB70 /* SQLite */,
+				34D9253C2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion */,
+				34D9253E2BB770B10005DB70 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				34D925402BB770B10005DB70 /* FirebaseAppDistribution-Beta */,
+				34D925422BB770B10005DB70 /* FirebaseAuthCombine-Community */,
+				34D925442BB770B10005DB70 /* FirebaseDatabase */,
+				34D925462BB770B10005DB70 /* FirebaseDatabaseSwift */,
+				34D925482BB770B10005DB70 /* FirebaseDynamicLinks */,
+				34D9254A2BB770B10005DB70 /* FirebaseFirestore */,
+				34D9254C2BB770B10005DB70 /* FirebaseFirestoreCombine-Community */,
+				34D9254E2BB770B10005DB70 /* FirebaseFirestoreSwift */,
+				34D925502BB770B10005DB70 /* FirebaseFunctions */,
+				34D925522BB770B10005DB70 /* FirebaseFunctionsCombine-Community */,
+				34D925542BB770B10005DB70 /* FirebaseInstallations */,
+				34D925562BB770B10005DB70 /* FirebaseMLModelDownloader */,
+				34D925582BB770B10005DB70 /* FirebasePerformance */,
+				34F1D7642BE40D4300FE14CD /* FirebaseAnalytics */,
+				34F1D7662BE40D4300FE14CD /* FirebaseAnalyticsOnDeviceConversion */,
+				34F1D7682BE40D4300FE14CD /* FirebaseAnalyticsSwift */,
+				34F1D76A2BE40D4300FE14CD /* FirebaseAnalyticsWithoutAdIdSupport */,
+				34F1D76C2BE40D4300FE14CD /* FirebaseAppCheck */,
+				34F1D76E2BE40D4300FE14CD /* FirebaseAppDistribution-Beta */,
+				34F1D7702BE40D4300FE14CD /* FirebaseAuth */,
+				34F1D7722BE40D4300FE14CD /* FirebaseAuthCombine-Community */,
+				34F1D7742BE40D4300FE14CD /* FirebaseCrashlytics */,
+				34F1D7762BE40D4300FE14CD /* FirebaseDatabase */,
+				34F1D7782BE40D4300FE14CD /* FirebaseDatabaseSwift */,
+				34F1D77A2BE40D4300FE14CD /* FirebaseDynamicLinks */,
+				34F1D77C2BE40D4300FE14CD /* FirebaseFirestore */,
+				34F1D77E2BE40D4300FE14CD /* FirebaseFirestoreCombine-Community */,
+				34F1D7802BE40D4300FE14CD /* FirebaseFirestoreSwift */,
+				34F1D7822BE40D4300FE14CD /* FirebaseFunctions */,
+				34F1D7842BE40D4300FE14CD /* FirebaseFunctionsCombine-Community */,
+				34F1D7862BE40D4300FE14CD /* FirebaseInAppMessaging-Beta */,
+				34F1D7882BE40D4300FE14CD /* FirebaseInAppMessagingSwift-Beta */,
+				34F1D78A2BE40D4300FE14CD /* FirebaseInstallations */,
+				34F1D78C2BE40D4300FE14CD /* FirebaseMLModelDownloader */,
+				34F1D78E2BE40D4300FE14CD /* FirebaseMessaging */,
+				34F1D7902BE40D4300FE14CD /* FirebasePerformance */,
+				34F1D7922BE40D4300FE14CD /* FirebaseRemoteConfig */,
+				34F1D7942BE40D4300FE14CD /* FirebaseRemoteConfigSwift */,
+				34F1D7962BE40D4300FE14CD /* FirebaseStorage */,
+				34F1D7982BE40D4300FE14CD /* FirebaseStorageCombine-Community */,
+			);
+			productName = "NVR Viewer";
+			productReference = 34D5EFD22B92AB1F002A84B0 /* NVR Viewer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34D5EFCA2B92AB1F002A84B0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					340AAFED2BA0A5CB00EB69F4 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					34D5EFD12B92AB1F002A84B0 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+				};
+			};
+			buildConfigurationList = 34D5EFCD2B92AB1F002A84B0 /* Build configuration list for PBXProject "NVR Viewer" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 34D5EFC92B92AB1F002A84B0;
+			packageReferences = (
+				34D925262BB48FC70005DB70 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			productRefGroup = 34D5EFD32B92AB1F002A84B0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34D5EFD12B92AB1F002A84B0 /* NVR Viewer */,
+				340AAFED2BA0A5CB00EB69F4 /* NotificationExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		340AAFEC2BA0A5CB00EB69F4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34D5EFD02B92AB1F002A84B0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				348C50AC2BB1ED7900A15446 /* .gitignore in Resources */,
+				34D5EFDD2B92AB22002A84B0 /* Preview Assets.xcassets in Resources */,
+				34D5EFDA2B92AB22002A84B0 /* Assets.xcassets in Resources */,
+				34E545632B9ADA0800137F34 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		72A9F37307DEBB984E7B9A9E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B1F10167B78112AC880CCB4D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NVR Viewer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		340AAFEA2BA0A5CB00EB69F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340AAFF12BA0A5CC00EB69F4 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34D5EFCE2B92AB1F002A84B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34BBA4782BAB45C300A6004E /* EventFilter.swift in Sources */,
+				348333C02BB8DFC600ED1DF2 /* ViewLive.swift in Sources */,
+				348AB7BA2BA55E58001ADE6C /* ViewEventUpdateDetails.swift in Sources */,
+				34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */,
+				343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */,
+				34D5F0012B92B442002A84B0 /* ViewUIImage.swift in Sources */,
+				340AAFFB2BA2406D00EB69F4 /* APIRequestor.swift in Sources */,
+				34D5EFFF2B92B419002A84B0 /* ViewPlayVideo.swift in Sources */,
+				34D5F00C2B92B57A002A84B0 /* Enums.swift in Sources */,
+				346542E42B983CE60037BA1D /* ViewEventInformation.swift in Sources */,
+				34D5EFFD2B92B3FD002A84B0 /* ViewLiveEvent.swift in Sources */,
+				34BBA48E2BAEA14F00A6004E /* ViewEventSlideShow.swift in Sources */,
+				34D5EFE72B92AB76002A84B0 /* ViewEventListHome.swift in Sources */,
+				34D5EFFB2B92B3DB002A84B0 /* ViewEventDetail.swift in Sources */,
+				348333A22BB8AB9700ED1DF2 /* RTSPPlayer2.swift in Sources */,
+				348333D92BBCAF9300ED1DF2 /* Helpers.swift in Sources */,
+				34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */,
+				34D5EFF32B92B1DF002A84B0 /* MQTTState.swift in Sources */,
+				348AB7B82BA54B33001ADE6C /* ViewEventCard.swift in Sources */,
+				34D5EFD82B92AB1F002A84B0 /* ContentView.swift in Sources */,
+				34D5F0052B92B490002A84B0 /* APIBuilder.swift in Sources */,
+				34D5F0072B92B4C3002A84B0 /* TopicFrigateEvent.swift in Sources */,
+				34D5EFF92B92B374002A84B0 /* Extension.swift in Sources */,
+				34E544F32B9ABD8C00137F34 /* NotificationManager.swift in Sources */,
+				34BBA4762BAB449C00A6004E /* ViewFilter.swift in Sources */,
+				34D5EFED2B92AC0C002A84B0 /* ViewConnection.swift in Sources */,
+				34D5F0092B92B4FA002A84B0 /* EndpointOptions.swift in Sources */,
+				34D5F0132B950F34002A84B0 /* MQTTConfig.swift in Sources */,
+				348333D42BBB1ACB00ED1DF2 /* NVRConfigurationCall.swift in Sources */,
+				34D5EFEB2B92ABDC002A84B0 /* ViewSettings.swift in Sources */,
+				346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */,
+				34D5EFD62B92AB1F002A84B0 /* NVR_ViewerApp.swift in Sources */,
+				34D5F0152B9510AC002A84B0 /* NVRConfig.swift in Sources */,
+				34D5F0192B968EEF002A84B0 /* ViewUIImageByData.swift in Sources */,
+				34BBA47F2BAE164400A6004E /* DataController.swift in Sources */,
+				340AAFFD2BA37E8C00EB69F4 /* RTSPPlayer.swift in Sources */,
+				34D5EFE92B92ABA4002A84B0 /* ViewCamera.swift in Sources */,
+				346542E22B982EAD0037BA1D /* ViewTest.swift in Sources */,
+				34D5EFF12B92B1CB002A84B0 /* MQTTManager.swift in Sources */,
+				34BBA4812BAE3A9000A6004E /* EventStorage.swift in Sources */,
+				34D5F0032B92B453002A84B0 /* ViewUIImageFull.swift in Sources */,
+				348333DB2BC04CCD00ED1DF2 /* ViewCameraDetails.swift in Sources */,
+				34D5F0172B963F07002A84B0 /* ImageContainer.swift in Sources */,
+				348333D72BBB241E00ED1DF2 /* ViewNVRDetails.swift in Sources */,
+				34E544EF2B9A721300137F34 /* NotificationHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		340AAFF42BA0A5CC00EB69F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 340AAFED2BA0A5CB00EB69F4 /* NotificationExtension */;
+			targetProxy = 340AAFF32BA0A5CC00EB69F4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		340AAFF72BA0A5CC00EB69F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VW686JVGR9;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer.NotificationExtension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		340AAFF82BA0A5CC00EB69F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VW686JVGR9;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer.NotificationExtension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		34D5EFDE2B92AB22002A84B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		34D5EFDF2B92AB22002A84B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		34D5EFE12B92AB22002A84B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86AA419A5283043C2EB5342F /* Pods-NVR Viewer.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
+				DEVELOPMENT_TEAM = VW686JVGR9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "NVR-Viewer-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Viewu;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		34D5EFE22B92AB22002A84B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F4C41C96EEF1EA69ED88916 /* Pods-NVR Viewer.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
+				DEVELOPMENT_TEAM = VW686JVGR9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "NVR-Viewer-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Viewu;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		340AAFF92BA0A5CC00EB69F4 /* Build configuration list for PBXNativeTarget "NotificationExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340AAFF72BA0A5CC00EB69F4 /* Debug */,
+				340AAFF82BA0A5CC00EB69F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34D5EFCD2B92AB1F002A84B0 /* Build configuration list for PBXProject "NVR Viewer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34D5EFDE2B92AB22002A84B0 /* Debug */,
+				34D5EFDF2B92AB22002A84B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34D5EFE02B92AB22002A84B0 /* Build configuration list for PBXNativeTarget "NVR Viewer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34D5EFE12B92AB22002A84B0 /* Debug */,
+				34D5EFE22B92AB22002A84B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		34D925262BB48FC70005DB70 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.0;
+			};
+		};
+		34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.25.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		34D925272BB48FC70005DB70 /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34D925262BB48FC70005DB70 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+		34D9253C2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		34D9253E2BB770B10005DB70 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		34D925402BB770B10005DB70 /* FirebaseAppDistribution-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseAppDistribution-Beta";
+		};
+		34D925422BB770B10005DB70 /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseAuthCombine-Community";
+		};
+		34D925442BB770B10005DB70 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseDatabase;
+		};
+		34D925462BB770B10005DB70 /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseDatabaseSwift;
+		};
+		34D925482BB770B10005DB70 /* FirebaseDynamicLinks */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseDynamicLinks;
+		};
+		34D9254A2BB770B10005DB70 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		34D9254C2BB770B10005DB70 /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		34D9254E2BB770B10005DB70 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestoreSwift;
+		};
+		34D925502BB770B10005DB70 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFunctions;
+		};
+		34D925522BB770B10005DB70 /* FirebaseFunctionsCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseFunctionsCombine-Community";
+		};
+		34D925542BB770B10005DB70 /* FirebaseInstallations */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseInstallations;
+		};
+		34D925562BB770B10005DB70 /* FirebaseMLModelDownloader */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseMLModelDownloader;
+		};
+		34D925582BB770B10005DB70 /* FirebasePerformance */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebasePerformance;
+		};
+		34F1D7642BE40D4300FE14CD /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		34F1D7662BE40D4300FE14CD /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		34F1D7682BE40D4300FE14CD /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		34F1D76A2BE40D4300FE14CD /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		34F1D76C2BE40D4300FE14CD /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		34F1D76E2BE40D4300FE14CD /* FirebaseAppDistribution-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAppDistribution-Beta";
+		};
+		34F1D7702BE40D4300FE14CD /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		34F1D7722BE40D4300FE14CD /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
+		};
+		34F1D7742BE40D4300FE14CD /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		34F1D7762BE40D4300FE14CD /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		34F1D7782BE40D4300FE14CD /* FirebaseDatabaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabaseSwift;
+		};
+		34F1D77A2BE40D4300FE14CD /* FirebaseDynamicLinks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDynamicLinks;
+		};
+		34F1D77C2BE40D4300FE14CD /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		34F1D77E2BE40D4300FE14CD /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		34F1D7802BE40D4300FE14CD /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
+		34F1D7822BE40D4300FE14CD /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+		34F1D7842BE40D4300FE14CD /* FirebaseFunctionsCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseFunctionsCombine-Community";
+		};
+		34F1D7862BE40D4300FE14CD /* FirebaseInAppMessaging-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseInAppMessaging-Beta";
+		};
+		34F1D7882BE40D4300FE14CD /* FirebaseInAppMessagingSwift-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseInAppMessagingSwift-Beta";
+		};
+		34F1D78A2BE40D4300FE14CD /* FirebaseInstallations */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseInstallations;
+		};
+		34F1D78C2BE40D4300FE14CD /* FirebaseMLModelDownloader */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMLModelDownloader;
+		};
+		34F1D78E2BE40D4300FE14CD /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		34F1D7902BE40D4300FE14CD /* FirebasePerformance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebasePerformance;
+		};
+		34F1D7922BE40D4300FE14CD /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
+		34F1D7942BE40D4300FE14CD /* FirebaseRemoteConfigSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfigSwift;
+		};
+		34F1D7962BE40D4300FE14CD /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		34F1D7982BE40D4300FE14CD /* FirebaseStorageCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F1D7632BE40D4300FE14CD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseStorageCombine-Community";
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 34D5EFCA2B92AB1F002A84B0 /* Project object */;
+}
