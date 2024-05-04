@@ -1,5 +1,5 @@
 # www.viewu.app
-# installation.viewu.app
+# https://installation.viewu.app
  
 ### Viewu App
 **Platform:** iOS  
