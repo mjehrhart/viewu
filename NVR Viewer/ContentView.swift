@@ -11,6 +11,11 @@ import SwiftData
 import TipKit
 
 struct ContentView: View {
+    //Load Config
+    let nvr = NVRConfig.shared()
+    @ObservedObject var config = NVRConfigurationSuper.shared()
+    let cNVR = APIRequester()
+    
     //
     @EnvironmentObject private var notificationManager2: NotificationManager
     @State var selection: Int = 0
@@ -74,6 +79,23 @@ struct ContentView: View {
                 }
             }
             //.background(Color(UIColor.secondarySystemBackground))
+            .task(){
+                
+                let url = nvr.getUrl()
+                let urlString = url + "/api/config"
+                
+                cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
+                    
+                    guard let data = data else { return }
+                    
+                    do {
+                        config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
+                        //print("nvr = ", config.item)
+                    }catch{
+                        print("Error Message goes here - 1001")
+                    }
+                }
+            }
             .task {
                 do{
                     try? Tips.showAllTipsForTesting()

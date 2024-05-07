@@ -20,7 +20,7 @@ struct ViewCameraDetails: View {
     let widthMultiplier:CGFloat = 2/5.5
     
     var body: some View {
-        
+       
         Form{
             Section{
                 HStack{
@@ -214,7 +214,7 @@ struct ViewCameraDetails: View {
                 Text("Detect")
                     .font(.caption)
             }
-             
+            
             Section{
                 HStack{
                     Text("Global Args")
@@ -230,18 +230,18 @@ struct ViewCameraDetails: View {
                 }
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
-                HStack{
-                    Text("HwAccel Args")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    VStack{
-                        ForEach(cameras.ffmpeg.hwaccel_args, id: \.self) {item in
-                            Text("\(item)")
-                                .frame(width: 140, alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                }
+                //                HStack{
+                //                    Text("HwAccel Args")
+                //                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                //                        .padding(.leading, 40)
+                //                    VStack{
+                //                        ForEach(cameras.ffmpeg.hwaccel_args, id: \.self) {item in
+                //                            Text("\(item)")
+                //                                .frame(width: 140, alignment: .leading)
+                //                                .foregroundStyle(.gray)
+                //                        }
+                //                    }
+                //                }
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
                 HStack{
@@ -253,15 +253,15 @@ struct ViewCameraDetails: View {
                         .foregroundStyle(.gray)
                 }
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
-                 
+                
                 VStack{
                     Text("Inputs")
                         .frame(width:UIScreen.screenWidth, alignment: .center)
-                        //.padding(.leading, 40)
+                    //.padding(.leading, 40)
                     
                     VStack{
                         ForEach(cameras.ffmpeg.inputs, id: \.self) {item in
-                             
+                            
                             HStack{
                                 Text("Path")
                                     .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -310,7 +310,7 @@ struct ViewCameraDetails: View {
                                 }
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading)
-                              
+                            
                             HStack{
                                 Text("Roles")
                                     .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -322,7 +322,7 @@ struct ViewCameraDetails: View {
                                 }
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading)
-                             
+                            
                         }
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
@@ -332,7 +332,7 @@ struct ViewCameraDetails: View {
                 VStack{
                     Text("Output Args")
                         .frame(width:UIScreen.screenWidth, alignment: .center)
-                        //.padding(.leading, 40)
+                    //.padding(.leading, 40)
                     
                     VStack{
                         HStack{
@@ -358,7 +358,7 @@ struct ViewCameraDetails: View {
                             }
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
-                         
+                        
                         HStack{
                             Text("RTMP")
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -662,7 +662,7 @@ struct ViewCameraDetails: View {
                 
                 Text("autotracking")
                     .frame(width:UIScreen.screenWidth, alignment: .center)
-                    //.padding(.leading, 40)
+                //.padding(.leading, 40)
                 VStack{
                     HStack{
                         Text("Calibrate")
@@ -699,7 +699,7 @@ struct ViewCameraDetails: View {
                         }
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
-                     
+                    
                     HStack{
                         Text("Return Preset")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -723,7 +723,7 @@ struct ViewCameraDetails: View {
                         }
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
-                     
+                    
                     HStack{
                         Text("Zooming")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -747,7 +747,7 @@ struct ViewCameraDetails: View {
                         }
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
-                     
+                    
                     HStack{
                         Text("Track")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -759,7 +759,7 @@ struct ViewCameraDetails: View {
                         }
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
-                     
+                    
                 }
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
@@ -807,7 +807,7 @@ struct ViewCameraDetails: View {
                 Text("Onvif")
                     .font(.caption)
             }
-             
+            
             Section{
                 HStack{
                     Text("enabled")
@@ -1018,15 +1018,15 @@ struct ViewCameraDetails: View {
                                 .foregroundStyle(.gray)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
-                         HStack{
-                             Text("Blue")
-                                 .frame(width:50, alignment: .leading)
-                                 .foregroundStyle(.gray)
-                             Text("\(cameras.timestamp_style.color.blue)")
-                                 .frame( alignment: .leading)
-                                 .foregroundStyle(.gray)
-                         }
-                         .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        HStack{
+                            Text("Blue")
+                                .frame(width:50, alignment: .leading)
+                                .foregroundStyle(.gray)
+                            Text("\(cameras.timestamp_style.color.blue)")
+                                .frame( alignment: .leading)
+                                .foregroundStyle(.gray)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
                         HStack{
                             Text("Green")
                                 .frame(width:50, alignment: .leading)
@@ -1122,7 +1122,6 @@ struct ViewCameraDetails: View {
         }
         .navigationBarTitle(text, displayMode: .inline)
     }
-    
 }
 
 //#Preview {

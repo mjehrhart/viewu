@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ViewNVRDetails: View {
     
-    @EnvironmentObject private var notificationManager2: NotificationManager  
+    let nvr = NVRConfig.shared()
+    
+    @EnvironmentObject private var notificationManager2: NotificationManager
     @ObservedObject var config = NVRConfigurationSuper.shared()
     
     let cNVR = APIRequester()
@@ -113,19 +115,24 @@ struct ViewNVRDetails: View {
         }
         .background(Color(UIColor.secondarySystemBackground)) //very light gray
         .toolbar(.hidden, for: .bottomBar)
-        .task(){
-            cNVR.fetchNVRConfig(urlString: "http://100.73.173.67:5555/api/config" ){ (data, error) in
-                
-                guard let data = data else { return }
-                
-                do {
-                    config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
-                    //print("nvr = ", config.item)
-                }catch{
-                    print("Error Message goes here - 1001")
-                }
-            }
-        }
+        // this has been moved to the ContentView
+//        .task(){
+//            
+//            let url = nvr.getUrl()
+//            let urlString = url + "/api/config"
+//            
+//            cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
+//                
+//                guard let data = data else { return }
+//                
+//                do {
+//                    config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
+//                    //print("nvr = ", config.item)
+//                }catch{
+//                    print("Error Message goes here - 1001")
+//                }
+//            }
+//        }
         .toolbar {
             ToolbarItemGroup(placement: .navigation) {
                 
@@ -138,7 +145,11 @@ struct ViewNVRDetails: View {
                 
 //                Button{
 //                    
-//                    cNVR.fetchNVRConfig(urlString: "http://100.73.173.67:5555/api/config" ){ (data, error) in
+//                    let url = nvr.getUrl()
+//                    let urlString = url + "/api/config"
+//                    print(1001, urlString)
+//                    
+//                    cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
 //                        
 //                        guard let data = data else { return }
 //                        

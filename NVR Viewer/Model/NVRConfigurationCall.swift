@@ -16,20 +16,26 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
     init(){
         
         item = NVRConfigurationCall(
-            cameras: ["" : Cameras(audio:
-                                   Audio(enabled: false, enabled_in_config: false, filters: nil, listen: [], max_not_heard: 0, min_volume: 0, num_threads: 1 ),
+            cameras: ["" : Cameras(
+                                   audio: Audio(enabled: false, enabled_in_config: false, filters: nil, listen: [], max_not_heard: 0, min_volume: 0, num_threads: 1 ),
                                    best_image_timeout: 0,
                                    birdseye: Birdseye(enabled: false, mode: "", order: 0),
                                    detect: Detect(annotation_offset: 0, enabled: false, fps: 5, height: 0, max_disappeared: 0, min_initialized: 0.0, width: 0),
                                    enabled: false, 
-                                   ffmpeg: FFMPEG(global_args: [], hwaccel_args: [], input_args: "", inputs: [], 
-                                                  output_args: CameraOutputArgs(detect: [], record: "", rtmp: ""), retry_interval: 0 ), 
-                                   ffmpeg_cmds: [], 
+                                   ffmpeg: FFMPEG(
+                                                  global_args: [],
+                                                  //hwaccel_args: [],
+                                                  input_args: "",
+                                                  inputs: [],
+                                                  output_args: CameraOutputArgs(detect: [], record: "", rtmp: ""),
+                                                  retry_interval: 0 )
+                                   ,
+                                   ffmpeg_cmds: [],
                                    live: Live(height: 0, quality: 0, stream_name: ""), 
                                    motion: Motion(contour_area: 0, delta_alpha: 0.0, frame_alpha: 0.0, frame_height: 0, improve_contrast: false, lightning_threshold: 0.0, mask: [], mqtt_off_delay: 0, threshold: 0), 
                                    mqtt: CameraMQTT(bounding_box: false, crop: false, enabled: false, height: 0, quality: 0, timestamp: false), 
                                    name: "",
-                                   objects: CameraObjects(filters: ["": CameraFilters(max_area: 0, max_ratio: 0, min_area: 0, min_ratio: 0, min_score: 0.0, threshold: 0.0) ] ), 
+                                   objects: CameraObjects(filters: ["": CameraFilters(max_area: 0, max_ratio: 0, min_area: 0, min_ratio: 0, min_score: 0.0, threshold: 0.0) ] ),
                                    onvif: ONVIF(autotracking: AutoTracking(calibrate_on_startup: false, enabled: false, enabled_in_config: false, return_preset: "", timeout: 0, track: [], zoom_factor: 0.0, zooming: ""),
                                                 host: "", password: "", port: 1800, user: ""), 
                                    record: Record(enabled: false, enabled_in_config: false, events: CameraEvents(post_capture: 0, pre_capture: 0, retain: Retain(mode: "")), expire_interval: 0, export: Export(timelapse_args: ""), retain: RecordRetain(days: 0, mode: ""), sync_recordings: false), 
@@ -37,7 +43,8 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                    snapshots: Snapshots(bounding_box: false, clean_copy: false, crop: false, enabled: false, height: 0, quality: 0, retain: SnapshotsRetain(mode: ""), timestamp: false), 
                                    timestamp_style: TimeStampStyle(color: TimeStampStyleColor(blue: 0, green: 0, red: 0), format: "", position: "", thickness: 0),
                                    ui: CameraUI(dashboard: false, order: 0), 
-                                   webui_url: "" )],
+                                   webui_url: ""
+            )],
             mqtt: MQTT(client_id: "String",
                        enabled: false,
                        host: "String",
@@ -86,7 +93,16 @@ struct Cameras: Codable, Hashable {
     let timestamp_style: TimeStampStyle
     let ui: CameraUI
     let webui_url: String?
-    //let zones: {} -> Unknown Type
+//    //let zones: {} -> Unknown Type
+}
+
+struct FFMPEG: Codable, Hashable {
+    let global_args: [String]
+//    let hwaccel_args: [String]
+    let input_args: String
+    let inputs: [CameraInputs]
+    let output_args: CameraOutputArgs
+    let retry_interval: Int
 }
 
 struct CameraUI: Codable, Hashable {
@@ -227,16 +243,7 @@ struct FFMPEGCommands: Codable, Hashable{
     let cmd: String
     let roles: [String]
 }
- 
-struct FFMPEG: Codable, Hashable {
-    let global_args: [String]
-    let hwaccel_args: [String]
-    let input_args: String
-    let inputs: [CameraInputs]
-    let output_args: CameraOutputArgs
-    let retry_interval: Int
-}
-
+  
 struct CameraInputs: Codable, Hashable {
     let global_args: [String]
     let hwaccel_args: [String]

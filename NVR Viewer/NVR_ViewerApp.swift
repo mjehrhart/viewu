@@ -28,7 +28,8 @@ struct NVR_ViewerApp: App {
                     setUpdNotificationManager()
                 }
         }
-        .modelContainer(for: [ImageContainer.self])
+        .modelContainer(for: [ImageContainer.self]) 
     }
+    
 }
 
