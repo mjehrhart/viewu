@@ -35,21 +35,6 @@ struct ViewCamera: View {
         ScrollView {
             VStack{
                 Section{
-//                    HStack{
-//                        Text("Camera Front")
-//                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
-//                            .padding(10)
-//                        
-//                        Label("", systemImage: flagMute1 ? "speaker.slash" : "speaker")
-//                            .padding(10)
-//                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
-//                            .onTapGesture{
-//                                flagMute1.toggle()
-//                                mediaPlayer1.audio.isMuted = flagMute1
-//                            }
-//                    }
-                    //.background(.blue, in: RoundedRectangle(cornerRadius: 5) )
-                    
                     
                     Section{
                         //HStack{
@@ -72,46 +57,6 @@ struct ViewCamera: View {
                         Text("Cameras")
                             .font(.caption)
                     }
-                    
-                    
-                    //                    StreamRTSP2(urlString: "rtsp://100.116.231.89:50400/70d3ddca11611ee9", mediaPlayer: mediaPlayer1)
-                    //                        .modifier(CardBackground())
-                    //                        .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-                    //                        .edgesIgnoringSafeArea(.all)
-                    //                        .onAppear(){
-                    //                            mediaPlayer1.play()
-                    //                        }
-                    //                        .onDisappear(){
-                    //                            mediaPlayer1.stop()
-                    //                        }
-                }
-                
-                Section{
-//                    HStack{
-//                        Text("Camera Side")
-//                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
-//                            .padding(10)
-//                        
-//                        Label("", systemImage: flagMute2 ? "speaker.slash" : "speaker")
-//                            .padding(10)
-//                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
-//                            .onTapGesture{
-//                                flagMute2.toggle()
-//                                mediaPlayer2.audio.isMuted = flagMute2
-//                            }
-//                    }
-                    //.background(.blue, in: RoundedRectangle(cornerRadius: 5) )
-                    
-                    //                    StreamRTSP2(urlString: "rtsp://100.116.231.89:50573/d9654200d47c7808", mediaPlayer: mediaPlayer2)
-                    //                        .modifier(CardBackground())
-                    //                        .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-                    //                        .edgesIgnoringSafeArea(.all)
-                    //                        .onAppear(){
-                    //                            mediaPlayer2.play()
-                    //                        }
-                    //                        .onDisappear(){
-                    //                            mediaPlayer2.stop()
-                    //                        }
                 }
                 
                 Spacer()
@@ -146,17 +91,7 @@ struct Webview: UIViewRepresentable {
 #Preview {
     ViewCamera(title: "Cameras")
 }
-
-/*
- Front
- rtsp://192.168.1.195:50400/70d3ddca11611ee9 //sub 70d3ddca11611ee9, //main 4030f70d4668a1a5
- rtsp://admin:m12345678@192.168.1.187:554/cam/realmonitor?channel=1&subtype=1
  
- Side
- rtsp://192.168.1.195:50573/d9654200d47c7808 //main 615f8839cbee0e5c, //sub d9654200d47c7808
- rtsp://admin:m12345678@192.168.1.186:554/cam/realmonitor?channel=1&subtype=1
- */
-
 //Webview(url: "http://100.73.173.67:5555/api/front?h=480")
 //    .modifier(CardBackground())
 //    .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
