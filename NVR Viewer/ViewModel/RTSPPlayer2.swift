@@ -23,14 +23,13 @@ struct VlcPlayeyRTSP2: UIViewRepresentable{
 }
 
 class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
-    
-    //let mediaPlayer : VLCMediaPlayer // = VLCMediaPlayer()
-    
+     
     //override
     init(frame: CGRect, urlString: String, mediaPlayer : VLCMediaPlayer) {
         
+        
         //super.init(frame: UIScreen.screens[0].bounds)
-        super.init(frame: CGRect(x:0,y:0, width:150, height: 150))
+        super.init(frame: CGRect(x:0,y:0, width:350, height: 250))
         
         let url = URL(string: urlString)!
         let media = VLCMedia(url: url)
@@ -78,40 +77,53 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
 struct StreamRTSP2: View {
     let urlString: String
     @State var mediaPlayer : VLCMediaPlayer = VLCMediaPlayer()
+    @State var flagMute = true
+    @State var flagFull = false
+     
     
     var body: some View {
         return VStack{
+             
+            HStack{
+                Text("value")
+                    .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
+                    .padding(10)
+                
+                Label("", systemImage: flagMute ? "speaker.slash" : "speaker")
+                    .padding(10)
+                    .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
+                    .onTapGesture{
+                        flagMute.toggle()
+                        mediaPlayer.audio.isMuted = flagMute
+                    }
+            }
             VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+                .aspectRatio(16/9, contentMode: .fit)
+                .modifier( CardBackground() )
+                .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20 )
+//                .frame(width: flagFull ? UIScreen.screenWidth-20 : UIScreen.screenHeight-100,
+//                       height: flagFull ? (UIScreen.screenWidth * 9/16)-20 : UIScreen.screenWidth)
+                //.edgesIgnoringSafeArea(.all)
+                .onAppear(){
+                    mediaPlayer.play()
+                }
+                .onDisappear(){
+                    mediaPlayer.stop()
+                }
+                .onTapGesture{
+                    flagFull.toggle()
+                    print("clicking onTapGesture")
+                    print(flagFull, flagMute)
+                    mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
+                       
+                }
+                .navigationDestination(isPresented: $flagFull){
+                    ViewCameraFullScreen(urlString: urlString)
+                }
         }
     }
 }
-
-/*
- media.addOptions([// Add options here
- "network-caching": 1000, //300
- "--rtsp-frame-buffer-size":100, //100
- "--vout": "ios",
- "--glconv" : "glconv_cvpx",
- "--rtsp-caching=": 150,
- "--tcp-caching=": 150,
- "--realrtsp-caching=": 150,
- "--h264-fps": 20.0,
- "--mms-timeout": 60000
- ])
- */
-
-/*
- "--network-caching" : "33",
- "--file-caching" : "33",
- "--live-caching" : "33",
- "--clock-synchro" : "0",
- "--clock-jitter" : "0",
- "--h264-fps" : "60",
- "--avcodec-fast" : true,
- "--avcodec-threads" : "1"
  
- */
-
 /*
  ["--rtsp-tcp": true, "--codec":"avcodec", "--network-caching":500, "--avcodec-hw":"none"]
  
@@ -135,20 +147,4 @@ struct StreamRTSP2: View {
  videoPlayer.media?.addOption("-vv")
  
  */
-
-/*
- [
- "--codec" : "avcodec",
- "--avcodec-fast" : true,
- "--avcodec-threads" : "2",
- "network-caching": 1000, //300
- "--rtsp-frame-buffer-size":1000, //100
- "--vout": "ios",
- "--glconv" : "glconv_cvpx",
- "--rtsp-caching=": 150,
- "--tcp-caching=": 150,
- "--realrtsp-caching=": 150, //150
- "--h264-fps": 20.0, //20.0
- "--mms-timeout": 60000
- ]
- */
+ 

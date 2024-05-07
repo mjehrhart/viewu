@@ -19,72 +19,99 @@ class AVRequester: NSObject {
 
 struct ViewCamera: View {
     
+    //
+    @ObservedObject var config = NVRConfigurationSuper.shared()
+    
     let title: String
     @State private var path = NavigationPath()
     
-    @State var mediaPlayer1 : VLCMediaPlayer = VLCMediaPlayer()
-    @State var mediaPlayer2 : VLCMediaPlayer = VLCMediaPlayer()
-    
-    @State var flagMute1 = true
-    @State var flagMute2 = true
+//    @State var mediaPlayer1 : VLCMediaPlayer = VLCMediaPlayer()
+//    @State var mediaPlayer2 : VLCMediaPlayer = VLCMediaPlayer()
+//    
+//    @State var flagMute1 = true
+//    @State var flagMute2 = true
     
     var body: some View {
         ScrollView {
             VStack{
                 Section{
-                    HStack{
-                        Text("Camera Front")
-                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
-                            .padding(10)
-                        
-                        Label("", systemImage: flagMute1 ? "speaker.slash" : "speaker")
-                            .padding(10)
-                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
-                            .onTapGesture{
-                                flagMute1.toggle()
-                                mediaPlayer1.audio.isMuted = flagMute1
-                            }
-                    }
+//                    HStack{
+//                        Text("Camera Front")
+//                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
+//                            .padding(10)
+//                        
+//                        Label("", systemImage: flagMute1 ? "speaker.slash" : "speaker")
+//                            .padding(10)
+//                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
+//                            .onTapGesture{
+//                                flagMute1.toggle()
+//                                mediaPlayer1.audio.isMuted = flagMute1
+//                            }
+//                    }
                     //.background(.blue, in: RoundedRectangle(cornerRadius: 5) )
-                      
-                    StreamRTSP2(urlString: "rtsp://100.116.231.89:50400/70d3ddca11611ee9", mediaPlayer: mediaPlayer1)
-                        .modifier(CardBackground())
-                        .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-                        .edgesIgnoringSafeArea(.all)
-                        .onAppear(){
-                            mediaPlayer1.play()
+                    
+                    
+                    Section{
+                        //HStack{
+                        ForEach(Array(config.item.go2rtc.streams.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, value in
+                             
+                            if value.contains("_sub"){
+                                Text(value)
+                                ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
+                                    ScrollView(.horizontal){
+                                        
+                                        if url.starts(with: "rtsp"){
+                                            StreamRTSP2(urlString: url)
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        .onDisappear(){
-                            mediaPlayer1.stop()
-                        }
+                        //}
+                    } header: {
+                        Text("Cameras")
+                            .font(.caption)
+                    }
+                    
+                    
+                    //                    StreamRTSP2(urlString: "rtsp://100.116.231.89:50400/70d3ddca11611ee9", mediaPlayer: mediaPlayer1)
+                    //                        .modifier(CardBackground())
+                    //                        .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
+                    //                        .edgesIgnoringSafeArea(.all)
+                    //                        .onAppear(){
+                    //                            mediaPlayer1.play()
+                    //                        }
+                    //                        .onDisappear(){
+                    //                            mediaPlayer1.stop()
+                    //                        }
                 }
                 
                 Section{
-                    HStack{
-                        Text("Camera Side")
-                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
-                            .padding(10)
-                        
-                        Label("", systemImage: flagMute2 ? "speaker.slash" : "speaker")
-                            .padding(10)
-                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
-                            .onTapGesture{
-                                flagMute2.toggle()
-                                mediaPlayer2.audio.isMuted = flagMute2
-                            }
-                    }
+//                    HStack{
+//                        Text("Camera Side")
+//                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
+//                            .padding(10)
+//                        
+//                        Label("", systemImage: flagMute2 ? "speaker.slash" : "speaker")
+//                            .padding(10)
+//                            .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
+//                            .onTapGesture{
+//                                flagMute2.toggle()
+//                                mediaPlayer2.audio.isMuted = flagMute2
+//                            }
+//                    }
                     //.background(.blue, in: RoundedRectangle(cornerRadius: 5) )
                     
-                    StreamRTSP2(urlString: "rtsp://100.116.231.89:50573/d9654200d47c7808", mediaPlayer: mediaPlayer2)
-                        .modifier(CardBackground())
-                        .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-                        .edgesIgnoringSafeArea(.all)
-                        .onAppear(){
-                            mediaPlayer2.play()
-                        }
-                        .onDisappear(){
-                            mediaPlayer2.stop()
-                        }
+                    //                    StreamRTSP2(urlString: "rtsp://100.116.231.89:50573/d9654200d47c7808", mediaPlayer: mediaPlayer2)
+                    //                        .modifier(CardBackground())
+                    //                        .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
+                    //                        .edgesIgnoringSafeArea(.all)
+                    //                        .onAppear(){
+                    //                            mediaPlayer2.play()
+                    //                        }
+                    //                        .onDisappear(){
+                    //                            mediaPlayer2.stop()
+                    //                        }
                 }
                 
                 Spacer()

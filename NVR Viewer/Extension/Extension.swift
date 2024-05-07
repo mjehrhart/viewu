@@ -34,6 +34,14 @@ extension UIScreen{
    static let screenSize = UIScreen.main.bounds.size
 }
 
+struct SquareBackground: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .cornerRadius(0)
+            .shadow(color: Color.black.opacity(0.2), radius: 4)
+    }
+}
+
 struct CardBackground: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -41,7 +49,7 @@ struct CardBackground: ViewModifier {
             .shadow(color: Color.black.opacity(0.2), radius: 4)
     }
 }
- 
+  
 extension View {
     func cardBackground() -> some View {
         modifier(CardBackground())

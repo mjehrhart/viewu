@@ -119,6 +119,7 @@
 		34F1D7952BE40D4300FE14CD /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7942BE40D4300FE14CD /* FirebaseRemoteConfigSwift */; };
 		34F1D7972BE40D4300FE14CD /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7962BE40D4300FE14CD /* FirebaseStorage */; };
 		34F1D7992BE40D4300FE14CD /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 34F1D7982BE40D4300FE14CD /* FirebaseStorageCombine-Community */; };
+		34FEA8082BEAC2D80015E8A6 /* ViewCameraFullScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FEA8072BEAC2D80015E8A6 /* ViewCameraFullScreen.swift */; };
 		4273E5C51ED170CAF443AAE4 /* Pods_NVR_Viewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */; };
 /* End PBXBuildFile section */
 
@@ -221,6 +222,7 @@
 		34E544EE2B9A721300137F34 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		34E544F22B9ABD8C00137F34 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		34E545622B9ADA0800137F34 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		34FEA8072BEAC2D80015E8A6 /* ViewCameraFullScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCameraFullScreen.swift; sourceTree = "<group>"; };
 		86AA419A5283043C2EB5342F /* Pods-NVR Viewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NVR Viewer.debug.xcconfig"; path = "Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer.debug.xcconfig"; sourceTree = "<group>"; };
 		BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NVR_Viewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -476,6 +478,7 @@
 				34D5EFFE2B92B419002A84B0 /* ViewPlayVideo.swift */,
 				34D5EFE82B92ABA4002A84B0 /* ViewCamera.swift */,
 				34640F2B2BA4D3430085F726 /* AVResource.swift */,
+				34FEA8072BEAC2D80015E8A6 /* ViewCameraFullScreen.swift */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -778,6 +781,7 @@
 				34D5EFED2B92AC0C002A84B0 /* ViewConnection.swift in Sources */,
 				34D5F0092B92B4FA002A84B0 /* EndpointOptions.swift in Sources */,
 				34D5F0132B950F34002A84B0 /* MQTTConfig.swift in Sources */,
+				34FEA8082BEAC2D80015E8A6 /* ViewCameraFullScreen.swift in Sources */,
 				348333D42BBB1ACB00ED1DF2 /* NVRConfigurationCall.swift in Sources */,
 				34D5EFEB2B92ABDC002A84B0 /* ViewSettings.swift in Sources */,
 				346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */,
