@@ -130,9 +130,6 @@ struct ContentView: View {
             .navigationDestination(isPresented: $showEventList){
                 ViewEventListHome()
             }
-            .navigationDestination(isPresented: $showCamera){
-                ViewCamera(title: "Live Cameras")
-            }
             .navigationDestination(isPresented: $showNVR){
                 ViewNVRDetails() 
             }
@@ -149,7 +146,10 @@ struct ContentView: View {
             .navigationDestination(isPresented: $showLog){
                 ViewTest(title:"test")
             }
-            //.navigationViewStyle(StackNavigationViewStyle())
+            .navigationDestination(isPresented: $showCamera){
+                ViewCamera(title: "Live Cameras")
+            }
+            .navigationViewStyle(StackNavigationViewStyle())
             .navigationDestination(for: Cameras.self){ config in 
                 
                 ViewCameraDetails(text: "\(config.name.uppercased()) Camera Details", cameras: config)
@@ -170,7 +170,7 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showFilter) {
                 ViewFilter()
-                    .presentationDetents([.medium])
+                    .presentationDetents([.large])
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) { 

@@ -27,13 +27,13 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
     //override
     init(frame: CGRect, urlString: String, mediaPlayer : VLCMediaPlayer) {
          
-        //super.init(frame: UIScreen.screens[0].bounds)
-        super.init(frame: CGRect(x:0,y:0, width:350, height: 250))
+        super.init(frame: UIScreen.screens[0].bounds)
+        //super.init(frame: CGRect(x:0,y:0, width:350, height: 250))
         
         let url = URL(string: urlString)!
         let media = VLCMedia(url: url)
         
-        // media.addOption("-vv")
+        media.addOption("-vvvv")
         media.addOptions(
             [
                 //"--rtsp-tcp": true,
@@ -62,8 +62,8 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
         mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
         
         //Logging
-        //mediaPlayer.libraryInstance.debugLoggingLevel = 0
-        //mediaPlayer.libraryInstance.debugLogging = false 
+        //mediaPlayer.libraryInstance.debugLoggingLevel = 1
+        //mediaPlayer.libraryInstance.debugLogging = true
         //mediaPlayer.play()
     }
   
@@ -74,72 +74,54 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
 }
  
 struct StreamRTSP2: View {
+    
     let urlString: String
-    //let cameraName: String
+    let cameraName: String
+    
     @State var mediaPlayer : VLCMediaPlayer = VLCMediaPlayer()
     @State var flagMute = true
     @State var flagFull = false
      
-    
     var body: some View {
         return VStack{
              
             HStack{
-                Text("value")
+                Text(cameraName)
                     .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
-                    .padding(10)
+                    .padding(5)
                 
-                Label("", systemImage: flagMute ? "speaker.slash" : "speaker")
-                    .padding(10)
+                Label("", systemImage: flagMute ? "" : "")
+                    .padding(5)
                     .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
                     .onTapGesture{
-                        flagMute.toggle()
                         mediaPlayer.audio.isMuted = flagMute
+                        flagMute.toggle()
                     }
             }
-            VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
-                .aspectRatio(16/9, contentMode: .fit)
-                .modifier( CardBackground() )
-                .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20 )
-                //.edgesIgnoringSafeArea(.all)
-                .onAppear(){
-                    mediaPlayer.play()
-                }
-                .onDisappear(){
-                    mediaPlayer.stop()
-                }
-                .onTapGesture{
-                    flagFull.toggle()
-                    mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
-                }
-                .navigationDestination(isPresented: $flagFull){
-                    ViewCameraFullScreen(urlString: urlString)
-                }
+             
+                VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+                    .aspectRatio(16/9, contentMode: .fit)
+                    .modifier( CardBackground() )
+                    .frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-10 )
+                    .onAppear(){
+                        mediaPlayer.audio.isMuted = flagMute
+                        mediaPlayer.play()
+                    }
+                    .onDisappear(){
+                        mediaPlayer.stop()
+                    }
+                    .onTapGesture{
+                        
+                        flagFull.toggle()
+                        if(flagFull == false){
+                            //mediaPlayer.stop()
+                        }
+                    }
+                
+        }
+        .navigationDestination(isPresented: $flagFull){
+            ViewCameraFullScreen(urlString: urlString)
         }
     }
 }
- 
-/*
- ["--rtsp-tcp": true, "--codec":"avcodec", "--network-caching":500, "--avcodec-hw":"none"]
- 
- "network-caching": 500,
- "sout-rtp-caching": 100,
- "sout-rtp-port-audio": 20000,
- "sout-rtp-port-video": 20002,
- ":rtp-timeout": 10000,
- ":rtsp-tcp": true,
- ":rtsp-frame-buffer-size":1024,
- ":rtsp-caching":0,
- ":live-caching":0,
- 
- videoPlayer.media?.addOption(":codec=avcodec")
- videoPlayer.media?.addOption(":vcodec=h264")
- videoPlayer.media?.addOption("--file-caching=2000")
- videoPlayer.media?.addOption("clock-jitter=0")
- videoPlayer.media?.addOption("--rtsp-tcp")
- videoPlayer.media?.clearStoredCookies()
- 
- videoPlayer.media?.addOption("-vv")
- 
- */
  

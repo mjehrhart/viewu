@@ -19,17 +19,14 @@ class AVRequester: NSObject {
 
 struct ViewCamera: View {
     
-    //
     @ObservedObject var config = NVRConfigurationSuper.shared()
     
     let title: String
-    @State private var path = NavigationPath()
+    @State var flagFull = false
+    //@State private var path = NavigationPath()
     
-//    @State var mediaPlayer1 : VLCMediaPlayer = VLCMediaPlayer()
-//    @State var mediaPlayer2 : VLCMediaPlayer = VLCMediaPlayer()
-//    
-//    @State var flagMute1 = true
-//    @State var flagMute2 = true
+    @State var flagAllowNonSub = false
+    var counter = 0;
     
     var body: some View {
         ScrollView {
@@ -37,34 +34,27 @@ struct ViewCamera: View {
                 Section{
                     
                     Section{
-                        //HStack{
+                         
                         ForEach(Array(config.item.go2rtc.streams.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, value in
-                             
-                            if value.contains("_sub"){
-                                Text(value)
+                            
+                            if value.contains("_sub"){ 
                                 ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
                                     ScrollView(.horizontal){
                                         
-                                        if url.starts(with: "rtsp"){
-                                            StreamRTSP2(urlString: url)
+                                        if url.starts(with: "rtsp"){ 
+                                            StreamRTSP2(urlString: url, cameraName: value)
                                         }
                                     }
                                 }
                             }
                         }
-                        //}
-                    } header: {
-                        Text("Cameras")
-                            .font(.caption)
                     }
                 }
-                
                 Spacer()
             }
         }
         .navigationBarTitle(title, displayMode: .inline)
         .scrollContentBackground(.hidden)
-        .toolbarBackground(.secondary, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
     }
 }
@@ -91,12 +81,8 @@ struct Webview: UIViewRepresentable {
 #Preview {
     ViewCamera(title: "Cameras")
 }
- 
-//Webview(url: "http://100.73.173.67:5555/api/front?h=480")
-//    .modifier(CardBackground())
-//    .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-//    .edgesIgnoringSafeArea(.all)
-//Webview(url: "http://100.73.173.67:5555/api/side?h=480")
+
+//Webview(url: url + "/api/front?h=480")
 //    .modifier(CardBackground())
 //    .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
 //    .edgesIgnoringSafeArea(.all)
