@@ -82,21 +82,7 @@ struct StreamRTSP2: View {
     
     var body: some View {
         return ZStack{
-            
-            //            HStack{
-            //                Text(cameraName)
-            //                    .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
-            //                    .padding(5)
-            //
-            //                Label("", systemImage: flagMute ? "" : "")
-            //                    .padding(5)
-            //                    .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
-            //                    .onTapGesture{
-            //                        mediaPlayer.audio.isMuted = flagMute
-            //                        flagMute.toggle()
-            //                    }
-            //            }
-            
+             
             LinearGradient(
                 colors: [.clear, .clear],
                 startPoint: .topLeading,
@@ -124,7 +110,7 @@ struct StreamRTSP2: View {
         }
         .padding(0)
         .navigationDestination(isPresented: $flagFull){
-            ViewCameraFullScreen(urlString: urlString)
+            ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
         }
     }
     
