@@ -22,7 +22,7 @@ struct ViewCameraFullScreen: View {
                 .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth)
                 .edgesIgnoringSafeArea(.all)
                 .onAppear(){
-                    mediaPlayer.audio.isMuted = false
+                    mediaPlayer.audio.isMuted = falsegi
                     mediaPlayer.play()
                 }
                 .onDisappear(){

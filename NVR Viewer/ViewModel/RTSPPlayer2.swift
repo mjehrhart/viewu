@@ -23,10 +23,10 @@ struct VlcPlayeyRTSP2: UIViewRepresentable{
 }
 
 class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
-     
+    
     //override
     init(frame: CGRect, urlString: String, mediaPlayer : VLCMediaPlayer) {
-         
+        
         super.init(frame: UIScreen.screens[0].bounds)
         //super.init(frame: CGRect(x:0,y:0, width:350, height: 250))
         
@@ -53,8 +53,6 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
             ]
         )
         
-        //
-        
         mediaPlayer.media = media
         mediaPlayer.delegate = self
         mediaPlayer.drawable = self
@@ -66,13 +64,13 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
         //mediaPlayer.libraryInstance.debugLogging = true
         //mediaPlayer.play()
     }
-  
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-     
+    
 }
- 
+
 struct StreamRTSP2: View {
     
     let urlString: String
@@ -81,47 +79,78 @@ struct StreamRTSP2: View {
     @State var mediaPlayer : VLCMediaPlayer = VLCMediaPlayer()
     @State var flagMute = true
     @State var flagFull = false
-     
+    
     var body: some View {
-        return VStack{
+        return ZStack{
+            
+            //            HStack{
+            //                Text(cameraName)
+            //                    .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
+            //                    .padding(5)
+            //
+            //                Label("", systemImage: flagMute ? "" : "")
+            //                    .padding(5)
+            //                    .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
+            //                    .onTapGesture{
+            //                        mediaPlayer.audio.isMuted = flagMute
+            //                        flagMute.toggle()
+            //                    }
+            //            }
+            
+            LinearGradient(
+                colors: [.clear, .clear],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+            
+            VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+                .padding(0)
+                .aspectRatio(16/9, contentMode: .fit)
+                .modifier( CardBackground() )
+                .frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-5)
+                .onAppear(){
+                    mediaPlayer.audio.isMuted = flagMute
+                    mediaPlayer.play()
+                }
+                .onDisappear(){
+                    mediaPlayer.stop()
+                }
+                .onTapGesture{
+                    flagFull.toggle()
+                }
+                .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
              
-            HStack{
-                Text(cameraName)
-                    .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
-                    .padding(5)
-                
-                Label("", systemImage: flagMute ? "" : "")
-                    .padding(5)
-                    .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
-                    .onTapGesture{
-                        mediaPlayer.audio.isMuted = flagMute
-                        flagMute.toggle()
-                    }
-            }
-             
-                VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
-                    .aspectRatio(16/9, contentMode: .fit)
-                    .modifier( CardBackground() )
-                    .frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-10 )
-                    .onAppear(){
-                        mediaPlayer.audio.isMuted = flagMute
-                        mediaPlayer.play()
-                    }
-                    .onDisappear(){
-                        mediaPlayer.stop()
-                    }
-                    .onTapGesture{
-                        
-                        flagFull.toggle()
-                        if(flagFull == false){
-                            //mediaPlayer.stop()
-                        }
-                    }
-                
         }
+        .padding(0)
         .navigationDestination(isPresented: $flagFull){
             ViewCameraFullScreen(urlString: urlString)
         }
     }
+    
+    struct CameraOverlay: View {
+        let name: String
+        @State var flagMute = true
+        @State var mediaPlayer : VLCMediaPlayer
+        
+        var body: some View {
+            
+//            Label("", systemImage: flagMute ? "speaker.slash" : "speaker")
+//                .padding(5)
+//                .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
+//                .foregroundColor(.white)
+//                .onTapGesture{
+//                    mediaPlayer.audio.isMuted = flagMute
+//                    flagMute.toggle()
+//                    print(flagMute, 100);
+//                }
+            
+            Text(name)
+                .padding([.top, .trailing], 10)
+                .padding(.leading, 10)
+                .foregroundColor(.white)
+        }
+    }
+     
 }
- 
+
