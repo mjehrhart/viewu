@@ -120,20 +120,11 @@ struct StreamRTSP2: View {
         @State var mediaPlayer : VLCMediaPlayer
         
         var body: some View {
-            
-//            Label("", systemImage: flagMute ? "speaker.slash" : "speaker")
-//                .padding(5)
-//                .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
-//                .foregroundColor(.white)
-//                .onTapGesture{
-//                    mediaPlayer.audio.isMuted = flagMute
-//                    flagMute.toggle()
-//                    print(flagMute, 100);
-//                }
-            
+             
             Text(name)
                 .padding([.top, .trailing], 10)
                 .padding(.leading, 10)
+                .padding(.bottom, 5)
                 .foregroundColor(.white)
         }
     }

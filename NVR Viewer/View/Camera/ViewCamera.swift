@@ -41,15 +41,14 @@ struct ViewCamera: View {
                                 ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
                                     ScrollView(.horizontal){
                                         
-                                        if url.starts(with: "rtsp"){ 
+                                        if url.starts(with: "rtsp"){
                                             StreamRTSP2(urlString: url, cameraName: value)
                                                 .padding(0)
                                         }
                                     }
                                 }
                             }
-                        }
-                         
+                        } 
                     }
                 }
                 Spacer()
