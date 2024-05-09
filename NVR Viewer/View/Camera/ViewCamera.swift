@@ -55,7 +55,7 @@ struct ViewCamera: View {
             }
         }
         .navigationBarTitle(title, displayMode: .inline)
-        .scrollContentBackground(.hidden)
+        //.scrollContentBackground(.hidden)
         .toolbarBackground(.visible, for: .navigationBar)
     }
 }

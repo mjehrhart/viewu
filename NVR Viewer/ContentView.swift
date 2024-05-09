@@ -172,6 +172,8 @@ struct ContentView: View {
                 ViewFilter()
                     .presentationDetents([.large])
             }
+            //added this 5/9
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) { 
                     Label("Filter", systemImage: "calendar.day.timeline.leading")

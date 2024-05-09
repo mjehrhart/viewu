@@ -659,150 +659,152 @@ struct ViewCameraDetails: View {
             }
             
             Section{
-                
-                Text("autotracking")
-                    .frame(width:UIScreen.screenWidth, alignment: .center)
-                //.padding(.leading, 40)
-                VStack{
-                    HStack{
-                        Text("Calibrate")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            Text("\(cameras.onvif.autotracking.calibrate_on_startup)")
-                                .frame( alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    HStack{
-                        Text("Enabled")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            Text("\(cameras.onvif.autotracking.enabled)")
-                                .frame( alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    HStack{
-                        Text("Config Enabled")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            Text("\(cameras.onvif.autotracking.enabled_in_config)")
-                                .frame( alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    HStack{
-                        Text("Return Preset")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            Text("\(cameras.onvif.autotracking.return_preset)")
-                                .frame( alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    HStack{
-                        Text("Timeout")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            Text("\(cameras.onvif.autotracking.timeout)")
-                                .frame( alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    HStack{
-                        Text("Zooming")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            Text("\(cameras.onvif.autotracking.zooming)")
-                                .frame( alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    HStack{
-                        Text("Zoom Factor")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            Text("\(cameras.onvif.autotracking.zoom_factor)")
-                                .frame( alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    HStack{
-                        Text("Track")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            Text("\(cameras.onvif.autotracking.track)")
-                                .frame( alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
                 HStack{
-                    Text("host")
+                    Text("Enabled")
                         .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                         .padding(.leading, 40)
-                    Text("\(cameras.onvif.host)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
+                    ScrollView(.horizontal){
+                        Text("\(cameras.onvif.autotracking.enabled)")
+                            .frame( alignment: .leading)
+                            .foregroundStyle(.gray)
+                    }
                 }
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
-                HStack{
-                    Text("password")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.onvif.password)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
+                if(cameras.onvif.autotracking.enabled) {
+                    Text("autotracking")
+                        .frame(width:UIScreen.screenWidth, alignment: .center)
+                    //.padding(.leading, 40)
+                    VStack{
+                        HStack{
+                            Text("Calibrate")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            ScrollView(.horizontal){
+                                Text("\(cameras.onvif.autotracking.calibrate_on_startup)")
+                                    .frame( alignment: .leading)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        
+                        
+                        HStack{
+                            Text("Config Enabled")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            ScrollView(.horizontal){
+                                Text("\(cameras.onvif.autotracking.enabled_in_config)")
+                                    .frame( alignment: .leading)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        HStack{
+                            Text("Return Preset")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            ScrollView(.horizontal){
+                                Text("\(cameras.onvif.autotracking.return_preset)")
+                                    .frame( alignment: .leading)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        HStack{
+                            Text("Timeout")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            ScrollView(.horizontal){
+                                Text("\(cameras.onvif.autotracking.timeout)")
+                                    .frame( alignment: .leading)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        HStack{
+                            Text("Zooming")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            ScrollView(.horizontal){
+                                Text("\(cameras.onvif.autotracking.zooming)")
+                                    .frame( alignment: .leading)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        HStack{
+                            Text("Zoom Factor")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            ScrollView(.horizontal){
+                                Text("\(cameras.onvif.autotracking.zoom_factor)")
+                                    .frame( alignment: .leading)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        HStack{
+                            Text("Track")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            ScrollView(.horizontal){
+                                Text("\(cameras.onvif.autotracking.track)")
+                                    .frame( alignment: .leading)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                    HStack{
+                        Text("host")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text("\(cameras.onvif.host)")
+                            .frame( alignment: .leading)
+                            .foregroundStyle(.gray)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                    HStack{
+                        Text("password")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text("\(cameras.onvif.password)")
+                            .frame( alignment: .leading)
+                            .foregroundStyle(.gray)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                    HStack{
+                        Text("port")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text("\(cameras.onvif.port)")
+                            .frame( alignment: .leading)
+                            .foregroundStyle(.gray)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                    HStack{
+                        Text("user")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text("\(cameras.onvif.user)")
+                            .frame( alignment: .leading)
+                            .foregroundStyle(.gray)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                 }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("port")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.onvif.port)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("user")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.onvif.user)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
             } header: {
                 Text("Onvif")
                     .font(.caption)
