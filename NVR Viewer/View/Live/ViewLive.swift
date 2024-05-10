@@ -70,7 +70,6 @@ struct ViewLive: View {
                         .frame(alignment: .trailing)
                     }
                 }
-                 
                 Spacer()
             }
         } 

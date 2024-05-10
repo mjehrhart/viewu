@@ -12,6 +12,7 @@ import TipKit
 
 struct ContentView: View {
     //Load Config
+    @ObservedObject var filter2 = EventFilter.shared()
     let nvr = NVRConfig.shared()
     @ObservedObject var config = NVRConfigurationSuper.shared()
     let cNVR = APIRequester()
@@ -82,7 +83,9 @@ struct ContentView: View {
                     
                     do {
                         config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
-                        //print("nvr = ", config.item)
+                         
+                        filter2.setCameras(items: config.item.cameras)
+                        filter2.setObject(items: config.item.cameras)
                     }catch{
                         print("Error Message goes here - 1001")
                     }

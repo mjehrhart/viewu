@@ -40,4 +40,36 @@ class EventFilter: ObservableObject{
         startDate = Calendar.current.date(byAdding: DateComponents(day: -1), to: Date()) ?? Date()
         endDate = Calendar.current.date(byAdding: DateComponents(day: 1), to: Date()) ?? Date()
     }
+    
+    func setCameras(items: [String : Cameras]){
+        
+        cameras.removeAll()
+        cameras.append("all")
+        
+        for (name, value) in items{
+            cameras.append(name)
+        }
+        
+        print(cameras)
+    } 
+    
+    func setObject(items: [String : Cameras]){
+        
+        objects.removeAll()
+        objects.append("all")
+        
+        for (name, value) in items{
+            let tmp = value.objects.filters
+            
+            for obj in tmp{
+                
+                if !objects.contains(obj.key){
+                    objects.append(obj.key)
+                }
+            }
+        }
+        
+        print(objects)
+    }
+      
 }

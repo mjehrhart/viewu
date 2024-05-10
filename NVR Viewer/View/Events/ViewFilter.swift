@@ -13,11 +13,7 @@ struct ViewFilter: View {
     @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
     
     @State private var scale = 1.0
-     
-    
-    //    @State private var selectedCamera: String
-    //    @State private var selectedObject: String
-    //    @State private var selectedDaysBack: Int
+      
     
     init(){
         //        _selectedCamera = State(initialValue: filter.selectedCamera)
@@ -55,17 +51,17 @@ struct ViewFilter: View {
                             .padding(0)
                     }
                     
-                    HStack{
-                        Label("", systemImage: "square.dashed")
-                            .padding(0)
-                        Picker("Zone", selection: $filter2.selectedZone) {
-                            ForEach(filter2.zones, id: \.self) {
-                                Text($0)
-                            }
-                        }.pickerStyle( .menu )
-                            .frame(minWidth: 100)
-                            .padding(0)
-                    }
+//                    HStack{
+//                        Label("", systemImage: "square.dashed")
+//                            .padding(0)
+//                        Picker("Zone", selection: $filter2.selectedZone) {
+//                            ForEach(filter2.zones, id: \.self) {
+//                                Text($0)
+//                            }
+//                        }.pickerStyle( .menu )
+//                            .frame(minWidth: 100)
+//                            .padding(0)
+//                    }
                 } header: {
                     Text("Filter")
                         .font(.largeTitle)

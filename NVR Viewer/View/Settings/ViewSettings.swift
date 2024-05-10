@@ -287,6 +287,19 @@ struct ViewSettings: View {
                         .font(.caption)
                 }
                 
+                Section{
+                    ScrollView(.horizontal){
+                        Text("0.1.0")
+                            .frame(alignment: .leading)
+                            .foregroundStyle(.tertiary)
+                            .textSelection(.enabled)
+                    }
+                    
+                } header: {
+                    Text("Version")
+                        .font(.caption)
+                }
+                
                 if developerModeIsOn {
                     Section{
                         ScrollView(.horizontal){
@@ -301,6 +314,8 @@ struct ViewSettings: View {
                             .font(.caption)
                     }
                 }
+                
+                
             }
             Spacer()
         }
