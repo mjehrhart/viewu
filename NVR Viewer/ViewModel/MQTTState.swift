@@ -22,6 +22,7 @@ final class MQTTAppState: ObservableObject {
     
     @State private var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     @AppStorage("viewu_device_paired") private var viewuDevicePaired: Bool = false
+    @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
     func setReceivedMessage(text: String) {
         
@@ -32,16 +33,16 @@ final class MQTTAppState: ObservableObject {
             //do nothing as this is a message response back to the viewu server
             return
         }
-        else if text == "viewu_device_paired" {
+        else if text.contains("viewu_device_paired"){
             //device is now paired
             viewuDevicePaired = true
+            let version = text.components(separatedBy: ":")
+            print(version)
+            viewuServerVersion = version[1]
+            
             return
         }
-        
-        print(100, "-------------------------------------------")
-        print(100, "-------------------------------------------")
-        print(developerModeIsOn);
-        
+         
         if developerModeIsOn {
             do {
                 

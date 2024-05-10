@@ -35,7 +35,8 @@ struct ViewSettings: View {
      
     var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
     //var viewuPairedDevice: Bool = UserDefaults.standard.bool(forKey: "viewu_device_paired")
-    @State @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
+    @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
+    @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
     let widthMultiplier:CGFloat = 2/5.8
     var body: some View {
@@ -288,15 +289,28 @@ struct ViewSettings: View {
                 }
                 
                 Section{
-                    ScrollView(.horizontal){
-                        Text("0.1.0")
-                            .frame(alignment: .leading)
-                            .foregroundStyle(.tertiary)
-                            .textSelection(.enabled)
+                    VStack {
+                        HStack{
+                            Text("App:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text("0.1.0")
+                                .frame(alignment: .leading)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        HStack{
+                            Text("Server:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(viewuServerVersion)
+                                .frame(alignment: .leading)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading) 
                     }
-                    
                 } header: {
-                    Text("Version")
+                    Text("Viewu Version")
                         .font(.caption)
                 }
                 

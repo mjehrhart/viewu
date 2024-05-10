@@ -48,10 +48,8 @@ class EventFilter: ObservableObject{
         
         for (name, value) in items{
             cameras.append(name)
-        }
-        
-        print(cameras)
-    } 
+        } 
+    }
     
     func setObject(items: [String : Cameras]){
         
@@ -68,8 +66,6 @@ class EventFilter: ObservableObject{
                 }
             }
         }
-        
-        print(objects)
     }
       
 }
