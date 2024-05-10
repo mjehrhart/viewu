@@ -33,8 +33,7 @@ struct ContentView: View {
     @State private var showNVR = false
     @State private var showLog = false
     @State private var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
-    
-    //@State private var path: [Cameras] = []
+     
     @State private var path = NavigationPath()
     //@State private var path: NavigationPath = .init()
     
@@ -43,13 +42,6 @@ struct ContentView: View {
     }
     
     var body: some View{
-//        Color.yellow
-//            .ignoresSafeArea()
-//        GeometryReader { reader in
-//                            Color.yellow
-//                                .frame(height: reader.safeAreaInsets.top, alignment: .top)
-//                                .ignoresSafeArea()
-//                        }
         
         NavigationStack (path: $path) { //(path: $path)
             VStack {
@@ -78,9 +70,9 @@ struct ContentView: View {
                     }
                 }
             }
-            //.background(Color(UIColor.secondarySystemBackground))
             .task(){
                 
+                //Load Defaults for app
                 let url = nvr.getUrl()
                 let urlString = url + "/api/config"
                 
@@ -208,15 +200,15 @@ struct ContentView: View {
                         })
                         .foregroundStyle(showSettings ? .blue : .gray)
                     
-                    if developerModeIsOn {
-                        Spacer()
-                        Label("Log", systemImage: "note.text")
-                            .labelStyle(VerticalLabelStyle())
-                            .onTapGesture(perform: {
-                                showLog.toggle()
-                            })
-                            .foregroundStyle(showSettings ? .blue : .gray)
-                    }
+//                    if developerModeIsOn {
+//                        Spacer()
+//                        Label("Log", systemImage: "note.text")
+//                            .labelStyle(VerticalLabelStyle())
+//                            .onTapGesture(perform: {
+//                                showLog.toggle()
+//                            })
+//                            .foregroundStyle(showSettings ? .blue : .gray)
+//                    }
                 }
             } 
         }

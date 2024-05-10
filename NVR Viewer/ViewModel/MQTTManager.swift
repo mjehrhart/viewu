@@ -23,6 +23,8 @@ import UserNotifications
     @Published var user: String = UserDefaults.standard.string(forKey: "mqttUser") ?? ""
     @Published var password: String = UserDefaults.standard.string(forKey: "mqttPassword") ?? ""
 
+    var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
+    
     @Published var currentAppState = MQTTAppState()
     private var anyCancellable: AnyCancellable?
      
@@ -47,18 +49,12 @@ import UserNotifications
         }
         
         self.identifier = UUID().uuidString
-        let id = "NVR Notifier_\(self.identifier ?? "RandomIDGoesHere")_" + String(ProcessInfo().processIdentifier)
-
-        // TODO: Guard
-        //let p = port
-        //let portConverted = UInt16(port)!
-        
+        let id = "viewu_\(self.identifier ?? "RandomIDGoesHere")_" + String(ProcessInfo().processIdentifier)
+ 
         if let number = UInt16(port) {
             mqttClient = CocoaMQTT(clientID: id, host: ip, port: number)
         }
-        
-         //mqttClient = CocoaMQTT(clientID: id, host: ip, port: 1883)
- 
+         
         if isAnonymous {
             mqttClient?.username = self.user
             mqttClient?.password = self.password
@@ -138,14 +134,14 @@ import UserNotifications
 }
 
 extension MQTTManager: CocoaMQTTDelegate {
-     
+      
     func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
         currentAppState.setAppConnectionState(state: .connectedSubscribed)
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
         currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
-        currentAppState.clearData()
+        //-currentAppState.clearData()
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
@@ -153,6 +149,7 @@ extension MQTTManager: CocoaMQTTDelegate {
             currentAppState.setAppConnectionState(state: .connected)
             //TODO clean this up 
             mqttClient?.subscribe("frigate/events")
+            mqttClient?.subscribe("viewu/pairing")
         }
     }
      
@@ -174,7 +171,7 @@ extension MQTTManager: CocoaMQTTDelegate {
 
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
         currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
-        currentAppState.clearData()
+        //-currentAppState.clearData()
     }
     //3
     func mqttDidPing(_ mqtt: CocoaMQTT) {

@@ -13,6 +13,7 @@ import SQLite3
 
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate, ObservableObject {
     
+    @AppStorage("fcm") private var fcmID: String = ""
     weak var notificationManager: NotificationManager?
     @ObservedObject var epsSup = EndpointOptionsSuper.shared()
     
@@ -46,6 +47,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         if let fcm = Messaging.messaging().fcmToken {
             print("fcm", fcm)
+            fcmID = fcm
         } else {
             print("Oh No!::UIApplicationDelegateAdaptor::messaging()")
         }

@@ -32,6 +32,10 @@ struct ViewSettings: View {
     @AppStorage("mqttIsAnonUser") private var mqttIsAnonUser: Bool = true
     @AppStorage("mqttUser") private var mqttUser: String = ""
     @AppStorage("mqttPassword") private var mqttPassword: String = ""
+     
+    var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
+    //var viewuPairedDevice: Bool = UserDefaults.standard.bool(forKey: "viewu_device_paired")
+    @State @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
     
     let widthMultiplier:CGFloat = 2/5.8
     var body: some View {
@@ -46,110 +50,111 @@ struct ViewSettings: View {
                         .font(.caption)
                 }
                 
-                if developerModeIsOn {
-                    Section {
+                if developerModeIsOn {}
+                Section {
+                    HStack{
+                        Text("Broker Address:")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        TextField("0.0.0.0", text: $mqttIPAddress)
+                            .frame(alignment: .leading)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+
+                    HStack{
+                        Text("Port:")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        TextField("1883", text: $mqttPortAddress)
+                            .frame(alignment: .leading)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+
+                    HStack{
+                        Text("Topic:")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text("viewu/pairing")
+                            .frame(alignment: .leading)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                    if developerModeIsOn {
                         HStack{
-                            Text("Broker Address:")
+                            Text("")
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                 .padding(.leading, 40)
-                            TextField("0.0.0.0", text: $mqttIPAddress)
-                                .frame(alignment: .leading)
-                                .foregroundStyle(.tertiary)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
- 
-                        HStack{
-                            Text("Port:")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            TextField("1883", text: $mqttPortAddress)
-                                .frame(alignment: .leading)
-                                .foregroundStyle(.tertiary)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
- 
-                        HStack{
-                            Text("Topic:")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            Text("frigate/events")
+                            Text("frigagte/events")
                                 .frame(alignment: .leading)
                                 .foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                         
-                        Toggle("Anonymous", isOn: $mqttIsAnonUser)
-                            .onTapGesture{
-                                if !mqttIsAnonUser {
-                                    mqttUser = ""
-                                    mqttPassword = ""
-                                }
+                    }
+                    
+                    Toggle("Anonymous", isOn: $mqttIsAnonUser)
+                        .onTapGesture{
+                            if !mqttIsAnonUser {
+                                mqttUser = ""
+                                mqttPassword = ""
                             }
-                        if !mqttIsAnonUser {
-                            VStack{
+                        }
+                    if !mqttIsAnonUser {
+                        VStack{
+                            HStack{
                                 Text("User:")
-                                    .frame(width: UIScreen.screenWidth - 80, alignment: .leading)
+                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                    .padding(.leading, 40)
                                 TextField("", text: $mqttUser)
-                                //.frame(width: UIScreen.screenWidth - 80, alignment: .leading)
-                                    .disabled(mqttIsAnonUser)
-                                
-                                Text("Password:")
-                                    .frame(width: UIScreen.screenWidth - 80, alignment: .leading)
-                                TextField("", text: $mqttPassword)
-                                //.frame(width: UIScreen.screenWidth - 80, alignment: .leading)
+                                    .frame(alignment: .leading)
+                                    .foregroundStyle(.tertiary)
                                     .disabled(mqttIsAnonUser)
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        }
-                        
-                        Label(mqttManager.isConnected() ? "Connected" : "Disconnected", systemImage: "cable.connector")
-                            .frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
-                            .foregroundStyle(mqttManager.isConnected() ? .green : .red)
-                        
-                        Button("Save Connection") {
                             
-                            //Sync data accross view and model
-                            mqttManager.setAnonymous(anonymous: mqttIsAnonUser )
-                            mqttManager.setIP(ip: mqttIPAddress )
-                            mqttManager.setPort( port: mqttPortAddress )
-                            mqttManager.setCredentials(user: mqttUser, password: mqttPassword)
-                            
-                            //connect to mqtt broker
-                            mqttManager.initializeMQTT()
-                            mqttManager.connect()
-                        }
-                        .buttonStyle(.bordered)
-                        .scaleEffect(scale)
-                        .animation(.linear(duration: 1), value: scale)
-                        .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                        
-                    } header: {
-                        Text("MQTT Settings")
-                            .font(.caption)
-                    }
-                }
-                
-                Section {
-                    Text("Allowed: \(notificationManager.hasPermission ? "Enabled" : "Disabled")" as String)
-                    
-                    if !notificationManager.hasPermission{
-                        Button("Request Notification"){
-                            Task{
-                                await notificationManager.request()
+                            HStack{
+                                Text("Password:")
+                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                    .padding(.leading, 40)
+                                TextField("", text: $mqttPassword)
+                                    .frame(alignment: .leading)
+                                    .foregroundStyle(.tertiary)
+                                    .disabled(mqttIsAnonUser)
                             }
+                            .frame(width: UIScreen.screenWidth, alignment: .leading) 
                         }
-                        .buttonStyle(.bordered)
-                        .disabled(notificationManager.hasPermission)
-                        .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
-                        .task {
-                            await notificationManager.getAuthStatus()
-                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
                     }
+                    
+                    Label(mqttManager.isConnected() ? "Connected" : "Disconnected", systemImage: "cable.connector")
+                        .frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
+                        .foregroundStyle(mqttManager.isConnected() ? .green : .red)
+                    
+                    Button("Save Connection") {
+                        
+                        //Sync data accross view and model
+                        mqttManager.setAnonymous(anonymous: mqttIsAnonUser )
+                        mqttManager.setIP(ip: mqttIPAddress )
+                        mqttManager.setPort( port: mqttPortAddress )
+                        mqttManager.setCredentials(user: mqttUser, password: mqttPassword)
+                        
+                        //connect to mqtt broker
+                        mqttManager.initializeMQTT()
+                        mqttManager.connect()
+                    }
+                    .buttonStyle(.bordered)
+                    .scaleEffect(scale)
+                    .animation(.linear(duration: 1), value: scale)
+                    .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
+                     
                 } header: {
-                    Text("Notifications")
+                    Text("MQTT Settings")
                         .font(.caption)
                 }
-                
+                   
                 Section {
                     HStack{
                         Text("Address:")
@@ -172,7 +177,7 @@ struct ViewSettings: View {
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     Toggle("Https", isOn: $nvrIsHttps)
-                    LabeledContent("NVR Synced", value: "No")
+//                    LabeledContent("NVR Synced", value: "No")
                     
                     //TODO this doesnt refresh as expected
                     Label(nvrManager.getConnectionState() ? "Connected" : "Disconnected", systemImage: "cable.connector")
@@ -193,11 +198,43 @@ struct ViewSettings: View {
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
+                    
                 } header: {
                     Text("NVR Settings")
                         .font(.caption)
                 }
-                   
+                
+                Section {
+                    HStack{
+                        Text("Allowed")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text(notificationManager.hasPermission  ? "Enabled" : "Disabled")
+                            .frame(alignment: .leading)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                    //Text("Allowed: \(notificationManager.hasPermission ? "Enabled" : "Disabled")" as String)
+                    
+                    if !notificationManager.hasPermission{
+                        Button("Request Notification"){
+                            Task{
+                                await notificationManager.request()
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .disabled(notificationManager.hasPermission)
+                        .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
+                        .task {
+                            await notificationManager.getAuthStatus()
+                        }
+                    }
+                } header: {
+                    Text("Notifications")
+                        .font(.caption)
+                }
+                 
                 Section{
                     Button("Clear All Storage") {
                         showingAlert = true
@@ -218,6 +255,51 @@ struct ViewSettings: View {
                 } header: {
                     Text("SQLite")
                         .font(.caption)
+                }
+                
+                Section{
+                    HStack{
+                        Text("Paired:")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text(viewuDevicePairedArg ? "Enabled" : "Disabled")
+                            .frame(alignment: .leading)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                     
+                    Button("Pair") {
+                        viewuDevicePairedArg = false
+                        for i in 0..<1 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
+                                    withAnimation(.easeInOut) {
+                                        mqttManager.publish(topic: "viewu/pairing", with: fcm)
+                                    }
+                                }
+                            }
+                    }
+                    .buttonStyle(.bordered)
+                    .scaleEffect(scale)
+                    .animation(.linear(duration: 1), value: scale)
+                    .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
+                } header: {
+                    Text("Pair Device")
+                        .font(.caption)
+                }
+                
+                if developerModeIsOn {
+                    Section{
+                        ScrollView(.horizontal){
+                            Text(fcm)
+                                .frame(alignment: .leading)
+                                .foregroundStyle(.tertiary)
+                                .textSelection(.enabled)
+                        }
+                        
+                    } header: {
+                        Text("APN ID")
+                            .font(.caption)
+                    }
                 }
             }
             Spacer()
