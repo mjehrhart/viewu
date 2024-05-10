@@ -16,13 +16,13 @@ class EventFilter: ObservableObject{
     }
  
     @Published var selectedCamera: String = "all"
-    @Published var cameras = ["all", "front", "side"]
+    @Published var cameras = ["all"]
     
     @Published var selectedObject: String = "all"
-    @Published var objects = ["all", "bird", "backpack", "dog", "person"]
+    @Published var objects = ["all"]
     
     @Published var selectedZone: String = "all"
-    @Published var zones = ["all", "front", "back", "side", "pool"]
+    @Published var zones = ["all"]
     
     //@Published var endDate = Date()
     //Add 1 future day so the app can search til midnight of today
