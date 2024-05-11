@@ -13,8 +13,10 @@ struct ViewUIImage: View{
     
     let cNVR = APIRequester()
     let urlString: String
+    let frameTime: Double
     @State var data: Data?
     @State private var zoomIn: Bool = false
+    @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
     
     var body: some View {
         
@@ -43,12 +45,25 @@ struct ViewUIImage: View{
                         
                         if let error = error {
                             
-                            //if Event Snapshot is empty, show this instead
-                            cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
+                            //TODO
+                            //Not sure i like this approach as it forces the list to reload when an image is removed
+                            print("Found ERROR ======================================================================")
+                            let flag = EventStorage.shared.delete(frameTime: frameTime)
+                            print(flag)
+                            if flag {
                                 
-                                if let error = error {  
-                                } else {
-                                    self.data = data
+//                                epsSuper.list3.removeAll(where: { _ in frameTime.isEqual(to: frameTime) } )
+//                                EventStorage.shared.readAll3(completion: { res in
+//                                    epsSuper.list3 = res!
+//                                })
+                                
+                                //if Event Snapshot is empty, show this instead
+                                cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
+                                    
+                                    if let error = error {  
+                                    } else {
+                                        self.data = data
+                                    }
                                 }
                             }
                             

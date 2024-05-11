@@ -51,7 +51,7 @@ struct ViewEventInformation: View {
                     HStack{
                         ForEach(endPointOptionsArray, id: \.self) { eps in
                              
-                            ViewUIImage(urlString: eps.image! )
+                            ViewUIImage(urlString: eps.image!,frameTime: 0.0  )
                                 .modifier(CardBackground())
                                 .padding(0)
                             

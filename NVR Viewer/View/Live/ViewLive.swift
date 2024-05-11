@@ -31,15 +31,6 @@ struct ViewLive: View {
         VStack(alignment: .leading){
             ScrollView {
                 
-                Button {
-                    self.selection = 0
-                    notificationManager2.newPage = 0
-                } label: {
-                    Label("Timeline", systemImage: "chevron.left")
-                }
-                .frame(width: UIScreen.screenWidth-10, alignment: .leading)
-                .padding(.leading, 20)
- 
                 HStack{
                     Label("Camera \(container.cameraName!.capitalized)", systemImage: "web.camera")
                         .frame(width: UIScreen.screenWidth/2 - 30, alignment: .leading)
@@ -73,7 +64,19 @@ struct ViewLive: View {
                 Spacer()
             }
         } 
-        .navigationBarTitle(text, displayMode: .inline) 
+        .toolbar {
+            ToolbarItemGroup(placement: .navigation) {
+                
+                Label("Timeline", systemImage: "chevron.left")
+                    .labelStyle(HorizontalLabelStyle())
+                    .foregroundStyle(.blue)
+                    .onTapGesture(perform: {
+                        self.selection = 0
+                        notificationManager2.newPage = 0
+                    })
+            }
+        }
+        .navigationBarTitle(text, displayMode: .inline)
     }
 }
  

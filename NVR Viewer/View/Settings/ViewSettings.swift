@@ -289,7 +289,7 @@ struct ViewSettings: View {
                 }
                 
                 Section{
-                    VStack {
+                    //VStack {
                         HStack{
                             Text("App:")
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -308,7 +308,7 @@ struct ViewSettings: View {
                                 .foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading) 
-                    }
+                    //}
                 } header: {
                     Text("Viewu Version")
                         .font(.caption)

@@ -47,7 +47,7 @@ struct ViewEventCard: View {
                 .modifier(CardBackground())
                 .frame(width: 110, alignment: .leading)
                 
-                ViewUIImage(urlString: container.snapshot! )
+                ViewUIImage(urlString: container.snapshot!, frameTime: containers[0].frameTime! )
                     .modifier(CardBackground())
             }
              

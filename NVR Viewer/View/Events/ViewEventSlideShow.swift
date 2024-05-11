@@ -30,7 +30,7 @@ struct ViewEventSlideShow: View {
             ScrollView(.horizontal){
                 HStack{
                     ForEach(containers, id: \.self){ container in
-                        ViewUIImage(urlString: container.image! )
+                        ViewUIImage(urlString: container.image!,frameTime: 0.0 )
                             .modifier(CardBackground())
                             .padding(0)
                     }
