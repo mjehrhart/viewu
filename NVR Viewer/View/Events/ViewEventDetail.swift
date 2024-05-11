@@ -43,7 +43,6 @@ struct ViewEventDetail: View {
                             notificationManager2.newPage = 0
                         } label: {
                             Label("Timeline", systemImage: "chevron.left")
-                                //.font(.title3)
                         }
                         .frame(width: 90, alignment: .leading)
                         .padding(20)
@@ -52,83 +51,119 @@ struct ViewEventDetail: View {
                     Label("Camera \(container.cameraName!.capitalized)", systemImage: "web.camera")
                         .frame( alignment: .leading)
                         .padding()
-                        //.background(.blue, in: RoundedRectangle(cornerRadius: 5))
                     Label("\(container.label!.capitalized)", systemImage: "figure.walk.motion")
                         .frame(alignment: .trailing)
                         .padding()
-                        //.background(.blue, in: RoundedRectangle(cornerRadius: 5))
                 }
-                //.padding(.bottom, 10)
                 .padding(.top, 0)
                  
                 
                 HStack{
                     Text("Video Clip")
-                        .frame(width:UIScreen.screenWidth/2 - 18, alignment: .leading)
+                        .frame(width:UIScreen.screenWidth - 30, alignment: .leading)
                         .padding(10)
-                    
-                    Label("", systemImage: "speaker")
-                        .padding(10)
-                        .frame(width:UIScreen.screenWidth/2 - 18, alignment: .trailing)
                 }
-                //.background(.blue, in: RoundedRectangle(cornerRadius: 5) )
                  
                 ViewPlayVideo(urlString: container.m3u8!)
                     .modifier(CardBackground())
                     .padding(0)
+                    .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
                  
-                if let _ = container.m3u8{
-                    HStack{
-                        Button{
-                            UIPasteboard.general.string = container.m3u8!
-                        } label: {
-                            Image(systemName: "doc.on.doc")
-                        }
-                        .frame(width: 340, alignment: .trailing)
-                        
-                        ShareLink(item: container.m3u8!, preview: SharePreview("NVR Video Clip", image: container.m3u8!)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .frame(alignment: .trailing)
-                    }
-                }
+//                if let _ = container.m3u8{
+//                    HStack{
+//                        Button{
+//                            UIPasteboard.general.string = container.m3u8!
+//                        } label: {
+//                            Image(systemName: "doc.on.doc")
+//                        }
+//                        .frame(width: 340, alignment: .trailing)
+//                        
+//                        ShareLink(item: container.m3u8!, preview: SharePreview("NVR Video Clip", image: container.m3u8!)){
+//                            Image(systemName: "square.and.arrow.up")
+//                        }
+//                        .frame(alignment: .trailing)
+//                    }
+//                }
                 Spacer().frame(height:20)
                 
                 Text("Snapshot")
                     .frame(width: UIScreen.screenWidth-30, alignment: .leading)
                     .padding(10)
-                    //.background(.blue, in: RoundedRectangle(cornerRadius: 5))
                 
                 ViewUIImageFull(urlString: container.snapshot!)
                     .modifier(CardBackground())
                     .padding(0)
-                
-                if let _ = container.snapshot{
-                    HStack{
-                        Button{
-                            UIPasteboard.general.string = container.snapshot!
-                        } label: {
-                            Image(systemName: "doc.on.doc")
-                        }
-                        .frame(width: 340, alignment: .trailing)
-                        
-                        ShareLink(item: container.snapshot!, preview: SharePreview("NVR Video Clip", image: container.snapshot!)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .frame(alignment: .trailing)
-                    }
-                }
+                    .overlay(CameraOverlaySnapShot(toCopy: container.snapshot! ), alignment: .bottomTrailing)
+                 
+//                if let _ = container.snapshot{
+//                    HStack{
+//                        Button{
+//                            UIPasteboard.general.string = container.snapshot!
+//                        } label: {
+//                            Image(systemName: "doc.on.doc")
+//                        }
+//                        .frame(width: 340, alignment: .trailing)
+//                        
+//                        ShareLink(item: container.snapshot!, preview: SharePreview("Viewu Clip", image: container.snapshot!)){
+//                            Image(systemName: "square.and.arrow.up")
+//                        }
+//                        .frame(alignment: .trailing)
+//                    }
+//                }
                 
                 ViewEventSlideShow(eventId: container.id!)
-                
-                //This is a comment in misc
-                //new comment
                 
                 Spacer()
             }
         }
         .navigationTitle(text)
     }
+    
+    struct CameraOverlayVideoClip: View {
+        
+        let toCopy: String
+        var body: some View {
+             
+            HStack{
+                ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .frame(alignment: .trailing)
+                .foregroundColor(.white)
+            }
+            .padding(.trailing, 5)
+            .padding(.bottom, 5)
+             
+        }
+    }
+    
+    struct CameraOverlaySnapShot: View {
+        
+        let toCopy: String
+        
+        var body: some View {
+             
+            HStack{
+                Button{
+                    UIPasteboard.general.string = toCopy
+                } label: {
+                    Image(systemName: "doc.on.doc")
+                }
+                .frame(width: 340, alignment: .trailing)
+                .foregroundColor(.white)
+                
+                ShareLink(item: toCopy, preview: SharePreview("Viewu SnapshotE", image: toCopy)){
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .frame(alignment: .trailing)
+                .foregroundColor(.white)
+            }
+            .padding(.trailing, 5)
+            .padding(.bottom, 5)
+             
+        }
+    }
+    
 }
 
 
