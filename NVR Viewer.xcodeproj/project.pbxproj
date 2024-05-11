@@ -98,6 +98,7 @@
 		34FEA80F2BEAE2670015E8A6 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 34FEA80E2BEAE2670015E8A6 /* FirebaseCrashlytics */; };
 		34FEA8112BEAE2670015E8A6 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 34FEA8102BEAE2670015E8A6 /* FirebaseMessaging */; };
 		34FEA8132BEAE2670015E8A6 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 34FEA8122BEAE2670015E8A6 /* FirebaseStorage */; };
+		34FEA8172BEF15770015E8A6 /* ViewLiveLandscape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FEA8162BEF15770015E8A6 /* ViewLiveLandscape.swift */; };
 		4273E5C51ED170CAF443AAE4 /* Pods_NVR_Viewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */; };
 /* End PBXBuildFile section */
 
@@ -201,6 +202,7 @@
 		34E544F22B9ABD8C00137F34 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		34E545622B9ADA0800137F34 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		34FEA8072BEAC2D80015E8A6 /* ViewCameraFullScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCameraFullScreen.swift; sourceTree = "<group>"; };
+		34FEA8162BEF15770015E8A6 /* ViewLiveLandscape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLiveLandscape.swift; sourceTree = "<group>"; };
 		86AA419A5283043C2EB5342F /* Pods-NVR Viewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NVR Viewer.debug.xcconfig"; path = "Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer.debug.xcconfig"; sourceTree = "<group>"; };
 		BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NVR_Viewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -285,6 +287,7 @@
 		348333BE2BB8DFB600ED1DF2 /* Live */ = {
 			isa = PBXGroup;
 			children = (
+				34FEA8162BEF15770015E8A6 /* ViewLiveLandscape.swift */,
 				348333BF2BB8DFC600ED1DF2 /* ViewLive.swift */,
 			);
 			path = Live;
@@ -706,6 +709,7 @@
 				34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */,
 				34D5EFF32B92B1DF002A84B0 /* MQTTState.swift in Sources */,
 				348AB7B82BA54B33001ADE6C /* ViewEventCard.swift in Sources */,
+				34FEA8172BEF15770015E8A6 /* ViewLiveLandscape.swift in Sources */,
 				34D5EFD82B92AB1F002A84B0 /* ContentView.swift in Sources */,
 				34D5F0052B92B490002A84B0 /* APIBuilder.swift in Sources */,
 				34D5F0072B92B4C3002A84B0 /* TopicFrigateEvent.swift in Sources */,

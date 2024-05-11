@@ -62,6 +62,7 @@ struct ContentView: View {
                         ViewEventListHome()
                     case 1:
                         ViewLive(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: false)
+                        //ViewLiveLandscape(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: false)
                     case 2:
                         ViewNVRDetails()
                             .transition(.move(edge: .trailing))
