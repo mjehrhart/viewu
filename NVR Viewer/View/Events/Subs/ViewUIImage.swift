@@ -21,19 +21,21 @@ struct ViewUIImage: View{
     var body: some View {
         
         if let data = data, let uiimage = UIImage(data: data){
-            
-            Image(uiImage: uiimage)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: self.zoomIn ? UIScreen.screenWidth*1.25: 250, height:self.zoomIn ? UIScreen.screenWidth : 150 )  //leave screenWidth alone
-                .transition(.slide)
-                .onAppear{
-                }
-                .onTapGesture{
-                    withAnimation {
-                        zoomIn.toggle()
+             
+            ScrollView(.horizontal){
+                Image(uiImage: uiimage)
+                    .resizable()
+                    .aspectRatio(16/9, contentMode: self.zoomIn ? .fill : .fit)
+                //.frame(width: self.zoomIn ? UIScreen.screenWidth: 250, height:self.zoomIn ? UIScreen.screenWidth : 150 )  //leave screenWidth alone
+                    .frame(width: self.zoomIn ? 260 : 260, height:self.zoomIn ? 310 : 146)
+                    .transition(.slide)
+                    .onTapGesture{
+                        withAnimation {
+                            zoomIn.toggle()
+                        }
                     }
-                }
+            }
+            
         } else {
             //Dummy Space
             Text("")
@@ -43,7 +45,7 @@ struct ViewUIImage: View{
                     
                     cNVR.fetchImage(urlString: urlString){ (data, error) in
                         
-                        if let error = error {
+                        if let _ = error {
                             
                             //TODO
                             //Not sure i like this approach as it forces the list to reload when an image is removed
@@ -60,7 +62,7 @@ struct ViewUIImage: View{
                                 //if Event Snapshot is empty, show this instead
                                 cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
                                     
-                                    if let error = error {  
+                                    if let _ = error {
                                     } else {
                                         self.data = data
                                     }

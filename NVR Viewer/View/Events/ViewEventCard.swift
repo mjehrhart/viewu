@@ -12,6 +12,9 @@ struct ViewEventCard: View {
     @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
+    //
+    @State private var zoomIn: Bool = false
+    
     init(frameTime: Double) {
         containers = EventStorage.shared.getEventByFrameTime(frameTime3: frameTime )
     }
@@ -48,7 +51,7 @@ struct ViewEventCard: View {
                 .frame(width: 110, alignment: .leading)
                 
                 ViewUIImage(urlString: container.snapshot!, frameTime: containers[0].frameTime! )
-                    .modifier(CardBackground())
+                    .modifier(CardBackground()) 
             }
              
         }
