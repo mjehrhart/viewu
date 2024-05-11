@@ -30,27 +30,9 @@ struct ViewLive: View {
     var body: some View {
         VStack(alignment: .leading){
             ScrollView {
-                
-//                HStack{
-//                    Label("Camera \(container.cameraName!.capitalized)", systemImage: "web.camera")
-//                        .frame(width: UIScreen.screenWidth/2 - 30, alignment: .leading)
-//                        .padding(10)
-//                    Label("\(container.label!.capitalized)", systemImage: "figure.walk.motion")
-//                        .frame(width: UIScreen.screenWidth/2 - 30, alignment: .trailing)
-//                        .padding(10)
-//                }
-//                .background(.blue, in: RoundedRectangle(cornerRadius: 5) )
-                
-                
-//                ViewUIImageFull(urlString: container.snapshot! ,zoomIn: true)
-//                    .modifier(CardBackground())
-//                    .padding([.leading, .top, .trailing], 10)
-                
-                
+ 
                 ViewLiveLandscape(urlString: container.snapshot!, cameraName: container.cameraName! ,zoomIn: false)
-//                    .modifier(CardBackground())
                     .padding([.top], 147)
-                
                 
 //                if let _ = container.snapshot{
 //                    
