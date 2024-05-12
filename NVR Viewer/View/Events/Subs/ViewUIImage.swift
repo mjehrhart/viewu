@@ -25,9 +25,9 @@ struct ViewUIImage: View{
             ScrollView(.horizontal){
                 Image(uiImage: uiimage)
                     .resizable()
-                    .aspectRatio(16/9, contentMode: self.zoomIn ? .fill : .fit)
+                    .aspectRatio(16/9, contentMode: self.zoomIn ? .fill : .fill)
                 //.frame(width: self.zoomIn ? UIScreen.screenWidth: 250, height:self.zoomIn ? UIScreen.screenWidth : 150 )  //leave screenWidth alone
-                    .frame(width: self.zoomIn ? 260 : 260, height:self.zoomIn ? 310 : 146)
+                    .frame(width: self.zoomIn ? 260 : 260, height:self.zoomIn ? 310 : 166)
                     .transition(.slide)
                     .onTapGesture{
                         withAnimation {
