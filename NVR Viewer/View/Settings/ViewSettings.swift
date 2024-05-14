@@ -97,12 +97,12 @@ struct ViewSettings: View {
                     }
                     
                     Toggle("Anonymous", isOn: $mqttIsAnonUser)
-                        .onTapGesture{
-                            if !mqttIsAnonUser {
-                                mqttUser = ""
-                                mqttPassword = ""
-                            }
-                        }
+//                        .onTapGesture{
+//                            if !mqttIsAnonUser {
+//                                mqttUser = ""
+//                                mqttPassword = ""
+//                            }
+//                        }
                     if !mqttIsAnonUser {
                         VStack{
                             HStack{
@@ -120,7 +120,8 @@ struct ViewSettings: View {
                                 Text("Password:")
                                     .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                     .padding(.leading, 40)
-                                TextField("", text: $mqttPassword)
+                                 
+                                SecureField("", text: $mqttPassword)
                                     .frame(alignment: .leading)
                                     .foregroundStyle(.tertiary)
                                     .disabled(mqttIsAnonUser)

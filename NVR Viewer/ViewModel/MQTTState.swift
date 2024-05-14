@@ -125,7 +125,7 @@ final class MQTTAppState: ObservableObject {
             }
         }
         else {
-            print("developerModeIsOn set to false")
+            //print("developerModeIsOn set to false")
         }
     }
      

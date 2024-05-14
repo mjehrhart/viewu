@@ -43,6 +43,8 @@ import UserNotifications
 
     func initializeMQTT() {
          
+        print("initializeMQTT");
+        
         //is this really needed
         if mqttClient != nil {
             mqttClient = nil
@@ -55,10 +57,16 @@ import UserNotifications
             mqttClient = CocoaMQTT(clientID: id, host: ip, port: number)
         }
          
-        if isAnonymous {
+        if !isAnonymous {
             mqttClient?.username = self.user
             mqttClient?.password = self.password
+            
+            print("isAnonymous is false")
+            print(isAnonymous)
+            print(user, self.user)
+            print(password, self.password)
         }
+        
         mqttClient?.willMessage = CocoaMQTTMessage(topic: "/will", string: "dieout")
         mqttClient?.keepAlive = 60
         mqttClient?.delegate = self
