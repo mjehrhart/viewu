@@ -74,6 +74,33 @@ class EventStorage: ObservableObject {
         }
     }
     
+    func delete(daysBack: Int, cameraName: String) -> Bool {
+ 
+        guard let database = db else {
+            return false
+        }
+         
+        do {
+             
+            if let date = Calendar.current.date(byAdding: .day, value: -daysBack, to: Date()) {
+           
+                let d = floor(date.timeIntervalSince1970)
+                 
+                let filter = events.filter(self.frameTime < d &&
+                                           self.cameraName == cameraName)
+                 
+                try database.run(filter.delete())
+                
+                return true
+            }
+             
+            return false
+        } catch {
+            print(error)
+            return false
+        }
+    }
+    
     func delete(frameTime: Double) -> Bool {
         
         guard let database = db else {

@@ -60,7 +60,7 @@ class EventFilter: ObservableObject{
             let tmp = value.objects.filters
             
             for obj in tmp{
-                
+                 
                 if !objects.contains(obj.key){
                     objects.append(obj.key)
                 }

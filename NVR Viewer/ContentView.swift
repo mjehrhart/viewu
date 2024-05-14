@@ -86,10 +86,18 @@ struct ContentView: View {
                          
                         filter2.setCameras(items: config.item.cameras)
                         filter2.setObject(items: config.item.cameras)
+                        
+                        //Delete non-retained snapshots
+                        for (name, value) in config.item.cameras{
+         
+                            let daysBack = value.snapshots.retain.default
+                            let cont = EventStorage.shared.delete(daysBack:daysBack, cameraName: value.name)
+                        }
+                         
                     }catch{
                         print("Error Message goes here - 1001")
                     }
-                }
+                } 
             }
             .task {
                 do{
