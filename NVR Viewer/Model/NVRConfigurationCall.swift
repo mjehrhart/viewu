@@ -38,9 +38,9 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                    objects: CameraObjects(filters: ["": CameraFilters(max_area: 0, max_ratio: 0, min_area: 0, min_ratio: 0, min_score: 0.0, threshold: 0.0) ] ),
                                    onvif: ONVIF(autotracking: AutoTracking(calibrate_on_startup: false, enabled: false, enabled_in_config: false, return_preset: "", timeout: 0, track: [], zoom_factor: 0.0, zooming: ""),
                                                 host: "", password: "", port: 1800, user: ""), 
-                                   record: Record(enabled: false, enabled_in_config: false, events: CameraEvents(post_capture: 0, pre_capture: 0, retain: Retain(mode: "")), expire_interval: 0, export: Export(timelapse_args: ""), retain: RecordRetain(days: 0, mode: ""), sync_recordings: false), 
-                                   rtmp: RTMP(enabled: false), 
-                                   snapshots: Snapshots(bounding_box: false, clean_copy: false, crop: false, enabled: false, height: 0, quality: 0, retain: SnapshotsRetain(mode: ""), timestamp: false), 
+                                   record: Record(enabled: false, enabled_in_config: false, events: CameraEvents(post_capture: 0, pre_capture: 0, retain: Retain(default: 0, mode: "")), expire_interval: 0, export: Export(timelapse_args: ""), retain: RecordRetain(days: 0, mode: ""), sync_recordings: false),
+                                   rtmp: RTMP(enabled: false),
+                                   snapshots: Snapshots(bounding_box: false, clean_copy: false, crop: false, enabled: false, height: 0, quality: 0, retain: SnapshotsRetain(default: 0, mode: ""), timestamp: false),
                                    timestamp_style: TimeStampStyle(color: TimeStampStyleColor(blue: 0, green: 0, red: 0), format: "", position: "", thickness: 0),
                                    ui: CameraUI(dashboard: false, order: 0), 
                                    webui_url: ""
@@ -136,7 +136,8 @@ struct Snapshots: Codable, Hashable {
     let timestamp: Bool
 }
 struct SnapshotsRetain: Codable, Hashable {
-    //let default: Int -> default is a keyword //TODO
+    //TODO
+    let `default`: Int //-> default is a keyword //TODO
     let mode: String
     //let objects: {} Unknown Type
 }
@@ -173,7 +174,7 @@ struct CameraEvents: Codable, Hashable {
 }
 
 struct Retain: Codable, Hashable {
-    //let default: Int -> default is a keyword. //TODO
+    let `default`: Int    // -> default is a keyword. //TODO
     let mode: String
     //let objects: [Unknown Type]
 }

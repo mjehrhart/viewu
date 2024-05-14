@@ -877,12 +877,19 @@ struct ViewCameraDetails: View {
                         Text("retain")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.record.retain.days)")
-                            .frame( alignment: .leading)
-                            .foregroundStyle(.gray)
                         Text("\(cameras.record.retain.mode)")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                    HStack{
+                        Text("retain days")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text("\(cameras.record.retain.days)")
+                            .frame( alignment: .leading)
+                            .foregroundStyle(.gray) 
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
@@ -984,6 +991,16 @@ struct ViewCameraDetails: View {
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
                         Text("\(cameras.snapshots.retain.mode)")
+                            .frame( alignment: .leading)
+                            .foregroundStyle(.gray)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                    HStack{
+                        Text("retain days")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text("\(cameras.snapshots.retain.default)")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
