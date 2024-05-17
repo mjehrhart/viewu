@@ -28,7 +28,7 @@ struct ViewSettings: View {
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
     
     @AppStorage("mqttIPAddress") private var mqttIPAddress: String = ""
-    @AppStorage("mqttPortAddress") private var mqttPortAddress: String = ""
+    @AppStorage("mqttPortAddress") private var mqttPortAddress: String = "1883"
     @AppStorage("mqttIsAnonUser") private var mqttIsAnonUser: Bool = true
     @AppStorage("mqttUser") private var mqttUser: String = ""
     @AppStorage("mqttPassword") private var mqttPassword: String = ""

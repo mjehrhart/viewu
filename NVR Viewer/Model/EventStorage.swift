@@ -456,6 +456,8 @@ class EventStorage: ObservableObject {
                 }
             } else { 
                 print("No records inserted")
+                print(dataset)
+                print("-------------------")
                 return
             }
         }
