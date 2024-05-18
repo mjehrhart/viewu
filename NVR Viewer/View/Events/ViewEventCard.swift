@@ -19,6 +19,17 @@ struct ViewEventCard: View {
         containers = EventStorage.shared.getEventByFrameTime(frameTime3: frameTime )
     }
     
+    private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
+    
+    func setWidth() -> CGFloat{
+        
+        if idiom == .pad {
+            return 200
+        } else {
+            return 110
+        }
+    }
+    
     var body: some View {
         ForEach(containers, id: \.self){ container in
             HStack{
@@ -48,7 +59,7 @@ struct ViewEventCard: View {
                     Spacer()
                 }
                 .modifier(CardBackground())
-                .frame(width: 110, alignment: .leading)
+                .frame(width: setWidth(), alignment: .leading) //110
                 
                 ViewUIImage(urlString: container.snapshot!, frameTime: containers[0].frameTime! )
                     .modifier(CardBackground()) 

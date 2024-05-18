@@ -18,6 +18,35 @@ struct ViewUIImage: View{
     @State private var zoomIn: Bool = false
     @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
     
+    private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
+    
+    func setWidth() -> CGFloat{
+        
+        if idiom == .pad {
+            var width = UIScreen.screenWidth
+            width = width - 200
+//            var w = width * 16/9
+//            w = (-w + width) * -1
+             
+            return width
+        } else {
+            var width = UIScreen.screenWidth
+            return width - 110
+            //return 260
+        }
+    }
+    
+    func setHeight() -> CGFloat {
+        
+        var height = UIScreen.screenHeight
+        
+        if idiom == .pad {
+            return (setWidth() * 9/16)
+        } else {
+            return 166
+        }
+    }
+    
     var body: some View {
         
         if let data = data, let uiimage = UIImage(data: data){
@@ -26,8 +55,8 @@ struct ViewUIImage: View{
                 Image(uiImage: uiimage)
                     .resizable()
                     .aspectRatio(16/9, contentMode: self.zoomIn ? .fill : .fill)
-                //.frame(width: self.zoomIn ? UIScreen.screenWidth: 250, height:self.zoomIn ? UIScreen.screenWidth : 150 )  //leave screenWidth alone
-                    .frame(width: self.zoomIn ? 260 : 260, height:self.zoomIn ? 310 : 166)
+                    .frame(width: self.zoomIn ? setWidth() : setWidth(), height: self.zoomIn ? setHeight() * 1.5 : setHeight() )  //leave screenWidth alone
+                    //.frame(width: self.zoomIn ? 260 : 260, height:self.zoomIn ? 310 : 166)
                     .transition(.slide)
                     .onTapGesture{
                         withAnimation {

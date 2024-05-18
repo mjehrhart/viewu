@@ -39,6 +39,10 @@ struct ViewSettings: View {
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
     let widthMultiplier:CGFloat = 2/5.8
+    
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+    let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+    
     var body: some View {
         VStack {
             
@@ -295,7 +299,17 @@ struct ViewSettings: View {
                             Text("App:")
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                 .padding(.leading, 40)
-                            Text("0.1.0")
+                            Text(appVersion!)
+                                .frame(alignment: .leading)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
+                        HStack{
+                            Text("Build:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(appBuild!)
                                 .frame(alignment: .leading)
                                 .foregroundStyle(.tertiary)
                         }
