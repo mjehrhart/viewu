@@ -63,7 +63,7 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         TextField("0.0.0.0", text: $mqttIPAddress)
                             .frame(alignment: .leading)
-                            .foregroundStyle(.tertiary)
+                        //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
 
@@ -73,7 +73,7 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         TextField("1883", text: $mqttPortAddress)
                             .frame(alignment: .leading)
-                            .foregroundStyle(.tertiary)
+                            //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
 
@@ -83,7 +83,7 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         Text("viewu/pairing")
                             .frame(alignment: .leading)
-                            .foregroundStyle(.tertiary)
+                            //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
@@ -94,7 +94,7 @@ struct ViewSettings: View {
                                 .padding(.leading, 40)
                             Text("frigagte/events")
                                 .frame(alignment: .leading)
-                                .foregroundStyle(.tertiary)
+                            //.foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                         
@@ -115,7 +115,7 @@ struct ViewSettings: View {
                                     .padding(.leading, 40)
                                 TextField("", text: $mqttUser)
                                     .frame(alignment: .leading)
-                                    .foregroundStyle(.tertiary)
+                                //.foregroundStyle(.tertiary)
                                     .disabled(mqttIsAnonUser)
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading)
@@ -127,7 +127,7 @@ struct ViewSettings: View {
                                  
                                 SecureField("", text: $mqttPassword)
                                     .frame(alignment: .leading)
-                                    .foregroundStyle(.tertiary)
+                                //.foregroundStyle(.tertiary)
                                     .disabled(mqttIsAnonUser)
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading) 
@@ -169,7 +169,7 @@ struct ViewSettings: View {
                         ScrollView(.horizontal){
                             TextField("0.0.0.0", text: $nvrIPAddress)
                                 .frame(alignment: .leading) 
-                                .foregroundStyle(.tertiary)
+                            //.foregroundStyle(.tertiary)
                         }
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
@@ -179,7 +179,7 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         TextField("5000", text: $nvrPortAddress)
                             .frame(alignment: .leading)
-                            .foregroundStyle(.tertiary)
+                        //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     Toggle("Https", isOn: $nvrIsHttps)
@@ -217,7 +217,7 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         Text(notificationManager.hasPermission  ? "Enabled" : "Disabled")
                             .frame(alignment: .leading)
-                            .foregroundStyle(.tertiary)
+                        //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
@@ -270,7 +270,7 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         Text(viewuDevicePairedArg ? "Enabled" : "Disabled")
                             .frame(alignment: .leading)
-                            .foregroundStyle(.tertiary)
+                        //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                      
@@ -301,7 +301,7 @@ struct ViewSettings: View {
                                 .padding(.leading, 40)
                             Text(appVersion!)
                                 .frame(alignment: .leading)
-                                .foregroundStyle(.tertiary)
+                            //.foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
@@ -311,7 +311,7 @@ struct ViewSettings: View {
                                 .padding(.leading, 40)
                             Text(appBuild!)
                                 .frame(alignment: .leading)
-                                .foregroundStyle(.tertiary)
+                            //.foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                         HStack{
@@ -320,7 +320,7 @@ struct ViewSettings: View {
                                 .padding(.leading, 40)
                             Text(viewuServerVersion)
                                 .frame(alignment: .leading)
-                                .foregroundStyle(.tertiary)
+                            //.foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading) 
                     //}
@@ -334,7 +334,7 @@ struct ViewSettings: View {
                         ScrollView(.horizontal){
                             Text(fcm)
                                 .frame(alignment: .leading)
-                                .foregroundStyle(.tertiary)
+                            //.foregroundStyle(.tertiary)
                                 .textSelection(.enabled)
                         }
                         
