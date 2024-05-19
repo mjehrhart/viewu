@@ -359,17 +359,17 @@ struct ViewCameraDetails: View {
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                         
-                        HStack{
-                            Text("RTMP")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            ScrollView(.horizontal){
-                                Text("\(cameras.ffmpeg.output_args.rtmp)")
-                                    .frame( alignment: .leading)
-                                    .foregroundStyle(.gray)
-                            }
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                        HStack{
+//                            Text("RTMP")
+//                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                                .padding(.leading, 40)
+//                            ScrollView(.horizontal){
+//                                Text("\(cameras.ffmpeg.output_args.rtmp)")
+//                                    .frame( alignment: .leading)
+//                                    .foregroundStyle(.gray)
+//                            }
+//                        }
+//                        .frame(width: UIScreen.screenWidth, alignment: .leading)
                     }
                     
                 }
@@ -459,103 +459,103 @@ struct ViewCameraDetails: View {
                     .font(.caption)
             }
             
-            Section{
-                HStack{
-                    Text("contour_area")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.motion.contour_area)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("delta_alpha")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.motion.delta_alpha)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("frame_alpha")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.motion.frame_alpha)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("frame_height")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.motion.frame_height)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("improve_contrast")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.motion.improve_contrast)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("lightning_threshold")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.motion.lightning_threshold)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("mask")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    ScrollView(.horizontal) {
-                        Text("\(cameras.motion.mask)")
-                            .frame( alignment: .leading)
-                            .foregroundStyle(.gray)
-                    }
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("threshold")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.motion.threshold)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                HStack{
-                    Text("mqtt_off_delay")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.motion.mqtt_off_delay)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-            } header: {
-                Text("Motion")
-                    .font(.caption)
-            }
+//            Section{
+//               HStack{
+//                    Text("contour_area")
+//                       .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                       .padding(.leading, 40)
+//                    Text("\(cameras.motion.contour_area)")
+//                       .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//                HStack{
+//                    Text("delta_alpha")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.motion.delta_alpha)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//                HStack{
+//                    Text("frame_alpha")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.motion.frame_alpha)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//                HStack{
+//                    Text("frame_height")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.motion.frame_height)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//                HStack{
+//                    Text("improve_contrast")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.motion.improve_contrast)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//                HStack{
+//                    Text("lightning_threshold")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.motion.lightning_threshold)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//                HStack{
+//                    Text("mask")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    ScrollView(.horizontal) {
+//                        Text("\(cameras.motion.mask)")
+//                            .frame( alignment: .leading)
+//                            .foregroundStyle(.gray)
+//                    }
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//                HStack{
+//                    Text("threshold")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.motion.threshold)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//                HStack{
+//                    Text("mqtt_off_delay")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.motion.mqtt_off_delay)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//            } header: {
+//                Text("Motion")
+//                    .font(.caption)
+//            }
             
             Section{
                 HStack{
@@ -908,21 +908,21 @@ struct ViewCameraDetails: View {
                     .font(.caption)
             }
             
-            Section{
-                HStack{
-                    Text("enabled")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.rtmp.enabled)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-            } header: {
-                Text("Rtmp")
-                    .font(.caption)
-            }
+//            Section{
+//                HStack{
+//                    Text("enabled")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.rtmp.enabled)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//            } header: {
+//                Text("Rtmp")
+//                    .font(.caption)
+//            }
             
             Section{
                 HStack{
@@ -1122,21 +1122,21 @@ struct ViewCameraDetails: View {
                     .font(.caption)
             }
             
-            Section{
-                HStack{
-                    Text("webui_url")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.webui_url)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-            } header: {
-                Text("Web URL")
-                    .font(.caption)
-            }
+//            Section{
+//                HStack{
+//                    Text("webui_url")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.webui_url)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
+//            } header: {
+//                Text("Web URL")
+//                    .font(.caption)
+//            }
             
         }
         .navigationBarTitle(text, displayMode: .inline)

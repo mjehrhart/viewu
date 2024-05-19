@@ -78,7 +78,11 @@ struct ContentView: View {
                 let urlString = url + "/api/config"
                 
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
-                    
+                    print("fetchNVRConfig()")
+                    print("============-----------------======================")
+                    print("============-----------------======================")
+                    print(data)
+                    print(error)
                     guard let data = data else { return }
                     
                     do {
@@ -87,15 +91,16 @@ struct ContentView: View {
                         filter2.setCameras(items: config.item.cameras)
                         filter2.setObject(items: config.item.cameras)
                         
-                        //Delete non-retained snapshots
+                        // Delete non-retained snapshots
                         for (name, value) in config.item.cameras{
          
                             let daysBack = value.snapshots.retain.default
                             let cont = EventStorage.shared.delete(daysBack:daysBack, cameraName: value.name)
                         }
                          
-                    }catch{
+                    }catch (let err){
                         print("Error Message goes here - 1001")
+                        print(err)
                     }
                 } 
             }

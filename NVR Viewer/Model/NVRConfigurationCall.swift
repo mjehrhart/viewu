@@ -27,23 +27,23 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                                   //hwaccel_args: [],
                                                   input_args: "",
                                                   inputs: [],
-                                                  output_args: CameraOutputArgs(detect: [], record: "", rtmp: ""),
+                                                  output_args: CameraOutputArgs(detect: [], record: "" ), //, rtmp: ""
                                                   retry_interval: 0 )
                                    ,
                                    ffmpeg_cmds: [],
                                    live: Live(height: 0, quality: 0, stream_name: ""), 
-                                   motion: Motion(contour_area: 0, delta_alpha: 0.0, frame_alpha: 0.0, frame_height: 0, improve_contrast: false, lightning_threshold: 0.0, mask: [], mqtt_off_delay: 0, threshold: 0), 
-                                   mqtt: CameraMQTT(bounding_box: false, crop: false, enabled: false, height: 0, quality: 0, timestamp: false), 
+                                   //motion: Motion(contour_area: 0, delta_alpha: 0.0, frame_alpha: 0.0, frame_height: 0, improve_contrast: false, lightning_threshold: 0.0, mask: [], mqtt_off_delay: 0, threshold: 0), 
+                                   mqtt: CameraMQTT(bounding_box: false, crop: false, enabled: false, height: 0, quality: 0, timestamp: false),
                                    name: "",
                                    objects: CameraObjects(filters: ["": CameraFilters(max_area: 0, max_ratio: 0, min_area: 0, min_ratio: 0, min_score: 0.0, threshold: 0.0) ] ),
                                    onvif: ONVIF(autotracking: AutoTracking(calibrate_on_startup: false, enabled: false, enabled_in_config: false, return_preset: "", timeout: 0, track: [], zoom_factor: 0.0, zooming: ""),
                                                 host: "", password: "", port: 1800, user: ""), 
                                    record: Record(enabled: false, enabled_in_config: false, events: CameraEvents(post_capture: 0, pre_capture: 0, retain: Retain(default: 0, mode: "")), expire_interval: 0, export: Export(timelapse_args: ""), retain: RecordRetain(days: 0, mode: ""), sync_recordings: false),
-                                   rtmp: RTMP(enabled: false),
+                                   //rtmp: RTMP(enabled: false),
                                    snapshots: Snapshots(bounding_box: false, clean_copy: false, crop: false, enabled: false, height: 0, quality: 0, retain: SnapshotsRetain(default: 0, mode: ""), timestamp: false),
                                    timestamp_style: TimeStampStyle(color: TimeStampStyleColor(blue: 0, green: 0, red: 0), format: "", position: "", thickness: 0),
-                                   ui: CameraUI(dashboard: false, order: 0), 
-                                   webui_url: ""
+                                   ui: CameraUI(dashboard: false, order: 0)
+//                                   webui_url: ""
             )],
             mqtt: MQTT(client_id: "String",
                        enabled: false,
@@ -82,18 +82,18 @@ struct Cameras: Codable, Hashable {
     let ffmpeg: FFMPEG
     let ffmpeg_cmds: [FFMPEGCommands]
     let live: Live
-    let motion: Motion
+    //let motion: Motion
     let mqtt: CameraMQTT
     let name: String
     let objects: CameraObjects
     let onvif: ONVIF
     let record: Record
-    let rtmp: RTMP
+    //let rtmp: RTMP
     let snapshots: Snapshots
     let timestamp_style: TimeStampStyle
     let ui: CameraUI
-    let webui_url: String?
-//    //let zones: {} -> Unknown Type
+//    let webui_url: String?
+//    let zones: {} -> Unknown Type
 }
 
 struct FFMPEG: Codable, Hashable {
@@ -136,8 +136,7 @@ struct Snapshots: Codable, Hashable {
     let timestamp: Bool
 }
 struct SnapshotsRetain: Codable, Hashable {
-    //TODO
-    let `default`: Int //-> default is a keyword //TODO
+    let `default`: Int
     let mode: String
     //let objects: {} Unknown Type
 }
@@ -256,7 +255,7 @@ struct CameraInputs: Codable, Hashable {
 struct CameraOutputArgs: Codable, Hashable {
     let detect: [String]
     let record: String
-    let rtmp: String
+    //let rtmp: String?
 }
 
 struct Detect: Codable, Hashable {
