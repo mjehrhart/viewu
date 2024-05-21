@@ -43,7 +43,7 @@ final class MQTTAppState: ObservableObject {
             return
         }
          
-        //if developerModeIsOn {
+        if developerModeIsOn {
             do {
                 
                 
@@ -123,10 +123,10 @@ final class MQTTAppState: ObservableObject {
             catch let error as NSError {
                 print(error)
             }
-//        }
-//        else {
-//            print("developerModeIsOn set to false")
-//        }
+        }
+        else {
+            print("developerModeIsOn set to false")
+        }
     }
      
     func setAppConnectionState(state: MQTTAppConnectionState) {
