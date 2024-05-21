@@ -24,9 +24,9 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                    enabled: false, 
                                    ffmpeg: FFMPEG(
                                                   global_args: [],
-                                                  //hwaccel_args: [],
+                                                  //hwaccel_args: "", //is this a string or array
                                                   input_args: "",
-                                                  inputs: [],
+                                                  //inputs: [],
                                                   output_args: CameraOutputArgs(detect: [], record: "" ), //, rtmp: ""
                                                   retry_interval: 0 )
                                    ,
@@ -98,9 +98,9 @@ struct Cameras: Codable, Hashable {
 
 struct FFMPEG: Codable, Hashable {
     let global_args: [String]
-//    let hwaccel_args: [String]
+//    let hwaccel_args: String
     let input_args: String
-    let inputs: [CameraInputs]
+//    let inputs: [CameraInputs]
     let output_args: CameraOutputArgs
     let retry_interval: Int
 }

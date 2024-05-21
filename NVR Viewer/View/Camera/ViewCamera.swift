@@ -24,6 +24,7 @@ struct ViewCamera: View {
     let title: String
     @State var flagFull = false
     //@State private var path = NavigationPath()
+    var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
     @State var flagAllowNonSub = false
     var counter = 0;
@@ -44,6 +45,11 @@ struct ViewCamera: View {
                                         if url.starts(with: "rtsp"){
                                             StreamRTSP2(urlString: url, cameraName: value)
                                                 .padding(0)
+                                            if developerModeIsOn {
+                                                Text(url)
+                                                    .textSelection(.enabled)
+                                            }
+                                            
                                         }
                                     }
                                 }

@@ -214,7 +214,7 @@ struct ViewCameraDetails: View {
                 Text("Detect")
                     .font(.caption)
             }
-            
+          
             Section{
                 HStack{
                     Text("Global Args")
@@ -242,90 +242,90 @@ struct ViewCameraDetails: View {
                 //                        }
                 //                    }
                 //                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
+                //.frame(width: UIScreen.screenWidth, alignment: .leading)
                 
-                HStack{
-                    Text("Input Args")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.ffmpeg.input_args)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
+//                HStack{
+//                    Text("Input Args")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.ffmpeg.input_args)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                
                 VStack{
                     Text("Inputs")
                         .frame(width:UIScreen.screenWidth, alignment: .center)
                     //.padding(.leading, 40)
                     
-                    VStack{
-                        ForEach(cameras.ffmpeg.inputs, id: \.self) {item in
-                            
-                            HStack{
-                                Text("Path")
-                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                    .padding(.leading, 40)
-                                ScrollView(.horizontal){
-                                    Text("\(item.path)")
-                                        .frame(width: .infinity, alignment: .leading)
-                                        .foregroundStyle(.gray)
-                                }
-                            }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-                            
-                            HStack{
-                                Text("Global Args")
-                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                    .padding(.leading, 40)
-                                ScrollView(.horizontal){
-                                    Text("\(item.global_args)")
-                                        .frame(width: .infinity, alignment: .leading)
-                                        .foregroundStyle(.gray)
-                                }
-                            }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-                            
-                            
-                            HStack{
-                                Text("HwAccel Args")
-                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                    .padding(.leading, 40)
-                                ScrollView(.horizontal){
-                                    Text("\(item.hwaccel_args)")
-                                        .frame(width: .infinity, alignment: .leading)
-                                        .foregroundStyle(.gray)
-                                }
-                            }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-                            
-                            HStack{
-                                Text("Input Args")
-                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                    .padding(.leading, 40)
-                                ScrollView(.horizontal){
-                                    Text("\(item.input_args)")
-                                        .frame(width: .infinity, alignment: .leading)
-                                        .foregroundStyle(.gray)
-                                }
-                            }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-                            
-                            HStack{
-                                Text("Roles")
-                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                    .padding(.leading, 40)
-                                ScrollView(.horizontal){
-                                    Text("\(item.roles)")
-                                        .frame(width: .infinity, alignment: .leading)
-                                        .foregroundStyle(.gray)
-                                }
-                            }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-                            
-                        }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                    VStack{
+//                        ForEach(cameras.ffmpeg.inputs, id: \.self) {item in
+//                            
+//                            HStack{
+//                                Text("Path")
+//                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                                    .padding(.leading, 40)
+//                                ScrollView(.horizontal){
+//                                    Text("\(item.path)")
+//                                        .frame(width: .infinity, alignment: .leading)
+//                                        .foregroundStyle(.gray)
+//                                }
+//                            }
+//                            .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                            
+//                            HStack{
+//                                Text("Global Args")
+//                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                                    .padding(.leading, 40)
+//                                ScrollView(.horizontal){
+//                                    Text("\(item.global_args)")
+//                                        .frame(width: .infinity, alignment: .leading)
+//                                        .foregroundStyle(.gray)
+//                                }
+//                            }
+//                            .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                            
+//                            
+////                            HStack{
+////                                Text("HwAccel Args")
+////                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+////                                    .padding(.leading, 40)
+////                                ScrollView(.horizontal){
+////                                    Text("\(item.hwaccel_args)")
+////                                        .frame(width: .infinity, alignment: .leading)
+////                                        .foregroundStyle(.gray)
+////                                }
+////                            }
+////                            .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                            
+////                            HStack{
+////                                Text("Input Args")
+////                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+////                                    .padding(.leading, 40)
+////                                ScrollView(.horizontal){
+////                                    Text("\(item.input_args)")
+////                                        .frame(width: .infinity, alignment: .leading)
+////                                        .foregroundStyle(.gray)
+////                                }
+////                            }
+////                            .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                            
+//                            HStack{
+//                                Text("Roles")
+//                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                                    .padding(.leading, 40)
+//                                ScrollView(.horizontal){
+//                                    Text("\(item.roles)")
+//                                        .frame(width: .infinity, alignment: .leading)
+//                                        .foregroundStyle(.gray)
+//                                }
+//                            }
+//                            .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                            
+//                        }
+//                    }
+//                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                 }
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
@@ -358,18 +358,7 @@ struct ViewCameraDetails: View {
                             }
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        
-//                        HStack{
-//                            Text("RTMP")
-//                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-//                                .padding(.leading, 40)
-//                            ScrollView(.horizontal){
-//                                Text("\(cameras.ffmpeg.output_args.rtmp)")
-//                                    .frame( alignment: .leading)
-//                                    .foregroundStyle(.gray)
-//                            }
-//                        }
-//                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                         
                     }
                     
                 }
@@ -389,7 +378,7 @@ struct ViewCameraDetails: View {
                 Text("FFMEPG")
                     .font(.caption)
             }
-            
+          
             Section{
                 HStack{
                     Text("Global Args")
