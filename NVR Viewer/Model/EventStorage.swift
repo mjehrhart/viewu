@@ -418,7 +418,7 @@ class EventStorage: ObservableObject {
              
             let dataset = self.getEventByFrameTime(frameTime3: frameTime)
              
-            if dataset[0].thumbnail == "" {
+            if dataset[0].thumbnail == "" { //should be ==
                 guard let database = db else { return }
                 
                 let insert = events.insert(self.id <- id,

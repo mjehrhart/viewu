@@ -38,7 +38,7 @@ struct ViewCamera: View {
                          
                         ForEach(Array(config.item.go2rtc.streams.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, value in
                             
-                            if value.contains("_sub"){
+                            //if value.contains("_sub"){
                                 ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
                                     ScrollView(.horizontal){
                                         
@@ -49,12 +49,11 @@ struct ViewCamera: View {
                                                 Text(url)
                                                     .textSelection(.enabled)
                                             }
-                                            
                                         }
                                     }
                                 }
-                            }
-                        } 
+                            //}
+                        }
                     }
                 }
                 Spacer()

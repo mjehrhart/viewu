@@ -216,19 +216,19 @@ struct ViewCameraDetails: View {
             }
           
             Section{
-                HStack{
-                    Text("Global Args")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    HStack{
-                        ScrollView(.horizontal){
-                            Text("\(cameras.ffmpeg.global_args)")
-                                .frame(width: .infinity, alignment: .leading)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                HStack{
+//                    Text("Global Args")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    HStack{
+//                        ScrollView(.horizontal){
+//                            Text("\(cameras.ffmpeg.global_args)")
+//                                .frame(width: .infinity, alignment: .leading)
+//                                .foregroundStyle(.gray)
+//                        }
+//                    }
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
                 //                HStack{
                 //                    Text("HwAccel Args")
@@ -259,7 +259,7 @@ struct ViewCameraDetails: View {
                         .frame(width:UIScreen.screenWidth, alignment: .center)
                     //.padding(.leading, 40)
                     
-//                    VStack{
+                    VStack{
 //                        ForEach(cameras.ffmpeg.inputs, id: \.self) {item in
 //                            
 //                            HStack{
@@ -270,6 +270,7 @@ struct ViewCameraDetails: View {
 //                                    Text("\(item.path)")
 //                                        .frame(width: .infinity, alignment: .leading)
 //                                        .foregroundStyle(.gray)
+//                                        .textSelection(.enabled)
 //                                }
 //                            }
 //                            .frame(width: UIScreen.screenWidth, alignment: .leading)
@@ -287,29 +288,29 @@ struct ViewCameraDetails: View {
 //                            .frame(width: UIScreen.screenWidth, alignment: .leading)
 //                            
 //                            
-////                            HStack{
-////                                Text("HwAccel Args")
-////                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-////                                    .padding(.leading, 40)
-////                                ScrollView(.horizontal){
-////                                    Text("\(item.hwaccel_args)")
-////                                        .frame(width: .infinity, alignment: .leading)
-////                                        .foregroundStyle(.gray)
-////                                }
-////                            }
-////                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-//                            
-////                            HStack{
-////                                Text("Input Args")
-////                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-////                                    .padding(.leading, 40)
-////                                ScrollView(.horizontal){
-////                                    Text("\(item.input_args)")
-////                                        .frame(width: .infinity, alignment: .leading)
-////                                        .foregroundStyle(.gray)
-////                                }
-////                            }
-////                            .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                            HStack{
+//                                Text("HwAccel Args")
+//                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                                    .padding(.leading, 40)
+//                                ScrollView(.horizontal){
+//                                    Text("\(item.hwaccel_args)")
+//                                        .frame(width: .infinity, alignment: .leading)
+//                                        .foregroundStyle(.gray)
+//                                }
+//                            }
+//                            .frame(width: UIScreen.screenWidth, alignment: .leading)
+                            
+//                            HStack{
+//                                Text("Input Args")
+//                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                                    .padding(.leading, 40)
+//                                ScrollView(.horizontal){
+//                                    Text("\(item.input_args)")
+//                                        .frame(width: .infinity, alignment: .leading)
+//                                        .foregroundStyle(.gray)
+//                                }
+//                            }
+//                            .frame(width: UIScreen.screenWidth, alignment: .leading)
 //                            
 //                            HStack{
 //                                Text("Roles")
@@ -322,57 +323,57 @@ struct ViewCameraDetails: View {
 //                                }
 //                            }
 //                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-//                            
+                           
 //                        }
-//                    }
-//                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
-                
-                VStack{
-                    Text("Output Args")
-                        .frame(width:UIScreen.screenWidth, alignment: .center)
-                    //.padding(.leading, 40)
-                    
-                    VStack{
-                        HStack{
-                            Text("Detect")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            ScrollView(.horizontal){
-                                Text("\(cameras.ffmpeg.output_args.detect)")
-                                    .frame( alignment: .leading)
-                                    .foregroundStyle(.gray)
-                            }
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        
-                        HStack{
-                            Text("Record")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            ScrollView(.horizontal){
-                                Text("\(cameras.ffmpeg.output_args.record)")
-                                    .frame( alignment: .leading)
-                                    .foregroundStyle(.gray)
-                            }
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                         
                     }
-                    
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                 }
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
-                HStack{
-                    Text("retry_interval")
-                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                        .padding(.leading, 40)
-                    Text("\(cameras.ffmpeg.retry_interval)")
-                        .frame( alignment: .leading)
-                        .foregroundStyle(.gray)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                VStack{
+//                    Text("Output Args")
+//                        .frame(width:UIScreen.screenWidth, alignment: .center)
+//                    //.padding(.leading, 40)
+//                    
+//                    VStack{
+//                        HStack{
+//                            Text("Detect")
+//                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                                .padding(.leading, 40)
+//                            ScrollView(.horizontal){
+//                                Text("\(cameras.ffmpeg.output_args.detect)")
+//                                    .frame( alignment: .leading)
+//                                    .foregroundStyle(.gray)
+//                            }
+//                        }
+//                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                        
+//                        HStack{
+//                            Text("Record")
+//                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                                .padding(.leading, 40)
+//                            ScrollView(.horizontal){
+//                                Text("\(cameras.ffmpeg.output_args.record)")
+//                                    .frame( alignment: .leading)
+//                                    .foregroundStyle(.gray)
+//                            }
+//                        }
+//                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                         
+//                    }
+//                    
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
+                
+//                HStack{
+//                    Text("retry_interval")
+//                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                        .padding(.leading, 40)
+//                    Text("\(cameras.ffmpeg.retry_interval)")
+//                        .frame( alignment: .leading)
+//                        .foregroundStyle(.gray)
+//                }
+//                .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
             } header: {
                 Text("FFMEPG")

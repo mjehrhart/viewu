@@ -22,14 +22,14 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                    birdseye: Birdseye(enabled: false, mode: "", order: 0),
                                    detect: Detect(annotation_offset: 0, enabled: false, fps: 5, height: 0, max_disappeared: 0, min_initialized: 0.0, width: 0),
                                    enabled: false, 
-                                   ffmpeg: FFMPEG(
-                                                  global_args: [],
-                                                  //hwaccel_args: "", //is this a string or array
-                                                  input_args: "",
-                                                  //inputs: [],
-                                                  output_args: CameraOutputArgs(detect: [], record: "" ), //, rtmp: ""
-                                                  retry_interval: 0 )
-                                   ,
+//                                   ffmpeg: FFMPEG(
+//                                                  //global_args: [],
+//                                                  //hwaccel_args: "", //is this a string or array
+//                                                  input_args: "",
+//                                                  inputs: [],
+//                                                  output_args: CameraOutputArgs(detect: [], record: "" ), //, rtmp: ""
+//                                                  retry_interval: 0 )
+//                                   ,
                                    ffmpeg_cmds: [],
                                    live: Live(height: 0, quality: 0, stream_name: ""), 
                                    //motion: Motion(contour_area: 0, delta_alpha: 0.0, frame_alpha: 0.0, frame_height: 0, improve_contrast: false, lightning_threshold: 0.0, mask: [], mqtt_off_delay: 0, threshold: 0), 
@@ -79,7 +79,7 @@ struct Cameras: Codable, Hashable {
     let birdseye: Birdseye
     let detect: Detect
     let enabled: Bool
-    let ffmpeg: FFMPEG
+    //let ffmpeg: FFMPEG
     let ffmpeg_cmds: [FFMPEGCommands]
     let live: Live
     //let motion: Motion
@@ -97,10 +97,10 @@ struct Cameras: Codable, Hashable {
 }
 
 struct FFMPEG: Codable, Hashable {
-    let global_args: [String]
+//    let global_args: [String]
 //    let hwaccel_args: String
     let input_args: String
-//    let inputs: [CameraInputs]
+    let inputs: [CameraInputs]
     let output_args: CameraOutputArgs
     let retry_interval: Int
 }
@@ -245,9 +245,9 @@ struct FFMPEGCommands: Codable, Hashable{
 }
   
 struct CameraInputs: Codable, Hashable {
-    let global_args: [String]
-    let hwaccel_args: [String]
-    let input_args: String
+    //let global_args: [String]
+    //let hwaccel_args: [String]
+    //let input_args: String
     let path: String
     let roles: [String]
 }

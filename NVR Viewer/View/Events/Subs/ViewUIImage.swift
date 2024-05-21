@@ -78,9 +78,9 @@ struct ViewUIImage: View{
                             
                             //TODO
                             //Not sure i like this approach as it forces the list to reload when an image is removed
-                            print("Found ERROR ======================================================================")
+                            //print("Found ERROR ======================================================================")
                             let flag = EventStorage.shared.delete(frameTime: frameTime)
-                            print(flag)
+                            //print(flag)
                             if flag {
                                 
 //                                epsSuper.list3.removeAll(where: { _ in frameTime.isEqual(to: frameTime) } )

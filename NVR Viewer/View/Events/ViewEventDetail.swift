@@ -23,10 +23,11 @@ struct ViewEventDetail: View {
     @State var selection: Int = 0
     @State var showButton: Bool
     
-    init(text: String, container: EndpointOptions, player: AVPlayer = AVPlayer(), path: NavigationPath = NavigationPath(), showButton: Bool) {
+    //, player: AVPlayer = AVPlayer()
+    init(text: String, container: EndpointOptions, path: NavigationPath = NavigationPath(), showButton: Bool) {
         self.text = text
         self.container = container
-        self.player = player
+//        self.player = player
         self.path = path
         self.showButton = showButton
     }
@@ -64,26 +65,31 @@ struct ViewEventDetail: View {
                         .padding(10)
                 }
                  
-                ViewPlayVideo(urlString: container.m3u8!)
-                    .modifier(CardBackground())
-                    .padding(0)
-                    .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
-                 
-//                if let _ = container.m3u8{
-//                    HStack{
-//                        Button{
-//                            UIPasteboard.general.string = container.m3u8!
-//                        } label: {
-//                            Image(systemName: "doc.on.doc")
-//                        }
-//                        .frame(width: 340, alignment: .trailing)
-//                        
-//                        ShareLink(item: container.m3u8!, preview: SharePreview("NVR Video Clip", image: container.m3u8!)){
-//                            Image(systemName: "square.and.arrow.up")
-//                        }
-//                        .frame(alignment: .trailing)
-//                    }
-//                }
+                if( container.m3u8 != nil ){
+                    if( container.m3u8! != nil ){
+                        ViewPlayVideo(urlString: container.m3u8!)
+                            .modifier(CardBackground())
+                            .padding(0)
+                            .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
+                         
+        //                if let _ = container.m3u8{
+        //                    HStack{
+        //                        Button{
+        //                            UIPasteboard.general.string = container.m3u8!
+        //                        } label: {
+        //                            Image(systemName: "doc.on.doc")
+        //                        }
+        //                        .frame(width: 340, alignment: .trailing)
+        //
+        //                        ShareLink(item: container.m3u8!, preview: SharePreview("NVR Video Clip", image: container.m3u8!)){
+        //                            Image(systemName: "square.and.arrow.up")
+        //                        }
+        //                        .frame(alignment: .trailing)
+        //                    }
+        //                }
+                    }
+                }
+ 
                 Spacer().frame(height:20)
                 
                 Text("Snapshot")
