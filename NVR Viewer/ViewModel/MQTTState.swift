@@ -45,8 +45,7 @@ final class MQTTAppState: ObservableObject {
          
         if developerModeIsOn {
             do {
-                
-                
+                 
                 let data = text.data(using: .utf8)
                 
                 let res = try JSONDecoder().decode(TopicFrigateEventHeader.self, from: data!)

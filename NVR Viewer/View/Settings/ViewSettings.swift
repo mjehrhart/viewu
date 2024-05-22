@@ -27,6 +27,11 @@ struct ViewSettings: View {
     @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = false
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
     
+    @AppStorage("cameraSubStream") private var cameraSubStream: Bool = false
+    @AppStorage("cameraRTSPPath") private var cameraRTSPPath: Bool = false
+    @AppStorage("camerGo2Rtc") private var camerGo2Rtc: Bool = true
+    @AppStorage("cameraHLS") private var cameraHLS: Bool = false
+    
     @AppStorage("mqttIPAddress") private var mqttIPAddress: String = ""
     @AppStorage("mqttPortAddress") private var mqttPortAddress: String = "1883"
     @AppStorage("mqttIsAnonUser") private var mqttIsAnonUser: Bool = true
@@ -34,7 +39,6 @@ struct ViewSettings: View {
     @AppStorage("mqttPassword") private var mqttPassword: String = ""
      
     var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
-    //var viewuPairedDevice: Bool = UserDefaults.standard.bool(forKey: "viewu_device_paired")
     @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
@@ -54,8 +58,42 @@ struct ViewSettings: View {
                     Text("Developer Mode")
                         .font(.caption)
                 }
+                  
+                Section {
+                    Toggle("go2rtc", isOn: $camerGo2Rtc)
+                        .onChange(of: camerGo2Rtc) {
+                            if camerGo2Rtc == true {
+                                cameraRTSPPath = false
+                                cameraHLS = false
+                            }
+                        }
+                    Toggle("RTSP", isOn: $cameraRTSPPath)
+                        .onChange(of: cameraRTSPPath) {
+                            if cameraRTSPPath == true {
+                                camerGo2Rtc = false
+                                cameraHLS = false
+                            }
+                        }
+                    Toggle("HLS", isOn: $cameraHLS)
+                        .onChange(of: cameraHLS) {
+                            if cameraHLS == true {
+                                camerGo2Rtc = false
+                                cameraRTSPPath = false
+                                cameraSubStream = false
+                            }
+                        }
+                    
+                    Toggle("Use Sub Stream", isOn: $cameraSubStream)
+                        .onChange(of: cameraSubStream) {
+                            if cameraSubStream == true {
+                                cameraHLS = false
+                            }
+                        }
+                } header: {
+                    Text("Camera Stream")
+                        .font(.caption)
+                }
                 
-                if developerModeIsOn {}
                 Section {
                     HStack{
                         Text("Broker Address:")

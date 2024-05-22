@@ -24,7 +24,13 @@ struct ViewCamera: View {
     let title: String
     @State var flagFull = false
     //@State private var path = NavigationPath()
+    let nvr = NVRConfig.shared()
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
+    
+    @State private var cameraSubStream: Bool = UserDefaults.standard.bool(forKey: "cameraSubStream")
+    @State private var cameraRTSPPath: Bool = UserDefaults.standard.bool(forKey: "cameraRTSPPath")
+    @State private var camerGo2Rtc: Bool = UserDefaults.standard.bool(forKey: "camerGo2Rtc")
+    @State private var cameraHLS: Bool = UserDefaults.standard.bool(forKey: "cameraHLS")
     
     @State var flagAllowNonSub = false
     var counter = 0;
@@ -38,22 +44,92 @@ struct ViewCamera: View {
                          
                         ForEach(Array(config.item.go2rtc.streams.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, value in
                             
-                            //if value.contains("_sub"){
-                                ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
-                                    ScrollView(.horizontal){
-                                        
-                                        if url.starts(with: "rtsp"){
-                                            StreamRTSP2(urlString: url, cameraName: value)
-                                                .padding(0)
-                                            if developerModeIsOn {
-                                                Text(url)
-                                                    .textSelection(.enabled)
+                            if cameraRTSPPath {
+                                
+                                if cameraSubStream {
+                                    if value.contains("_sub"){
+                                        ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
+                                            ScrollView(.horizontal){
+                                                
+                                                if url.starts(with: "rtsp"){
+                                                    StreamRTSP2(urlString: url, cameraName: value)
+                                                        .padding(0)
+                                                    if developerModeIsOn {
+                                                        Text(url)
+                                                            .textSelection(.enabled)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }else if !value.contains("_sub"){
+                                    ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
+                                        ScrollView(.horizontal){
+                                            
+                                            if url.starts(with: "rtsp"){
+                                                StreamRTSP2(urlString: url, cameraName: value)
+                                                    .padding(0)
+                                                if developerModeIsOn {
+                                                    Text(url)
+                                                        .textSelection(.enabled)
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            //}
+                            }
                         }
+                        if camerGo2Rtc {
+                            VStack{
+                                ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
+                                    
+                                    let camera = config.item.cameras[cameraName];
+                                     
+                                    ForEach(camera!.ffmpeg.inputs, id: \.self) {item in
+                                        
+                                        let url = item.path;
+                                        
+                                        if cameraSubStream {
+                                            if url.contains("_sub"){
+                                                
+                                                if url.starts(with: "rtsp"){
+                                                    StreamRTSP2(urlString: url, cameraName: cameraName)
+                                                        .padding(0)
+                                                    if developerModeIsOn {
+                                                        Text(url)
+                                                            .textSelection(.enabled)
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            if !url.contains("_sub"){
+                                                
+                                                if url.starts(with: "rtsp"){
+                                                    StreamRTSP2(urlString: url, cameraName: cameraName)
+                                                        .padding(0)
+                                                    if developerModeIsOn {
+                                                        Text(url)
+                                                            .textSelection(.enabled)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if cameraHLS {
+                            
+                            ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
+                                
+                                let url = nvr.getUrl()
+                                Webview(url: url + "/api/\(cameraName)?h=480")
+                                    .modifier(CardBackground())
+                                    .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
+                                    .edgesIgnoringSafeArea(.all)
+                            }
+                        }
+                        
                     }
                 }
                 Spacer()
