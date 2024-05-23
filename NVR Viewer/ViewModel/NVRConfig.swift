@@ -36,6 +36,10 @@ final class NVRConfig: ObservableObject  {
         self.port = port
     }
     
+    func getIP() -> String {
+        return url
+    }
+    
     func getUrl() -> String {
         
         var http: String {

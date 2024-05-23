@@ -87,6 +87,8 @@ struct ContentView: View {
                     
                     do {
                         config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
+                        
+                        print(config)
                          
                         filter2.setCameras(items: config.item.cameras)
                         filter2.setObject(items: config.item.cameras)
@@ -95,7 +97,8 @@ struct ContentView: View {
                         for (name, value) in config.item.cameras{
          
                             let daysBack = value.snapshots.retain.default
-                            let cont = EventStorage.shared.delete(daysBack:daysBack, cameraName: value.name)
+                            var db:Int = Int(daysBack)
+                            let cont = EventStorage.shared.delete(daysBack:db, cameraName: value.name)
                         }
                          
                     }catch (let err){

@@ -130,7 +130,7 @@ struct ViewSettings: View {
                             Text("")
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                 .padding(.leading, 40)
-                            Text("frigagte/events")
+                            Text("frigate/events")
                                 .frame(alignment: .leading)
                             //.foregroundStyle(.tertiary)
                         }

@@ -17,6 +17,14 @@ class AVRequester: NSObject {
     }
 }
 
+//struct CameraName: View {
+//    
+//    let name:String
+//  var body: some View {
+//    Text(name)
+//  }
+//}
+
 struct ViewCamera: View {
     
     @ObservedObject var config = NVRConfigurationSuper.shared()
@@ -47,7 +55,7 @@ struct ViewCamera: View {
                             if cameraRTSPPath {
                                 
                                 if cameraSubStream {
-                                    if value.contains("_sub"){
+                                    if value.contains("sub"){
                                         ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
                                             ScrollView(.horizontal){
                                                 
@@ -62,7 +70,7 @@ struct ViewCamera: View {
                                             }
                                         }
                                     }
-                                }else if !value.contains("_sub"){
+                                }else if !value.contains("sub"){
                                     ForEach(config.item.go2rtc.streams[value]!, id: \.self) { url in
                                         ScrollView(.horizontal){
                                             
@@ -80,20 +88,26 @@ struct ViewCamera: View {
                             }
                         }
                         if camerGo2Rtc {
+                            
                             VStack{
+                               
                                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
                                     
                                     let camera = config.item.cameras[cameraName];
                                      
+                                    //CameraName(name: cameraName)
+                                    
                                     ForEach(camera!.ffmpeg.inputs, id: \.self) {item in
                                         
-                                        let url = item.path;
+                                        //let url = item.path;
+                                        let url = verifyGo2RTCUrl(urlString: item.path)
                                         
                                         if cameraSubStream {
-                                            if url.contains("_sub"){
-                                                
+                                            if url.contains("sub") || cameraName.contains("sub"){
+                                                 
                                                 if url.starts(with: "rtsp"){
-                                                    StreamRTSP2(urlString: url, cameraName: cameraName)
+                                                    let name = cameraName + "_sub"
+                                                    StreamRTSP2(urlString: url, cameraName: name)
                                                         .padding(0)
                                                     if developerModeIsOn {
                                                         Text(url)
@@ -102,8 +116,8 @@ struct ViewCamera: View {
                                                 }
                                             }
                                         } else {
-                                            if !url.contains("_sub"){
-                                                
+                                            if !url.contains("sub"){
+                                                 
                                                 if url.starts(with: "rtsp"){
                                                     StreamRTSP2(urlString: url, cameraName: cameraName)
                                                         .padding(0)
@@ -127,6 +141,10 @@ struct ViewCamera: View {
                                     .modifier(CardBackground())
                                     .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
                                     .edgesIgnoringSafeArea(.all)
+                                if developerModeIsOn {
+                                    Text(url + "/api/\(cameraName)?h=480")
+                                        .textSelection(.enabled)
+                                }
                             }
                         }
                         
@@ -138,6 +156,20 @@ struct ViewCamera: View {
         .navigationBarTitle(title, displayMode: .inline)
         //.scrollContentBackground(.hidden)
         .toolbarBackground(.visible, for: .navigationBar)
+    }
+    
+    func verifyGo2RTCUrl(urlString: String) -> String {
+        
+        let tmp = urlString.split(separator: ":")
+        let data = Array(tmp[1])
+        let ip = String(data[2...])
+        
+        if ip == "127.0.0.1" {
+            let newAddress = tmp[0] + "://" + nvr.getIP() + ":" + String(tmp[2])
+            return newAddress
+        }
+        
+        return urlString
     }
 }
 

@@ -136,7 +136,7 @@ struct Snapshots: Codable, Hashable {
     let timestamp: Bool
 }
 struct SnapshotsRetain: Codable, Hashable {
-    let `default`: Int
+    let `default`: Float
     let mode: String
     //let objects: {} Unknown Type
 }
