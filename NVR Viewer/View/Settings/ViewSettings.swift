@@ -100,7 +100,9 @@ struct ViewSettings: View {
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
                         TextField("0.0.0.0", text: $mqttIPAddress)
+                            .autocorrectionDisabled()
                             .frame(alignment: .leading)
+                            
                         //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
@@ -135,16 +137,10 @@ struct ViewSettings: View {
                             //.foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        
                     }
                     
                     Toggle("Anonymous", isOn: $mqttIsAnonUser)
-//                        .onTapGesture{
-//                            if !mqttIsAnonUser {
-//                                mqttUser = ""
-//                                mqttPassword = ""
-//                            }
-//                        }
+ 
                     if !mqttIsAnonUser {
                         VStack{
                             HStack{
@@ -165,6 +161,7 @@ struct ViewSettings: View {
                                  
                                 SecureField("", text: $mqttPassword)
                                     .frame(alignment: .leading)
+                                    .autocorrectionDisabled()
                                 //.foregroundStyle(.tertiary)
                                     .disabled(mqttIsAnonUser)
                             }
@@ -206,7 +203,8 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         ScrollView(.horizontal){
                             TextField("0.0.0.0", text: $nvrIPAddress)
-                                .frame(alignment: .leading) 
+                                .autocorrectionDisabled()
+                                .frame(alignment: .leading)
                             //.foregroundStyle(.tertiary)
                         }
                     }
