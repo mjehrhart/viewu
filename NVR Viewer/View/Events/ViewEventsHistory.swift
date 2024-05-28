@@ -29,7 +29,7 @@ struct ViewEventsHistory: View {
     var body: some View {
         VStack{
             List {
-                ForEach(epsSup3.list3) { container in
+                ForEach(epsSup3.list3, id: \.id) { container in
                     
                     if container.id! != "" {
                         ViewEventCard(frameTime: container.frameTime!)

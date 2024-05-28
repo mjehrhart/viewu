@@ -44,6 +44,9 @@ struct ViewEventDetail: View {
                     Label("\(container.label!.capitalized)", systemImage: "figure.walk.motion")
                         .frame(alignment: .trailing)
                         .padding()
+                    Label("\(container.type!)", systemImage: "moonphase.new.moon.inverse")
+                        .frame(alignment: .trailing)
+                        .padding()
                 }
                 .padding([.top, .bottom], 0)
                  

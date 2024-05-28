@@ -33,7 +33,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
     func addBlank() {
         
         let x = EventMeta3()
-        x.type = "new"
+        x.type = ""
         x.camera = ""
         x.cameraName = ""
         x.frameTime = 0.0

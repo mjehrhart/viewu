@@ -139,11 +139,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                 eps2.cameraName = msg
                 eps3.cameraName = msg
             }
-            if let msg = userInfo["type"] as? String {
+            if let msg = userInfo["types"] as? String { 
+                print(200, msg)
                 eps.type = msg
                 eps2.type = msg
                 eps3.type = msg
             }
+            
             if let msg = userInfo["frameTime"] as? String {
                 eps.frameTime = Double(msg)
                 eps2.frameTime = Double(msg)
@@ -225,7 +227,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             //THIS USES EPS"3"
             //using epsSup.list3 and not eps3
             if applicationState == "active"{
-                if eps3.type == "new"{
+                //if eps3.type == "new"{
                     if epsSup.list3.contains(where: {$0.frameTime == eps3.frameTime}) {
                         // do nothing
                         print("1==============================================================================")
@@ -237,7 +239,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                         print("==============================================================================")
                         epsSup.list3.insert(eps3, at: 0)
                     }
-                }
+                //}
             }
             
             //Check if value is nil
@@ -250,12 +252,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             if eps.enteredZones == nil {
                 eps.enteredZones = ""
             }
+            if eps.type == nil {
+                eps.type = "new"
+            }
             
             //OPTION 3
             let id = EventStorage.shared.insertIfNone(id: eps.id!,
                                                       frameTime: eps.frameTime!,
                                                       score: eps.score!,
-                                                      type: "new", //eps.types!, //TODO
+                                                      type: eps.type!, //eps.types!, //TODO
                                                       cameraName: eps.cameraName!,
                                                       label: eps.label!,
                                                       thumbnail: eps.thumbnail!,
@@ -274,8 +279,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                 self.epsSup3 = res!
                 //TODO
                 self.epsSup.list3 = res!
-            })
-            print("is this before or after") 
+            }) 
             
             //Navigation --> Send to ViewLive()
             notificationManager?.newPage = newPage

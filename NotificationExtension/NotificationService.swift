@@ -39,13 +39,13 @@ class NotificationService: UNNotificationServiceExtension {
 
 extension UNNotificationRequest {
     var attachment: UNNotificationAttachment? {
-         print("=", content.userInfo["image_url"] as? String)
+        //print("=", content.userInfo["image_url"] as? String)
         guard let attachmentURL = content.userInfo["image_url"] as? String, let imageData = try? Data(contentsOf: URL(string: attachmentURL)!) else {
-            print(content)
-            print("returning nil")
+//            print(content)
+//            print("returning nil")
             return nil
         }
-        print("UNNotificationRequest", attachmentURL)
+        //print("UNNotificationRequest", attachmentURL)
         return try? UNNotificationAttachment(data: imageData, options: nil)
     }
 }

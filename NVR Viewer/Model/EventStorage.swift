@@ -219,29 +219,18 @@ class EventStorage: ObservableObject {
             //Breifly wrote this. seems to work but needs further testing
             let startDate4 = Calendar.current.date(byAdding: DateComponents(day: -1), to: filter2.startDate) ?? Date()
             let startDate3 = Calendar.current.nextDate(after: startDate4, matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTimePreservingSmallerComponents)!
-            
-            //Maybe below works, needs futher testing
-//            let timezoneOffset =  TimeZone.current.secondsFromGMT()
-//            let epochDate = startDate3.timeIntervalSince1970
-//            let timezoneEpochOffset = (epochDate + Double(timezoneOffset))
-//            let timeZoneOffsetDate = Date(timeIntervalSince1970: timezoneEpochOffset)
-//            print()
-//            print("Date Time")
-//            print("timeZoneOffsetDate",timeZoneOffsetDate.timeIntervalSince1970 )
-//            print("start",timeZoneOffsetDate)
-            
+ 
             var startDate = startDate3.timeIntervalSince1970
-            //var startDate = timeZoneOffsetDate.timeIntervalSince1970
    
             let endDate2 = Calendar.current.nextDate(after: filter2.endDate, matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTimePreservingSmallerComponents)!
-            //print("end", endDate2)
+ 
             var endDate = endDate2.timeIntervalSince1970
-            print(Date(timeIntervalSince1970: endDate))
             
             if filter2.selectedCamera == "all" && filter2.selectedObject == "all"{
                  
                 //type == "new" &&
                 filter = self.events.filter(
+                                           // type == "end" &&
                                             frameTime >= startDate &&
                                             frameTime <= endDate
                                             ).order(frameTime.desc)
@@ -277,6 +266,7 @@ class EventStorage: ObservableObject {
             for events in try database.prepare(filter) {
                     
                 let x = EndpointOptionsSuper.EventMeta3()
+                //x.sid = events[sid]  5/26
                 x.thumbnail = events[thumbnail]
                 x.snapshot = events[snapshot]
                 x.m3u8 = events[m3u8]
@@ -303,12 +293,12 @@ class EventStorage: ObservableObject {
          
         //TODO
         epsSup3 = eps3
-        print("3count::\(epsSup3.count)")
         
         completion(eps3)
         //return eps3
     }
     
+    //Depreciated
     func readAll2() -> [EndpointOptionsSuper.EventMeta] {
     
         var eps: [EndpointOptionsSuper.EventMeta] = []
@@ -405,7 +395,7 @@ class EventStorage: ObservableObject {
 
         do {
             //TODO remove "new"
-            let filter = self.events.filter(type == "new").order(frameTime.desc)
+            let filter = self.events.filter(type != "-1").order(frameTime.desc)
             
             for events in try database.prepare(filter) { //self.events
                  

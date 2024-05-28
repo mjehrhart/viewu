@@ -114,9 +114,7 @@ final class MQTTAppState: ObservableObject {
             catch let error as NSError {
                 print(error)
             }
-        } else {
-            print("developerModeIsOn set to false")
-        }
+        } 
     }
      
     func setAppConnectionState(state: MQTTAppConnectionState) {

@@ -45,9 +45,13 @@ struct ViewEventCard: View {
                         .font(.caption)
                     Text("\(container.sublabel!)")
                         .foregroundColor(.secondary)
-                        .font(.caption)
- 
+                        .font(.caption) 
+                      
                     EnteredZones(zones: container.enteredZones!)
+                    
+                    Text("\(container.type!)")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
                     
                     if developerModeIsOn {
                         Text(container.snapshot!)
