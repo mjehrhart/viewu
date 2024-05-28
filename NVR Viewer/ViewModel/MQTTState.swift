@@ -33,8 +33,7 @@ final class MQTTAppState: ObservableObject {
         else if text.contains("viewu_device_paired"){
             //device is now paired
             viewuDevicePaired = true
-            let version = text.components(separatedBy: ":")
-            print(version)
+            let version = text.components(separatedBy: ":") 
             viewuServerVersion = version[1]
             
             return

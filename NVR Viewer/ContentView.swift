@@ -34,6 +34,9 @@ struct ContentView: View {
     @State private var showNVR = false
     @State private var showLog = false
     @State private var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
+    
+    @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0"
+    //@State private var backgroundFetchEventsEpochtime: Bool = UserDefaults.standard.bool(forKey: "background_fetch_events_epochtime")
      
     @State private var path = NavigationPath()
     //@State private var path: NavigationPath = .init()
@@ -76,8 +79,7 @@ struct ContentView: View {
                 
                 //Load Defaults for app
                 let url = nvr.getUrl()
-                let urlString = url + "/api/config"
-                
+                let urlString = url + "/api/config" 
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
  
                     guard let data = data else { return }
@@ -107,19 +109,20 @@ struct ContentView: View {
                 //DEV
                 //Load Events
                 let urlEvents = nvr.getUrl()
-                let urlStringEvents = url + "/api/events?limit=10000"
+                let urlStringEvents = url + "/api/events?limit=10000&after=\(backgroundFetchEventsEpochtime)"
+   
+                let after = Int(Date().timeIntervalSince1970)
+                backgroundFetchEventsEpochtime = String(after)
+                
                 cNVR.fetchNVREvents(urlString: urlStringEvents) { data, error in
                     
                     guard let data = data else { return }
-                    
-                    print(data)
+                     
                     do{
-                        let arrayEvents = try JSONDecoder().decode([NVRConfigurationHTTP].self, from: data)
-                        //print(arrayEvents)
+                        let arrayEvents = try JSONDecoder().decode([NVRConfigurationHTTP].self, from: data) 
                         
                         for event in arrayEvents {
-                            
-                            //print(event)
+                             
                             let url = nvr.getUrl()
                             let id = event.id   
                             let frameTime = event.start_time

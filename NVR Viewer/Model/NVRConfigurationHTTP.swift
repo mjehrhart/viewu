@@ -13,7 +13,7 @@ struct EventsHTTP: Codable {
 
 struct NVRConfigurationHTTP: Codable, Hashable  {
     let camera: String
-    let end_time : Double
+    let end_time : Double?
     let id: String
     let label: String
     let start_time: Double
