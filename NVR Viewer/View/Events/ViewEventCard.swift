@@ -39,12 +39,16 @@ struct ViewEventCard: View {
                         .font(.title3)
                     Text(convertDate(time: container.frameTime!))
                         .foregroundColor(.primary)
-                        .font(.caption)
-                    //                        .padding(.bottom, 15)
+                        .font(.caption) 
                     Text("\(container.label!)")
                         .foregroundColor(.secondary)
                         .font(.caption)
-                        .padding(.bottom, 15)
+                    Text("\(container.sublabel!)")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+ 
+                    EnteredZones(zones: container.enteredZones!)
+                    
                     if developerModeIsOn {
                         Text(container.snapshot!)
                             .foregroundColor(.primary)
@@ -76,7 +80,28 @@ struct ViewEventCard: View {
         }
     }
     
+    struct EnteredZones: View {
     
+        let zones:String
+        var enteredZones: Array<Substring>;
+          
+        init(zones: String) {
+            self.zones = zones
+            enteredZones = zones.split(separator: "|")
+        }
+         
+        var body: some View {
+            
+            if !enteredZones.isEmpty {
+                Text("Zones")
+                ForEach(enteredZones, id: \.self) { zone in
+                    Text(zone)
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+            }
+        }
+    }
     
     private func deserializeObject(object: Data?) ->  String{
         

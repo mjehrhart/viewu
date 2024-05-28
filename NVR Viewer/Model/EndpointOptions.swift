@@ -46,6 +46,9 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         x.snapshot  = ""
         x.thumbnail  = ""
         x.transportType = "blank"
+        x.sublabel = ""
+        x.currentZones = ""
+        x.enteredZones = ""
         list3.append(x)
     }
     
@@ -65,6 +68,9 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         var score: Double?
         var frameTime: Double?
         var label: String?
+        var sublabel: String?
+        var currentZones: String?
+        var enteredZones: String?
         
         //Misc
         var transportType: String?
@@ -86,6 +92,9 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         var score: Double?
         var frameTime: Double?
         var label: String?
+        var sublabel: String?
+        var currentZones: String?
+        var enteredZones: String?
         
         //Misc
         var transportType: String?
@@ -110,6 +119,9 @@ struct EndpointOptions: Hashable, Codable, Identifiable {
     var score: Double?
     var frameTime: Double?
     var label: String?
+    var sublabel: String?
+    var currentZones: String?
+    var enteredZones: String?
     
     //Misc
     var transportType: String?

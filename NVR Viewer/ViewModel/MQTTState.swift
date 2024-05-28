@@ -25,9 +25,6 @@ final class MQTTAppState: ObservableObject {
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
     func setReceivedMessage(text: String) {
-        
-//        print("MQTTAppState::setReceivedMessage")
-//        print(text)
          
         if text.count == 163 {
             //do nothing as this is a message response back to the viewu server
@@ -44,15 +41,20 @@ final class MQTTAppState: ObservableObject {
         }
          
         if developerModeIsOn {
+            
+            print("MQTTAppState::setReceivedMessage::developerModeIsOn")
+            print(text)
+            
             do {
                  
                 let data = text.data(using: .utf8)
                 
                 let res = try JSONDecoder().decode(TopicFrigateEventHeader.self, from: data!)
-                
+                 
                 let frigateURLBuilder = APIBuilder(dataSet: res)
                 var eps = frigateURLBuilder.getAllEndpoint()
                 eps.transportType = "mqttState"
+                 
                 
                 //            var eps2 = EndpointOptionsSuper.EventMeta()
                 //            eps2.id = eps.id
@@ -81,36 +83,26 @@ final class MQTTAppState: ObservableObject {
                 //                print("epsSup.list2.insert at 0 framTime == ", eps2.frameTime)
                 //            }
                 //------------------>
-                
-                //OPTION 3
-                //            let id = EventStorage.shared.insertIfNone(id: eps.id!,
-                //                                                 frameTime: eps.frameTime!,
-                //                                                 score: eps.score!,
-                //                                                 type: eps.type!,
-                //                                                 cameraName: eps.cameraName!,
-                //                                                 label: eps.label!,
-                //                                                 thumbnail: eps.thumbnail!,
-                //                                                 snapshot: eps.snapshot!,
-                //                                                 m3u8: eps.m3u8!,
-                //                                                 camera: eps.camera!,
-                //                                                 debug: eps.debug!,
-                //                                                 image: eps.image!,
-                //                                                 transportType: eps.transportType!)
-                
+  
                 //Option 3
-                let id = EventStorage.shared.insertIfNone(id: eps.id!,
-                                                          frameTime: eps.frameTime!,
-                                                          score: eps.score!,
-                                                          type: eps.type!,
-                                                          cameraName: eps.cameraName!,
-                                                          label: eps.label!,
-                                                          thumbnail: eps.thumbnail!,
-                                                          snapshot: eps.snapshot!,
-                                                          m3u8: eps.m3u8!,
-                                                          camera: eps.camera!,
-                                                          debug: eps.debug!,
-                                                          image: eps.image!,
-                                                          transportType: eps.transportType!)
+                let id = EventStorage.shared.insertIfNone(
+                      id: eps.id!,
+                      frameTime: eps.frameTime!,
+                      score: eps.score!,
+                      type: eps.type!,
+                      cameraName: eps.cameraName!,
+                      label: eps.label!,
+                      thumbnail: eps.thumbnail!,
+                      snapshot: eps.snapshot!,
+                      m3u8: eps.m3u8!,
+                      camera: eps.camera!,
+                      debug: eps.debug!,
+                      image: eps.image!,
+                      transportType: eps.transportType!,
+                      subLabel: eps.sublabel!, //ADDED 5/26 ?? "" TODO !
+                      currentZones: eps.currentZones!,
+                      enteredZones: eps.enteredZones!
+                )
                 
                 print("mqttState", id)
                 //TODO: does this need to be here
@@ -122,8 +114,7 @@ final class MQTTAppState: ObservableObject {
             catch let error as NSError {
                 print(error)
             }
-        }
-        else {
+        } else {
             print("developerModeIsOn set to false")
         }
     }

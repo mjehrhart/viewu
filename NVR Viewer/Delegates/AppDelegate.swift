@@ -116,6 +116,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         
         if let info = userInfo["aps"] as? Dictionary<String, AnyObject> {
             
+            print("parseUserInfo---------------------------------------------")
+            print("parseUserInfo---------------------------------------------")
+            print("parseUserInfo---------------------------------------------")
             print(info)
             
             var eps = EndpointOptions()
@@ -186,14 +189,39 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                 eps2.image = msg
                 eps3.image = msg
             }
+ 
+            if let msg = userInfo["sub_label"] as? String? {
+                eps.sublabel = msg
+                eps2.sublabel = msg
+                eps3.sublabel = msg
+            }
+            
+            if let msg = userInfo["current_zones"] as? String? {
+                eps.currentZones = msg
+                eps2.currentZones = msg
+                eps3.currentZones = msg
+            }
+            
+            if let msg = userInfo["entered_zones"] as? String? {
+                eps.enteredZones = msg
+                eps2.enteredZones = msg
+                eps3.enteredZones = msg
+            }
+            
             if let msg = userInfo["image_url"] as? String {
                 print("---------------------------> image_url")
                 print(msg)
                 print()
             }
             
-            print(eps);
-            
+//            print("99999999999999999")
+//            print(eps3);
+//            print("--")
+//            print(eps2);
+//            print("--")
+//            print(eps);
+//            print("99999999999999999")
+//            
             //THIS USES EPS"3"
             //using epsSup.list3 and not eps3
             if applicationState == "active"{
@@ -212,11 +240,22 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                 }
             }
             
+            //Check if value is nil
+            if eps.sublabel == nil { 
+                eps.sublabel = ""
+            }
+            if eps.currentZones == nil {
+                print("it equals nil")
+            }
+            if eps.enteredZones == nil {
+                eps.enteredZones = ""
+            }
+            
             //OPTION 3
             let id = EventStorage.shared.insertIfNone(id: eps.id!,
                                                       frameTime: eps.frameTime!,
                                                       score: eps.score!,
-                                                      type: "new", //eps.types!,
+                                                      type: "new", //eps.types!, //TODO
                                                       cameraName: eps.cameraName!,
                                                       label: eps.label!,
                                                       thumbnail: eps.thumbnail!,
@@ -225,7 +264,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                                                       camera: eps.camera!,
                                                       debug: eps.debug!,
                                                       image: eps.image!,
-                                                      transportType: eps.transportType!)
+                                                      transportType: eps.transportType!,
+                                                      subLabel: eps.sublabel!, // ADDED THIS 5/26
+                                                      currentZones: eps.currentZones!,
+                                                      enteredZones: eps.enteredZones!
+            )
 
             EventStorage.shared.readAll3(completion: { res in
                 self.epsSup3 = res!

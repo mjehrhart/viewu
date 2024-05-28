@@ -49,6 +49,10 @@ class EventStorage: ObservableObject {
     private let cameraName = Expression<String>("cameraName")
     private let label = Expression<String>("label")
     private let transportType = Expression<String>("transportType")
+    
+    private let sub_label = Expression<String>("subLabel")
+    private let current_zones = Expression<String>("currentZones")
+    private let entered_zones = Expression<String>("enteredZones")
       
     static let shared = EventStorage()
 
@@ -134,7 +138,7 @@ class EventStorage: ObservableObject {
      
     func getEventByFrameTime(frameTime3: Double) -> [EndpointOptions] {
         
-        var eps: EndpointOptions = EndpointOptions(thumbnail: "", snapshot: "", m3u8: "", camera: "", debug: "", image: "", id: "", type: "", cameraName: "", score: 0.0, frameTime: 0.0, label: "", transportType: "")
+        var eps: EndpointOptions = EndpointOptions(thumbnail: "", snapshot: "", m3u8: "", camera: "", debug: "", image: "", id: "", type: "", cameraName: "", score: 0.0, frameTime: 0.0, label: "", sublabel: "", currentZones: "", enteredZones: "", transportType: "")
         
         guard let database = db else { return [] }
 
@@ -154,6 +158,10 @@ class EventStorage: ObservableObject {
                 eps.frameTime = events[frameTime]
                 eps.label = events[label]
                 eps.transportType = events[transportType]
+                eps.sublabel = events[sub_label]            // 5/26
+                eps.currentZones = events[current_zones]
+                eps.enteredZones = events[entered_zones]
+                
             }
         } catch {
             print(error)
@@ -183,6 +191,9 @@ class EventStorage: ObservableObject {
                                             score: events[score],
                                             frameTime: events[frameTime],
                                             label: events[label],
+                                            sublabel: events[sub_label], // ADDED THIS 5/26
+                                            currentZones: events[current_zones],
+                                            enteredZones: events[entered_zones],
                                             transportType: events[transportType]
                                            ) )
             }
@@ -229,7 +240,8 @@ class EventStorage: ObservableObject {
             
             if filter2.selectedCamera == "all" && filter2.selectedObject == "all"{
                  
-                filter = self.events.filter(type == "new" &&
+                //type == "new" &&
+                filter = self.events.filter(
                                             frameTime >= startDate &&
                                             frameTime <= endDate
                                             ).order(frameTime.desc)
@@ -237,7 +249,7 @@ class EventStorage: ObservableObject {
                 //print(filter)
             } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all"{
                 
-                filter = self.events.filter(type == "new" &&
+                filter = self.events.filter(
                                             label == filter2.selectedObject &&
                                             frameTime >= startDate &&
                                             frameTime <= endDate
@@ -245,7 +257,7 @@ class EventStorage: ObservableObject {
                 //print(filter)
             } else if filter2.selectedCamera != "all" && filter2.selectedObject == "all"{
                  
-                filter = self.events.filter(type == "new" &&
+                filter = self.events.filter(
                                             cameraName == filter2.selectedCamera &&
                                             frameTime >= startDate &&
                                             frameTime <= endDate
@@ -253,7 +265,7 @@ class EventStorage: ObservableObject {
                 //print(filter)
             } else if filter2.selectedCamera != "all" && filter2.selectedObject != "all"{
                  
-                filter = self.events.filter(type == "new" &&
+                filter = self.events.filter(
                                             cameraName == filter2.selectedCamera &&
                                             label == filter2.selectedObject &&
                                             frameTime >= startDate &&
@@ -277,6 +289,9 @@ class EventStorage: ObservableObject {
                 x.score = events[score]
                 x.frameTime = events[frameTime]
                 x.label = events[label]
+                x.sublabel = events[sub_label] // ADDED THIS 5/26
+                x.currentZones = events[current_zones]
+                x.enteredZones = events[entered_zones]
                 x.transportType = events[transportType]
                 
                 eps3.append( x )
@@ -314,7 +329,8 @@ class EventStorage: ObservableObject {
             
             if filter2.selectedCamera == "all" && filter2.selectedObject == "all"{
                  
-                filter = self.events.filter(type == "new" //&&
+                //type == "new" //&&
+                filter = self.events.filter( type != "-1"
                                             //frameTime >= startDate &&
                                             //frameTime <= endDate
                                             ).order(frameTime.desc)
@@ -322,7 +338,7 @@ class EventStorage: ObservableObject {
                 //print(filter)
             } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all"{
                 
-                filter = self.events.filter(type == "new" &&
+                filter = self.events.filter(
                                             label == filter2.selectedObject //&&
                                             //frameTime >= startDate &&
                                             //frameTime <= endDate
@@ -330,14 +346,14 @@ class EventStorage: ObservableObject {
                 
             } else if filter2.selectedCamera != "all" && filter2.selectedObject == "all"{
                  
-                filter = self.events.filter(type == "new" &&
+                filter = self.events.filter(
                                             cameraName == filter2.selectedCamera //&&
                                             //frameTime >= startDate &&
                                             //frameTime <= endDate
                                             ).order(frameTime.desc)
             } else if filter2.selectedCamera != "all" && filter2.selectedObject != "all"{
                  
-                filter = self.events.filter(type == "new" &&
+                filter = self.events.filter(
                                             cameraName == filter2.selectedCamera &&
                                             label == filter2.selectedObject //&&
                                             //frameTime >= startDate &&
@@ -359,6 +375,9 @@ class EventStorage: ObservableObject {
                                             score: events[score],
                                             frameTime: events[frameTime],
                                             label: events[label],
+                                            sublabel: events[sub_label], //ADDED 5/26
+                                            currentZones: events[current_zones],
+                                            enteredZones:events[entered_zones],
                                             transportType: events[transportType]
                                            ) )
              
@@ -385,6 +404,7 @@ class EventStorage: ObservableObject {
         guard let database = db else { return [] }
 
         do {
+            //TODO remove "new"
             let filter = self.events.filter(type == "new").order(frameTime.desc)
             
             for events in try database.prepare(filter) { //self.events
@@ -401,6 +421,9 @@ class EventStorage: ObservableObject {
                                             score: events[score],
                                             frameTime: events[frameTime],
                                             label: events[label],
+                                            sublabel: events[sub_label], //ADDED 5/26
+                                            currentZones: events[current_zones],
+                                            enteredZones:events[entered_zones],
                                             transportType: events[transportType]
                                            ) )
             }
@@ -410,9 +433,8 @@ class EventStorage: ObservableObject {
         return eps
     }
      
-    func insertIfNone(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String ) {
-          
-        print("insertIfNone()======================================================>")
+    func insertIfNone(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
+           
         //TODO is this needed DispatchQueue.main.async
         DispatchQueue.main.async { [self] in
              
@@ -433,7 +455,10 @@ class EventStorage: ObservableObject {
                                            self.camera <- camera,
                                            self.debug <- debug,
                                            self.image <- image,
-                                           self.transportType <- transportType
+                                           self.transportType <- transportType,
+                                           self.sub_label <- subLabel,      //5/26
+                                           self.current_zones <- currentZones,
+                                           self.entered_zones <- enteredZones
                 )
                 do {
                     let rowID = try database.run(insert)
@@ -464,7 +489,7 @@ class EventStorage: ObservableObject {
     }
      
     
-    func insert(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String ) -> Int64? {
+    func insert(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) -> Int64? {
         
         guard let database = db else { return nil }
 
@@ -480,7 +505,10 @@ class EventStorage: ObservableObject {
                                   self.camera <- camera,
                                   self.debug <- debug,
                                   self.image <- image,
-                                  self.transportType <- transportType
+                                  self.transportType <- transportType,
+                                  self.sub_label <- subLabel,      //5/26
+                                  self.current_zones <- currentZones,
+                                  self.entered_zones <- enteredZones
         )
         do {
             let rowID = try database.run(insert)
@@ -502,6 +530,7 @@ class EventStorage: ObservableObject {
         guard let database = db else {
             return
         }
+        print(database.userVersion)
         do {
             try database.run(events.create { table in
                 table.column(sid, primaryKey: .autoincrement)
@@ -520,6 +549,33 @@ class EventStorage: ObservableObject {
                 table.column(transportType)
             })
             
+            database.userVersion = 1
+            
+        } catch {
+            print(error)
+        }
+         
+        do {
+            //print(database.userVersion)
+            try database.run(
+                events.addColumn(sub_label, defaultValue: "")
+            )
+        } catch {
+            print(error)
+        }
+        
+        do {
+            try database.run(
+                events.addColumn(current_zones, defaultValue: "")
+            )
+        } catch {
+            print(error)
+        }
+        
+        do {
+            try database.run(
+                events.addColumn(entered_zones, defaultValue: "")
+            )
         } catch {
             print(error)
         }

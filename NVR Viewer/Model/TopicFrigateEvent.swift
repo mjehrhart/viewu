@@ -33,8 +33,8 @@ struct TopicFrigateEvent: Codable, Hashable {
     let stationary: Bool
     let motionless_count: Int
     let position_changes: Int
-    let current_zones: [String?]
-    let entered_zones: [String?]
+    let current_zones: String?    // 5/26 [String?]
+    let entered_zones: String?    // 5/26 [String?]
     let has_clip: Bool
     //let attribute
     //let current_attributes
