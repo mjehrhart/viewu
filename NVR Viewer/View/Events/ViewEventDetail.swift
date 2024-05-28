@@ -22,14 +22,14 @@ struct ViewEventDetail: View {
     @EnvironmentObject private var notificationManager2: NotificationManager
     @State var selection: Int = 0
     @State var showButton: Bool
-    
-    //, player: AVPlayer = AVPlayer()
-    init(text: String, container: EndpointOptions, path: NavigationPath = NavigationPath(), showButton: Bool) {
+    @State var showClip: Bool
+     
+    init(text: String, container: EndpointOptions, path: NavigationPath = NavigationPath(), showButton: Bool, showClip: Bool) {
         self.text = text
         self.container = container
-//        self.player = player
         self.path = path
         self.showButton = showButton
+        self.showClip = showClip
     }
     
     var body: some View {
@@ -38,17 +38,6 @@ struct ViewEventDetail: View {
             ScrollView {
                 HStack{
                     
-                    if showButton {
-                        Button {
-                            self.selection = 0
-                            notificationManager2.newPage = 0
-                        } label: {
-                            Label("Timeline", systemImage: "chevron.left")
-                        }
-                        .frame(width: 90, alignment: .leading)
-                        .padding(20)
-                    }
-                     
                     Label("Camera \(container.cameraName!.capitalized)", systemImage: "web.camera")
                         .frame( alignment: .leading)
                         .padding()
@@ -56,41 +45,44 @@ struct ViewEventDetail: View {
                         .frame(alignment: .trailing)
                         .padding()
                 }
-                .padding(.top, 0)
+                .padding([.top, .bottom], 0)
                  
-                
-                HStack{
-                    Text("Video Clip")
-                        .frame(width:UIScreen.screenWidth - 30, alignment: .leading)
-                        .padding(10)
-                }
-                 
-                if( container.m3u8 != nil ){
-                    if( container.m3u8! != nil ){
-                        ViewPlayVideo(urlString: container.m3u8!)
-                            .modifier(CardBackground())
-                            .padding(0)
-                            .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
-                         
-        //                if let _ = container.m3u8{
-        //                    HStack{
-        //                        Button{
-        //                            UIPasteboard.general.string = container.m3u8!
-        //                        } label: {
-        //                            Image(systemName: "doc.on.doc")
-        //                        }
-        //                        .frame(width: 340, alignment: .trailing)
-        //
-        //                        ShareLink(item: container.m3u8!, preview: SharePreview("NVR Video Clip", image: container.m3u8!)){
-        //                            Image(systemName: "square.and.arrow.up")
-        //                        }
-        //                        .frame(alignment: .trailing)
-        //                    }
-        //                }
+                EnteredZones(zones: container.enteredZones!)
+  
+                if showClip {
+                    if( container.m3u8 != nil ){
+                        if( container.m3u8! != nil ){
+                            
+                            HStack{
+                                Text("Video Clip")
+                                    .frame(width:UIScreen.screenWidth - 30, alignment: .leading)
+                                    .padding(10)
+                            }
+                            
+                            ViewPlayVideo(urlString: container.m3u8!)
+                                .modifier(CardBackground())
+                                .padding(0)
+                                .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
+                            
+                            //                if let _ = container.m3u8{
+                            //                    HStack{
+                            //                        Button{
+                            //                            UIPasteboard.general.string = container.m3u8!
+                            //                        } label: {
+                            //                            Image(systemName: "doc.on.doc")
+                            //                        }
+                            //                        .frame(width: 340, alignment: .trailing)
+                            //
+                            //                        ShareLink(item: container.m3u8!, preview: SharePreview("NVR Video Clip", image: container.m3u8!)){
+                            //                            Image(systemName: "square.and.arrow.up")
+                            //                        }
+                            //                        .frame(alignment: .trailing)
+                            //                    }
+                            //                }
+                        }
                     }
                 }
- 
-                Spacer().frame(height:20)
+                //Spacer().frame(height:20)
                 
                 Text("Snapshot")
                     .frame(width: UIScreen.screenWidth-30, alignment: .leading)
@@ -122,7 +114,49 @@ struct ViewEventDetail: View {
                 Spacer()
             }
         }
-        .navigationTitle(text)
+        //.navigationTitle(text)
+        .toolbar {
+            ToolbarItemGroup(placement: .navigation) {
+                
+                if showButton {
+                    Label("Timeline", systemImage: "chevron.left")
+                        .labelStyle(HorizontalLabelStyle())
+                        .foregroundStyle(.blue)
+                        .onTapGesture(perform: {
+                            notificationManager2.newPage = 0
+                        })
+                }
+            }
+        }
+        .navigationBarTitle(text, displayMode: .inline)
+    }
+    
+    struct EnteredZones: View {
+    
+        let zones:String
+        var enteredZones: Array<Substring>;
+          
+        init(zones: String) {
+            self.zones = zones
+            enteredZones = zones.split(separator: "|")
+        }
+         
+        var body: some View {
+            
+            if !enteredZones.isEmpty {
+                HStack{
+                    Label("Zones", systemImage: "square.stack.3d.down.right.fill")
+                        .frame( alignment: .leading)
+                        .padding(0)
+                    
+                    ForEach(enteredZones, id: \.self) { zone in
+                        Text(zone)
+                    }
+                }
+                .frame( alignment: .leading)
+                .padding(0)
+            }
+        }
     }
     
     struct CameraOverlayVideoClip: View {

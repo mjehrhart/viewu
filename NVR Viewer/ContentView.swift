@@ -61,7 +61,8 @@ struct ContentView: View {
                     case 0:
                         ViewEventListHome()
                     case 1:
-                        ViewLive(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: false)
+                        //ViewLive(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: false)
+                        ViewEventDetail(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: true, showClip: false)
                     case 2:
                         ViewNVRDetails()
                             .transition(.move(edge: .trailing))
@@ -78,11 +79,11 @@ struct ContentView: View {
                 let urlString = url + "/api/config"
                 
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
-                    print("fetchNVRConfig()")
-                    print("============-----------------======================")
-                    print("============-----------------======================")
-                    print(data)
-                    print(error)
+//                    print("fetchNVRConfig()")
+//                    print("============-----------------======================")
+//                    print("============-----------------======================")
+//                    print(data)
+//                    print(error)
                     guard let data = data else { return }
                     
                     do {
@@ -167,7 +168,7 @@ struct ContentView: View {
             }
             .navigationDestination(for: EndpointOptions.self){ eps in
                 
-                ViewEventDetail(text: convertDateTime(time: eps.frameTime!), container: eps, showButton: false)
+                ViewEventDetail(text: convertDateTime(time: eps.frameTime!), container: eps, showButton: false, showClip: true)
             }
             .navigationDestination(for: String.self){ jsonObject in
           
