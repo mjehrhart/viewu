@@ -79,20 +79,15 @@ struct ContentView: View {
                 let urlString = url + "/api/config"
                 
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
-//                    print("fetchNVRConfig()")
-//                    print("============-----------------======================")
-//                    print("============-----------------======================")
-//                    print(data)
-//                    print(error)
+ 
                     guard let data = data else { return }
                     
                     do {
                         config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
-                        
-                        print(config)
                          
                         filter2.setCameras(items: config.item.cameras)
                         filter2.setObject(items: config.item.cameras)
+                        filter2.setZones(items: config.item.cameras)
                         
                         // Delete non-retained snapshots
                         for (name, value) in config.item.cameras{

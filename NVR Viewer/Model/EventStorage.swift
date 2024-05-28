@@ -161,6 +161,7 @@ class EventStorage: ObservableObject {
                 eps.sublabel = events[sub_label]            // 5/26
                 eps.currentZones = events[current_zones]
                 eps.enteredZones = events[entered_zones]
+                eps.sid = events[sid]
                 
             }
         } catch {
@@ -194,7 +195,8 @@ class EventStorage: ObservableObject {
                                             sublabel: events[sub_label], // ADDED THIS 5/26
                                             currentZones: events[current_zones],
                                             enteredZones: events[entered_zones],
-                                            transportType: events[transportType]
+                                            transportType: events[transportType],
+                                            sid: events[sid]
                                            ) )
             }
         } catch {
@@ -225,48 +227,157 @@ class EventStorage: ObservableObject {
             let endDate2 = Calendar.current.nextDate(after: filter2.endDate, matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTimePreservingSmallerComponents)!
  
             var endDate = endDate2.timeIntervalSince1970
-            
-            if filter2.selectedCamera == "all" && filter2.selectedObject == "all"{
-                 
-                //type == "new" &&
+             
+            if filter2.selectedCamera == "all" && filter2.selectedObject == "all" && filter2.selectedType == "all" && filter2.selectedZone == "all" {
+                  
                 filter = self.events.filter(
-                                           // type == "end" &&
-                                            frameTime >= startDate &&
-                                            frameTime <= endDate
-                                            ).order(frameTime.desc)
-                 
-                //print(filter)
-            } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all"{
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera == "all" && filter2.selectedObject == "all" && filter2.selectedType == "all" && filter2.selectedZone != "all" {
                 
                 filter = self.events.filter(
-                                            label == filter2.selectedObject &&
-                                            frameTime >= startDate &&
-                                            frameTime <= endDate
-                                            ).order(frameTime.desc)
-                //print(filter)
-            } else if filter2.selectedCamera != "all" && filter2.selectedObject == "all"{
+                    frameTime >= startDate &&
+                    frameTime <= endDate &&
+                    entered_zones .like("%"+filter2.selectedZone+"%")
+                    ).order(frameTime.desc)
+                print(filter)
+                
+            } 
+            
+            //******// 1
+            else if filter2.selectedCamera == "all" && filter2.selectedObject == "all" && filter2.selectedType != "all" && filter2.selectedZone == "all" {
+                
+                filter = self.events.filter(
+                    type == filter2.selectedType &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all" && filter2.selectedType == "all" && filter2.selectedZone == "all" {
+                
+                filter = self.events.filter(
+                    label == filter2.selectedObject &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera != "all" && filter2.selectedObject == "all" && filter2.selectedType == "all" && filter2.selectedZone == "all" {
                  
                 filter = self.events.filter(
-                                            cameraName == filter2.selectedCamera &&
-                                            frameTime >= startDate &&
-                                            frameTime <= endDate
-                                            ).order(frameTime.desc)
-                //print(filter)
-            } else if filter2.selectedCamera != "all" && filter2.selectedObject != "all"{
+                    cameraName == filter2.selectedCamera &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all" && filter2.selectedType != "all" && filter2.selectedZone == "all" {
+                
+                filter = self.events.filter(
+                    type == filter2.selectedType &&
+                    label == filter2.selectedObject &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera != "all" && filter2.selectedObject == "all" && filter2.selectedType != "all" && filter2.selectedZone == "all" {
                  
                 filter = self.events.filter(
-                                            cameraName == filter2.selectedCamera &&
-                                            label == filter2.selectedObject &&
-                                            frameTime >= startDate &&
-                                            frameTime <= endDate
-                                            ).order(frameTime.desc)
-                //print(filter)
+                    type == filter2.selectedType &&
+                    cameraName == filter2.selectedCamera &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera != "all" && filter2.selectedObject != "all" && filter2.selectedType != "all" && filter2.selectedZone == "all" {
+                
+                filter = self.events.filter(
+                    type == filter2.selectedType &&
+                    cameraName == filter2.selectedCamera &&
+                    label == filter2.selectedObject &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+                
+            }   
+            
+            //******// 2
+            else if filter2.selectedCamera == "all" && filter2.selectedObject == "all" && filter2.selectedType != "all" && filter2.selectedZone != "all" {
+                
+                filter = self.events.filter(
+                    type == filter2.selectedType &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate &&
+                    entered_zones .like("%"+filter2.selectedZone+"%")
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all" && filter2.selectedType == "all" && filter2.selectedZone != "all" {
+                
+                filter = self.events.filter(
+                    label == filter2.selectedObject &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate &&
+                    entered_zones .like("%"+filter2.selectedZone+"%")
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera != "all" && filter2.selectedObject == "all" && filter2.selectedType == "all" && filter2.selectedZone != "all" {
+                 
+                filter = self.events.filter(
+                    cameraName == filter2.selectedCamera &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate &&
+                    entered_zones .like("%"+filter2.selectedZone+"%")
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all" && filter2.selectedType != "all" && filter2.selectedZone != "all" {
+                
+                filter = self.events.filter(
+                    type == filter2.selectedType &&
+                    label == filter2.selectedObject &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate &&
+                    entered_zones .like("%"+filter2.selectedZone+"%")
+                    ).order(frameTime.desc)
+                
+            } else if filter2.selectedCamera != "all" && filter2.selectedObject == "all" && filter2.selectedType != "all" && filter2.selectedZone != "all" {
+                 
+                filter = self.events.filter(
+                    type == filter2.selectedType &&
+                    cameraName == filter2.selectedCamera &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate &&
+                    entered_zones .like("%"+filter2.selectedZone+"%")
+                    ).order(frameTime.desc)
+                
+            }
+            
+            //******// 3
+            else if filter2.selectedCamera != "all" && filter2.selectedObject != "all" && filter2.selectedType != "all" && filter2.selectedZone == "all"{
+                
+                filter = self.events.filter(
+                    type == filter2.selectedType &&
+                    cameraName == filter2.selectedCamera &&
+                    label == filter2.selectedObject &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+                
+            }  else if filter2.selectedCamera != "all" && filter2.selectedObject != "all" && filter2.selectedType != "all" && filter2.selectedZone != "all" {
+                
+                filter = self.events.filter( 
+                    type == filter2.selectedType &&
+                    cameraName == filter2.selectedCamera &&
+                    label == filter2.selectedObject &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate &&
+                    entered_zones .like("%"+filter2.selectedZone+"%")
+                    ).order(frameTime.desc)
             }
              
             for events in try database.prepare(filter) {
                     
                 let x = EndpointOptionsSuper.EventMeta3()
-                //x.sid = events[sid]  5/26
+                x.sid = events[sid]  //5/26
                 x.thumbnail = events[thumbnail]
                 x.snapshot = events[snapshot]
                 x.m3u8 = events[m3u8]
@@ -414,7 +525,8 @@ class EventStorage: ObservableObject {
                                             sublabel: events[sub_label], //ADDED 5/26
                                             currentZones: events[current_zones],
                                             enteredZones:events[entered_zones],
-                                            transportType: events[transportType]
+                                            transportType: events[transportType], 
+                                            sid:events[sid]
                                            ) )
             }
         } catch {

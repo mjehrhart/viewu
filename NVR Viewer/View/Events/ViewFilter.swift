@@ -51,6 +51,31 @@ struct ViewFilter: View {
                             .padding(0)
                     }
                     
+                    HStack{
+                        Label("", systemImage: "square.stack.3d.down.right.fill")
+                            .padding(0)
+                        Picker("Zones", selection: $filter2.selectedZone) {
+                            ForEach(filter2.zones, id: \.self) {
+                                Text($0)
+                            }
+                        }.pickerStyle( .menu )
+                            .frame(minWidth: 100)
+                            .padding(0)
+                    }
+                    
+                    HStack{
+                        Label("", systemImage: "lineweight")
+                            .padding(0)
+                        Picker("Type", selection: $filter2.selectedType) {
+                            ForEach(filter2.types, id: \.self) {
+                                Text($0)
+                            }
+                        }.pickerStyle( .menu )
+                            .frame(minWidth: 100)
+                            .padding(0)
+                    }
+                    
+                    
 //                    HStack{
 //                        Label("", systemImage: "square.dashed")
 //                            .padding(0)

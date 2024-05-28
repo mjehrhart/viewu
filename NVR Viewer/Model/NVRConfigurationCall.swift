@@ -39,6 +39,7 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                    onvif: ONVIF(autotracking: AutoTracking(calibrate_on_startup: false, enabled: false, enabled_in_config: false, return_preset: "", timeout: 0, track: [], zoom_factor: 0.0, zooming: ""),
                                                 host: "", password: "", port: 1800, user: ""), 
                                    record: Record(enabled: false, enabled_in_config: false, events: CameraEvents(post_capture: 0, pre_capture: 0, retain: Retain(default: 0, mode: "")), expire_interval: 0, export: Export(timelapse_args: ""), retain: RecordRetain(days: 0, mode: ""), sync_recordings: false),
+                                   zones: ["": Zone(color: [0], inertia: 0, loitering_time: 0)],
                                    //rtmp: RTMP(enabled: false),
                                    snapshots: Snapshots(bounding_box: false, clean_copy: false, crop: false, enabled: false, height: 0, quality: 0, retain: SnapshotsRetain(default: 0, mode: ""), timestamp: false),
                                    timestamp_style: TimeStampStyle(color: TimeStampStyleColor(blue: 0, green: 0, red: 0), format: "", position: "", thickness: 0),
@@ -89,11 +90,18 @@ struct Cameras: Codable, Hashable {
     let onvif: ONVIF
     let record: Record
     //let rtmp: RTMP
+    let zones: [String: Zone]
     let snapshots: Snapshots
     let timestamp_style: TimeStampStyle
     let ui: CameraUI
 //    let webui_url: String?
 //    let zones: {} -> Unknown Type
+}
+
+struct Zone: Codable, Hashable {
+    let color: [Int]
+    let inertia: Int
+    let loitering_time: Int
 }
 
 struct FFMPEG: Codable, Hashable {

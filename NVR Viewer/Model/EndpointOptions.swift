@@ -33,6 +33,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
     func addBlank() {
         
         let x = EventMeta3()
+        x.sid = 0 //5/26
         x.type = ""
         x.camera = ""
         x.cameraName = ""
@@ -74,6 +75,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         
         //Misc
         var transportType: String?
+        var sid: Int64?
     }
     
     struct EventMeta: Identifiable,Equatable, Hashable {
@@ -98,6 +100,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         
         //Misc
         var transportType: String?
+        var sid: Int64?
     }
 }
 
@@ -125,4 +128,5 @@ struct EndpointOptions: Hashable, Codable, Identifiable {
     
     //Misc
     var transportType: String?
+    var sid: Int64?
 }

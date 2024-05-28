@@ -32,47 +32,60 @@ struct ViewEventCard: View {
     
     var body: some View {
         ForEach(containers, id: \.self){ container in
-            HStack{
-                VStack(alignment: .leading, spacing: 1) {
-                    NavigationLink(convertTime(time: container.frameTime!), value: container)
-                        .foregroundColor(.primary)
-                        .font(.title3)
-                    Text(convertDate(time: container.frameTime!))
-                        .foregroundColor(.primary)
-                        .font(.caption) 
-                    Text("\(container.label!)")
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                    Text("\(container.sublabel!)")
-                        .foregroundColor(.secondary)
-                        .font(.caption) 
-                      
-                    EnteredZones(zones: container.enteredZones!)
+            
+            VStack{
+                
+                HStack{
+                    VStack(alignment: .leading, spacing: 1) {
+                        NavigationLink(convertTime(time: container.frameTime!), value: container)
+                            .foregroundColor(.primary)
+                            .font(.title3)
+                        Text(convertDate(time: container.frameTime!))
+                            .foregroundColor(.primary)
+                            .font(.caption)
+                        Text("\(container.label!)")
+                            .foregroundColor(.secondary)
+                            .font(.caption)
+                        
+                        if(container.sublabel! != ""){
+                            Text("\(container.sublabel!)")
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                        }
+                        
+                        Text("\(container.type!)")
+                            .foregroundColor(.secondary)
+                            .font(.caption)
+                        
+                        EnteredZones(zones: container.enteredZones!)
+                         
+                        Spacer()
+                        
+                        if developerModeIsOn {
+                            Text(container.transportType!)
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                                .frame(width: setWidth(), alignment: .bottomLeading)
+                        }
+                        
+                    }
+                    .modifier(CardBackground())
+                    .frame(width: setWidth(), alignment: .leading) //110
                     
-                    Text("\(container.type!)")
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                    
+                    ViewUIImage(urlString: container.snapshot!, frameTime: containers[0].frameTime! )
+                        .modifier(CardBackground())
+                }
+                
+                VStack{
                     if developerModeIsOn {
                         Text(container.snapshot!)
-                            .foregroundColor(.primary)
+                            .foregroundColor(.secondary)
                             .font(.caption)
-                            .padding(.bottom, 15)
-                            .textSelection(.enabled) 
-                        Text(container.transportType!)
-                            .foregroundColor(.primary)
-                            .font(.caption)
-                            .padding(.bottom, 15)
+                            .textSelection(.enabled)
                     }
-                    Spacer()
                 }
-                .modifier(CardBackground())
-                .frame(width: setWidth(), alignment: .leading) //110
-                
-                ViewUIImage(urlString: container.snapshot!, frameTime: containers[0].frameTime! )
-                    .modifier(CardBackground()) 
+                .frame(width: UIScreen.screenWidth-20, alignment: .bottomLeading)
             }
-             
         }
         .onDelete{ indexes in
             let flag = EventStorage.shared.delete(frameTime: containers[0].frameTime!)

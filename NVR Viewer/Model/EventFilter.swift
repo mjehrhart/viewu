@@ -24,6 +24,9 @@ class EventFilter: ObservableObject{
     @Published var selectedZone: String = "all"
     @Published var zones = ["all"]
     
+    @Published var selectedType: String = "all"
+    @Published var types = ["all", "new", "end", "update"]
+    
     //@Published var endDate = Date()
     //Add 1 future day so the app can search til midnight of today
     @Published var endDate = Calendar.current.date(byAdding: DateComponents(day: 1), to: Date()) ?? Date()
@@ -36,9 +39,22 @@ class EventFilter: ObservableObject{
         selectedCamera = "all"
         selectedObject = "all"
         selectedZone = "all"
+        selectedType = "all"
         
         startDate = Calendar.current.date(byAdding: DateComponents(day: -1), to: Date()) ?? Date()
         endDate = Calendar.current.date(byAdding: DateComponents(day: 1), to: Date()) ?? Date()
+    }
+    
+    func setZones(items: [String : Cameras]){
+         
+        zones.removeAll()
+        zones.append("all")
+        
+        for (name, value) in items{ 
+            for zone in value.zones.keys {
+                zones.append(zone)
+            }
+        }
     }
     
     func setCameras(items: [String : Cameras]){
