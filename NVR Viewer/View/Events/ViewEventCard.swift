@@ -111,6 +111,7 @@ struct ViewEventCard: View {
             
             if !enteredZones.isEmpty {
                 Text("Zones")
+                    .font(.caption)
                 ForEach(enteredZones, id: \.self) { zone in
                     Text(zone)
                         .foregroundColor(.secondary)

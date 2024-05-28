@@ -569,8 +569,7 @@ class EventStorage: ObservableObject {
                             self.epsSup3 = res!
                             self.epsSuper.list3 = res! 
                             return
-                        })
-                        print("Records Inserted: Is this before or after")
+                        }) 
                     }
                      
                     print("Insert rowID::", rowID)

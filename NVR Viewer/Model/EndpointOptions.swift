@@ -34,22 +34,22 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         
         let x = EventMeta3()
         x.sid = 0 //5/26
-        x.type = ""
-        x.camera = ""
-        x.cameraName = ""
-        x.frameTime = 0.0
-        x.debug = ""
-        x.id  = "\(UUID.init())"
-        x.image = ""
-        x.label = ""
-        x.m3u8 = ""
-        x.score = 0.0
-        x.snapshot  = ""
-        x.thumbnail  = ""
-        x.transportType = "blank"
-        x.sublabel = ""
-        x.currentZones = ""
-        x.enteredZones = ""
+        x.type = ""                 //no
+        x.camera = ""               // yes
+        x.cameraName = ""           // yes
+        x.frameTime = 0.0           // maybe
+        x.debug = ""                // yes
+        x.id  = "\(UUID.init())"    // yes
+        x.image = ""                // yes
+        x.label = ""                // yes
+        x.m3u8 = ""                 // yes
+        x.score = 0.0               // maybe
+        x.snapshot  = ""            // yes
+        x.thumbnail  = ""           // yes
+        x.transportType = "blank"   // yes
+        x.sublabel = ""             // yes
+        x.currentZones = ""         // no
+        x.enteredZones = ""         // yes
         list3.append(x)
     }
     

@@ -51,6 +51,7 @@
 		34A4F4AA2BF9297A0052B08A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 34A4F4A92BF9297A0052B08A /* FirebaseAuth */; };
 		34A4F4AC2BF9297A0052B08A /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 34A4F4AB2BF9297A0052B08A /* FirebaseCrashlytics */; };
 		34A4F4AE2BF9297A0052B08A /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 34A4F4AD2BF9297A0052B08A /* FirebaseMessaging */; };
+		34A4F4B02C066F0D0052B08A /* NVRConfigurationHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */; };
 		34BBA4762BAB449C00A6004E /* ViewFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4752BAB449C00A6004E /* ViewFilter.swift */; };
 		34BBA4782BAB45C300A6004E /* EventFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4772BAB45C300A6004E /* EventFilter.swift */; };
 		34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4792BABC40C00A6004E /* AppDelegate.swift */; };
@@ -169,6 +170,7 @@
 		348AB7B92BA55E58001ADE6C /* ViewEventUpdateDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventUpdateDetails.swift; sourceTree = "<group>"; };
 		348C50AB2BB1ED7900A15446 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		349E9F432B9BC5EC002F83C5 /* NVR Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "NVR Viewer.entitlements"; sourceTree = "<group>"; };
+		34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVRConfigurationHTTP.swift; sourceTree = "<group>"; };
 		34BBA4752BAB449C00A6004E /* ViewFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFilter.swift; sourceTree = "<group>"; };
 		34BBA4772BAB45C300A6004E /* EventFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFilter.swift; sourceTree = "<group>"; };
 		34BBA4792BABC40C00A6004E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 				34BBA47E2BAE164400A6004E /* DataController.swift */,
 				34BBA4802BAE3A9000A6004E /* EventStorage.swift */,
 				348333D32BBB1ACA00ED1DF2 /* NVRConfigurationCall.swift */,
+				34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -715,6 +718,7 @@
 				34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */,
 				34D5EFF32B92B1DF002A84B0 /* MQTTState.swift in Sources */,
 				348AB7B82BA54B33001ADE6C /* ViewEventCard.swift in Sources */,
+				34A4F4B02C066F0D0052B08A /* NVRConfigurationHTTP.swift in Sources */,
 				34FEA8172BEF15770015E8A6 /* ViewLiveLandscape.swift in Sources */,
 				34D5EFD82B92AB1F002A84B0 /* ContentView.swift in Sources */,
 				34D5F0052B92B490002A84B0 /* APIBuilder.swift in Sources */,

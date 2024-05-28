@@ -15,6 +15,23 @@ struct FrigateResponse: Codable {
 
 class APIRequester: NSObject {
     
+    func fetchNVREvents(urlString: String, completion: @escaping (Data?, Error?) -> Void) {
+        
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
+        let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+ 
+            completion(data, error)
+        }
+        task.progress.resume()
+    }
+    
     func fetchNVRConfig(urlString: String, completion: @escaping (Data?, Error?) -> Void) {
         
         guard let url = URL(string: urlString) else {

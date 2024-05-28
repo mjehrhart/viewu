@@ -102,6 +102,88 @@ struct ContentView: View {
                         print(err)
                     }
                 } 
+                
+                
+                //DEV
+                //Load Events
+                let urlEvents = nvr.getUrl()
+                let urlStringEvents = url + "/api/events?limit=10000"
+                cNVR.fetchNVREvents(urlString: urlStringEvents) { data, error in
+                    
+                    guard let data = data else { return }
+                    
+                    print(data)
+                    do{
+                        let arrayEvents = try JSONDecoder().decode([NVRConfigurationHTTP].self, from: data)
+                        //print(arrayEvents)
+                        
+                        for event in arrayEvents {
+                            
+                            //print(event)
+                            let url = nvr.getUrl()
+                            let id = event.id   
+                            let frameTime = event.start_time
+                            
+                            var enteredZones = ""
+                            for zone in event.zones! {
+                                enteredZones += zone + "|"
+                            }
+                             
+                            var eps = EndpointOptions()
+                            eps.snapshot = url + "/api/events/\(id)/snapshot.jpg?bbox=1"
+                            eps.cameraName = event.camera
+                            eps.m3u8 = url + "/vod/event/\(id)/master.m3u8"
+                            eps.frameTime = event.start_time
+                            eps.label = event.label
+                            eps.id = event.id
+                            eps.thumbnail = url + "/api/events/\(id)/thumbnail.jpg"
+                            eps.camera = url + "/cameras/\(event.camera)"
+                            eps.debug = url + "/api/\(event.camera)?h=480"
+                            eps.image = url + "/api/\(event.camera)/recordings/\(frameTime)/snapshot.png"
+                            eps.score = 0.0
+                            eps.transportType = "http"
+                            eps.type = "web"
+                            eps.currentZones = ""
+                            eps.enteredZones = enteredZones
+                            eps.sublabel = event.sub_label
+                             
+                            //Check if value is nil
+                            if eps.sublabel == nil {
+                                eps.sublabel = ""
+                            }
+                            if eps.currentZones == nil {
+                            }
+                            if eps.enteredZones == nil {
+                                eps.enteredZones = ""
+                            } 
+                            
+                            let _ = EventStorage.shared.insertIfNone(
+                                  id: eps.id!,
+                                  frameTime: eps.frameTime!,
+                                  score: eps.score!,
+                                  type: eps.type!,
+                                  cameraName: eps.cameraName!,
+                                  label: eps.label!,
+                                  thumbnail: eps.thumbnail!,
+                                  snapshot: eps.snapshot!,
+                                  m3u8: eps.m3u8!,
+                                  camera: eps.camera!,
+                                  debug: eps.debug!,
+                                  image: eps.image!,
+                                  transportType: eps.transportType!,
+                                  subLabel: eps.sublabel!, //ADDED 5/26 ?? "" TODO !
+                                  currentZones: eps.currentZones!,
+                                  enteredZones: eps.enteredZones!
+                            )
+                            
+                        }
+                    } catch(let err) {
+                        print("Error Message goes here - 1002")
+                        print(err)
+                    }
+                    
+                    
+                }
             }
             .task {
                 do{

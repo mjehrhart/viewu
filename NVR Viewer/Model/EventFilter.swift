@@ -25,7 +25,7 @@ class EventFilter: ObservableObject{
     @Published var zones = ["all"]
     
     @Published var selectedType: String = "all"
-    @Published var types = ["all", "new", "end", "update"]
+    @Published var types = ["all", "new", "end", "update", "web"]
     
     //@Published var endDate = Date()
     //Add 1 future day so the app can search til midnight of today

@@ -38,7 +38,7 @@ struct ViewEventDetail: View {
             ScrollView {
                 HStack{
                     
-                    Label("Camera \(container.cameraName!.capitalized)", systemImage: "web.camera")
+                    Label("\(container.cameraName!.capitalized)", systemImage: "web.camera")
                         .frame( alignment: .leading)
                         .padding()
                     Label("\(container.label!.capitalized)", systemImage: "figure.walk.motion")
