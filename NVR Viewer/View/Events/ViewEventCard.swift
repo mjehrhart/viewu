@@ -53,9 +53,11 @@ struct ViewEventCard: View {
                                 .font(.caption)
                         }
                         
-                        Text("\(container.type!)")
-                            .foregroundColor(.secondary)
-                            .font(.caption)
+                        if developerModeIsOn {
+                            Text("\(container.type!)")
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                        }
                         
                         EnteredZones(zones: container.enteredZones!)
                          
