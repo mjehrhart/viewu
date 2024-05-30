@@ -11,6 +11,7 @@ import Firebase
 import FirebaseMessaging
 import SQLite3
 
+
 class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate, ObservableObject {
     
     @AppStorage("fcm") private var fcmID: String = ""
@@ -80,7 +81,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         
         completionHandler([[.banner, .badge, .sound]])
     }
-    
+ 
     //-------------------------------------------------------------------------------------------------------//
     //-------------------------------------------------------------------------------------------------------//
     
@@ -97,7 +98,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         switch application.applicationState {
         case .active:
             print("1. do stuff in case App is active")
-            parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 1, applicationState: "active")
+            parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "active")
         case .inactive:
             print("2. do stuff in case App is .inactive")
             parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "inactive")
@@ -147,6 +148,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             }
             
             if let msg = userInfo["frameTime"] as? String {
+                print("frameTime")
+                print(msg)
+                
                 eps.frameTime = Double(msg)
                 eps2.frameTime = Double(msg)
                 eps3.frameTime = Double(msg)
@@ -210,76 +214,102 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                 eps3.enteredZones = msg
             }
             
+            if let msg = userInfo["start_time"] as? String? {
+                print("start_time")
+                print(msg)
+                
+                //TODO think this through
+                if (msg != nil) {
+                    eps.frameTime = Double(msg!)
+                    eps2.frameTime = Double(msg!)
+                    eps3.frameTime = Double(msg!)
+                }
+            }
+            
+            if let msg = userInfo["end_time"] as? String? {
+                print("end_time")
+                print(msg)
+            }
+            
+            if let msg = userInfo["top_score"] as? String? {
+                print("top_score")
+                print(msg)
+            }
+ 
             if let msg = userInfo["image_url"] as? String {
                 print("---------------------------> image_url")
                 print(msg)
                 print()
             }
-            
-//            print("99999999999999999")
-//            print(eps3);
-//            print("--")
-//            print(eps2);
-//            print("--")
-//            print(eps);
-//            print("99999999999999999")
-//            
+ 
             //THIS USES EPS"3"
             //using epsSup.list3 and not eps3
-            if applicationState == "active"{
+            //if applicationState == "active"{
                 //if eps3.type == "new"{
-                    if epsSup.list3.contains(where: {$0.frameTime == eps3.frameTime}) {
-                        // do nothing
-                        print("1==============================================================================")
-                        print("DO NOT INSERT INTO epsSup.list3.already has where frameTime == ", eps3.frameTime)
-                        print("==============================================================================")
-                    } else {
-                        print("2==============================================================================")
-                        print("INSERT epsSup.list3.insert at 0 frameTime == ", eps3.frameTime)
-                        print("==============================================================================")
-                        epsSup.list3.insert(eps3, at: 0)
-                    }
+//                    if epsSup.list3.contains(where: {$0.frameTime == eps3.frameTime}) {
+//                        // do nothing
+//                        print("1==============================================================================")
+//                        print("DO NOT INSERT INTO epsSup.list3.already has where frameTime == ", eps3.frameTime)
+//                        print("==============================================================================")
+//                    } else {
+//                        print("2==============================================================================")
+//                        print("INSERT epsSup.list3.insert at 0 frameTime == ", eps3.frameTime)
+//                        print("==============================================================================")
+//                        epsSup.list3.insert(eps3, at: 0)
+//                    }
                 //}
-            }
+            //}
             
             //Check if value is nil
             if eps.sublabel == nil { 
                 eps.sublabel = ""
+                eps2.sublabel = ""
+                eps3.sublabel = ""
             }
             if eps.currentZones == nil {
-                print("it equals nil")
+                eps.currentZones = ""
+                eps2.currentZones = ""
+                eps3.currentZones = ""
             }
             if eps.enteredZones == nil {
                 eps.enteredZones = ""
+                eps2.enteredZones = ""
+                eps3.enteredZones = ""
             }
             if eps.type == nil {
-                eps.type = "new"
+                eps.type = "auto"
+                eps2.enteredZones = "auto"
+                eps3.enteredZones = "auto"
             }
-            
+ 
             //OPTION 3
-            let id = EventStorage.shared.insertIfNone(id: eps.id!,
-                                                      frameTime: eps.frameTime!,
-                                                      score: eps.score!,
-                                                      type: eps.type!, //eps.types!, //TODO
-                                                      cameraName: eps.cameraName!,
-                                                      label: eps.label!,
-                                                      thumbnail: eps.thumbnail!,
-                                                      snapshot: eps.snapshot!,
-                                                      m3u8: eps.m3u8!,
-                                                      camera: eps.camera!,
-                                                      debug: eps.debug!,
-                                                      image: eps.image!,
-                                                      transportType: eps.transportType!,
-                                                      subLabel: eps.sublabel!, // ADDED THIS 5/26
-                                                      currentZones: eps.currentZones!,
-                                                      enteredZones: eps.enteredZones!
+            let _ = EventStorage.shared.insertOrUpdate(id: eps.id!,
+              frameTime: eps.frameTime!,
+              score: eps.score!,
+              type: eps.type!, //eps.types!, //TODO
+              cameraName: eps.cameraName!,
+              label: eps.label!,
+              thumbnail: eps.thumbnail!,
+              snapshot: eps.snapshot!,
+              m3u8: eps.m3u8!,
+              camera: eps.camera!,
+              debug: eps.debug!,
+              image: eps.image!,
+              transportType: eps.transportType!,
+              subLabel: eps.sublabel!, // ADDED THIS 5/26
+              currentZones: eps.currentZones!,
+              enteredZones: eps.enteredZones!
             )
-
+//
             EventStorage.shared.readAll3(completion: { res in
                 self.epsSup3 = res!
                 //TODO
                 self.epsSup.list3 = res!
-            }) 
+                
+//                self.epsSup.list3.insert(eps3, at: 0)
+//                self.epsSup3.insert(eps3, at: 0)
+            })
+             
             
             //Navigation --> Send to ViewLive()
             notificationManager?.newPage = newPage

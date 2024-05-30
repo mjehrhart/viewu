@@ -5,6 +5,8 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<string>viewu_refresh</string>
+		<string>viewu_refresh_urlSession</string>
 	</array>
 	<key>CFBundleURLTypes</key>
 	<array>

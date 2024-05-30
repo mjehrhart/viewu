@@ -15,6 +15,100 @@ struct FrigateResponse: Codable {
 
 class APIRequester: NSObject {
     
+    //let nvr = NVRConfig.shared()
+    //@AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0"
+    //UserDefaults.standard.set("@twostraws", forKey: "background_fetch_events_epochtime")
+    
+   
+    func fetchEventsInBackground(urlString: String, backgroundFetchEventsEpochtime: String, epsType: String){
+        
+        //DEV
+        //Load Events
+        //let urlEvents = nvr.getUrl()
+        let urlStringEvents = urlString + "/api/events?limit=10000&after=\(backgroundFetchEventsEpochtime)"
+        print("===== fetchEventsInBackground::url")
+        print(urlStringEvents)
+        
+        let after = Int(Date().timeIntervalSince1970)
+        //backgroundFetchEventsEpochtime = String(after)
+        UserDefaults.standard.set(String(after), forKey: "background_fetch_events_epochtime")
+        
+        fetchNVREvents(urlString: urlStringEvents) { data, error in
+            
+            guard let data = data else { return }
+             
+            do{
+                let arrayEvents = try JSONDecoder().decode([NVRConfigurationHTTP].self, from: data)
+                
+                for event in arrayEvents {
+                     
+                    let url = urlString //self.nvr.getUrl()
+                    let id = event.id
+                    let frameTime = event.start_time
+                    
+                    var enteredZones = ""
+                    for zone in event.zones! {
+                        enteredZones += zone + "|"
+                    }
+                     
+                    var eps = EndpointOptions()
+                    eps.snapshot = url + "/api/events/\(id)/snapshot.jpg?bbox=1"
+                    eps.cameraName = event.camera
+                    eps.m3u8 = url + "/vod/event/\(id)/master.m3u8"
+                    eps.frameTime = event.start_time
+                    eps.label = event.label
+                    eps.id = event.id
+                    eps.thumbnail = url + "/api/events/\(id)/thumbnail.jpg"
+                    eps.camera = url + "/cameras/\(event.camera)"
+                    eps.debug = url + "/api/\(event.camera)?h=480"
+                    eps.image = url + "/api/\(event.camera)/recordings/\(frameTime)/snapshot.png"
+                    eps.score = 0.0
+                    eps.transportType = "viewu"
+                    eps.type = epsType
+                    eps.currentZones = ""
+                    eps.enteredZones = enteredZones
+                    eps.sublabel = event.sub_label
+                     
+                    //Check if value is nil
+                    if eps.sublabel == nil {
+                        eps.sublabel = ""
+                    }
+                    if eps.currentZones == nil {
+                    }
+                    if eps.enteredZones == nil {
+                        eps.enteredZones = ""
+                    }
+                    
+                    let _ = EventStorage.shared.insertOrUpdate(
+                          id: eps.id!,
+                          frameTime: eps.frameTime!,
+                          score: eps.score!,
+                          type: eps.type!,
+                          cameraName: eps.cameraName!,
+                          label: eps.label!,
+                          thumbnail: eps.thumbnail!,
+                          snapshot: eps.snapshot!,
+                          m3u8: eps.m3u8!,
+                          camera: eps.camera!,
+                          debug: eps.debug!,
+                          image: eps.image!,
+                          transportType: eps.transportType!,
+                          subLabel: eps.sublabel!, //ADDED 5/26 ?? "" TODO !
+                          currentZones: eps.currentZones!,
+                          enteredZones: eps.enteredZones!
+                    )
+                    
+                }
+            } catch(let err) {
+                print("Error Message goes here - 1002")
+                print(err)
+            }
+            
+            
+        }
+    }
+    
+    
     func fetchNVREvents(urlString: String, completion: @escaping (Data?, Error?) -> Void) {
         
         guard let url = URL(string: urlString) else {

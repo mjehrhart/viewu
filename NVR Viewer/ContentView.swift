@@ -9,6 +9,7 @@ import SwiftUI
 import CocoaMQTT
 import SwiftData
 import TipKit
+import BackgroundTasks
 
 struct ContentView: View {
     //Load Config
@@ -35,24 +36,33 @@ struct ContentView: View {
     @State private var showLog = false
     @State private var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
-    @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0"
-    //@State private var backgroundFetchEventsEpochtime: Bool = UserDefaults.standard.bool(forKey: "background_fetch_events_epochtime")
+    @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0" 
      
+    @Environment(\.scenePhase) var scenePhase
+    
     @State private var path = NavigationPath()
-    //@State private var path: NavigationPath = .init()
     
     init() {
         //UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
     }
     
+    func sheduleBackgroundTask() async {
+       
+        let request = BGAppRefreshTaskRequest(identifier: "viewu_refresh")
+        request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30 * 60, to: Date())
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            print("DEBUG: Background Task Scheduled!")
+        } catch(let error) {
+            print("DEBUG: Scheduling Error \(error.localizedDescription)") 
+        }
+    }
+    
     var body: some View{
         
-        NavigationStack (path: $path) { //(path: $path)
+        NavigationStack (path: $path) {
             VStack {
- 
-                //ViewNVRDetails()
-                //ViewEventListHome()
-                 
+  
                 ZStack {
                     GeometryReader { reader in
                         Color.white
@@ -79,7 +89,7 @@ struct ContentView: View {
                 
                 //Load Defaults for app
                 let url = nvr.getUrl()
-                let urlString = url + "/api/config" 
+                let urlString = url + "/api/config"
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
  
                     guard let data = data else { return }
@@ -92,11 +102,11 @@ struct ContentView: View {
                         filter2.setZones(items: config.item.cameras)
                         
                         // Delete non-retained snapshots
-                        for (name, value) in config.item.cameras{
+                        for (_, value) in config.item.cameras{
          
                             let daysBack = value.snapshots.retain.default
-                            var db:Int = Int(daysBack)
-                            let cont = EventStorage.shared.delete(daysBack:db, cameraName: value.name)
+                            let db:Int = Int(daysBack)
+                            let _ = EventStorage.shared.delete(daysBack:db, cameraName: value.name)
                         }
                          
                     }catch (let err){
@@ -104,89 +114,9 @@ struct ContentView: View {
                         print(err)
                     }
                 } 
-                
-                
-                //DEV
+                 
                 //Load Events
-                let urlEvents = nvr.getUrl()
-                let urlStringEvents = url + "/api/events?limit=10000&after=\(backgroundFetchEventsEpochtime)"
-   
-                let after = Int(Date().timeIntervalSince1970)
-                backgroundFetchEventsEpochtime = String(after)
-                
-                cNVR.fetchNVREvents(urlString: urlStringEvents) { data, error in
-                    
-                    guard let data = data else { return }
-                     
-                    do{
-                        let arrayEvents = try JSONDecoder().decode([NVRConfigurationHTTP].self, from: data) 
-                        
-                        for event in arrayEvents {
-                             
-                            let url = nvr.getUrl()
-                            let id = event.id   
-                            let frameTime = event.start_time
-                            
-                            var enteredZones = ""
-                            for zone in event.zones! {
-                                enteredZones += zone + "|"
-                            }
-                             
-                            var eps = EndpointOptions()
-                            eps.snapshot = url + "/api/events/\(id)/snapshot.jpg?bbox=1"
-                            eps.cameraName = event.camera
-                            eps.m3u8 = url + "/vod/event/\(id)/master.m3u8"
-                            eps.frameTime = event.start_time
-                            eps.label = event.label
-                            eps.id = event.id
-                            eps.thumbnail = url + "/api/events/\(id)/thumbnail.jpg"
-                            eps.camera = url + "/cameras/\(event.camera)"
-                            eps.debug = url + "/api/\(event.camera)?h=480"
-                            eps.image = url + "/api/\(event.camera)/recordings/\(frameTime)/snapshot.png"
-                            eps.score = 0.0
-                            eps.transportType = "http"
-                            eps.type = "web"
-                            eps.currentZones = ""
-                            eps.enteredZones = enteredZones
-                            eps.sublabel = event.sub_label
-                             
-                            //Check if value is nil
-                            if eps.sublabel == nil {
-                                eps.sublabel = ""
-                            }
-                            if eps.currentZones == nil {
-                            }
-                            if eps.enteredZones == nil {
-                                eps.enteredZones = ""
-                            } 
-                            
-                            let _ = EventStorage.shared.insertIfNone(
-                                  id: eps.id!,
-                                  frameTime: eps.frameTime!,
-                                  score: eps.score!,
-                                  type: eps.type!,
-                                  cameraName: eps.cameraName!,
-                                  label: eps.label!,
-                                  thumbnail: eps.thumbnail!,
-                                  snapshot: eps.snapshot!,
-                                  m3u8: eps.m3u8!,
-                                  camera: eps.camera!,
-                                  debug: eps.debug!,
-                                  image: eps.image!,
-                                  transportType: eps.transportType!,
-                                  subLabel: eps.sublabel!, //ADDED 5/26 ?? "" TODO !
-                                  currentZones: eps.currentZones!,
-                                  enteredZones: eps.enteredZones!
-                            )
-                            
-                        }
-                    } catch(let err) {
-                        print("Error Message goes here - 1002")
-                        print(err)
-                    }
-                    
-                    
-                }
+                cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "ctask" )
             }
             .task {
                 do{
@@ -204,7 +134,50 @@ struct ContentView: View {
                 self.selection = notificationSelection
                 
             }
+            //DEBGUGGIG ALL BELOW
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                            print("======================================================================================================")
+                            print("opened! 1")
+                            print("======================================================================================================") 
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                            print("======================================================================================================")
+                            print("opened! 2")
+                            print("======================================================================================================")
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                            print("======================================================================================================")
+                            print("opened! 3")
+                            print("======================================================================================================")
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                            print("======================================================================================================")
+                            print("opened! 4") // lll
+                            print("======================================================================================================")
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)) { _ in
+                            print("======================================================================================================")
+                            print("opened! 5") // ll
+                            print("======================================================================================================")
+            }
+            .onChange(of: scenePhase) { _, newScenePhase in
+                print(".onChange(of: scenePhase")
+                
+                if newScenePhase == .active {
+                    print("Active")
+                    cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "scenePhase")
+                }
+                else if newScenePhase == .inactive {
+                    print("Inactive")
+                } else if newScenePhase == .background {
+                    print("Background")
+                }
+            }
             .onAppear{
+                  Task{
+                    await sheduleBackgroundTask()
+                  }
+                
                 //check accesibilty to nvr
                 nvrManager.checkConnectionStatus(){data,error in
                     //do nothing

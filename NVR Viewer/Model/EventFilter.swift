@@ -25,13 +25,10 @@ class EventFilter: ObservableObject{
     @Published var zones = ["all"]
     
     @Published var selectedType: String = "all"
-    @Published var types = ["all", "new", "end", "update", "web"]
-    
-    //@Published var endDate = Date()
+    @Published var types = ["all", "new", "end", "update", "background", "ctask", "scenePhase"]
+     
     //Add 1 future day so the app can search til midnight of today
     @Published var endDate = Calendar.current.date(byAdding: DateComponents(day: 1), to: Date()) ?? Date()
-    //Calendar.current.nextDate(after: .now, matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTimePreservingSmallerComponents)!
-    
     @Published var startDate = Calendar.current.date(byAdding: DateComponents(day: -1), to: Date()) ?? Date()
     
     func reset() {

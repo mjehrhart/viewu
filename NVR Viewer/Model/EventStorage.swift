@@ -105,6 +105,7 @@ class EventStorage: ObservableObject {
         }
     }
     
+    //TODO this may need to change to ID 5/29
     func delete(frameTime: Double) -> Bool {
         
         guard let database = db else {
@@ -181,23 +182,23 @@ class EventStorage: ObservableObject {
             for events in try database.prepare(filter) { //self.events
                 
                 eps.append( EndpointOptions(thumbnail: events[thumbnail],
-                                            snapshot: events[snapshot],
-                                            m3u8: events[m3u8],
-                                            camera: events[camera],
-                                            debug: events[debug],
-                                            image: events[image],
-                                            id: events[id],
-                                            type: events[type],
-                                            cameraName: events[cameraName],
-                                            score: events[score],
-                                            frameTime: events[frameTime],
-                                            label: events[label],
-                                            sublabel: events[sub_label], // ADDED THIS 5/26
-                                            currentZones: events[current_zones],
-                                            enteredZones: events[entered_zones],
-                                            transportType: events[transportType],
-                                            sid: events[sid]
-                                           ) )
+                    snapshot: events[snapshot],
+                    m3u8: events[m3u8],
+                    camera: events[camera],
+                    debug: events[debug],
+                    image: events[image],
+                    id: events[id],
+                    type: events[type],
+                    cameraName: events[cameraName],
+                    score: events[score],
+                    frameTime: events[frameTime],
+                    label: events[label],
+                    sublabel: events[sub_label], // ADDED THIS 5/26
+                    currentZones: events[current_zones],
+                    enteredZones: events[entered_zones],
+                    transportType: events[transportType],
+                    sid: events[sid]
+                   ) )
             }
         } catch {
             print(error)
@@ -535,32 +536,128 @@ class EventStorage: ObservableObject {
         return eps
     }
      
+    func insertOrUpdate(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
+           
+        //TODO is this needed DispatchQueue.main.async
+        DispatchQueue.main.async { [self] in
+             
+            //let dataset = self.getEventByFrameTime(frameTime3: frameTime)
+            let dataset = self.getEventById(id3: id)
+           
+            if dataset.isEmpty {
+                guard let database = db else { return }
+                
+                print("Inserting into events table")
+                let insert = events.insert(
+                   self.id <- id,
+                   self.frameTime <- frameTime,
+                   self.score <- score,
+                   self.type <- type,
+                   self.cameraName <- cameraName,
+                   self.label <- label,
+                   self.thumbnail <- thumbnail,
+                   self.snapshot <- snapshot,
+                   self.m3u8 <- m3u8,
+                   self.camera <- camera,
+                   self.debug <- debug,
+                   self.image <- image,
+                   self.transportType <- transportType,
+                   self.sub_label <- subLabel,                  //5/26
+                   self.current_zones <- currentZones,
+                   self.entered_zones <- enteredZones
+                )
+                do {
+                    let rowID = try database.run(insert)
+                    if rowID > -1 {
+                        EventStorage.shared.readAll3(completion: { res in
+                            self.epsSup3 = res!
+                            self.epsSuper.list3 = res!
+                            return
+                        })
+                    }
+                     
+                    print("Insert rowID::", rowID)
+                } catch {
+                    print("No records inserted with Error")
+                    print(error)
+                    return
+                }
+            } else {
+               
+                guard let database = db else { return }
+                 
+                print("Updating into events table")
+                let filter = events.filter(id == self.id)
+                
+                let update = filter.update(
+                   self.id <- id,
+                   self.frameTime <- frameTime,
+                   self.score <- score,
+                   self.type <- type,
+                   self.cameraName <- cameraName,
+                   self.label <- label,
+                   self.thumbnail <- thumbnail,
+                   self.snapshot <- snapshot,
+                   self.m3u8 <- m3u8,
+                   self.camera <- camera,
+                   self.debug <- debug,
+                   self.image <- image,
+                   self.transportType <- transportType,
+                   self.sub_label <- subLabel,                  //5/26
+                   self.current_zones <- currentZones,
+                   self.entered_zones <- enteredZones
+                )
+                do {
+                    let rowID = try database.run(update)
+                    if rowID > -1 {
+                        EventStorage.shared.readAll3(completion: { res in
+                            self.epsSup3 = res!
+                            self.epsSuper.list3 = res!
+                            return
+                        })
+                    }
+                     
+                    print("Updated rowID::", rowID)
+                } catch {
+                    print("No records inserted with Error")
+                    print(error)
+                    return
+                }
+            }
+        }
+    }
+    
     func insertIfNone(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
            
         //TODO is this needed DispatchQueue.main.async
         DispatchQueue.main.async { [self] in
              
-            let dataset = self.getEventByFrameTime(frameTime3: frameTime)
-             
-            if dataset[0].thumbnail == "" { //should be ==
+            //let dataset = self.getEventByFrameTime(frameTime3: frameTime)
+            let dataset = self.getEventById(id3: id)
+            print("====================================================")
+            print(dataset)
+              
+            if dataset.isEmpty {
                 guard let database = db else { return }
                 
-                let insert = events.insert(self.id <- id,
-                                           self.frameTime <- frameTime,
-                                           self.score <- score,
-                                           self.type <- type,
-                                           self.cameraName <- cameraName,
-                                           self.label <- label,
-                                           self.thumbnail <- thumbnail,
-                                           self.snapshot <- snapshot,
-                                           self.m3u8 <- m3u8,
-                                           self.camera <- camera,
-                                           self.debug <- debug,
-                                           self.image <- image,
-                                           self.transportType <- transportType,
-                                           self.sub_label <- subLabel,      //5/26
-                                           self.current_zones <- currentZones,
-                                           self.entered_zones <- enteredZones
+                print("Inserting into events table")
+                let insert = events.insert(
+                   self.id <- id,
+                   self.frameTime <- frameTime,
+                   self.score <- score,
+                   self.type <- type,
+                   self.cameraName <- cameraName,
+                   self.label <- label,
+                   self.thumbnail <- thumbnail,
+                   self.snapshot <- snapshot,
+                   self.m3u8 <- m3u8,
+                   self.camera <- camera,
+                   self.debug <- debug,
+                   self.image <- image,
+                   self.transportType <- transportType,
+                   self.sub_label <- subLabel,                  //5/26
+                   self.current_zones <- currentZones,
+                   self.entered_zones <- enteredZones
                 )
                 do {
                     let rowID = try database.run(insert)
@@ -573,8 +670,6 @@ class EventStorage: ObservableObject {
                     }
                      
                     print("Insert rowID::", rowID)
-                    
-                    //return
                 } catch {
                     print("No records inserted with Error")
                     print(error)
@@ -582,8 +677,6 @@ class EventStorage: ObservableObject {
                 }
             } else { 
                 print("No records inserted")
-                print(dataset)
-                print("-------------------")
                 return
             }
         }

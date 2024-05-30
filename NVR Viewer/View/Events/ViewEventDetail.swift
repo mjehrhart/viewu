@@ -85,7 +85,6 @@ struct ViewEventDetail: View {
                         }
                     }
                 }
-                //Spacer().frame(height:20)
                 
                 Text("Snapshot")
                     .frame(width: UIScreen.screenWidth-30, alignment: .leading)
@@ -95,29 +94,12 @@ struct ViewEventDetail: View {
                     .modifier(CardBackground())
                     .padding(0)
                     .overlay(CameraOverlaySnapShot(toCopy: container.snapshot! ), alignment: .bottomTrailing)
-                 
-//                if let _ = container.snapshot{
-//                    HStack{
-//                        Button{
-//                            UIPasteboard.general.string = container.snapshot!
-//                        } label: {
-//                            Image(systemName: "doc.on.doc")
-//                        }
-//                        .frame(width: 340, alignment: .trailing)
-//                        
-//                        ShareLink(item: container.snapshot!, preview: SharePreview("Viewu Clip", image: container.snapshot!)){
-//                            Image(systemName: "square.and.arrow.up")
-//                        }
-//                        .frame(alignment: .trailing)
-//                    }
-//                }
-                
-                ViewEventSlideShow(eventId: container.id!)
-                
+ 
+                //Obsolete sice the app now does http fetch
+                //ViewEventSlideShow(eventId: container.id!)
                 Spacer()
             }
-        }
-        //.navigationTitle(text)
+        } 
         .toolbar {
             ToolbarItemGroup(placement: .navigation) {
                 
