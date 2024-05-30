@@ -1010,7 +1010,7 @@ struct ViewCameraDetails: View {
                 Text("snapshots")
                     .font(.caption)
             }
-            
+             
             Section{
                 HStack{
                     Text("color")

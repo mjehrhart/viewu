@@ -39,7 +39,7 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                    onvif: ONVIF(autotracking: AutoTracking(calibrate_on_startup: false, enabled: false, enabled_in_config: false, return_preset: "", timeout: 0, track: [], zoom_factor: 0.0, zooming: ""),
                                                 host: "", password: "", port: 1800, user: ""), 
                                    record: Record(enabled: false, enabled_in_config: false, events: CameraEvents(post_capture: 0, pre_capture: 0, retain: Retain(default: 0, mode: "")), expire_interval: 0, export: Export(timelapse_args: ""), retain: RecordRetain(days: 0, mode: ""), sync_recordings: false),
-                                   zones: ["": Zone(color: [0], inertia: 0, loitering_time: 0)],
+                                   zones: ["": Zone( inertia: 0, loitering_time: 0)], //color: [0]
                                    //rtmp: RTMP(enabled: false),
                                    snapshots: Snapshots(bounding_box: false, clean_copy: false, crop: false, enabled: false, height: 0, quality: 0, retain: SnapshotsRetain(default: 0, mode: ""), timestamp: false),
                                    timestamp_style: TimeStampStyle(color: TimeStampStyleColor(blue: 0, green: 0, red: 0), format: "", position: "", thickness: 0),
@@ -99,9 +99,9 @@ struct Cameras: Codable, Hashable {
 }
 
 struct Zone: Codable, Hashable {
-    let color: [Int]
-    let inertia: Int
-    let loitering_time: Int
+    //let color: [Int?]
+    let inertia: Int?
+    let loitering_time: Int?
 }
 
 struct FFMPEG: Codable, Hashable {
@@ -209,10 +209,10 @@ struct ONVIF: Codable, Hashable {
 
 struct CameraFilters: Codable, Hashable{
     //let mask: Any,
-    let max_area: Int64
-    let max_ratio: Int64
-    let min_area: Int
-    let min_ratio: Int
+    let max_area: Double
+    let max_ratio: Double
+    let min_area: Double
+    let min_ratio: Double
     let min_score: Double
     let threshold: Double
 }
