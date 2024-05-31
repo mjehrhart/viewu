@@ -96,7 +96,7 @@ struct ContentView: View {
                     
                     do {
                         config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
-                         
+                           
                         filter2.setCameras(items: config.item.cameras)
                         filter2.setObject(items: config.item.cameras)
                         filter2.setZones(items: config.item.cameras)

@@ -71,8 +71,13 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
 struct NVRConfigurationCall: Codable, Hashable  {
     let cameras: [String: Cameras]
     let mqtt : MQTT
-    let go2rtc : Go2RTC
+    let go2rtc : Go2RTC                //?
 }
+
+struct Go2RTC: Codable, Hashable {
+    let streams: [String: [String]]?    //?
+}
+ 
 
 struct Cameras: Codable, Hashable {
     let audio: Audio
@@ -298,10 +303,6 @@ struct Ui: Codable, Hashable  {
     let time_format: String
     let time_style: String
     let use_experimental: Bool
-}
-
-struct Go2RTC: Codable, Hashable {
-    let streams: [String: [String]]
 }
  
 struct MQTT: Codable, Hashable {

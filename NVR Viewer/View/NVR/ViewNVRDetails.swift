@@ -24,10 +24,10 @@ struct ViewNVRDetails: View {
         Form{
             Section{
                 //HStack{
-                    ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, camera in
-                        NavigationLink("\(camera)", value: config.item.cameras[camera]) 
-                            .foregroundStyle(.blue)
-                    }
+                ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, camera in
+                    NavigationLink("\(camera)", value: config.item.cameras[camera])
+                        .foregroundStyle(.blue)
+                }
                 //}
             } header: {
                 Text("Cameras")
@@ -89,28 +89,34 @@ struct ViewNVRDetails: View {
                 Text("MQTT")
                     .font(.caption)
             }
-            
-            Section {
-                ForEach(Array(config.item.go2rtc.streams.keys).sorted(by: {$0 < $1}), id: \.self) { value in
-                    Text("\(value)")
-                        .frame(width:UIScreen.screenWidth, alignment: .leading)
-                        .padding(.leading, 75)
-                        //.foregroundStyle(.secondary)
-                    
-                    ForEach(config.item.go2rtc.streams[value]!, id: \.self) { item in
-                        ScrollView(.horizontal){
-                            Text("\(item)")
-                                .textSelection(.enabled)
-                                .foregroundStyle(.secondary)
-                                .padding(.leading, 0)
-                                .frame(width:UIScreen.screenWidth, alignment: .leading)
+          
+            if ( config.item.go2rtc.streams != nil  ){ 
+                //streams: ["" : [] ])
+                Section {
+                    ForEach(Array(config.item.go2rtc.streams!.keys ).sorted(by: {$0 < $1}), id: \.self) { value in
+                      if !value.isEmpty {
+                        Text("\(value)")
+                            .frame(width:UIScreen.screenWidth, alignment: .leading)
+                            .padding(.leading, 75)
+  
+                            ForEach(config.item.go2rtc.streams![value]!, id: \.self) { item in
+                                ScrollView(.horizontal){
+                                    Text("\(item)")
+                                        .textSelection(.enabled)
+                                        .foregroundStyle(.secondary)
+                                        .padding(.leading, 0)
+                                        .frame(width:UIScreen.screenWidth, alignment: .leading)
+                                }
+                            }
                         }
-                    }
+                   }
+                } header: {
+                    Text("Go2RTC")
+                        .font(.caption)
                 }
-            } header: {
-                Text("Go2RTC")
-                    .font(.caption)
             }
+              
+          
             
         }
         .background(Color(UIColor.secondarySystemBackground)) //very light gray
