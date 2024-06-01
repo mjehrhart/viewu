@@ -32,16 +32,7 @@ class APIRequester: NSObject {
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
              
             guard let data = data else { return }
-            
-            do {
-                if let json = try JSONSerialization.jsonObject(with: (data) ) as? Any {
-                    print(json)
-                    
-                }
-            } catch(let err) { 
-                print(err)
-            }
-            
+             
             completion(data, error)
         }
         task.progress.resume()

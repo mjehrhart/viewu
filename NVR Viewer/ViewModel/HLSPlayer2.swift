@@ -40,6 +40,7 @@ struct HLSPlayer2: View {
                 .padding(.leading, 10)
                 .padding(.bottom, 5)
                 .foregroundColor(.white)
+                .fontWeight(.bold)
         }
     }
 

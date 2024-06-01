@@ -390,8 +390,8 @@ struct ViewSettings: View {
                 
                 Section {
                     Text("[Viewu](https://www.viewu.app)")
+                    Text("[Support](https://github.com/mjehrhart/viewu)")
                     Text("[Installation Guide](https://installation.viewu.app)")
-                     
                 } header: {
                     Text("Information")
                         .font(.caption)
@@ -399,7 +399,6 @@ struct ViewSettings: View {
                 
                 Text("Viewu™ 2024")
             }
-            Spacer()
         }
         .navigationBarTitle(title, displayMode: .inline)
     }

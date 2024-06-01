@@ -42,6 +42,7 @@ struct ViewCameraHLSFullScreen: View {
                         }
                         .foregroundColor(.white)
                         .font(.title)
+                        .fontWeight(.bold)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                         .padding(.bottom, 10)
                         .padding([.trailing], 90)

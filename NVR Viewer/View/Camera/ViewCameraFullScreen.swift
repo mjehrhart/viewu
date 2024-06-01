@@ -64,7 +64,7 @@ struct ViewCameraFullScreen: View {
 //                        .foregroundColor(.white)
 //                        .font(.title)
 //                    }
-//                    .frame(maxWidth: .infinity, maxHeight: 40, alignment: .topLeading) 
+//                    .frame(maxWidth: .infinity, maxHeight: 40, alignment: .topLeading)
                     
                     Spacer()
                     
@@ -78,7 +78,7 @@ struct ViewCameraFullScreen: View {
                         .font(.title)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                         .padding(.bottom, 10)
-                        //.background(Color(.yellow))
+                        .fontWeight(.bold)
                         
                         Button("", systemImage: flagMute ? "speaker.slash" : "speaker"){
                             flagMute.toggle()
@@ -89,9 +89,9 @@ struct ViewCameraFullScreen: View {
                         .frame(maxHeight: .infinity, alignment: .bottomTrailing)
                         .foregroundColor(.white)
                         .font(.title)
+                        .fontWeight(.bold)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    //.background(Color(.gray))
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                  

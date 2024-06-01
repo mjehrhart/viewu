@@ -140,6 +140,7 @@ struct ViewEventDetail: View {
                 }
                 .frame(alignment: .trailing)
                 .foregroundColor(.white)
+                .fontWeight(.bold)
             }
             .padding(.trailing, 5)
             .padding(.bottom, 5)
@@ -167,12 +168,14 @@ struct ViewEventDetail: View {
                 }
                 .frame(width: 340, alignment: .trailing)
                 .foregroundColor(.white)
+                .fontWeight(.bold)
                 
                 ShareLink(item: toCopy, preview: SharePreview("Viewu SnapshotE", image: toCopy)){
                     Image(systemName: "square.and.arrow.up")
                 }
                 .frame(alignment: .trailing)
                 .foregroundColor(.white)
+                .fontWeight(.bold)
                 
                 if frigatePlusOn {
                     Button{
@@ -180,13 +183,26 @@ struct ViewEventDetail: View {
                         let url = nvr.getUrl()
                         let urlString = url + "/api/events/\(eventId)/plus"
                         cNVR.postImageToFrigatePlus(urlString: urlString, eventId: eventId ){ (data, error) in
-  
+                            
+                            guard let data = data else { return }
+                            
+                            do {
+                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                           
+                                    if let res = json["success"] as? Int {
+                                        print(res)
+                                    }
+                                }
+                            } catch(let err) {
+                                print(err)
+                            }
                         }
                        
                     } label: {
                         Image(systemName: "plus.rectangle")
                     }
                     .foregroundColor(.white)
+                    .fontWeight(.bold)
                 }
             }
             .padding(.trailing, 5)
