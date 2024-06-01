@@ -27,6 +27,8 @@ struct ViewSettings: View {
     @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = false
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
     
+    @AppStorage("frigatePlusOn") private var frigatePlusOn: Bool = false
+    
     @AppStorage("cameraSubStream") private var cameraSubStream: Bool = false
     @AppStorage("cameraRTSPPath") private var cameraRTSPPath: Bool = false
     @AppStorage("camerGo2Rtc") private var camerGo2Rtc: Bool = true
@@ -365,6 +367,11 @@ struct ViewSettings: View {
                         .font(.caption)
                 }
                 
+                Section{
+                    Toggle("Enabled", isOn: $frigatePlusOn)
+                } header: {
+                    Text("Friagte+")
+                }
                 if developerModeIsOn {
                     Section{
                         ScrollView(.horizontal){
@@ -381,6 +388,16 @@ struct ViewSettings: View {
                 }
                 
                 
+                Section {
+                    Text("[Viewu](https://www.viewu.app)")
+                    Text("[Installation Guide](https://installation.viewu.app)")
+                     
+                } header: {
+                    Text("Information")
+                        .font(.caption)
+                }
+                
+                Text("Viewu™ 2024")
             }
             Spacer()
         }

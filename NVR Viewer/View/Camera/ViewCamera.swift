@@ -16,22 +16,13 @@ class AVRequester: NSObject {
         
     }
 }
-
-//struct CameraName: View {
-//    
-//    let name:String
-//  var body: some View {
-//    Text(name)
-//  }
-//}
-
+ 
 struct ViewCamera: View {
     
     @ObservedObject var config = NVRConfigurationSuper.shared()
     
     let title: String
-    @State var flagFull = false
-    //@State private var path = NavigationPath()
+    @State var flagFull = false 
     let nvr = NVRConfig.shared()
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
@@ -139,10 +130,8 @@ struct ViewCamera: View {
                             ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
                                 
                                 let url = nvr.getUrl()
-                                Webview(url: url + "/api/\(cameraName)?h=480")
-                                    .modifier(CardBackground())
-                                    .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-                                    .edgesIgnoringSafeArea(.all)
+                                HLSPlayer2(urlString: url, cameraName: cameraName, flagFull: false)
+                                
                                 if developerModeIsOn {
                                     Text(url + "/api/\(cameraName)?h=480")
                                         .textSelection(.enabled)
@@ -156,7 +145,6 @@ struct ViewCamera: View {
             }
         }
         .navigationBarTitle(title, displayMode: .inline)
-        //.scrollContentBackground(.hidden)
         .toolbarBackground(.visible, for: .navigationBar)
     }
     
@@ -174,35 +162,5 @@ struct ViewCamera: View {
         return urlString
     }
 }
-
-struct Webview: UIViewRepresentable {
-    
-    var url: String
-    func makeUIView(context: Context) -> WKWebView {
-        
-        guard let url = URL(string: self.url) else {
-            return WKWebView()
-        }
-        
-        let request = URLRequest(url: url)
-        
-        let wkWebview = WKWebView()
-        wkWebview.load(request)
-        return wkWebview
-    }
-    
-    func updateUIView(_ uiView: Webview.UIViewType, context: UIViewRepresentableContext<Webview>) {
-    }
-}
-#Preview {
-    ViewCamera(title: "Cameras")
-}
-
-//Webview(url: url + "/api/front?h=480")
-//    .modifier(CardBackground())
-//    .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-//    .edgesIgnoringSafeArea(.all)
-
-
 
 
