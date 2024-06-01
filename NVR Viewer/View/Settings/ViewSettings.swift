@@ -401,19 +401,7 @@ struct ViewSettings: View {
             }
             Spacer()
         }
-        .onAppear{
-            //            print("ContentView::onAppear")
-            //            //check accesibilty to nvr
-            //            nvrManager.checkConnectionStatus()
-            //
-            //            //connect to mqtt broker
-            //            mqttManager.initializeMQTT()
-            //            mqttManager.connect()
-        }
         .navigationBarTitle(title, displayMode: .inline)
-//        .scrollContentBackground(.hidden)
-//        .toolbarBackground(.secondary, for: .navigationBar)
-//        .toolbarBackground(.visible, for: .navigationBar)
     }
     
 }

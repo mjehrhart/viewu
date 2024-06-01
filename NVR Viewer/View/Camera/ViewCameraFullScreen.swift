@@ -55,17 +55,16 @@ struct ViewCameraFullScreen: View {
             HStack{
                 
                 VStack{
-                    HStack{
-                        Button("", systemImage: "arrow.down.forward.topleading.rectangle"){
-                            showCameras.toggle()
-                        }
-                        .padding([.leading], 85)
-                        .frame(maxHeight: .infinity, alignment: .bottomTrailing)
-                        .foregroundColor(.white)
-                        .font(.title)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: 40, alignment: .topLeading)
-                    //.background(Color(.yellow))
+//                    HStack{
+//                        Button("", systemImage: "arrow.down.forward.topleading.rectangle"){
+//                            showCameras.toggle()
+//                        }
+//                        .padding([.leading], 85)
+//                        .frame(maxHeight: .infinity, alignment: .bottomTrailing)
+//                        .foregroundColor(.white)
+//                        .font(.title)
+//                    }
+//                    .frame(maxWidth: .infinity, maxHeight: 40, alignment: .topLeading) 
                     
                     Spacer()
                     

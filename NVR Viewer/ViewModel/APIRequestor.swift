@@ -19,6 +19,33 @@ class APIRequester: NSObject {
     //@AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0"
     //UserDefaults.standard.set("@twostraws", forKey: "background_fetch_events_epochtime")
     
+    func postImageToFrigatePlus(urlString: String, eventId: String, completion: @escaping (Data?, Error?) -> Void) {
+        
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        let session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
+        let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+             
+            guard let data = data else { return }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: (data) ) as? Any {
+                    print(json)
+                    
+                }
+            } catch(let err) { 
+                print(err)
+            }
+            
+            completion(data, error)
+        }
+        task.progress.resume()
+    }
    
     func fetchEventsInBackground(urlString: String, backgroundFetchEventsEpochtime: String, epsType: String){
         

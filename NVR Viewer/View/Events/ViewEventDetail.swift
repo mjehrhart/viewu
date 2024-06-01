@@ -18,6 +18,7 @@ struct ViewEventDetail: View {
     @State private var player = AVPlayer()
     @State private var path = NavigationPath()
     
+    var frigatePlusOn: Bool = UserDefaults.standard.bool(forKey: "frigatePlusOn")
     //
     @EnvironmentObject private var notificationManager2: NotificationManager
     @State var selection: Int = 0
@@ -65,23 +66,7 @@ struct ViewEventDetail: View {
                             ViewPlayVideo(urlString: container.m3u8!)
                                 .modifier(CardBackground())
                                 .padding(0)
-                                .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
-                            
-                            //                if let _ = container.m3u8{
-                            //                    HStack{
-                            //                        Button{
-                            //                            UIPasteboard.general.string = container.m3u8!
-                            //                        } label: {
-                            //                            Image(systemName: "doc.on.doc")
-                            //                        }
-                            //                        .frame(width: 340, alignment: .trailing)
-                            //
-                            //                        ShareLink(item: container.m3u8!, preview: SharePreview("NVR Video Clip", image: container.m3u8!)){
-                            //                            Image(systemName: "square.and.arrow.up")
-                            //                        }
-                            //                        .frame(alignment: .trailing)
-                            //                    }
-                            //                }
+                                .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing) 
                         }
                     }
                 }
@@ -89,11 +74,11 @@ struct ViewEventDetail: View {
                 Text("Snapshot")
                     .frame(width: UIScreen.screenWidth-30, alignment: .leading)
                     .padding(10)
-                
+                 
                 ViewUIImageFull(urlString: container.snapshot!)
                     .modifier(CardBackground())
                     .padding(0)
-                    .overlay(CameraOverlaySnapShot(toCopy: container.snapshot! ), alignment: .bottomTrailing)
+                    .overlay(CameraOverlaySnapShot(eventId: container.id!, toCopy: container.snapshot! ), alignment: .bottomTrailing)
  
                 //Obsolete sice the app now does http fetch
                 //ViewEventSlideShow(eventId: container.id!)
@@ -164,11 +149,17 @@ struct ViewEventDetail: View {
     
     struct CameraOverlaySnapShot: View {
         
+        let nvr = NVRConfig.shared()
+        let cNVR = APIRequester()
+        
+        let eventId: String
         let toCopy: String
+        var frigatePlusOn: Bool = UserDefaults.standard.bool(forKey: "frigatePlusOn")
         
         var body: some View {
              
             HStack{
+                
                 Button{
                     UIPasteboard.general.string = toCopy
                 } label: {
@@ -182,6 +173,21 @@ struct ViewEventDetail: View {
                 }
                 .frame(alignment: .trailing)
                 .foregroundColor(.white)
+                
+                if frigatePlusOn {
+                    Button{
+                        
+                        let url = nvr.getUrl()
+                        let urlString = url + "/api/events/\(eventId)/plus"
+                        cNVR.postImageToFrigatePlus(urlString: urlString, eventId: eventId ){ (data, error) in
+  
+                        }
+                       
+                    } label: {
+                        Image(systemName: "plus.rectangle")
+                    }
+                    .foregroundColor(.white)
+                }
             }
             .padding(.trailing, 5)
             .padding(.bottom, 5)
@@ -190,9 +196,3 @@ struct ViewEventDetail: View {
     }
     
 }
-
-
-//#Preview {
-//    ViewEventDetail(frameTime: 1710541384.496615)
-//        .modelContainer(for: ImageContainer.self)
-//}

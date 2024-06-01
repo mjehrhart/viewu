@@ -423,13 +423,13 @@
 			isa = PBXGroup;
 			children = (
 				34D5F0042B92B490002A84B0 /* APIBuilder.swift */,
+				340AAFFA2BA2406C00EB69F4 /* APIRequestor.swift */,
 				34D5EFF02B92B1CB002A84B0 /* MQTTManager.swift */,
 				34D5EFF22B92B1DF002A84B0 /* MQTTState.swift */,
 				34D5F0122B950F34002A84B0 /* MQTTConfig.swift */,
 				34D5F0142B9510AB002A84B0 /* NVRConfig.swift */,
 				34E544EE2B9A721300137F34 /* NotificationHandler.swift */,
 				34E544F22B9ABD8C00137F34 /* NotificationManager.swift */,
-				340AAFFA2BA2406C00EB69F4 /* APIRequestor.swift */,
 				348333A12BB8AB9700ED1DF2 /* RTSPPlayer2.swift */,
 				34D3D0052C0AA17300E263B5 /* HLSPlayer2.swift */,
 			);
