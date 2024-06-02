@@ -112,6 +112,16 @@ struct ContentView: View {
                     }catch (let err){
                         print("Error Message goes here - 1001")
                         print(err)
+                         
+//                        do {
+//                            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+//                                
+//                                 print(json)
+//                            }
+//                        } catch(let err) {
+//                            print("Error Message goes here - 2001")
+//                            print(err)
+//                        }
                     }
                 } 
                  

@@ -32,7 +32,7 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                    ),
                                    ffmpeg_cmds: [],
                                    live: Live(height: 0, quality: 0, stream_name: ""), 
-                                   //motion: Motion(contour_area: 0, delta_alpha: 0.0, frame_alpha: 0.0, frame_height: 0, improve_contrast: false, lightning_threshold: 0.0, mask: [], mqtt_off_delay: 0, threshold: 0), 
+                                   //motion: Motion(contour_area: 0, delta_alpha: 0.0, frame_alpha: 0.0, frame_height: 0, improve_contrast: false, lightning_threshold: 0.0, mask: [], mqtt_off_delay: 0, threshold: 0.0), 
                                    mqtt: CameraMQTT(bounding_box: false, crop: false, enabled: false, height: 0, quality: 0, timestamp: false),
                                    name: "",
                                    objects: CameraObjects(filters: ["": CameraFilters(max_area: 0, max_ratio: 0, min_area: 0, min_ratio: 0, min_score: 0.0, threshold: 0.0) ] ),
@@ -244,7 +244,7 @@ struct Motion: Codable, Hashable {
     let lightning_threshold: Double
     let mask: [String]
     let mqtt_off_delay: Int
-    let threshold: Int
+    let threshold: Double       //Int
 }
 struct Live: Codable, Hashable {
     let height: Int
