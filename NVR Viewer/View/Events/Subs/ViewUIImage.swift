@@ -106,15 +106,18 @@ struct ViewUIImage: View{
     struct ImageOverlay: View {
         
         let frigatePlus: Bool
+        var frigatePlusOn: Bool = UserDefaults.standard.bool(forKey: "frigatePlusOn")
         
         var body: some View {
              
-            if(frigatePlus) {
-                Text("Frigate+")
-                    .padding( .trailing, 35) 
-                    .padding(.bottom, 10)
-                    .foregroundColor(.white)
-                    .fontWeight(.semibold)
+            if(frigatePlusOn) {
+                if(frigatePlus) {
+                    Text("Frigate+")
+                        .padding( .trailing, 35) 
+                        .padding(.bottom, 10)
+                        .foregroundColor(.white)
+                        .fontWeight(.semibold)
+                }
             }
         }
     }
