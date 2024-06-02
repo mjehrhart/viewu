@@ -54,6 +54,7 @@ struct ViewEventCard: View {
                         Text("\(containers[index].label!)")
                             .foregroundColor(.secondary)
                             .font(.caption)
+                        
                         if(containers[index].sublabel! != ""){
                             Text("\(containers[index].sublabel!)")
                                 .foregroundColor(.secondary)
@@ -72,14 +73,13 @@ struct ViewEventCard: View {
                          
                         if !containers[index].frigatePlus!{
                             if frigatePlusOn {
-                                Button("Frigate+") {
+                                Button( action: {
                                     
                                     containers[index].frigatePlus!.toggle()
                                     
                                     let url = nvr.getUrl()
                                     let urlString = url + "/api/events/\(containers[index].id!)/plus"
                                     cNVR.postImageToFrigatePlus(urlString: urlString, eventId: containers[index].id! ){ (data, error) in
-                                        
                                          
                                         guard let data = data else { return }
                                         
@@ -113,9 +113,18 @@ struct ViewEventCard: View {
                                         }
                                     }
                                     return
+                                } ){
+                                    Text("Frigate+")
+                                        .padding(3)
                                 }
-                                .buttonStyle(.borderedProminent)
-                                .controlSize(.regular)
+//                                .buttonStyle(.borderedProminent)
+//                                .tint(.gray).opacity(0.2)
+//                                .foregroundColor(.white).opacity(1.0)
+                                .font(.footnote)
+                                .foregroundColor(.black)
+                                .background(.gray).opacity(0.4)
+                                .cornerRadius(4)
+                                .padding(.bottom, 5)
                             }
                         }
                         
@@ -127,7 +136,6 @@ struct ViewEventCard: View {
                         }
                          
                     }
-                    //.modifier(CardBackground())
                     .frame(width: setWidth(), alignment: .leading) //110
                      
                     ViewUIImage(urlString: containers[index].snapshot!, frameTime: containers[index].frameTime!, frigatePlus: containers[index].frigatePlus! )
