@@ -32,13 +32,9 @@ struct ViewEventsHistory: View {
                 ForEach(epsSup3.list3, id: \.sid) { container in 
                     
                     if container.id! != "" {
-                        ViewEventCard(frameTime: container.frameTime!)
-//                            .swipeActions {
-//                                NavigationLink("convertTime(time: container.frameTime!)", value: 1)
-//                                .tint(.green)
-//                            }
+                        ViewEventCard(frameTime: container.frameTime!) 
                     }
-                } 
+                }
             }
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
@@ -48,16 +44,7 @@ struct ViewEventsHistory: View {
                         Label(!nvrManager.getConnectionState() ? "" : "", systemImage: "cable.connector")
                             .frame(alignment: .leading)
                             .foregroundStyle(nvrManager.getConnectionState() ? .white : .red)
-                    }
-//                    Button {
-//                        EventStorage.shared.readAll3(completion: { res in
-//                            epsSup3.list3 = res!
-//                        })
-//                    } label: {
-//                        Image(systemName: "circle.hexagonpath")
-//                    }
-//                    .frame(alignment: .trailing)
-//                    .foregroundStyle(.gray)
+                    } 
                 }
             }
             .task{

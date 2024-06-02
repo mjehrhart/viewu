@@ -76,6 +76,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         //Misc
         var transportType: String?
         var sid: Int64?
+        var frigatePlus: Bool?
     }
     
     struct EventMeta: Identifiable,Equatable, Hashable {
@@ -101,6 +102,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         //Misc
         var transportType: String?
         var sid: Int64?
+        var frigatePlus: Bool?
     }
 }
 
@@ -129,4 +131,5 @@ struct EndpointOptions: Hashable, Codable, Identifiable {
     //Misc
     var transportType: String?
     var sid: Int64?
+    var frigatePlus: Bool?
 }

@@ -78,9 +78,9 @@ struct ViewEventDetail: View {
                 ViewUIImageFull(urlString: container.snapshot!)
                     .modifier(CardBackground())
                     .padding(0)
-                    .overlay(CameraOverlaySnapShot(eventId: container.id!, toCopy: container.snapshot! ), alignment: .bottomTrailing)
+                    .overlay(CameraOverlaySnapShot(eventId: container.id!, toCopy: container.snapshot!, frigatePlus: container.frigatePlus! ), alignment: .bottomTrailing)
  
-                //Obsolete sice the app now does http fetch
+                //Obsolete since the app now does http fetch
                 //ViewEventSlideShow(eventId: container.id!)
                 Spacer()
             }
@@ -155,7 +155,11 @@ struct ViewEventDetail: View {
         
         let eventId: String
         let toCopy: String
+        @State var frigatePlus: Bool
         var frigatePlusOn: Bool = UserDefaults.standard.bool(forKey: "frigatePlusOn")
+        
+        @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
+        //@ObservedObject var epsSup3 = EndpointOptionsSuper.shared().list3
         
         var body: some View {
              
@@ -177,32 +181,50 @@ struct ViewEventDetail: View {
                 .foregroundColor(.white)
                 .fontWeight(.bold)
                 
-                if frigatePlusOn {
-                    Button{
-                        
-                        let url = nvr.getUrl()
-                        let urlString = url + "/api/events/\(eventId)/plus"
-                        cNVR.postImageToFrigatePlus(urlString: urlString, eventId: eventId ){ (data, error) in
+                if !frigatePlus{
+                    if frigatePlusOn {
+                        Button{
                             
-                            guard let data = data else { return }
+                            frigatePlus = true
                             
-                            do {
-                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                           
-                                    if let res = json["success"] as? Int {
-                                        print(res)
+                            let url = nvr.getUrl()
+                            let urlString = url + "/api/events/\(eventId)/plus"
+                            cNVR.postImageToFrigatePlus(urlString: urlString, eventId: eventId ){ (data, error) in
+                                
+                                guard let data = data else { return }
+                                
+                                do {
+                                    if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                                        
+                                        if let res = json["success"] as? Int {
+                                            print(res)
+                                            if res == 1 {
+                                                
+                                                EventStorage.shared.updateFrigatePlus(id:eventId)
+                                                
+                                                EventStorage.shared.readAll3(completion: { res in
+                                                    //self.epsSup3 = res!
+                                                    epsSuper.list3 = res!
+                                                    return
+                                                })
+                                            } else {
+                                                if let msg = json["message"] as? String {
+                                                    print(msg)
+                                                }
+                                            }
+                                        }
                                     }
+                                } catch(let err) {
+                                    print(err)
                                 }
-                            } catch(let err) {
-                                print(err)
                             }
+                            
+                        } label: {
+                            Image(systemName: "plus.rectangle")
                         }
-                       
-                    } label: {
-                        Image(systemName: "plus.rectangle")
+                        .foregroundColor(.white)
+                        .fontWeight(.bold)
                     }
-                    .foregroundColor(.white)
-                    .fontWeight(.bold)
                 }
             }
             .padding(.trailing, 5)

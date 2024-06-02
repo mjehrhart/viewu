@@ -14,6 +14,8 @@ struct ViewUIImage: View{
     let cNVR = APIRequester()
     let urlString: String
     let frameTime: Double
+    let frigatePlus: Bool
+    
     @State var data: Data?
     @State private var zoomIn: Bool = false
     @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
@@ -63,6 +65,7 @@ struct ViewUIImage: View{
                             zoomIn.toggle()
                         }
                     }
+                    .overlay(ImageOverlay(frigatePlus: frigatePlus), alignment: .bottomTrailing)
             }
             
         } else {
@@ -80,14 +83,8 @@ struct ViewUIImage: View{
                             //Not sure i like this approach as it forces the list to reload when an image is removed
                             //print("Found ERROR ======================================================================")
                             let flag = EventStorage.shared.delete(frameTime: frameTime)
-                            //print(flag)
                             if flag {
-                                
-//                                epsSuper.list3.removeAll(where: { _ in frameTime.isEqual(to: frameTime) } )
-//                                EventStorage.shared.readAll3(completion: { res in
-//                                    epsSuper.list3 = res!
-//                                })
-                                
+                                 
                                 //if Event Snapshot is empty, show this instead
                                 cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
                                     
@@ -104,6 +101,22 @@ struct ViewUIImage: View{
                     }
                 }
         }   
+    }
+    
+    struct ImageOverlay: View {
+        
+        let frigatePlus: Bool
+        
+        var body: some View {
+             
+            if(frigatePlus) {
+                Text("Frigate+")
+                    .padding( .trailing, 35) 
+                    .padding(.bottom, 10)
+                    .foregroundColor(.white)
+                    .fontWeight(.semibold)
+            }
+        }
     }
 }
 

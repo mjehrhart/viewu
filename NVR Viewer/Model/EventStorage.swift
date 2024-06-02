@@ -53,6 +53,7 @@ class EventStorage: ObservableObject {
     private let sub_label = Expression<String>("subLabel")
     private let current_zones = Expression<String>("currentZones")
     private let entered_zones = Expression<String>("enteredZones")
+    private let frigtePlus = Expression<Bool>("frigtePlus")
       
     static let shared = EventStorage()
 
@@ -163,6 +164,7 @@ class EventStorage: ObservableObject {
                 eps.currentZones = events[current_zones]
                 eps.enteredZones = events[entered_zones]
                 eps.sid = events[sid]
+                eps.frigatePlus = events[frigtePlus]
                 
             }
         } catch {
@@ -395,6 +397,9 @@ class EventStorage: ObservableObject {
                 x.currentZones = events[current_zones]
                 x.enteredZones = events[entered_zones]
                 x.transportType = events[transportType]
+                x.frigatePlus = events[frigtePlus]
+                
+                //Fprint(x.frigatePlus!)
                 
                 eps3.append( x )
                  
@@ -402,7 +407,7 @@ class EventStorage: ObservableObject {
         } catch {
             print(error)
         }
-         
+          
         //TODO
         epsSup3 = eps3
         
@@ -527,7 +532,8 @@ class EventStorage: ObservableObject {
                                             currentZones: events[current_zones],
                                             enteredZones:events[entered_zones],
                                             transportType: events[transportType], 
-                                            sid:events[sid]
+                                            sid:events[sid],
+                                            frigatePlus: events[frigtePlus]
                                            ) )
             }
         } catch {
@@ -536,6 +542,39 @@ class EventStorage: ObservableObject {
         return eps
     }
      
+    func updateFrigatePlus(id: String){
+        //TODO is this needed DispatchQueue.main.async
+        DispatchQueue.main.async { [self] in
+            
+            guard let database = db else { return }
+             
+            print("Updating into events table")
+            let filter = events.filter(id == self.id)
+            
+            let update = filter.update(
+                self.frigtePlus <- true
+            )
+            
+            print(update)
+            do {
+                let rowID = try database.run(update)
+                if rowID > -1 {
+                    EventStorage.shared.readAll3(completion: { res in
+                        self.epsSup3 = res!
+                        self.epsSuper.list3 = res!
+                        return
+                    })
+                }
+                 
+                print("Updated rowID::", rowID)
+            } catch {
+                print("No records inserted with Error")
+                print(error)
+                return
+            }
+            
+        }
+    }
     func insertOrUpdate(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
            
         //TODO is this needed DispatchQueue.main.async
@@ -608,6 +647,7 @@ class EventStorage: ObservableObject {
                    self.entered_zones <- enteredZones
                 )
                 do {
+                     
                     let rowID = try database.run(update)
                     if rowID > -1 {
                         EventStorage.shared.readAll3(completion: { res in
@@ -769,6 +809,14 @@ class EventStorage: ObservableObject {
         do {
             try database.run(
                 events.addColumn(entered_zones, defaultValue: "")
+            )
+        } catch {
+            print(error)
+        }
+        
+        do {
+            try database.run(
+                events.addColumn(frigtePlus, defaultValue: false)
             )
         } catch {
             print(error)
