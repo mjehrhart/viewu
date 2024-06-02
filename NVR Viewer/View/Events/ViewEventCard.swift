@@ -115,9 +115,9 @@ struct ViewEventCard: View {
                                     return
                                 } ){
                                     Text("Frigate+")
-                                        .padding(3)
+                                        .padding(1)
                                 }
-//                                .buttonStyle(.borderedProminent)
+                                .buttonStyle(.borderedProminent)
 //                                .tint(.gray).opacity(0.2)
 //                                .foregroundColor(.white).opacity(1.0)
                                 .font(.footnote)
