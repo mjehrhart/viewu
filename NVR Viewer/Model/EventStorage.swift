@@ -542,7 +542,7 @@ class EventStorage: ObservableObject {
         return eps
     }
      
-    func updateFrigatePlus(id: String){
+    func updateFrigatePlus(id: String, value: Bool){
         //TODO is this needed DispatchQueue.main.async
         DispatchQueue.main.async { [self] in
             
@@ -552,7 +552,7 @@ class EventStorage: ObservableObject {
             let filter = events.filter(id == self.id)
             
             let update = filter.update(
-                self.frigtePlus <- true
+                self.frigtePlus <- value
             )
             
             print(update)

@@ -200,7 +200,7 @@ struct ViewEventDetail: View {
                                             print(res)
                                             if res == 1 {
                                                 
-                                                EventStorage.shared.updateFrigatePlus(id:eventId)
+                                                EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
                                                 
                                                 EventStorage.shared.readAll3(completion: { res in
                                                     //self.epsSup3 = res!
@@ -208,8 +208,14 @@ struct ViewEventDetail: View {
                                                     return
                                                 })
                                             } else {
+                                                
                                                 if let msg = json["message"] as? String {
                                                     print(msg)
+                                                    
+                                                    if (msg == "PLUS_API_KEY environment variable is not set" ){
+                                                        frigatePlus = false
+                                                        EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
+                                                    }
                                                 }
                                             }
                                         }

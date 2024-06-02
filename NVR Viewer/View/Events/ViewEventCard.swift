@@ -90,7 +90,7 @@ struct ViewEventCard: View {
                                                     print(res)
                                                     if res == 1 {
                                                          
-                                                        EventStorage.shared.updateFrigatePlus(id: containers[index].id!)
+                                                        EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: true)
                                                         EventStorage.shared.readAll3(completion: { res in
                                                             //self.epsSup3 = res!
                                                             epsSuper.list3 = res!
@@ -99,6 +99,11 @@ struct ViewEventCard: View {
                                                     } else {
                                                         if let msg = json["message"] as? String {
                                                             print(msg)
+                                                            
+                                                            if (msg == "PLUS_API_KEY environment variable is not set" ){
+                                                                containers[index].frigatePlus!.toggle()
+                                                                EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: false)
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -110,14 +115,9 @@ struct ViewEventCard: View {
                                     return
                                 }
                                 .buttonStyle(.borderedProminent)
-                                .controlSize(.regular) 
+                                .controlSize(.regular)
                             }
                         }
-                         
-                        //.background(Color.yellow)
-                        //.padding(.bottom, 5)
-                        //.frame(width: setWidth(), alignment: .bottomLeading)
-                        //.buttonStyle(.borderedProminent)
                         
                         if developerModeIsOn {
                             Text(containers[index].transportType!)
