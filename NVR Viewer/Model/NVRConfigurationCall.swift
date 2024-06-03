@@ -213,9 +213,9 @@ struct ONVIF: Codable, Hashable {
 
 struct CameraFilters: Codable, Hashable{
     //let mask: Any,
-    let max_area: Int            // should be Int 6/2
-    let max_ratio: Double           // should be Int 6/2
-    let min_area: Int
+    let max_area: Int               // should be Int 6/2
+    let max_ratio: Double
+    let min_area: Int               // should be Int 6/2
     let min_ratio: Double
     let min_score: Double
     let threshold: Double
@@ -243,7 +243,7 @@ struct Motion: Codable, Hashable {
     let lightning_threshold: Double
     //let mask: [String]        // 6/2
     let mqtt_off_delay: Int
-    let threshold: Int       //Int Should this be an Int 6/2
+    let threshold: Int       //Double Should this be an Int 6/2
 }
 struct Live: Codable, Hashable {
     let height: Int
