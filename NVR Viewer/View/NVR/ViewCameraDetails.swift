@@ -101,6 +101,7 @@ struct ViewCameraDetails: View {
             }
             .frame(width: UIScreen.screenWidth, alignment: .leading)
             
+          
             Section{
                 HStack{
                     Text("Enabled")
@@ -123,20 +124,21 @@ struct ViewCameraDetails: View {
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
-                    HStack{
-                        Text("Order")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text("\(cameras.birdseye.order)")
-                            .frame( alignment: .leading)
-                            .foregroundStyle(.gray)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                    HStack{
+//                        Text("Order")
+//                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                            .padding(.leading, 40)
+//                        Text("\(cameras.birdseye.order)")
+//                            .frame( alignment: .leading)
+//                            .foregroundStyle(.gray)
+//                    }
+//                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                 }
             } header: {
                 Text("Birdseye")
                     .font(.caption)
             }
+          
             
             Section{
                 HStack{
@@ -174,7 +176,7 @@ struct ViewCameraDetails: View {
                         Text("Height")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(String(cameras.detect.height))")
+                        Text("\(String(cameras.detect.height!))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
@@ -204,7 +206,7 @@ struct ViewCameraDetails: View {
                         Text("Width")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(String(cameras.detect.width))")
+                        Text("\(String(cameras.detect.width!))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }

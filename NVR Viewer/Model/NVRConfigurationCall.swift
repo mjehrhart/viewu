@@ -19,8 +19,8 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
             cameras: ["" : Cameras(
                                    audio: Audio(enabled: false, enabled_in_config: false, filters: nil, listen: [], max_not_heard: 0, min_volume: 0, num_threads: 1 ),
                                    best_image_timeout: 0,
-                                   birdseye: Birdseye(enabled: false, mode: "", order: 0),
-                                   detect: Detect(annotation_offset: 0, enabled: false, fps: 5, height: 0, max_disappeared: 0, min_initialized: 0.0, width: 0),
+                                   birdseye: Birdseye(enabled: false, mode: "" ), // order: 0
+                                   detect: Detect(annotation_offset: 0, enabled: false, fps: 5, height: 0, max_disappeared: 0, min_initialized: 0, width: 0),
                                    enabled: false, 
                                    ffmpeg: FFMPEG(
                                                   //global_args: [],
@@ -88,7 +88,7 @@ struct Cameras: Codable, Hashable {
     let ffmpeg: FFMPEG
     let ffmpeg_cmds: [FFMPEGCommands]
     let live: Live
-    //let motion: Motion
+    //let motion: Motion?
     let mqtt: CameraMQTT
     let name: String
     let objects: CameraObjects
@@ -100,7 +100,6 @@ struct Cameras: Codable, Hashable {
     let timestamp_style: TimeStampStyle
     let ui: CameraUI
 //    let webui_url: String?
-//    let zones: {} -> Unknown Type
 }
 
 struct Zone: Codable, Hashable {
@@ -151,7 +150,7 @@ struct Snapshots: Codable, Hashable {
 struct SnapshotsRetain: Codable, Hashable {
     let `default`: Float
     let mode: String
-    //let objects: {} Unknown Type
+    //let objects: [String, Int]
 }
 
 struct RTMP: Codable, Hashable {
@@ -160,7 +159,7 @@ struct RTMP: Codable, Hashable {
 
 struct Record: Codable, Hashable {
     let enabled: Bool
-    let enabled_in_config: Bool
+    let enabled_in_config: Bool?            // 6/2
     let events: CameraEvents
     let expire_interval: Int
     let export: Export
@@ -169,7 +168,7 @@ struct Record: Codable, Hashable {
 }
 
 struct RecordRetain: Codable, Hashable {
-    let days: Int
+    let days: Double                //Int  6/2
     let mode: String
 }
 
@@ -178,7 +177,7 @@ struct Export: Codable, Hashable {
 }
 
 struct CameraEvents: Codable, Hashable {
-    //let objects: Unknown type
+    //let objects: [[String]]?
     let post_capture: Int
     let pre_capture: Int
     //let required_zones: [Unknown Type]
@@ -186,7 +185,7 @@ struct CameraEvents: Codable, Hashable {
 }
 
 struct Retain: Codable, Hashable {
-    let `default`: Int    // -> default is a keyword. //TODO
+    let `default`: Double               //Int  6/2
     let mode: String
     //let objects: [Unknown Type]
 }
@@ -194,7 +193,7 @@ struct Retain: Codable, Hashable {
 struct AutoTracking: Codable, Hashable {
     let calibrate_on_startup: Bool
     let enabled: Bool
-    let enabled_in_config: Bool
+    let enabled_in_config: Bool?        // 6/2
     //let movement_weights: [] not sure what type is
     //let required_zones: [] not sure what type is
     let return_preset: String
@@ -214,9 +213,9 @@ struct ONVIF: Codable, Hashable {
 
 struct CameraFilters: Codable, Hashable{
     //let mask: Any,
-    let max_area: Double
-    let max_ratio: Double
-    let min_area: Double
+    let max_area: Int            // should be Int 6/2
+    let max_ratio: Double           // should be Int 6/2
+    let min_area: Int
     let min_ratio: Double
     let min_score: Double
     let threshold: Double
@@ -236,15 +235,15 @@ struct CameraMQTT: Codable, Hashable {
     let timestamp: Bool
 }
 struct Motion: Codable, Hashable {
-    let contour_area: Int
+    let contour_area: Int?      //  6/2
     let delta_alpha: Double
     let frame_alpha: Double
-    let frame_height: Int
+    let frame_height: Int?      //  6/2
     let improve_contrast: Bool
     let lightning_threshold: Double
-    let mask: [String]
+    //let mask: [String]        // 6/2
     let mqtt_off_delay: Int
-    let threshold: Double       //Int
+    let threshold: Int       //Int Should this be an Int 6/2
 }
 struct Live: Codable, Hashable {
     let height: Int
@@ -275,22 +274,22 @@ struct Detect: Codable, Hashable {
     let annotation_offset: Int
     let enabled: Bool
     let fps: Int
-    let height: Int
-    let max_disappeared: Int
-    let min_initialized: Double
-    let width: Int
+    let height: Int?                        //  6/2
+    let max_disappeared: Int?               //  6/2
+    let min_initialized: Int?               //  6/2
+    let width: Int?                         //  6/2
     //let stationary: {} // new struct needed
 }
 
 struct Birdseye: Codable, Hashable{
     let enabled: Bool
     let mode: String
-    let order: Int
+    //let order: Int
 }
 
 struct Audio: Codable, Hashable {
     let enabled: Bool
-    let enabled_in_config: Bool
+    let enabled_in_config: Bool?            // 6/2
     let filters: String?
     let listen: [String]
     let max_not_heard: Int
