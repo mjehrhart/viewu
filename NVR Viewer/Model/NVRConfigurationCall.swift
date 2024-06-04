@@ -20,7 +20,7 @@ final class NVRConfigurationSuper: ObservableObject { // Codable,
                                    audio: Audio(enabled: false, enabled_in_config: false, filters: nil, listen: [], max_not_heard: 0, min_volume: 0, num_threads: 1 ),
                                    best_image_timeout: 0,
                                    birdseye: Birdseye(enabled: false, mode: "" ), // order: 0
-                                   detect: Detect(annotation_offset: 0, enabled: false, fps: 5, height: 0, max_disappeared: 0, min_initialized: 0, width: 0),
+                                   detect: Detect(annotation_offset: 0, enabled: false, fps: 5, height: 0, max_disappeared: 0, width: 0), //min_initialized: 0,
                                    enabled: false, 
                                    ffmpeg: FFMPEG(
                                                   //global_args: [],
@@ -276,7 +276,7 @@ struct Detect: Codable, Hashable {
     let fps: Int
     let height: Int?                        //  6/2
     let max_disappeared: Int?               //  6/2
-    let min_initialized: Int?               //  6/2
+    //let min_initialized: Int?               //  6/2
     let width: Int?                         //  6/2
     //let stationary: {} // new struct needed
 }

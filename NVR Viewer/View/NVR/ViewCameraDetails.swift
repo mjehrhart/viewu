@@ -192,15 +192,15 @@ struct ViewCameraDetails: View {
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
-                    HStack{
-                        Text("Min Initialized")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text("\(cameras.detect.min_initialized)")
-                            .frame( alignment: .leading)
-                            .foregroundStyle(.gray)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+//                    HStack{
+//                        Text("Min Initialized")
+//                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+//                            .padding(.leading, 40)
+//                        Text("\(cameras.detect.min_initialized)")
+//                            .frame( alignment: .leading)
+//                            .foregroundStyle(.gray)
+//                    }
+//                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
                     HStack{
                         Text("Width")

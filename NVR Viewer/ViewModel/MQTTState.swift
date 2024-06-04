@@ -110,8 +110,9 @@ final class MQTTAppState: ObservableObject {
                 //--------------------------------------------------------------------
                 
             }
-            catch let error as NSError {
+            catch let error as NSError { 
                 print(error)
+                Log.shared().print(page: "MQTTState", fn: "setReceivedMessage", type: "ERROR", text: "\(error)")
             }
         } 
     }

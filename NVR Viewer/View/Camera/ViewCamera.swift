@@ -18,7 +18,7 @@ class AVRequester: NSObject {
 }
  
 struct ViewCamera: View {
-    
+     
     @ObservedObject var config = NVRConfigurationSuper.shared()
     
     let title: String
@@ -35,6 +35,7 @@ struct ViewCamera: View {
     var counter = 0;
     
     var body: some View {
+         
         ScrollView {
             VStack{
                 Section{

@@ -34,7 +34,10 @@ struct ContentView: View {
     @State private var showConnection = false
     @State private var showNVR = false
     @State private var showLog = false
-    @State private var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
+    
+    @AppStorage("developerModeIsOn") var developerModeIsOn = true
+    //@State private var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
+    //var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
     @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0" 
      
@@ -57,12 +60,12 @@ struct ContentView: View {
             print("DEBUG: Scheduling Error \(error.localizedDescription)") 
         }
     }
-    
+     
     var body: some View{
         
         NavigationStack (path: $path) {
             VStack {
-  
+                 
                 ZStack {
                     GeometryReader { reader in
                         Color.white
@@ -92,6 +95,8 @@ struct ContentView: View {
                 let urlString = url + "/api/config"
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
  
+                    Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
+                    
                     guard let data = data else { return }
                     
                     do {
@@ -112,16 +117,18 @@ struct ContentView: View {
                     }catch (let err){
                         print("Error Message goes here - 1001")
                         print(err)
+                        Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001", type: "ERROR", text: "\(err)")
                          
-//                        do {
-//                            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-//                                
-//                                 print(json)
-//                            }
-//                        } catch(let err) {
-//                            print("Error Message goes here - 2001")
-//                            print(err)
-//                        }
+                        do {
+                            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                                
+                                 //print(json)
+                            }
+                        } catch(let err) {
+                            print("Error Message goes here - 2001")
+                            print(err)
+                            Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001", type: "ERROR", text: "\(err)")
+                        }
                     }
                 } 
                  
@@ -219,7 +226,8 @@ struct ContentView: View {
                     .environmentObject(mqttManager)
             }
             .navigationDestination(isPresented: $showLog){
-                ViewTest(title:"test")
+                //ViewTest(title:"test")
+                ViewLog()
             }
             .navigationDestination(isPresented: $showCamera){
                 ViewCamera(title: "Live Cameras")
@@ -250,22 +258,23 @@ struct ContentView: View {
             //added this 5/9
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) { 
-                    Label("Filter", systemImage: "calendar.day.timeline.leading")
-                        .labelStyle(VerticalLabelStyle())
-                        .onTapGesture(perform: {
-                            showFilter.toggle()
-                        })
-                        .foregroundStyle(showSettings ? .blue : .blue)
-                    Spacer()
-                    Label("Cameras", systemImage: "web.camera")
-                        .labelStyle(VerticalLabelStyle())
-                        .onTapGesture(perform: {
-                            showCamera.toggle()
-                        })
-                        .foregroundStyle(showCamera ? .blue : .gray)
-                    Spacer()
-                    //NavigationLink(destination: ViewNVRDetails()){
+                 
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Label("Filter", systemImage: "calendar.day.timeline.leading")
+                            .labelStyle(VerticalLabelStyle())
+                            .onTapGesture(perform: {
+                                showFilter.toggle()
+                            })
+                            .foregroundStyle(showSettings ? .blue : .blue)
+                        Spacer()
+                        Label("Cameras", systemImage: "web.camera")
+                            .labelStyle(VerticalLabelStyle())
+                            .onTapGesture(perform: {
+                                showCamera.toggle()
+                            })
+                            .foregroundStyle(showCamera ? .blue : .gray)
+                        Spacer()
+                        //NavigationLink(destination: ViewNVRDetails()){
                         Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
                             .labelStyle(VerticalLabelStyle())
                             .onTapGesture(perform: {
@@ -274,26 +283,26 @@ struct ContentView: View {
                                 self.selection = 2
                             })
                             .foregroundStyle(showNVR ? .blue : .gray)
-                    //}
-                    Spacer()
-                    Label("Settings", systemImage: "gearshape")
-                        .labelStyle(VerticalLabelStyle())
-                        .onTapGesture(perform: {
-                            showSettings.toggle()
-                        })
-                        .foregroundStyle(showSettings ? .blue : .gray)
-                    
-//                    if developerModeIsOn {
-//                        Spacer()
-//                        Label("Log", systemImage: "note.text")
-//                            .labelStyle(VerticalLabelStyle())
-//                            .onTapGesture(perform: {
-//                                showLog.toggle()
-//                            })
-//                            .foregroundStyle(showSettings ? .blue : .gray)
-//                    }
+                        //}
+                        Spacer()
+                        Label("Settings", systemImage: "gearshape")
+                            .labelStyle(VerticalLabelStyle())
+                            .onTapGesture(perform: {
+                                showSettings.toggle()
+                            })
+                            .foregroundStyle(showSettings ? .blue : .gray)
+                        
+                        if developerModeIsOn {
+                            Spacer()
+                            Label("Log", systemImage: "note.text")
+                                .labelStyle(VerticalLabelStyle())
+                                .onTapGesture(perform: {
+                                    showLog.toggle()
+                                })
+                                .foregroundStyle(showSettings ? .blue : .gray)
+                        }
                 }
-            } 
+            }
         }
     }
     
