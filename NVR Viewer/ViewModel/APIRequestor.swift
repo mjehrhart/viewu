@@ -68,7 +68,7 @@ class APIRequester: NSObject {
                     for zone in event.zones! {
                         enteredZones += zone + "|"
                     }
-                     
+                      
                     var eps = EndpointOptions()
                     eps.snapshot = url + "/api/events/\(id)/snapshot.jpg?bbox=1"
                     eps.cameraName = event.camera
@@ -92,6 +92,7 @@ class APIRequester: NSObject {
                         eps.sublabel = ""
                     }
                     if eps.currentZones == nil {
+                        eps.currentZones = ""
                     }
                     if eps.enteredZones == nil {
                         eps.enteredZones = ""

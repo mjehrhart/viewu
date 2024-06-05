@@ -35,6 +35,7 @@
 		340AB0212BA38B0900EB69F4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0202BA38B0900EB69F4 /* UIKit.framework */; };
 		342103462C0EA08F00CBBF83 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103452C0EA08F00CBBF83 /* Log.swift */; };
 		342103492C0EA29B00CBBF83 /* ViewLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103482C0EA29B00CBBF83 /* ViewLog.swift */; };
+		3421034F2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421034E2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift */; };
 		343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343676B82BA3C48400BD765F /* HLSPlayer.swift */; };
 		34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34640F2B2BA4D3430085F726 /* AVResource.swift */; };
 		346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542DF2B9783860037BA1D /* ViewEventsHistory.swift */; };
@@ -161,6 +162,7 @@
 		340AB0202BA38B0900EB69F4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		342103452C0EA08F00CBBF83 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		342103482C0EA29B00CBBF83 /* ViewLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLog.swift; sourceTree = "<group>"; };
+		3421034E2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicFrigateEventMQTT.swift; sourceTree = "<group>"; };
 		343676B82BA3C48400BD765F /* HLSPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlayer.swift; sourceTree = "<group>"; };
 		34640F2B2BA4D3430085F726 /* AVResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVResource.swift; sourceTree = "<group>"; };
 		346542DF2B9783860037BA1D /* ViewEventsHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventsHistory.swift; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 			children = (
 				34BBA4772BAB45C300A6004E /* EventFilter.swift */,
 				34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */,
+				3421034E2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift */,
 				34D5F0082B92B4FA002A84B0 /* EndpointOptions.swift */,
 				34D5F0162B963F06002A84B0 /* ImageContainer.swift */,
 				34BBA47E2BAE164400A6004E /* DataController.swift */,
@@ -755,6 +758,7 @@
 				34FEA8172BEF15770015E8A6 /* ViewLiveLandscape.swift in Sources */,
 				34D5EFD82B92AB1F002A84B0 /* ContentView.swift in Sources */,
 				34D5F0052B92B490002A84B0 /* APIBuilder.swift in Sources */,
+				3421034F2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift in Sources */,
 				34D5F0072B92B4C3002A84B0 /* TopicFrigateEvent.swift in Sources */,
 				34D5EFF92B92B374002A84B0 /* Extension.swift in Sources */,
 				34E544F32B9ABD8C00137F34 /* NotificationManager.swift in Sources */,

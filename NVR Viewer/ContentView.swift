@@ -122,7 +122,8 @@ struct ContentView: View {
                         do {
                             if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
                                 
-                                 //print(json)
+                                Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001", type: "Info", text: "\(json)")
+                                 print(json)
                             }
                         } catch(let err) {
                             print("Error Message goes here - 2001")

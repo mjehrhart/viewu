@@ -47,10 +47,33 @@ final class MQTTAppState: ObservableObject {
             do {
                  
                 let data = text.data(using: .utf8)
+                //let res = try JSONDecoder().decode(TopicFrigateEventHeader.self, from: data!)
                 
-                let res = try JSONDecoder().decode(TopicFrigateEventHeader.self, from: data!)
+                /******************************/
+                var res = try JSONDecoder().decode(TopicFrigateEventHeaderMQTT.self, from: data!)
+                  
+                var enteredZones = ""
+                for zone in res.after.entered_zones {
+                    enteredZones += zone! + "|"
+                }
+
+                var currentZones = ""
+                for zone in res.after.entered_zones {
+                    currentZones += zone! + "|"
+                }
+                
+                var before_topic = TopicFrigateEvent(id: res.before.id, camera: res.before.camera, frame_time: res.before.frame_time, label: res.before.label, sub_label: res.before.sub_label, top_score: res.before.top_score, false_positive: res.before.false_positive, start_time: res.before.start_time, end_time: res.before.end_time, score: res.before.score, box: res.before.box, area: res.before.area, ratio: res.before.ratio, region: res.before.region, stationary: res.before.stationary, motionless_count: res.before.motionless_count, position_changes: res.before.position_changes, current_zones: "", entered_zones: "", has_clip: res.before.has_clip)
+                
+                var after_topic = TopicFrigateEvent(id: res.after.id, camera: res.after.camera, frame_time: res.after.frame_time, label: res.after.label, sub_label: res.after.sub_label, top_score: res.after.top_score, false_positive: res.after.false_positive, start_time: res.after.start_time, end_time: res.after.end_time, score: res.after.score, box: res.after.box, area: res.after.area, ratio: res.after.ratio, region: res.after.region, stationary: res.after.stationary, motionless_count: res.after.motionless_count, position_changes: res.after.position_changes, current_zones: currentZones, entered_zones: enteredZones, has_clip: res.after.has_clip)
+                
+                var message = TopicFrigateEventHeader(
+                    before: before_topic,
+                    after: after_topic,
+                    type: res.type
+                )
                  
-                let frigateURLBuilder = APIBuilder(dataSet: res)
+                /******************************/
+                let frigateURLBuilder = APIBuilder(dataSet: message)
                 var eps = frigateURLBuilder.getAllEndpoint()
                 eps.transportType = "mqttState"
                  
@@ -73,7 +96,6 @@ final class MQTTAppState: ObservableObject {
                 
                 //------------------>
                 //epsSup.list2.insert(eps2, at: 0)
-                
                 //            if epsSup.list2.contains(where: {$0.frameTime == eps2.frameTime}) {
                 //               // do nothing
                 //                print("epsSup.list2.contains where framTime == ", eps2.frameTime)
@@ -84,6 +106,11 @@ final class MQTTAppState: ObservableObject {
                 //------------------>
   
                 //Option 3
+                //TODO current_zone and entered_zone are arrays in mqtt message, need to convert to string
+                //
+                if eps.sublabel == nil {
+                    eps.sublabel = ""
+                }
                 let id = EventStorage.shared.insertIfNone(
                       id: eps.id!,
                       frameTime: eps.frameTime!,
@@ -98,7 +125,7 @@ final class MQTTAppState: ObservableObject {
                       debug: eps.debug!,
                       image: eps.image!,
                       transportType: eps.transportType!,
-                      subLabel: eps.sublabel!, //ADDED 5/26 ?? "" TODO !
+                      subLabel: eps.sublabel!,  //ADDED 5/26 ?? "" TODO !
                       currentZones: eps.currentZones!,
                       enteredZones: eps.enteredZones!
                 )

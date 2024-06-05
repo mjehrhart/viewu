@@ -65,11 +65,7 @@ struct APIBuilder {
         endpointOptions.score = dataSet.after.score
         endpointOptions.label = dataSet.after.label
         endpointOptions.sublabel = dataSet.after.sub_label
-        
-        print("------------------  func getAllEndpoint() -----------------------")
-        print(dataSet.after.current_zones)
-        print(dataSet.after.entered_zones)
-        
+         
         endpointOptions.currentZones = dataSet.after.current_zones
         endpointOptions.enteredZones = dataSet.after.entered_zones
         
