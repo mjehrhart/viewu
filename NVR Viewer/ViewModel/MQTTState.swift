@@ -105,9 +105,7 @@ final class MQTTAppState: ObservableObject {
                 //            }
                 //------------------>
   
-                //Option 3
-                //TODO current_zone and entered_zone are arrays in mqtt message, need to convert to string
-                //
+                //Option 3 
                 if eps.sublabel == nil {
                     eps.sublabel = ""
                 }

@@ -75,11 +75,12 @@ struct ViewEventDetail: View {
                     .frame(width: UIScreen.screenWidth-30, alignment: .leading)
                     .padding(10)
                  
-                ViewUIImageFull(urlString: container.snapshot!)
-                    .modifier(CardBackground())
-                    .padding(0)
-                    .overlay(CameraOverlaySnapShot(eventId: container.id!, toCopy: container.snapshot!, frigatePlus: container.frigatePlus! ), alignment: .bottomTrailing)
- 
+                if(container.id != nil && container.snapshot != nil) {
+                    ViewUIImageFull(urlString: container.snapshot!)
+                        .modifier(CardBackground())
+                        .padding(0)
+                        .overlay(CameraOverlaySnapShot(eventId: container.id!, toCopy: container.snapshot!, frigatePlus: container.frigatePlus! ), alignment: .bottomTrailing)
+                }
                 //Obsolete since the app now does http fetch
                 //ViewEventSlideShow(eventId: container.id!)
                 Spacer()

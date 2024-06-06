@@ -53,7 +53,8 @@ struct ViewCamera: View {
                                                 ScrollView(.horizontal){
                                                     
                                                     if url.starts(with: "rtsp"){
-                                                        StreamRTSP2(urlString: url, cameraName: value)
+                                                        let name = value + "_sub"
+                                                        StreamRTSP2(urlString: url, cameraName: name)
                                                             .padding(0)
                                                         if developerModeIsOn {
                                                             Text(url)
