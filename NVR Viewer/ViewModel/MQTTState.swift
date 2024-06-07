@@ -13,6 +13,7 @@ import SwiftUI
 
 final class MQTTAppState: ObservableObject {
  
+    @StateObject var nts = NotificationTemplateString.shared()
     let notify = NotificationHandler()
     @ObservedObject var epsSup = EndpointOptionsSuper.shared()
     @Published var appConnectionState: MQTTAppConnectionState = .disconnected
@@ -26,6 +27,7 @@ final class MQTTAppState: ObservableObject {
     
     func setReceivedMessage(text: String) {
          
+         
         if text.count == 163 {
             //do nothing as this is a message response back to the viewu server
             return
@@ -35,6 +37,29 @@ final class MQTTAppState: ObservableObject {
             viewuDevicePaired = true
             let version = text.components(separatedBy: ":") 
             viewuServerVersion = version[1]
+            
+            return
+            
+        } else if text.starts(with: "viewu_device_event_back"){
+            
+            print("========================")
+            print(text)
+            
+            let sub = text.split(separator: ":")
+            print(sub)
+            if(sub[2] == "200") {
+                nts.alert = true
+                nts.delayText()
+            } else {
+                nts.alert = false
+            }
+            
+            return
+        } else if text.starts(with: "viewu_device_event"){
+             
+            print("========================")
+            print(text)
+             
             
             return
         }

@@ -34,8 +34,11 @@ struct ContentView: View {
     @State private var showConnection = false
     @State private var showNVR = false
     @State private var showLog = false
+    @State private var showNotificationManager = false
     
     @AppStorage("developerModeIsOn") var developerModeIsOn = true
+    @AppStorage("notificationModeIsOn") var notificationModeIsOn = UserDefaults.standard.bool(forKey: "notificationModeIsOn")
+    
     //@State private var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     //var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
@@ -233,6 +236,10 @@ struct ContentView: View {
             .navigationDestination(isPresented: $showCamera){
                 ViewCamera(title: "Live Cameras")
             }
+            .navigationDestination(isPresented: $showNotificationManager){
+                //ViewNotificationManager(title: "Notification Manager")
+                ViewAPN(title: "Notification Manager")
+            }
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationDestination(for: Cameras.self){ config in 
                 
@@ -285,14 +292,15 @@ struct ContentView: View {
                             })
                             .foregroundStyle(showNVR ? .blue : .gray)
                         //}
-                        Spacer()
-                        Label("Settings", systemImage: "gearshape")
-                            .labelStyle(VerticalLabelStyle())
-                            .onTapGesture(perform: {
-                                showSettings.toggle()
-                            })
-                            .foregroundStyle(showSettings ? .blue : .gray)
-                        
+                        if notificationModeIsOn {
+                            Spacer()
+                            Label("Notifications", systemImage: "app.badge")
+                                .labelStyle(VerticalLabelStyle())
+                                .onTapGesture(perform: {
+                                    showNotificationManager.toggle()
+                                })
+                                .foregroundStyle(showNotificationManager ? .blue : .gray)
+                        }
                         if developerModeIsOn {
                             Spacer()
                             Label("Log", systemImage: "note.text")
@@ -302,6 +310,15 @@ struct ContentView: View {
                                 })
                                 .foregroundStyle(showSettings ? .blue : .gray)
                         }
+                        Spacer()
+                        Label("Settings", systemImage: "gearshape")
+                            .labelStyle(VerticalLabelStyle())
+                            .onTapGesture(perform: {
+                                showSettings.toggle()
+                            })
+                            .foregroundStyle(showSettings ? .blue : .gray)
+                        
+                        
                 }
             }
         }

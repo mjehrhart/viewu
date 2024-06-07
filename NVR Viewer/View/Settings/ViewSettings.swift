@@ -25,7 +25,9 @@ struct ViewSettings: View {
     @AppStorage("nvrIPAddress") private var nvrIPAddress: String = ""
     @AppStorage("nvrPortAddress") private var nvrPortAddress: String = ""
     @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = false
+    
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
+    @AppStorage("notificationModeIsOn") private var notificationModeIsOn: Bool = false
     
     @AppStorage("frigatePlusOn") private var frigatePlusOn: Bool = false
     
@@ -58,6 +60,13 @@ struct ViewSettings: View {
                     Toggle("Enabled", isOn: $developerModeIsOn)
                 } header: {
                     Text("Developer Mode")
+                        .font(.caption)
+                }
+                
+                Section{
+                    Toggle("Enabled", isOn: $notificationModeIsOn)
+                } header: {
+                    Text("Notification Manager")
                         .font(.caption)
                 }
                   
