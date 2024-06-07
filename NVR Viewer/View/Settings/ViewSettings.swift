@@ -46,12 +46,22 @@ struct ViewSettings: View {
     @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
+    @StateObject var nts = NotificationTemplateString.shared()
+    
     let widthMultiplier:CGFloat = 2/5.8
     
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
     
     var body: some View {
+        
+        if( nts.alert ){
+            VStack{
+            }
+            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
+            .overlay(Popup())
+        }
+        
         VStack {
             
             Form {
@@ -410,6 +420,25 @@ struct ViewSettings: View {
             }
         }
         .navigationBarTitle(title, displayMode: .inline)
+    }
+    
+    struct Popup: View {
+        
+        var body: some View {
+             
+            VStack{
+                Spacer()
+                Text("Synced with Viewu Server")
+                    .multilineTextAlignment(.center)
+                    .font(.title)
+                    .foregroundColor(.white) 
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Spacer()
+            }
+            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
+            .background(.green.opacity(0.08))
+            .ignoresSafeArea()
+        }
     }
     
 }

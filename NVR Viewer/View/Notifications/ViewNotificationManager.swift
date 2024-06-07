@@ -24,36 +24,47 @@ struct ViewAPN: View {
     @State private var scale = 1.0
     let widthMultiplier:CGFloat = 2/5.8
     
-    //tmp
+ 
     @State var templateList:[UUID] = []
-    //@State var templateList2:[ViewNotificationManager] = []
+    
+    @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
+    
+    var version = false
     
     init(title: String) {
         self.title = title
         self.apnDomain = nvrManager.getUrl()
-    }
-    
-    struct Popup: View {
         
-        var body: some View {
-             
-            VStack{
-                Spacer()
-                Text("Saved")
-                    .multilineTextAlignment(.center)
-                    .font(.title)
-                    .foregroundColor(.black)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                Spacer()
-            }
-            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
-            .background(.green.opacity(0.08))
-            .ignoresSafeArea()
+        print(viewuServerVersion)
+        let x = viewuServerVersion.split(separator: ".")
+        let d1 = Int(x[0])
+        let d2 = Int(x[1])
+        let d3 = Int(x[2])
+         
+        if d2! <= 2 && d3! <= 5 {
+            version = true
         }
     }
     
+      
     var body: some View {
+        
+        if version {
+            VStack{
+                Spacer()
+                Text("This page requires Viewu Server 0.2.6 or later.")
+                    //.multilineTextAlignment(.center)
+                    .frame(alignment: .center)
+                    .padding(.leading, 35)
+                Text("You have \(viewuServerVersion) installed.")
+                    //.multilineTextAlignment(.center)
+                    .padding(.leading, 25)
+                    .frame(width: .infinity, alignment: .center)
+                Spacer()
+            }
+            .frame(width: UIScreen.screenWidth, height: 100, alignment: .topLeading)
+            .background(.red.opacity(0.8))
+        }
         
         if( nts.alert ){
             VStack{
@@ -165,6 +176,26 @@ struct ViewAPN: View {
             if(nts.templateList.isEmpty){
                 nts.templateList.append(ViewNotificationManager(vid: UUID()))
             }
+        }
+    }
+    
+    struct Popup: View {
+        
+        var body: some View {
+             
+            VStack{
+                Spacer()
+                Text("Synced with Viewu Server")
+                    .multilineTextAlignment(.center)
+                    .font(.title)
+                    .foregroundColor(.white)
+                    //.fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Spacer()
+            }
+            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
+            .background(.green.opacity(0.08))
+            .ignoresSafeArea()
         }
     }
 }

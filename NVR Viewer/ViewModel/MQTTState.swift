@@ -37,16 +37,15 @@ final class MQTTAppState: ObservableObject {
             viewuDevicePaired = true
             let version = text.components(separatedBy: ":") 
             viewuServerVersion = version[1]
+            nts.alert = true
+            nts.delayText()
             
             return
             
         } else if text.starts(with: "viewu_device_event_back"){
-            
-            print("========================")
-            print(text)
+             
             
             let sub = text.split(separator: ":")
-            print(sub)
             if(sub[2] == "200") {
                 nts.alert = true
                 nts.delayText()
