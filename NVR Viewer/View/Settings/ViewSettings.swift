@@ -443,12 +443,13 @@ struct ViewSettings: View {
                 Text("Synced with Viewu Server")
                     .multilineTextAlignment(.center)
                     .font(.title)
-                    .foregroundColor(.white) 
+                    .foregroundColor(.secondary)
+                    //.fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .center)
                 Spacer()
             }
             .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
-            .background(.green.opacity(0.08))
+            .background(.mint.opacity(0.5))
             .ignoresSafeArea()
         }
     }

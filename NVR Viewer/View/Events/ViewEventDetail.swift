@@ -75,7 +75,7 @@ struct ViewEventDetail: View {
                     .frame(width: UIScreen.screenWidth-30, alignment: .leading)
                     .padding(10)
                  
-                if(container.id != nil && container.snapshot != nil) {
+                if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
                     ViewUIImageFull(urlString: container.snapshot!)
                         .modifier(CardBackground())
                         .padding(0)

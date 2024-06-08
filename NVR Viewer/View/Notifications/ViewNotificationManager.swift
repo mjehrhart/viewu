@@ -150,7 +150,7 @@ struct ViewAPN: View {
                     List{
                         Text("")
                             .frame(width: .infinity, height: 4, alignment: .leading)
-                            .overlay(IndicatorOverlay(offset: 255, flag: nts.flagTemplate))
+                            .overlay(IndicatorOverlay(offset: 265, flag: nts.flagTemplate))
                         
                         ForEach( 0..<nts.templates.count, id: \.self ){ index in
                             Text("\(nts.templates[index].template)")
