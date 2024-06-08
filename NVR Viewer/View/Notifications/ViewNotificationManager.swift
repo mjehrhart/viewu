@@ -10,6 +10,7 @@ import SwiftUI
 struct ViewAPN: View {
     
     let title: String
+    var version = false
     
     let cNVR = APIRequester()
     let nvr = NVRConfig.shared()
@@ -23,17 +24,13 @@ struct ViewAPN: View {
     
     @State private var scale = 1.0
     let widthMultiplier:CGFloat = 2/5.8
-    
- 
+     
     @State var templateList:[UUID] = []
     
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
-    
-    var version = false
-    
+     
     init(title: String) {
         self.title = title
-        self.apnDomain = nvrManager.getUrl()
         
         print(viewuServerVersion)
         let x = viewuServerVersion.split(separator: ".")
@@ -44,11 +41,14 @@ struct ViewAPN: View {
         if d2! <= 2 && d3! <= 5 {
             version = true
         }
-    }
-    
-      
-    var body: some View {
         
+        if apnDomain.isEmpty {
+            apnDomain = nvrManager.getUrl()
+        }
+    }
+  
+    var body: some View {
+         
         if version {
             VStack{
                 Spacer()
@@ -76,11 +76,16 @@ struct ViewAPN: View {
         VStack {
             Form {
                 Section {
-                    Text("Title:")
-                        .frame(alignment: .leading)
+//                    Text("")
+//                        .frame(width: .infinity, alignment: .leading)
+//                        .overlay(IndicatorOverlay(offset: 200, flag: nts.flagTitle))
                     
-                    TextField("", text: $apnTitle)
+                    TextField("Message Title", text: $apnTitle)
                         .frame(alignment: .leading)
+                        .overlay(IndicatorOverlay(offset: -60, flag: nts.flagTitle))
+                        .onChange(of: apnTitle){
+                            nts.flagTitle = false
+                        }
                     
                     Button("Save") {
                         for i in 0..<1 {
@@ -98,16 +103,27 @@ struct ViewAPN: View {
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
                     
                 } header: {
-                    Text("Docker Arguments")
+                    Text("Notification Title")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
+                //.headerProminence(.increased)
+                //.foregroundColor(.white)
+                //.listRowBackground(Color.mint)
                 
                 Section {
-                    Text("Domain:")
-                        .frame(alignment: .leading)
+//                    Text("Domain:")
+//                        .fontWeight(.semibold)
+//                        .frame(width: .infinity, alignment: .leading)
+//                        .overlay(IndicatorOverlay(offset: 175, flag: nts.flagDomain))
                     
-                    TextField("", text: $apnDomain)
+                    TextField("https://domaintoviewnvr.com", text: $apnDomain)
                         .frame(alignment: .leading)
+                        .autocorrectionDisabled()
+                        .overlay(IndicatorOverlay(offset: -60, flag: nts.flagDomain))
+                        .onChange(of: apnDomain){
+                            nts.flagDomain = false
+                        }
                     
                     Button("Save") {
                         for i in 0..<1 {
@@ -125,12 +141,17 @@ struct ViewAPN: View {
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
                     
                 } header: {
-                    Text("Docker Arguments")
+                    Text("Accessible Domain")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                 
                 Section {
                     List{
+                        Text("")
+                            .frame(width: .infinity, height: 4, alignment: .leading)
+                            .overlay(IndicatorOverlay(offset: 255, flag: nts.flagTemplate))
+                        
                         ForEach( 0..<nts.templates.count, id: \.self ){ index in
                             Text("\(nts.templates[index].template)")
                         }
@@ -141,10 +162,10 @@ struct ViewAPN: View {
                                 nts.templates.remove(at: index)
                             }
                             
-                            print(nts.templates)
+                            nts.flagTemplate = false
                         }
                         
-                        Button("Save Templates") {
+                        Button("Save") {
                             
                             let templateString = nts.buildTemplateString()
                             
@@ -165,6 +186,7 @@ struct ViewAPN: View {
                     }
                 } header: {
                     Text("Saved Templates")
+                        .foregroundColor(.orange)
                 }
                  
                 ForEach( nts.templateList, id: \.self) { template in
@@ -177,6 +199,19 @@ struct ViewAPN: View {
                 nts.templateList.append(ViewNotificationManager(vid: UUID()))
             }
         }
+        .navigationBarTitle(title, displayMode: .inline)
+    }
+    
+    struct IndicatorOverlay: View {
+         
+        var offset: CGFloat
+        var flag: Bool
+        var body: some View {
+            Image(systemName: "circle.fill")
+                .frame(width: UIScreen.screenWidth + offset, alignment: .trailing)
+                .foregroundStyle( flag ? .green : .red)
+                .font(.system(size: 8))
+        }
     }
     
     struct Popup: View {
@@ -188,13 +223,13 @@ struct ViewAPN: View {
                 Text("Synced with Viewu Server")
                     .multilineTextAlignment(.center)
                     .font(.title)
-                    .foregroundColor(.white)
+                    .foregroundColor(.secondary)
                     //.fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .center)
                 Spacer()
             }
             .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
-            .background(.green.opacity(0.08))
+            .background(.mint.opacity(0.5))
             .ignoresSafeArea()
         }
     }
@@ -457,6 +492,7 @@ struct ViewNotificationManager: View, Hashable, Equatable {
         } header: {
             Text("Template")
                 .font(.caption)
+                .foregroundColor(.orange)
         }
         .task {
             

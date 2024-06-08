@@ -71,13 +71,15 @@ struct ViewSettings: View {
                 } header: {
                     Text("Developer Mode")
                         .font(.caption)
-                }
+                        .foregroundColor(.orange)
+                } 
                 
                 Section{
                     Toggle("Enabled", isOn: $notificationModeIsOn)
                 } header: {
                     Text("Notification Manager")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                   
                 Section {
@@ -113,6 +115,7 @@ struct ViewSettings: View {
                 } header: {
                     Text("Camera Stream")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                 
                 Section {
@@ -215,6 +218,7 @@ struct ViewSettings: View {
                 } header: {
                     Text("MQTT Settings")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                    
                 Section {
@@ -265,6 +269,7 @@ struct ViewSettings: View {
                 } header: {
                     Text("NVR Settings")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                 
                 Section {
@@ -296,6 +301,7 @@ struct ViewSettings: View {
                 } header: {
                     Text("Notifications")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                  
                 Section{
@@ -318,6 +324,7 @@ struct ViewSettings: View {
                 } header: {
                     Text("SQLite")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                 
                 Section{
@@ -348,6 +355,7 @@ struct ViewSettings: View {
                 } header: {
                     Text("Pair Device")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                 
                 Section{
@@ -384,12 +392,14 @@ struct ViewSettings: View {
                 } header: {
                     Text("Viewu Version")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                 
                 Section{
                     Toggle("Enabled", isOn: $frigatePlusOn)
                 } header: {
                     Text("Friagte+")
+                        .foregroundColor(.orange)
                 }
                 if developerModeIsOn {
                     Section{
@@ -403,6 +413,7 @@ struct ViewSettings: View {
                     } header: {
                         Text("APN ID")
                             .font(.caption)
+                            .foregroundColor(.orange)
                     }
                 }
                 
@@ -414,6 +425,7 @@ struct ViewSettings: View {
                 } header: {
                     Text("Information")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
                 
                 Text("Viewu™ 2024")

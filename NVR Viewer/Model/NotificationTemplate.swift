@@ -11,6 +11,9 @@ import SwiftUI
 class NotificationTemplateString: ObservableObject {
     
     @Published var alert: Bool = false
+    @AppStorage("flagTitle") var flagTitle: Bool = false
+    @AppStorage("flagDomain") var flagDomain: Bool = false
+    @AppStorage("flagTemplate") var flagTemplate: Bool = false
     
     @Published var templates: [Item] = []
     @Published var templateList:[ViewNotificationManager] = [] 
@@ -21,13 +24,7 @@ class NotificationTemplateString: ObservableObject {
     static func shared() -> NotificationTemplateString {
         return _shared
     }
-    
-    func delayText() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-            self.alert = false
-        }
-    }
-    
+  
     init(){
          
         let sub = templateString.split(separator: "::")
@@ -39,8 +36,8 @@ class NotificationTemplateString: ObservableObject {
     
     func pushTemplate(id: UUID, template: String) {
          
+        flagTemplate = false
         var found = templates.filter{$0.id == id}
-        
         if found.count == 0 {
             let item = Item(id: id, template: template.trimmingCharacters(in: .whitespaces))
             templates.append(item)
@@ -74,6 +71,12 @@ class NotificationTemplateString: ObservableObject {
         }
          
         return templateString
+    }
+    
+    func delayText() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            self.alert = false
+        }
     }
     
     struct Item {

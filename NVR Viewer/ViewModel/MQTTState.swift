@@ -43,9 +43,19 @@ final class MQTTAppState: ObservableObject {
             return
             
         } else if text.starts(with: "viewu_device_event_back"){
-             
+            // viewu_device_event_back:title:200
+            print(text);
             
             let sub = text.split(separator: ":")
+            
+            if(sub[1] == "title"){
+                nts.flagTitle = true
+            } else if(sub[1] == "domain"){
+                nts.flagDomain = true
+            } else if(sub[1] == "template"){
+                nts.flagTemplate = true
+            }
+            
             if(sub[2] == "200") {
                 nts.alert = true
                 nts.delayText()
@@ -56,10 +66,7 @@ final class MQTTAppState: ObservableObject {
             return
         } else if text.starts(with: "viewu_device_event"){
              
-            print("========================")
-            print(text)
-             
-            
+            //Do nothing as these are from the Viewu app itself
             return
         }
          

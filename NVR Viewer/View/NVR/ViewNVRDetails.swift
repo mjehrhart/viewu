@@ -32,6 +32,7 @@ struct ViewNVRDetails: View {
             } header: {
                 Text("Cameras")
                     .font(.caption)
+                    .foregroundColor(.orange)
             }
             
             Section{
@@ -88,6 +89,7 @@ struct ViewNVRDetails: View {
             } header: {
                 Text("MQTT")
                     .font(.caption)
+                    .foregroundColor(.orange)
             }
           
             if ( config.item.go2rtc.streams != nil  ){ 
@@ -113,6 +115,7 @@ struct ViewNVRDetails: View {
                 } header: {
                     Text("Go2RTC")
                         .font(.caption)
+                        .foregroundColor(.orange)
                 }
             }
               
