@@ -124,24 +124,6 @@ struct ViewNVRDetails: View {
         }
         .background(Color(UIColor.secondarySystemBackground)) //very light gray
         .toolbar(.hidden, for: .bottomBar)
-        // this has been moved to the ContentView
-//        .task(){
-//            
-//            let url = nvr.getUrl()
-//            let urlString = url + "/api/config"
-//            
-//            cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
-//                
-//                guard let data = data else { return }
-//                
-//                do {
-//                    config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
-//                    //print("nvr = ", config.item)
-//                }catch{
-//                    print("Error Message goes here - 1001")
-//                }
-//            }
-//        }
         .toolbar {
             ToolbarItemGroup(placement: .navigation) {
                 

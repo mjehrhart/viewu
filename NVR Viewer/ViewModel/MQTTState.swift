@@ -54,7 +54,12 @@ final class MQTTAppState: ObservableObject {
                 nts.flagDomain = true
             } else if(sub[1] == "template"){
                 nts.flagTemplate = true
+            } else if(sub[1] == "paused"){
+                
+            } else if(sub[1] == "time_paused"){
+                
             }
+            
             
             if(sub[2] == "200") {
                 nts.alert = true

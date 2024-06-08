@@ -46,9 +46,9 @@ struct ViewAPN: View {
             apnDomain = nvrManager.getUrl()
         }
     }
-  
+   
     var body: some View {
-         
+          
         if version {
             VStack{
                 Spacer()
@@ -79,15 +79,14 @@ struct ViewAPN: View {
 //                    Text("")
 //                        .frame(width: .infinity, alignment: .leading)
 //                        .overlay(IndicatorOverlay(offset: 200, flag: nts.flagTitle))
-                    
+ 
                     TextField("Message Title", text: $apnTitle)
                         .frame(alignment: .leading)
                         .overlay(IndicatorOverlay(offset: -60, flag: nts.flagTitle))
                         .onChange(of: apnTitle){
                             nts.flagTitle = false
                         }
-                    
-                    Button("Save") {
+                      Button("Save") {
                         for i in 0..<1 {
                             DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
                                 withAnimation(.easeInOut) {
