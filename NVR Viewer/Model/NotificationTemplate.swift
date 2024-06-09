@@ -11,6 +11,10 @@ import SwiftUI
 class NotificationTemplateString: ObservableObject {
     
     @Published var alert: Bool = false
+    @AppStorage("notificationPaused") var notificationPaused: Bool = false
+    @AppStorage("notificationTimePaused") var notificationTimePaused: Bool = false
+    
+    
     @AppStorage("flagTitle") var flagTitle: Bool = false
     @AppStorage("flagDomain") var flagDomain: Bool = false
     @AppStorage("flagTemplate") var flagTemplate: Bool = false

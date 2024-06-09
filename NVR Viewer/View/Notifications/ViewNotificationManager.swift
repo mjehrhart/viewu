@@ -72,106 +72,56 @@ struct ViewAPN: View {
             .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
             .overlay(Popup())
         }
-        
-        VStack {
-            Form {
-                Section {
-//                    Text("")
-//                        .frame(width: .infinity, alignment: .leading)
-//                        .overlay(IndicatorOverlay(offset: 200, flag: nts.flagTitle))
  
-                    TextField("Message Title", text: $apnTitle)
-                        .frame(alignment: .leading)
-                        .overlay(IndicatorOverlay(offset: -60, flag: nts.flagTitle))
-                        .onChange(of: apnTitle){
-                            nts.flagTitle = false
-                        }
-                      Button("Save") {
+            VStack {
+                
+                Form {
+                    
+                VStack {
+                    
+                    Button( action: {
                         for i in 0..<1 {
                             DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
                                 withAnimation(.easeInOut) {
-                                    let msg = "viewu_device_event::::title::::\(apnTitle)"
+                                    print("isPaused :: \(nts.notificationPaused)")
+                                    let msg = "viewu_device_event::::paused::::\(nts.notificationPaused)"
                                     mqttManager.publish(topic: "viewu/pairing", with: msg)
+                                    nts.notificationPaused.toggle()
                                 }
                             }
                         }
-                    }
-                    .buttonStyle(.bordered)
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
-                    .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                    
-                } header: {
-                    Text("Notification Title")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                //.headerProminence(.increased)
-                //.foregroundColor(.white)
-                //.listRowBackground(Color.mint)
-                
-                Section {
-//                    Text("Domain:")
-//                        .fontWeight(.semibold)
-//                        .frame(width: .infinity, alignment: .leading)
-//                        .overlay(IndicatorOverlay(offset: 175, flag: nts.flagDomain))
-                    
-                    TextField("https://domaintoviewnvr.com", text: $apnDomain)
-                        .frame(alignment: .leading)
-                        .autocorrectionDisabled()
-                        .overlay(IndicatorOverlay(offset: -60, flag: nts.flagDomain))
-                        .onChange(of: apnDomain){
-                            nts.flagDomain = false
-                        }
-                    
-                    Button("Save") {
-                        for i in 0..<1 {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
-                                withAnimation(.easeInOut) {
-                                    let msg = "viewu_device_event::::domain::::\(apnDomain)"
-                                    mqttManager.publish(topic: "viewu/pairing", with: msg)
-                                }
-                            }
-                        }
-                    }
-                    .buttonStyle(.bordered)
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
-                    .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                    
-                } header: {
-                    Text("Accessible Domain")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Section {
-                    List{
-                        Text("")
-                            .frame(width: .infinity, height: 4, alignment: .leading)
-                            .overlay(IndicatorOverlay(offset: 265, flag: nts.flagTemplate))
                         
-                        ForEach( 0..<nts.templates.count, id: \.self ){ index in
-                            Text("\(nts.templates[index].template)")
-                        }
-                        .onDelete{ indexes in
-                            print(indexes)
-                            for index in indexes{
-                                print(index)
-                                nts.templates.remove(at: index)
-                            }
-                            
-                            nts.flagTemplate = false
-                        }
+                    }) {
+                        Text(nts.notificationPaused ? "Pause Notifications" : "Resume Notifications")
+                            .padding(1)
+                            .frame(height: 25)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .font(.footnote)
+                    .foregroundColor(.black)
+                    .background(nts.notificationPaused ? .gray : .red).opacity(0.4)
+                    .cornerRadius(4)
+                    .frame(width: .infinity, alignment: .center)
+                }
+                .frame(width: UIScreen.screenWidth, alignment: .center)
+                //.listRowBackground(UIColor.systemGroupedBackground)
+                    // UIColor.systemGroupedBackground
+                
+                 
+                    
+                    Section {
                         
+                        TextField("Message Title", text: $apnTitle)
+                            .frame(alignment: .leading)
+                            .overlay(IndicatorOverlay(offset: -60, flag: nts.flagTitle))
+                            .onChange(of: apnTitle){
+                                nts.flagTitle = false
+                            }
                         Button("Save") {
-                            
-                            let templateString = nts.buildTemplateString()
-                            
                             for i in 0..<1 {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
                                     withAnimation(.easeInOut) {
-                                        let msg = "viewu_device_event::::template::::\(templateString)"
+                                        let msg = "viewu_device_event::::title::::\(apnTitle)"
                                         mqttManager.publish(topic: "viewu/pairing", with: msg)
                                     }
                                 }
@@ -182,23 +132,105 @@ struct ViewAPN: View {
                         .animation(.linear(duration: 1), value: scale)
                         .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
                         
+                    } header: {
+                        Text("Notification Title")
+                            .font(.caption)
+                            .foregroundColor(.orange)
                     }
-                } header: {
-                    Text("Saved Templates")
-                        .foregroundColor(.orange)
-                }
-                 
-                ForEach( nts.templateList, id: \.self) { template in
-                    template
+                    //.headerProminence(.increased)
+                    //.foregroundColor(.white)
+                    //.listRowBackground(Color.mint)
+                    
+                    Section {
+                        //                    Text("Domain:")
+                        //                        .fontWeight(.semibold)
+                        //                        .frame(width: .infinity, alignment: .leading)
+                        //                        .overlay(IndicatorOverlay(offset: 175, flag: nts.flagDomain))
+                        
+                        TextField("https://domaintoviewnvr.com", text: $apnDomain)
+                            .frame(alignment: .leading)
+                            .autocorrectionDisabled()
+                            .overlay(IndicatorOverlay(offset: -60, flag: nts.flagDomain))
+                            .onChange(of: apnDomain){
+                                nts.flagDomain = false
+                            }
+                        
+                        Button("Save") {
+                            for i in 0..<1 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
+                                    withAnimation(.easeInOut) {
+                                        let msg = "viewu_device_event::::domain::::\(apnDomain)"
+                                        mqttManager.publish(topic: "viewu/pairing", with: msg)
+                                    }
+                                }
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .scaleEffect(scale)
+                        .animation(.linear(duration: 1), value: scale)
+                        .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
+                        
+                    } header: {
+                        Text("Accessible Domain")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                    
+                    Section {
+                        List{
+                            Text("")
+                                .frame(width: .infinity, height: 4, alignment: .leading)
+                                .overlay(IndicatorOverlay(offset: 265, flag: nts.flagTemplate))
+                            
+                            ForEach( 0..<nts.templates.count, id: \.self ){ index in
+                                Text("\(nts.templates[index].template)")
+                            }
+                            .onDelete{ indexes in
+                                print(indexes)
+                                for index in indexes{
+                                    print(index)
+                                    nts.templates.remove(at: index)
+                                }
+                                
+                                nts.flagTemplate = false
+                            }
+                            
+                            Button("Save") {
+                                
+                                let templateString = nts.buildTemplateString()
+                                
+                                for i in 0..<1 {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
+                                        withAnimation(.easeInOut) {
+                                            let msg = "viewu_device_event::::template::::\(templateString)"
+                                            mqttManager.publish(topic: "viewu/pairing", with: msg)
+                                        }
+                                    }
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .scaleEffect(scale)
+                            .animation(.linear(duration: 1), value: scale)
+                            .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
+                            
+                        }
+                    } header: {
+                        Text("Saved Templates")
+                            .foregroundColor(.orange)
+                    }
+                    
+                    ForEach( nts.templateList, id: \.self) { template in
+                        template
+                    }
                 }
             }
-        }
-        .task {
-            if(nts.templateList.isEmpty){
-                nts.templateList.append(ViewNotificationManager(vid: UUID()))
+            .task {
+                if(nts.templateList.isEmpty){
+                    nts.templateList.append(ViewNotificationManager(vid: UUID()))
+                }
             }
-        }
-        .navigationBarTitle(title, displayMode: .inline)
+            .navigationBarTitle(title, displayMode: .inline)
+ 
     }
     
     struct IndicatorOverlay: View {
