@@ -76,9 +76,9 @@ struct ViewAPN: View {
             VStack {
                 
                 Form {
-                    
-                VStack {
-                    
+                     
+                     
+                    /*
                     Button( action: {
                         for i in 0..<1 {
                             DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
@@ -102,12 +102,28 @@ struct ViewAPN: View {
                     .background(nts.notificationPaused ? .gray : .red).opacity(0.4)
                     .cornerRadius(4)
                     .frame(width: .infinity, alignment: .center)
-                }
-                .frame(width: UIScreen.screenWidth, alignment: .center)
-                //.listRowBackground(UIColor.systemGroupedBackground)
-                    // UIColor.systemGroupedBackground
-                
+                     */
+         
                  
+                    Section{
+                        Toggle("Pause", isOn: nts.$notificationPaused)
+                            .onChange(of: nts.notificationPaused){
+                                for i in 0..<1 {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
+                                        withAnimation(.easeInOut) {
+                                            print("isPaused :: \(nts.notificationPaused)")
+                                            let msg = "viewu_device_event::::paused::::\(nts.notificationPaused)"
+                                            mqttManager.publish(topic: "viewu/pairing", with: msg)
+                                            //nts.notificationPaused.toggle()
+                                        }
+                                    }
+                                }
+                            }
+                    } header: {
+                        Text("Notifications")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
                     
                     Section {
                         
