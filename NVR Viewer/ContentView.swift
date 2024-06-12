@@ -143,7 +143,7 @@ struct ContentView: View {
                 do{
                     try? Tips.showAllTipsForTesting()
                     try? Tips.configure([
-                        .displayFrequency(.immediate),
+                        .displayFrequency(.immediate), 
                         .datastoreLocation(.applicationDefault)
                     ])
                 } catch{

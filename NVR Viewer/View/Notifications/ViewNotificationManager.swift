@@ -6,11 +6,18 @@
 //
 
 import SwiftUI
+import TipKit
+import PopupView
+
 
 struct ViewAPN: View {
     
     let title: String
     var version = false
+    
+    var tipEventDomain = TipEventDomain()
+    var tipEventNotifcationTemplate = TipEventNotifcationTemplate()
+    var tipEventNotifcationManger = TipEventNotifcationManger()
     
     let cNVR = APIRequester()
     let nvr = NVRConfig.shared()
@@ -26,6 +33,7 @@ struct ViewAPN: View {
     let widthMultiplier:CGFloat = 2/5.8
      
     @State var templateList:[UUID] = []
+    @State var showingPopup = true
     
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
      
@@ -66,17 +74,16 @@ struct ViewAPN: View {
             .background(.red.opacity(0.8))
         }
         
-        if( nts.alert ){
-            VStack{
-            }
-            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
-            .overlay(Popup())
-        }
+//        if( nts.alert ){
+//            VStack{
+//            }
+//            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
+//            .overlay(Popup())
+//        }
  
-            VStack {
+            ZStack {
                 
                 Form {
-                     
                      
                     /*
                     Button( action: {
@@ -103,8 +110,10 @@ struct ViewAPN: View {
                     .cornerRadius(4)
                     .frame(width: .infinity, alignment: .center)
                      */
-         
-                 
+          
+                    
+                    TipView(tipEventNotifcationManger, arrowEdge: .bottom)
+                    
                     Section{
                         Toggle("Pause", isOn: nts.$notificationPaused)
                             .onChange(of: nts.notificationPaused){
@@ -156,12 +165,9 @@ struct ViewAPN: View {
                     //.headerProminence(.increased)
                     //.foregroundColor(.white)
                     //.listRowBackground(Color.mint)
-                    
+                     
                     Section {
-                        //                    Text("Domain:")
-                        //                        .fontWeight(.semibold)
-                        //                        .frame(width: .infinity, alignment: .leading)
-                        //                        .overlay(IndicatorOverlay(offset: 175, flag: nts.flagDomain))
+                        TipView(tipEventDomain, arrowEdge: .bottom)
                         
                         TextField("https://domaintoviewnvr.com", text: $apnDomain)
                             .frame(alignment: .leading)
@@ -170,6 +176,7 @@ struct ViewAPN: View {
                             .onChange(of: apnDomain){
                                 nts.flagDomain = false
                             }
+                            //.popoverTip(tipEventDomain)
                         
                         Button("Save") {
                             for i in 0..<1 {
@@ -193,6 +200,7 @@ struct ViewAPN: View {
                     }
                     
                     Section {
+                        TipView(tipEventNotifcationTemplate, arrowEdge: .bottom)
                         List{
                             Text("")
                                 .frame(width: .infinity, height: 4, alignment: .leading)
@@ -239,6 +247,10 @@ struct ViewAPN: View {
                         template
                     }
                 }
+                
+                if( nts.alert ){
+                    PopupMiddle( onClose: {})
+                }
             }
             .task {
                 if(nts.templateList.isEmpty){
@@ -246,7 +258,6 @@ struct ViewAPN: View {
                 }
             }
             .navigationBarTitle(title, displayMode: .inline)
- 
     }
     
     struct IndicatorOverlay: View {
@@ -267,18 +278,75 @@ struct ViewAPN: View {
              
             VStack{
                 Spacer()
-                Text("Synced with Viewu Server")
-                    .multilineTextAlignment(.center)
-                    .font(.title)
-                    .foregroundColor(.secondary)
-                    //.fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                
+                VStack{
+                    
+                    HStack{
+                        Spacer()
+                            .frame(width: 100, alignment: .center)
+                        
+                        Text("Synced with Viewu Server")
+                            .multilineTextAlignment(.center)
+                            .font(.title)
+                            .foregroundColor(.secondary)
+                            //.frame(maxWidth: .infinity, alignment: .center)
+                            .frame(width: 300, alignment: .center)
+                        Spacer()
+                    }
+                    .background(.mint.opacity(0.5))
+                    
+                }
+                .frame(width: 300, height: 250, alignment: .center)
+                 
                 Spacer()
+                    
             }
             .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
-            .background(.mint.opacity(0.5))
+            .background(.white)
             .ignoresSafeArea()
         }
+    }
+}
+ 
+struct PopupMiddle: View {
+ 
+    var onClose: () -> Void
+
+    var body: some View {
+        
+        VStack{
+            Spacer()
+            
+            VStack{
+                
+                HStack{
+                    VStack(spacing: 20) {
+                        
+                        Text("Synced with Viewu Server")
+                            .foregroundColor(.black)
+                            .font(.system(size: 19))
+                            .padding(.bottom, 12)
+                        
+                        Image(systemName: "server.rack")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 226, maxHeight: 100)
+ 
+                    }
+                    .padding(EdgeInsets(top: 37, leading: 24, bottom: 40, trailing: 24))
+                    .background(Color.white.cornerRadius(20))
+                    .padding(.horizontal, 10)
+                }
+                .padding(.trailing, 40 )
+                .padding(.leading, 70 )
+            }
+             
+            Spacer()
+                
+        }
+        .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
+        .background(.gray).opacity(0.9)
+        .ignoresSafeArea()
     }
 }
 
@@ -570,16 +638,83 @@ struct ViewNotificationManager: View, Hashable, Equatable {
     }
 }
 
-//#Preview {
-//    ViewNotificationManager(title: "Notification Manager")
-//}
-//                    Toggle(isOn: $templateSubLabel) {
-//                        Text("Sub Label")
-//                    }
-//                    .toggleStyle(iOSCheckboxToggleStyle())
-//                Section {
-//                    LabeledContent("iOS Version", value: "16.2")
-//                } header: {
-//                    Text("About")
-//                }
-//                .listRowBackground(Color.yellow)
+struct TipEventNotifcationManger: Tip {
+    
+    @Parameter
+    static var shownBefore: Bool = false
+    
+    var title: Text {
+        Text("Notification Manager")
+    }
+ 
+    var message: Text? {
+        Text("Important. Anytime you update or restart the Viewu Server, you will need to resync these values.")
+    }
+ 
+    var image: Image? {
+        Image(systemName: "info.bubble")
+    }
+    
+    var rules: [Rule] {
+        [
+            #Rule(Self.$shownBefore) { $0 == false }
+        ]
+    }
+    
+    var options: [TipOption] = [MaxDisplayCount(1)]
+ 
+}
+
+struct TipEventNotifcationTemplate: Tip {
+    
+    @Parameter
+    static var shownBefore: Bool = false
+    
+    var title: Text {
+        Text("Notification Templates")
+    }
+ 
+    var message: Text? {
+        Text("This helps reduce the number of notifications received and allows you to specify which events you get notifications for. Filtering notifications based on the type field can significantly reduce noise and ensure users receive only the most relevant updates.")
+    }
+ 
+    var image: Image? {
+        Image(systemName: "info.bubble")
+    }
+    
+    var rules: [Rule] {
+        [
+            #Rule(Self.$shownBefore) { $0 == false }
+        ]
+    }
+    
+    var options: [TipOption] = [MaxDisplayCount(1)]
+ 
+}
+
+struct TipEventDomain: Tip {
+    
+    @Parameter
+    static var shownBefore: Bool = false
+    
+    var title: Text {
+        Text("Accessible Domain")
+    }
+ 
+    var message: Text? {
+        Text("For accessing the NVRs clips and snapshots, it's recommended to use a public domain name for Viewu. Your domain must start with http:// or https://. To enhance security, it's best practice to protect this domain with a VPN like Tailscale, ensuring that only authorized individuals can access it.")
+    }
+ 
+    var image: Image? {
+        Image(systemName: "info.bubble")
+    }
+    
+    var rules: [Rule] {
+        [
+            #Rule(Self.$shownBefore) { $0 == false }
+        ]
+    }
+    
+    var options: [TipOption] = [MaxDisplayCount(1)]
+ 
+}

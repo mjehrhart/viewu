@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
-
+import TipKit
 
 struct ViewSettings: View {
     
     let title: String
     //let notify = NotificationHandler()
+    let tipEventPairDevice = TipEventPairDevice()
     @StateObject var notificationManager = NotificationManager()
     
     var currentAppState = MQTTAppState()
@@ -54,15 +55,8 @@ struct ViewSettings: View {
     let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
     
     var body: some View {
-        
-        if( nts.alert ){
-            VStack{
-            }
-            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
-            .overlay(Popup())
-        }
-        
-        VStack {
+
+        ZStack {
             
             Form {
                 
@@ -328,6 +322,7 @@ struct ViewSettings: View {
                 }
                 
                 Section{
+                    TipView(tipEventPairDevice, arrowEdge: .bottom)
                     HStack{
                         Text("Paired:")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -430,30 +425,40 @@ struct ViewSettings: View {
                 
                 Text("Viewu™ 2024")
             }
+            
+            if( nts.alert ){
+                PopupMiddle( onClose: {})
+            }
         }
         .navigationBarTitle(title, displayMode: .inline)
     }
     
-    struct Popup: View {
+    struct TipEventPairDevice: Tip {
         
-        var body: some View {
-             
-            VStack{
-                Spacer()
-                Text("Synced with Viewu Server")
-                    .multilineTextAlignment(.center)
-                    .font(.title)
-                    .foregroundColor(.secondary)
-                    //.fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                Spacer()
-            }
-            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
-            .background(.mint.opacity(0.5))
-            .ignoresSafeArea()
+        @Parameter
+        static var shownBefore: Bool = false
+        
+        var title: Text {
+            Text("Pairing Device")
         }
+     
+        var message: Text? {
+            Text("Important. Anytime you update or restart the Viewu Server, you will need to repair your device")
+        }
+     
+        var image: Image? {
+            Image(systemName: "info.bubble")
+        }
+        
+        var rules: [Rule] {
+            [
+                #Rule(Self.$shownBefore) { $0 == false }
+            ]
+        }
+        
+        var options: [TipOption] = [MaxDisplayCount(1)]
+     
     }
-    
 }
 
 #Preview {

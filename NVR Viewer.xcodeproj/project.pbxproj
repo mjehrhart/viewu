@@ -42,6 +42,7 @@
 		342103592C13F56000CBBF83 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 342103582C13F56000CBBF83 /* FirebaseAuth */; };
 		3421035B2C13F56000CBBF83 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3421035A2C13F56000CBBF83 /* FirebaseCrashlytics */; };
 		3421035D2C13F56000CBBF83 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 3421035C2C13F56000CBBF83 /* FirebaseMessaging */; };
+		342103602C1A493D00CBBF83 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 3421035F2C1A493D00CBBF83 /* PopupView */; };
 		343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343676B82BA3C48400BD765F /* HLSPlayer.swift */; };
 		34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34640F2B2BA4D3430085F726 /* AVResource.swift */; };
 		346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542DF2B9783860037BA1D /* ViewEventsHistory.swift */; };
@@ -256,6 +257,7 @@
 				340AB0112BA38AB200EB69F4 /* libbz2.tbd in Frameworks */,
 				342103572C13F56000CBBF83 /* FirebaseAnalytics in Frameworks */,
 				34D9253D2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				342103602C1A493D00CBBF83 /* PopupView in Frameworks */,
 				340616272BF91AFF00296130 /* FirebaseAppCheck in Frameworks */,
 				340AB00F2BA38AA600EB69F4 /* Foundation.framework in Frameworks */,
 				34D925492BB770B10005DB70 /* FirebaseDynamicLinks in Frameworks */,
@@ -622,6 +624,7 @@
 				342103582C13F56000CBBF83 /* FirebaseAuth */,
 				3421035A2C13F56000CBBF83 /* FirebaseCrashlytics */,
 				3421035C2C13F56000CBBF83 /* FirebaseMessaging */,
+				3421035F2C1A493D00CBBF83 /* PopupView */,
 			);
 			productName = "NVR Viewer";
 			productReference = 34D5EFD22B92AB1F002A84B0 /* NVR Viewer.app */;
@@ -657,6 +660,7 @@
 			packageReferences = (
 				340616352BF91BB200296130 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 				342103552C13F56000CBBF83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				3421035E2C1A493D00CBBF83 /* XCRemoteSwiftPackageReference "PopupView" */,
 			);
 			productRefGroup = 34D5EFD32B92AB1F002A84B0 /* Products */;
 			projectDirPath = "";
@@ -1117,6 +1121,14 @@
 				minimumVersion = 10.27.0;
 			};
 		};
+		3421035E2C1A493D00CBBF83 /* XCRemoteSwiftPackageReference "PopupView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/PopupView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1156,6 +1168,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 342103552C13F56000CBBF83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		3421035F2C1A493D00CBBF83 /* PopupView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3421035E2C1A493D00CBBF83 /* XCRemoteSwiftPackageReference "PopupView" */;
+			productName = PopupView;
 		};
 		34D9253C2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion */ = {
 			isa = XCSwiftPackageProductDependency;
