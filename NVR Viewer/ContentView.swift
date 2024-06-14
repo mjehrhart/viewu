@@ -44,24 +44,15 @@ struct ContentView: View {
     
     @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0" 
      
+    @AppStorage("isOnboarding") var isOnboarding: Bool = true
+    //@State var isOnboarding = true
+    
     @Environment(\.scenePhase) var scenePhase
     
     @State private var path = NavigationPath()
     
     init() {
         //UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
-    }
-    
-    func sheduleBackgroundTask() async {
-       
-        let request = BGAppRefreshTaskRequest(identifier: "viewu_refresh")
-        request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30 * 60, to: Date())
-        do {
-            try BGTaskScheduler.shared.submit(request)
-            print("DEBUG: Background Task Scheduled!")
-        } catch(let error) {
-            print("DEBUG: Scheduling Error \(error.localizedDescription)") 
-        }
     }
      
     var body: some View{
@@ -78,7 +69,14 @@ struct ContentView: View {
                     
                     switch selection {
                     case 0:
-                        ViewEventListHome()
+                        
+                        if isOnboarding {
+                            ViewOnBoarding()
+                            
+                        } else {
+                            ViewEventListHome()
+                        }
+                         
                     case 1:
                         //ViewLive(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: false)
                         ViewEventDetail(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: true, showClip: false)
@@ -141,7 +139,7 @@ struct ContentView: View {
             }
             .task {
                 do{
-                    try? Tips.showAllTipsForTesting()
+                    //try? Tips.showAllTipsForTesting()
                     try? Tips.configure([
                         .displayFrequency(.immediate), 
                         .datastoreLocation(.applicationDefault)
@@ -266,7 +264,7 @@ struct ContentView: View {
             //added this 5/9
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
-                 
+                if !isOnboarding {
                     ToolbarItemGroup(placement: .bottomBar) {
                         Label("Filter", systemImage: "calendar.day.timeline.leading")
                             .labelStyle(VerticalLabelStyle())
@@ -281,17 +279,7 @@ struct ContentView: View {
                                 showCamera.toggle()
                             })
                             .foregroundStyle(showCamera ? .blue : .gray)
-                        Spacer()
-                        //NavigationLink(destination: ViewNVRDetails()){
-                        Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
-                            .labelStyle(VerticalLabelStyle())
-                            .onTapGesture(perform: {
-                                //showNVR.toggle()
-                                notificationManager2.newPage = 2
-                                self.selection = 2
-                            })
-                            .foregroundStyle(showNVR ? .blue : .gray)
-                        //}
+                        
                         if notificationModeIsOn {
                             Spacer()
                             Label("Notifications", systemImage: "app.badge")
@@ -301,6 +289,19 @@ struct ContentView: View {
                                 })
                                 .foregroundStyle(showNotificationManager ? .blue : .gray)
                         }
+                        
+                        if developerModeIsOn {
+                            Spacer()
+                            Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
+                                .labelStyle(VerticalLabelStyle())
+                                .onTapGesture(perform: {
+                                    //showNVR.toggle()
+                                    notificationManager2.newPage = 2
+                                    self.selection = 2
+                                })
+                                .foregroundStyle(showNVR ? .blue : .gray)
+                        }
+                        
                         if developerModeIsOn {
                             Spacer()
                             Label("Log", systemImage: "note.text")
@@ -319,8 +320,21 @@ struct ContentView: View {
                             .foregroundStyle(showSettings ? .blue : .gray)
                         
                         
+                    }
                 }
             }
+        }
+    }
+    
+    func sheduleBackgroundTask() async {
+       
+        let request = BGAppRefreshTaskRequest(identifier: "viewu_refresh")
+        request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30 * 60, to: Date())
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            print("DEBUG: Background Task Scheduled!")
+        } catch(let error) {
+            print("DEBUG: Scheduling Error \(error.localizedDescription)")
         }
     }
     

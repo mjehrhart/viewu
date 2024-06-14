@@ -43,6 +43,9 @@ struct ViewSettings: View {
     @AppStorage("mqttUser") private var mqttUser: String = ""
     @AppStorage("mqttPassword") private var mqttPassword: String = ""
      
+    @AppStorage("isOnboarding") var isOnboarding: Bool?
+    @State private var resetTipsAndInstructions: Bool = false
+    
     var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
     @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
@@ -59,7 +62,7 @@ struct ViewSettings: View {
         ZStack {
             
             Form {
-                
+                 
                 Section{
                     Toggle("Enabled", isOn: $developerModeIsOn)
                 } header: {
@@ -67,6 +70,13 @@ struct ViewSettings: View {
                         .font(.caption)
                         .foregroundColor(.orange)
                 } 
+                
+                Section{
+                    Toggle("Enabled", isOn: $frigatePlusOn)
+                } header: {
+                    Text("Friagte+")
+                        .foregroundColor(.orange)
+                }
                 
                 Section{
                     Toggle("Enabled", isOn: $notificationModeIsOn)
@@ -354,6 +364,36 @@ struct ViewSettings: View {
                 }
                 
                 Section{
+                    Button( action: {
+                        isOnboarding = true
+                        try? Tips.resetDatastore()
+                        try? Tips.configure([
+                            .displayFrequency(.immediate),
+                            .datastoreLocation(.applicationDefault)
+                        ])
+                    }) {
+                        Text("Reset Tips")
+                            .padding(1)
+                            .frame(height: 25)
+                    }
+                    .buttonStyle(.bordered)
+                    .scaleEffect(scale)
+                    .animation(.linear(duration: 1), value: scale)
+                    //.buttonStyle(.borderedProminent)
+                    //.font(.footnote)
+                    //.foregroundColor(.black)
+                    //.background(.gray).opacity(0.4)
+                    //.cornerRadius(4)
+                    //.frame(width: .infinity, alignment: .center)
+                    .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
+                    
+                } header: {
+                    Text("Instructions and Tips")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                
+                Section{
                     //VStack {
                         HStack{
                             Text("App:")
@@ -389,13 +429,7 @@ struct ViewSettings: View {
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
-                
-                Section{
-                    Toggle("Enabled", isOn: $frigatePlusOn)
-                } header: {
-                    Text("Friagte+")
-                        .foregroundColor(.orange)
-                }
+                 
                 if developerModeIsOn {
                     Section{
                         ScrollView(.horizontal){

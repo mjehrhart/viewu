@@ -43,6 +43,9 @@
 		3421035B2C13F56000CBBF83 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3421035A2C13F56000CBBF83 /* FirebaseCrashlytics */; };
 		3421035D2C13F56000CBBF83 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 3421035C2C13F56000CBBF83 /* FirebaseMessaging */; };
 		342103602C1A493D00CBBF83 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 3421035F2C1A493D00CBBF83 /* PopupView */; };
+		342103632C1B5C6000CBBF83 /* OnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103622C1B5C6000CBBF83 /* OnBoarding.swift */; };
+		342103652C1B5CFE00CBBF83 /* ViewInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103642C1B5CFE00CBBF83 /* ViewInstructions.swift */; };
+		342103672C1B614000CBBF83 /* ViewOnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103662C1B614000CBBF83 /* ViewOnBoarding.swift */; };
 		343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343676B82BA3C48400BD765F /* HLSPlayer.swift */; };
 		34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34640F2B2BA4D3430085F726 /* AVResource.swift */; };
 		346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542DF2B9783860037BA1D /* ViewEventsHistory.swift */; };
@@ -167,6 +170,9 @@
 		3421034E2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicFrigateEventMQTT.swift; sourceTree = "<group>"; };
 		342103512C11382D00CBBF83 /* ViewNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewNotificationManager.swift; sourceTree = "<group>"; };
 		342103532C11645600CBBF83 /* NotificationTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTemplate.swift; sourceTree = "<group>"; };
+		342103622C1B5C6000CBBF83 /* OnBoarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoarding.swift; sourceTree = "<group>"; };
+		342103642C1B5CFE00CBBF83 /* ViewInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewInstructions.swift; sourceTree = "<group>"; };
+		342103662C1B614000CBBF83 /* ViewOnBoarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOnBoarding.swift; sourceTree = "<group>"; };
 		343676B82BA3C48400BD765F /* HLSPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlayer.swift; sourceTree = "<group>"; };
 		34640F2B2BA4D3430085F726 /* AVResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVResource.swift; sourceTree = "<group>"; };
 		346542DF2B9783860037BA1D /* ViewEventsHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventsHistory.swift; sourceTree = "<group>"; };
@@ -312,6 +318,15 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
+		342103612C1B5C0100CBBF83 /* OnBoarding */ = {
+			isa = PBXGroup;
+			children = (
+				342103642C1B5CFE00CBBF83 /* ViewInstructions.swift */,
+				342103662C1B614000CBBF83 /* ViewOnBoarding.swift */,
+			);
+			path = OnBoarding;
+			sourceTree = "<group>";
+		};
 		34640F2D2BA4DB870085F726 /* NotUsed */ = {
 			isa = PBXGroup;
 			children = (
@@ -419,6 +434,7 @@
 		34D5EFE32B92AB29002A84B0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				342103612C1B5C0100CBBF83 /* OnBoarding */,
 				342103502C11381000CBBF83 /* Notifications */,
 				342103472C0EA29000CBBF83 /* Log */,
 				348333D52BBB240900ED1DF2 /* NVR */,
@@ -446,6 +462,7 @@
 				34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */,
 				342103452C0EA08F00CBBF83 /* Log.swift */,
 				342103532C11645600CBBF83 /* NotificationTemplate.swift */,
+				342103622C1B5C6000CBBF83 /* OnBoarding.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -753,7 +770,9 @@
 				348AB7BA2BA55E58001ADE6C /* ViewEventUpdateDetails.swift in Sources */,
 				34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */,
 				343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */,
+				342103672C1B614000CBBF83 /* ViewOnBoarding.swift in Sources */,
 				34D5F0012B92B442002A84B0 /* ViewUIImage.swift in Sources */,
+				342103632C1B5C6000CBBF83 /* OnBoarding.swift in Sources */,
 				340AAFFB2BA2406D00EB69F4 /* APIRequestor.swift in Sources */,
 				34D5EFFF2B92B419002A84B0 /* ViewPlayVideo.swift in Sources */,
 				342103462C0EA08F00CBBF83 /* Log.swift in Sources */,
@@ -779,6 +798,7 @@
 				34D5F0072B92B4C3002A84B0 /* TopicFrigateEvent.swift in Sources */,
 				34D5EFF92B92B374002A84B0 /* Extension.swift in Sources */,
 				34E544F32B9ABD8C00137F34 /* NotificationManager.swift in Sources */,
+				342103652C1B5CFE00CBBF83 /* ViewInstructions.swift in Sources */,
 				34BBA4762BAB449C00A6004E /* ViewFilter.swift in Sources */,
 				34D5EFED2B92AC0C002A84B0 /* ViewConnection.swift in Sources */,
 				34D5F0092B92B4FA002A84B0 /* EndpointOptions.swift in Sources */,

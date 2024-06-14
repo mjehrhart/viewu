@@ -84,34 +84,7 @@ struct ViewAPN: View {
             ZStack {
                 
                 Form {
-                     
-                    /*
-                    Button( action: {
-                        for i in 0..<1 {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
-                                withAnimation(.easeInOut) {
-                                    print("isPaused :: \(nts.notificationPaused)")
-                                    let msg = "viewu_device_event::::paused::::\(nts.notificationPaused)"
-                                    mqttManager.publish(topic: "viewu/pairing", with: msg)
-                                    nts.notificationPaused.toggle()
-                                }
-                            }
-                        }
-                        
-                    }) {
-                        Text(nts.notificationPaused ? "Pause Notifications" : "Resume Notifications")
-                            .padding(1)
-                            .frame(height: 25)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .font(.footnote)
-                    .foregroundColor(.black)
-                    .background(nts.notificationPaused ? .gray : .red).opacity(0.4)
-                    .cornerRadius(4)
-                    .frame(width: .infinity, alignment: .center)
-                     */
-          
-                    
+                      
                     TipView(tipEventNotifcationManger, arrowEdge: .bottom)
                     
                     Section{

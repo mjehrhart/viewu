@@ -31,6 +31,7 @@ struct NVR_ViewerApp: App {
     }
      
     var body: some Scene {
+         
         WindowGroup {
             ContentView()
                 .environmentObject(delegate)
