@@ -73,13 +73,6 @@ struct ViewAPN: View {
             .frame(width: UIScreen.screenWidth, height: 100, alignment: .topLeading)
             .background(.red.opacity(0.8))
         }
-        
-//        if( nts.alert ){
-//            VStack{
-//            }
-//            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .topLeading)
-//            .overlay(Popup())
-//        }
  
             ZStack {
                 
