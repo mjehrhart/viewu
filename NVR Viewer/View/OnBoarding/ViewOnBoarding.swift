@@ -33,6 +33,7 @@ struct ViewOnBoarding: View {
               ViewInstructions(instruction: instructions[index])
         }
       }
+      .preferredColorScheme(.light)
       .foregroundColor(Color.black)
       .tabViewStyle(.page)
       .tableStyle(.inset)

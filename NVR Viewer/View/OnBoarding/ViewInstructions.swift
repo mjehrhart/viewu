@@ -13,6 +13,7 @@ struct ViewInstructions: View {
     
     @State private var isAnimating: Bool = false
     
+    
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
@@ -53,6 +54,7 @@ struct ViewInstructions: View {
                     .padding(.vertical, 20)
             }
         }
+        //.preferredColorScheme(.light)
         .onAppear {
             withAnimation(.easeOut(duration: 0.5)) {
                 isAnimating = true

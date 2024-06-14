@@ -24,7 +24,7 @@ struct ViewSettings: View {
     @State private var showingAlert = false
     
     @AppStorage("nvrIPAddress") private var nvrIPAddress: String = ""
-    @AppStorage("nvrPortAddress") private var nvrPortAddress: String = ""
+    @AppStorage("nvrPortAddress") private var nvrPortAddress: String = "5000"
     @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = false
     
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
