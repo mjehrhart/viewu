@@ -76,10 +76,7 @@ final class MQTTAppState: ObservableObject {
         }
          
         if developerModeIsOn {
-            
-            print("MQTTAppState::setReceivedMessage::developerModeIsOn")
-            print(text)
-            
+             
             do {
                  
                 let data = text.data(using: .utf8)

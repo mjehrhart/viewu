@@ -75,6 +75,8 @@ final class NVRConfig: ObservableObject  {
             if error != nil {
                 print("Error: \(String(describing: error))")
                 self.connectionState = .disconnected
+                Log.shared().print(page: "NVRConfig", fn: "checkConnectionStatus", type: "ERROR", text: " \(String(describing: error))")
+                
                 completion(nil, error)
             } else {
                 print("Received data: \(String(describing: data))")

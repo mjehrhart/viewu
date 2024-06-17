@@ -121,6 +121,7 @@ class APIRequester: NSObject {
             } catch(let err) {
                 print("Error Message goes here - 1002")
                 print(err)
+                Log.shared().print(page: "APIRequestor", fn: "fetchEventsInBackground", type: "ERROR", text: "\(err)")
             }
             
             
@@ -215,7 +216,7 @@ class APIRequester: NSObject {
     func checkConnectionStatus(urlString: String, completion: @escaping (Data?, Error?) -> Void){
         
         guard let url = URL(string: "\(urlString)/api/version") else {
-            print("checkConnectionStatus::------ERROR-----::")
+            Log.shared().print(page: "APIRequestor", fn: "checkConnectionStatus", type: "ERROR", text: "")
             return
         }
         
@@ -250,6 +251,7 @@ extension APIRequester: URLSessionDelegate {
         // We've got an error
         if let err = error {
             print("Error: \(err.localizedDescription)")
+            Log.shared().print(page: "APIRequestor", fn: "urlSession", type: "ERROR", text: "\(err.localizedDescription)")
         }
     }
 }

@@ -77,7 +77,7 @@ struct APIBuilder {
             let (data, _) = try await URLSession.shared.data(from: URL(string: url)!)
             return data
         } catch {
-            print("Error fetching data: \(error)")
+            Log.shared().print(page: "APIBuilder", fn: "getDataFrom", type: "ERROR", text: "")
             return nil
         }
     }

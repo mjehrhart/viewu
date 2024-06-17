@@ -108,8 +108,9 @@ struct ViewEventCard: View {
                                                     }
                                                 }
                                             }
-                                        } catch(let err) {
-                                            print(err)
+                                        } catch(let error) {
+                                            Log.shared().print(page: "ViewEventCard", fn: "button", type: "ERROR", text: "\(error)")
+                                            print(error)
                                         }
                                     }
                                     return

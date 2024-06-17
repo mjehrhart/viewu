@@ -263,6 +263,8 @@ struct ViewSettings: View {
                         
                         nvrManager.checkConnectionStatus(){data,error in
                             //do nothing here
+                            
+                            Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(error)")
                         }
                     }
                     .buttonStyle(.bordered)

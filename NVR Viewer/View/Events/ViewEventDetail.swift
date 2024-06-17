@@ -198,7 +198,7 @@ struct ViewEventDetail: View {
                                     if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
                                         
                                         if let res = json["success"] as? Int {
-                                            print(res)
+                                            //print(res)
                                             if res == 1 {
                                                 
                                                 EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
@@ -212,17 +212,20 @@ struct ViewEventDetail: View {
                                                 
                                                 if let msg = json["message"] as? String {
                                                     print(msg)
-                                                    
+                                                     
                                                     if (msg == "PLUS_API_KEY environment variable is not set" ){
                                                         frigatePlus = false
                                                         EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
+                                                        Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                } catch(let err) {
-                                    print(err)
+                                } catch(let error) {
+                                    
+                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
+                                    print(error)
                                 }
                             }
                             

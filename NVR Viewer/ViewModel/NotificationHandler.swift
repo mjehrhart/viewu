@@ -16,6 +16,7 @@ class NotificationHandler{
                 print("Cool, user accepted notifications")
             } else {
                 print("Oh no, user denided notifications")
+                Log.shared().print(page: "NotificationHandler", fn: "askPermission", type: "INFO", text: "Oh no, user denided notifications")
             }
         }
     }
@@ -59,6 +60,7 @@ class NotificationHandler{
                     }
                     catch {
                         print(error.localizedDescription)
+                        Log.shared().print(page: "NotificationHandler", fn: "sendNotificationMessage", type: "ERROR", text: "\(error.localizedDescription)")
                     }
                 }
             }

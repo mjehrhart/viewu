@@ -38,6 +38,8 @@ struct ViewLiveLandscape: View {
                         
                         if let error = error {
                             
+                            Log.shared().print(page: "ViewLiveLandscape", fn: "onAppear", type: "ERROR", text: "\(error)")
+                            
                             //if Event Snapshot is empty, show this instead
                             cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
                                 

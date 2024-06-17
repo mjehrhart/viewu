@@ -96,7 +96,7 @@ struct ContentView: View {
                 let urlString = url + "/api/config"
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
  
-                    Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
+                    //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
                     
                     guard let data = data else { return }
                     
@@ -144,7 +144,8 @@ struct ContentView: View {
                         .displayFrequency(.immediate), 
                         .datastoreLocation(.applicationDefault)
                     ])
-                } catch{
+                } catch (let error){
+                    Log.shared().print(page: "ContentView", fn: "task", type: "ERROR", text: "\(error)")
                     print("there was a tip error")
                 }
             }

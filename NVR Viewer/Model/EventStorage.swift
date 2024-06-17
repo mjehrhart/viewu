@@ -100,7 +100,8 @@ class EventStorage: ObservableObject {
             }
              
             return false
-        } catch {
+        } catch(let error) {
+            Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
             print(error)
             return false
         }
@@ -117,8 +118,9 @@ class EventStorage: ObservableObject {
             try database.run(filter.delete())
              
             return true
-        } catch {
+        } catch (let error){
             print(error)
+            Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
             return false
         }
     }
@@ -132,7 +134,8 @@ class EventStorage: ObservableObject {
             let filter = events.filter(self.id != "-1")
             try database.run(filter.delete())
             return true
-        } catch {
+        } catch (let error){
+            Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
             print(error)
             return false
         }
@@ -167,7 +170,8 @@ class EventStorage: ObservableObject {
                 eps.frigatePlus = events[frigtePlus]
                 
             }
-        } catch {
+        } catch(let error) {
+            Log.shared().print(page: "EventStorage", fn: "getEventByFrameTime", type: "ERROR", text: "\(error)")
             print(error)
         }
         return [eps]
@@ -202,7 +206,8 @@ class EventStorage: ObservableObject {
                     sid: events[sid]
                    ) )
             }
-        } catch {
+        } catch(let error) {
+            Log.shared().print(page: "EventStorage", fn: "getEventById", type: "ERROR", text: "\(error)")
             print(error)
         }
        
@@ -404,7 +409,8 @@ class EventStorage: ObservableObject {
                 eps3.append( x )
                  
             }
-        } catch {
+        } catch (let error){
+            Log.shared().print(page: "EventStorage", fn: "readAll3", type: "ERROR", text: "\(error)")
             print(error)
         }
           
@@ -490,7 +496,8 @@ class EventStorage: ObservableObject {
              
                  
             }
-        } catch {
+        } catch (let error){
+            Log.shared().print(page: "EventStorage", fn: "readAll2", type: "ERROR", text: "\(error)")
             print(error)
         }
         
@@ -536,7 +543,8 @@ class EventStorage: ObservableObject {
                                             frigatePlus: events[frigtePlus]
                                            ) )
             }
-        } catch {
+        } catch(let error) {
+            Log.shared().print(page: "EventStorage", fn: "readAll", type: "ERROR", text: "\(error)")
             print(error)
         }
         return eps
@@ -555,7 +563,7 @@ class EventStorage: ObservableObject {
                 self.frigtePlus <- value
             )
             
-            print(update)
+            //print(update)
             do {
                 let rowID = try database.run(update)
                 if rowID > -1 {
@@ -567,7 +575,8 @@ class EventStorage: ObservableObject {
                 }
                  
                 print("Updated rowID::", rowID)
-            } catch {
+            } catch (let error){
+                Log.shared().print(page: "EventStorage", fn: "updateFrigatePlus", type: "ERROR", text: "\(error)")
                 print("No records inserted with Error")
                 print(error)
                 return
@@ -616,8 +625,9 @@ class EventStorage: ObservableObject {
                     }
                      
                     print("Insert rowID::", rowID)
-                } catch {
+                } catch (let error){
                     print("No records inserted with Error")
+                    Log.shared().print(page: "EventStorage", fn: "insertOrUpdate", type: "ERROR", text: "\(error)")
                     print(error)
                     return
                 }
@@ -658,8 +668,9 @@ class EventStorage: ObservableObject {
                     }
                      
                     print("Updated rowID::", rowID)
-                } catch {
+                } catch (let error){
                     print("No records inserted with Error")
+                    Log.shared().print(page: "EventStorage", fn: "insertOrUpdate", type: "ERROR", text: "\(error)")
                     print(error)
                     return
                 }
@@ -710,8 +721,9 @@ class EventStorage: ObservableObject {
                     }
                      
                     print("Insert rowID::", rowID)
-                } catch {
+                } catch (let error){
                     print("No records inserted with Error")
+                    Log.shared().print(page: "EventStorage", fn: "insertIfNone", type: "ERROR", text: "\(error)")
                     print(error)
                     return
                 }
@@ -754,7 +766,8 @@ class EventStorage: ObservableObject {
             })
               
             return rowID
-        } catch {
+        } catch (let error){
+            Log.shared().print(page: "EventStorage", fn: "insert", type: "ERROR", text: "\(error)")
             print(error)
             return nil
         }
@@ -785,7 +798,8 @@ class EventStorage: ObservableObject {
             
             database.userVersion = 1
             
-        } catch {
+        } catch (let error){
+            Log.shared().print(page: "EventStorage", fn: "createEventsTable", type: "ERROR", text: "\(error)")
             print(error)
         }
          
@@ -795,6 +809,7 @@ class EventStorage: ObservableObject {
                 events.addColumn(sub_label, defaultValue: "")
             )
         } catch {
+            Log.shared().print(page: "EventStorage", fn: "createEventsTable", type: "ERROR", text: "\(error)")
             print(error)
         }
         
@@ -803,6 +818,7 @@ class EventStorage: ObservableObject {
                 events.addColumn(current_zones, defaultValue: "")
             )
         } catch {
+            Log.shared().print(page: "EventStorage", fn: "createEventsTable", type: "ERROR", text: "\(error)")
             print(error)
         }
         
@@ -811,6 +827,7 @@ class EventStorage: ObservableObject {
                 events.addColumn(entered_zones, defaultValue: "")
             )
         } catch {
+            Log.shared().print(page: "EventStorage", fn: "createEventsTable", type: "ERROR", text: "\(error)")
             print(error)
         }
         
@@ -818,7 +835,8 @@ class EventStorage: ObservableObject {
             try database.run(
                 events.addColumn(frigtePlus, defaultValue: false)
             )
-        } catch {
+        } catch (let error){
+            Log.shared().print(page: "EventStorage", fn: "createEventsTable*", type: "ERROR", text: "\(error)")
             print(error)
         }
     }
