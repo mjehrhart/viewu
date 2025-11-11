@@ -27,7 +27,7 @@ struct ViewEventInformation: View {
                 .padding(.bottom, 10)
                 .padding(.top, 0)
                 
-                Text("Video Clip")
+                Text("Video Clip1")
                     .frame(width: UIScreen.screenWidth-10, alignment: .leading)
                     .padding([.leading], 34)
                     .padding(.bottom, 0)

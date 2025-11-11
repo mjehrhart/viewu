@@ -46,7 +46,10 @@ struct ViewSettings: View {
     @AppStorage("isOnboarding") var isOnboarding: Bool?
     @State private var resetTipsAndInstructions: Bool = false
     
+    //FIX THIS
+    //11/05/2025 
     var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
+    
     @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
@@ -94,13 +97,13 @@ struct ViewSettings: View {
                                 cameraHLS = false
                             }
                         }
-                    Toggle("RTSP", isOn: $cameraRTSPPath)
-                        .onChange(of: cameraRTSPPath) {
-                            if cameraRTSPPath == true {
-                                camerGo2Rtc = false
-                                cameraHLS = false
-                            }
-                        }
+//                    Toggle("RTSP", isOn: $cameraRTSPPath)
+//                        .onChange(of: cameraRTSPPath) {
+//                            if cameraRTSPPath == true {
+//                                camerGo2Rtc = false
+//                                cameraHLS = false
+//                            }
+//                        }
                     Toggle("HLS", isOn: $cameraHLS)
                         .onChange(of: cameraHLS) {
                             if cameraHLS == true {
@@ -214,9 +217,10 @@ struct ViewSettings: View {
                         mqttManager.initializeMQTT()
                         mqttManager.connect()
                     }
-                    .buttonStyle(.bordered)
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
+                    .buttonStyle(.borderedProminent)
+                    .tint(Color(white: 0.78)) //accentColor
+                    //.scaleEffect(scale)
+                    //.animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
                      
                 } header: {
@@ -263,12 +267,13 @@ struct ViewSettings: View {
                         
                         nvrManager.checkConnectionStatus(){data,error in
                             //do nothing here
-                            
                             Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(error)")
                         }
                     }
-                    .buttonStyle(.bordered)
-                    .scaleEffect(scale)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(.borderedProminent)
+                    .tint(Color(white: 0.7))
+                    //.scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
                     
@@ -297,7 +302,9 @@ struct ViewSettings: View {
                                 await notificationManager.request()
                             }
                         }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(.borderedProminent)
+                        .tint(Color(white: 0.78))
+                        //.buttonStyle(.bordered)
                         .disabled(notificationManager.hasPermission)
                         .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
                         .task {
@@ -321,7 +328,9 @@ struct ViewSettings: View {
                             let _ = EventStorage.shared.delete()
                         }
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(.borderedProminent)
+                    .tint(Color(white: 0.78))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
@@ -350,12 +359,24 @@ struct ViewSettings: View {
                         for i in 0..<1 {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
                                     withAnimation(.easeInOut) {
+                                        //testing only on 11/04/2025
+                                        
+                                        //fcm.replace(":", with: "")
+                                        //mqttManager.publish(topic: "viewu/pairing", with: fcm)
+                                        
+                                        //print("VIEWSETTINGS")
+                                        //let trimmedString = fcm.prefix(136)
+                                        
+                                        //mqttManager.publish(topic: "viewu/pairing", with: fcm)
                                         mqttManager.publish(topic: "viewu/pairing", with: fcm)
+                                        //print("354", fcm)
                                     }
                                 }
                             }
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(.borderedProminent)
+                    .tint(Color(white: 0.78))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
@@ -375,10 +396,12 @@ struct ViewSettings: View {
                         ])
                     }) {
                         Text("Reset Tips")
-                            .padding(1)
-                            .frame(height: 25)
+                            .padding(0)
+                            .frame(height: 20)
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(.borderedProminent)
+                    .tint(Color(white: 0.78))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     //.buttonStyle(.borderedProminent)

@@ -28,6 +28,11 @@ final class MQTTAppState: ObservableObject {
     func setReceivedMessage(text: String) {
          
          
+        print("**********************:: setReceivedMessage")
+        print(text)
+        print(text.count)
+        print("___________________________________________")
+        
         if text.count == 163 {
             //do nothing as this is a message response back to the viewu server
             return

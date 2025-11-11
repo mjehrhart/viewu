@@ -31,7 +31,7 @@ struct APIBuilder {
         case .Thumbnail:
             return url + "/api/events/\(id)/thumbnail.jpg"
         case .Snapshot:
-            return url + "/api/events/\(id)/snapshot.jpg?bbox=1"
+            return url + "/api/events/\(id)/snapshot.jpg" //?bbox=1"
         case .Image:
             return url + "/api/\(camera)/recordings/\(frameTime)/snapshot.png"
         case .M3U8:

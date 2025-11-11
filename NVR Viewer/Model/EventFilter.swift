@@ -42,7 +42,7 @@ class EventFilter: ObservableObject{
         endDate = Calendar.current.date(byAdding: DateComponents(day: 1), to: Date()) ?? Date()
     }
     
-    func setZones(items: [String : Cameras]){
+    func setZones(items: [String : Cameras2]){
          
         zones.removeAll()
         zones.append("all")
@@ -54,7 +54,9 @@ class EventFilter: ObservableObject{
         }
     }
     
-    func setCameras(items: [String : Cameras]){
+    //11/08/2025 - changed Cameras to Cameras2
+    //func setCameras(items: [String : Cameras]){
+    func setCameras(items: [String : Cameras2]){
         
         cameras.removeAll()
         cameras.append("all")
@@ -64,7 +66,7 @@ class EventFilter: ObservableObject{
         } 
     }
     
-    func setObject(items: [String : Cameras]){
+    func setObject(items: [String : Cameras2]){
         
         objects.removeAll()
         objects.append("all")

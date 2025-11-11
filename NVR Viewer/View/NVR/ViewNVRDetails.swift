@@ -12,10 +12,12 @@ struct ViewNVRDetails: View {
     let nvr = NVRConfig.shared()
     
     @EnvironmentObject private var notificationManager2: NotificationManager
-    @ObservedObject var config = NVRConfigurationSuper.shared()
+    //@ObservedObject var config = NVRConfigurationSuper.shared()
+    @ObservedObject var config = NVRConfigurationSuper2.shared()
     
     let cNVR = APIRequester()
-    var sup = NVRConfigurationSuper()
+    //var sup = NVRConfigurationSuper()
+    var sup = NVRConfigurationSuper2()
     let widthMultiplier:CGFloat = 2/5
     init(){
     }
@@ -23,12 +25,10 @@ struct ViewNVRDetails: View {
           
         Form{
             Section{
-                //HStack{
                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, camera in
                     NavigationLink("\(camera)", value: config.item.cameras[camera])
                         .foregroundStyle(.blue)
                 }
-                //}
             } header: {
                 Text("Cameras")
                     .font(.caption)
@@ -77,7 +77,7 @@ struct ViewNVRDetails: View {
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
                 
                 HStack{
-                    Text("Interval")
+                    Text("Interval2")
                         .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                         .padding(.leading, 40)
                     Text("\(config.item.mqtt.stats_interval)")

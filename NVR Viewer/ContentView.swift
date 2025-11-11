@@ -15,7 +15,9 @@ struct ContentView: View {
     //Load Config
     @ObservedObject var filter2 = EventFilter.shared()
     let nvr = NVRConfig.shared()
-    @ObservedObject var config = NVRConfigurationSuper.shared()
+    //Commented out for testing on 11/08/2025
+    //@ObservedObject var config = NVRConfigurationSuper.shared()
+    @ObservedObject var config = NVRConfigurationSuper2.shared()
     let cNVR = APIRequester()
     
     //
@@ -62,7 +64,7 @@ struct ContentView: View {
                  
                 ZStack {
                     GeometryReader { reader in
-                        Color.white
+                        Color.secondary
                                 .frame(height: reader.safeAreaInsets.top, alignment: .top)
                                 .ignoresSafeArea()
                         }
@@ -94,15 +96,33 @@ struct ContentView: View {
                 //Load Defaults for app
                 let url = nvr.getUrl()
                 let urlString = url + "/api/config"
+                print(urlString)
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
  
                     //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
                     
+                    print("_1_______________________________________________________")
+                    
                     guard let data = data else { return }
                     
                     do {
-                        config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
-                           
+                        //Commented out for Testing on 11/08/2025
+                        //config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
+                        config.item = try JSONDecoder().decode(NVRConfigurationCall2.self, from: data)
+                        
+                        print("_2_______________________________________________________")
+                        print(config.item)
+                        
+                        print("3")
+                        print(config.item.cameras["front"] as Any)
+                        
+//                        if let dataJson = jsonObject.data(using: .utf8) {
+//                            let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
+//                            ViewEventInformation( endPointOptionsArray: epsArray)
+//                        }
+                        
+          
+                        //Commented out for Testing on 11/08/2025
                         filter2.setCameras(items: config.item.cameras)
                         filter2.setObject(items: config.item.cameras)
                         filter2.setZones(items: config.item.cameras)
@@ -116,7 +136,7 @@ struct ContentView: View {
                         }
                          
                     }catch (let err){
-                        print("Error Message goes here - 1001")
+                        print("Error Message goes here - 1001.b")
                         print(err)
                         Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001", type: "ERROR", text: "\(err)")
                          
@@ -124,7 +144,7 @@ struct ContentView: View {
                             if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
                                 
                                 Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001", type: "Info", text: "\(json)")
-                                 print(json)
+                                //print(json)
                             }
                         } catch(let err) {
                             print("Error Message goes here - 2001")
@@ -233,6 +253,7 @@ struct ContentView: View {
                 ViewLog()
             }
             .navigationDestination(isPresented: $showCamera){
+                //HERE
                 ViewCamera(title: "Live Cameras")
             }
             .navigationDestination(isPresented: $showNotificationManager){
@@ -241,15 +262,19 @@ struct ContentView: View {
             }
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationDestination(for: Cameras.self){ config in 
-                
+                 
                 ViewCameraDetails(text: "\(config.name.uppercased()) Camera Details", cameras: config)
+            }
+            .navigationDestination(for: Cameras2.self){ config in
+                 
+                ViewCameraDetails2(text: "\(config.name.uppercased()) Camera Details", cameras: config)
             }
             .navigationDestination(for: EndpointOptions.self){ eps in
                 
                 ViewEventDetail(text: convertDateTime(time: eps.frameTime!), container: eps, showButton: false, showClip: true)
             }
             .navigationDestination(for: String.self){ jsonObject in
-          
+              
                 if let dataJson = jsonObject.data(using: .utf8) {
                     let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
                     ViewEventInformation( endPointOptionsArray: epsArray)
@@ -267,60 +292,99 @@ struct ContentView: View {
             .toolbar {
                 if !isOnboarding {
                     ToolbarItemGroup(placement: .bottomBar) {
-                        Label("Filter", systemImage: "calendar.day.timeline.leading")
-                            .labelStyle(VerticalLabelStyle())
-                            .onTapGesture(perform: {
-                                showFilter.toggle()
-                            })
-                            .foregroundStyle(showSettings ? .blue : .blue)
-                        Spacer()
-                        Label("Cameras", systemImage: "web.camera")
-                            .labelStyle(VerticalLabelStyle())
-                            .onTapGesture(perform: {
-                                showCamera.toggle()
-                            })
-                            .foregroundStyle(showCamera ? .blue : .gray)
                         
-                        if notificationModeIsOn {
-                            Spacer()
-                            Label("Notifications", systemImage: "app.badge")
-                                .labelStyle(VerticalLabelStyle())
+                        HStack{
+                            Label("Filter", systemImage: "calendar.day.timeline.leading")
+                                .labelStyle(VerticalLabelStyle(show: false))
+                                //.foregroundStyle(.orange)
+                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                //.foregroundStyle(showSettings ? .blue : .blue)
+                                //.font(.system(size: 20))
+                                .fontWeight(.regular)
+                                .foregroundColor(.gray)
                                 .onTapGesture(perform: {
-                                    showNotificationManager.toggle()
+                                    showFilter.toggle()
                                 })
-                                .foregroundStyle(showNotificationManager ? .blue : .gray)
-                        }
-                        
-                        if developerModeIsOn {
+                            
                             Spacer()
-                            Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
-                                .labelStyle(VerticalLabelStyle())
+                            
+                            Label("Cameras", systemImage: "web.camera")
+                                .labelStyle(VerticalLabelStyle(show: false))
+                                //.foregroundStyle(.orange)
+                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                //.foregroundStyle(showCamera ? .blue : .gray)
+                                //.font(.system(size: 20))
+                                .fontWeight(.regular)
+                                .foregroundColor(.gray)
                                 .onTapGesture(perform: {
-                                    //showNVR.toggle()
-                                    notificationManager2.newPage = 2
-                                    self.selection = 2
+                                    showCamera.toggle()
                                 })
-                                .foregroundStyle(showNVR ? .blue : .gray)
-                        }
-                        
-                        if developerModeIsOn {
+                             
+                            if notificationModeIsOn {
+                                Spacer()
+                                Label("Notifications", systemImage: "app.badge")
+                                    .labelStyle(VerticalLabelStyle(show: false))
+                                    //.foregroundStyle(.orange)
+                                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                    //.foregroundStyle(showNotificationManager ? .blue : .gray)
+                                    //.font(.system(size: 20))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.gray)
+                                    .onTapGesture(perform: {
+                                        showNotificationManager.toggle()
+                                    })
+                            }
+                            
+                             
+                            
+                             
+                            
+                            if developerModeIsOn {
+                                Spacer()
+                                Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
+                                    .labelStyle(VerticalLabelStyle(show: false))
+                                    //.foregroundStyle(.orange)
+                                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                    //.foregroundStyle(showNVR ? .blue : .gray)
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.gray)
+                                    .onTapGesture(perform: {
+                                        //showNVR.toggle()
+                                        notificationManager2.newPage = 2
+                                        self.selection = 2
+                                    })
+                            }
+                            
+                            
+                            
+                            if developerModeIsOn {
+                                Spacer()
+                                Label("Log", systemImage: "note.text")
+                                    .labelStyle(VerticalLabelStyle(show: false))
+                                    //.foregroundStyle(.orange)
+                                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                    //.foregroundStyle(showSettings ? .blue : .gray)
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.gray)
+                                    .onTapGesture(perform: {
+                                        showLog.toggle()
+                                    })
+                            }
+                             
                             Spacer()
-                            Label("Log", systemImage: "note.text")
-                                .labelStyle(VerticalLabelStyle())
+                            
+                            Label("Settings", systemImage: "gearshape")
+                                .labelStyle(VerticalLabelStyle(show: false))
+                                //.foregroundStyle(.orange)
+                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                //.foregroundStyle(showSettings ? .blue : .gray)
+                                //.font(.system(size: 20))
+                                .fontWeight(.regular)
+                                .foregroundColor(.gray)
                                 .onTapGesture(perform: {
-                                    showLog.toggle()
+                                    showSettings.toggle()
                                 })
-                                .foregroundStyle(showSettings ? .blue : .gray)
-                        }
-                        Spacer()
-                        Label("Settings", systemImage: "gearshape")
-                            .labelStyle(VerticalLabelStyle())
-                            .onTapGesture(perform: {
-                                showSettings.toggle()
-                            })
-                            .foregroundStyle(showSettings ? .blue : .gray)
-                        
-                        
+                        }//hstack
                     }
                 }
             }
@@ -362,11 +426,19 @@ struct ContentView: View {
 }
 
 struct VerticalLabelStyle: LabelStyle {
+    
+    var show: Bool
+    
+    init(show: Bool){
+        self.show = show
+    }
+    
     func makeBody(configuration: Configuration) -> some View {
-        VStack {
-            configuration.icon.font(.system(size: 18))
-            configuration.title.font(.system(size: 10))
-        }
+         
+            VStack {
+                configuration.icon.font(.system(size: 18))
+                configuration.title.font(.system(size: 10))
+            }
     }
 }
 

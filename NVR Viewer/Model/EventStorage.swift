@@ -777,6 +777,7 @@ class EventStorage: ObservableObject {
         guard let database = db else {
             return
         }
+        print("Databse Stuff")
         print(database.userVersion)
         do {
             try database.run(events.create { table in

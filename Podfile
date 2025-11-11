@@ -7,7 +7,8 @@ target 'NVR Viewer' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   pod 'CocoaMQTT'
-  pod 'MobileVLCKit', '~>3.3.0'
+  #pod 'MobileVLCKit', '~>3.3.0'
+  pod 'MobileVLCKit', '4.0.0a2'
   # Pods for NVR Viewer
 
 end

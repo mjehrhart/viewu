@@ -40,7 +40,10 @@ struct ViewEventsHistory: View {
                 ToolbarItemGroup(placement: .primaryAction) {
                     HStack{
                         Text("\(epsSup3.list3.count)")
-                            .font(.system(size: 16, weight: .medium, design: .default))
+                            //.font(.system(size: 16, weight: .medium, design: .default))
+                            .font(.system(size: 20))
+                            .fontWeight(.regular)
+                            .foregroundColor(.gray)
                         Label(!nvrManager.getConnectionState() ? "" : "", systemImage: "cable.connector")
                             .frame(alignment: .leading)
                             .foregroundStyle(nvrManager.getConnectionState() ? .white : .red)

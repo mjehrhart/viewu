@@ -119,14 +119,16 @@ struct StreamRTSP2: View {
                     mediaPlayer.stop()
                 }
                 .onTapGesture{
+                    print("tap")
                     flagFull.toggle()
                 }
                 .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
              
         }
         .padding(0)
-        .navigationDestination(isPresented: $flagFull){
-            ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
+        .navigationDestination(isPresented: $flagFull){ 
+            //ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
+            ViewTest(title: "11/09/2025")
         }
     }
     

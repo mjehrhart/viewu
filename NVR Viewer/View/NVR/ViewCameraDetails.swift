@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ViewCameraDetails: View {
-    
+     
     var cameras: Cameras
     let text: String
-    
+     
     init (text: String, cameras: Cameras){
         self.cameras = cameras
         self.text = text

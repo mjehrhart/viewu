@@ -20,7 +20,9 @@ class AVRequester: NSObject {
  
 struct ViewCamera: View {
      
-    @ObservedObject var config = NVRConfigurationSuper.shared()
+    //11/09/25
+    //@ObservedObject var config = NVRConfigurationSuper.shared()
+    @ObservedObject var config = NVRConfigurationSuper2.shared()
     
     let title: String
     @State var flagFull = false 
@@ -48,9 +50,9 @@ struct ViewCamera: View {
                 
                 Section{
                     
-                    Section{
-                        
+                    Section{ 
                         if ( config.item.go2rtc.streams != nil  ){
+                             
                             ForEach(Array(config.item.go2rtc.streams!.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, value in
                                 
                                 if cameraRTSPPath {
@@ -97,13 +99,18 @@ struct ViewCamera: View {
                                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
                                     
                                     let camera = config.item.cameras[cameraName];
-                                     
+                                    //Text("1")
+                                    //Text("\(camera!.ffmpeg.inputs)")
+                                    //Text("2")
+                                    //Text("\(camera)")
                                     //CameraName(name: cameraName)
                                     
                                     ForEach(camera!.ffmpeg.inputs, id: \.self) {item in
                                         
                                         //let url = item.path;
                                         let url = verifyGo2RTCUrl(urlString: item.path)
+                                        //Text("\(url)")
+                                        //Text("\(cameraName)")
                                         
                                         if cameraSubStream {
                                             if url.contains("sub") || cameraName.contains("sub"){

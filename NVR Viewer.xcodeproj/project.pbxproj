@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		34045AE32EBFD25F00D90B7F /* NVRConfigurationCall2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34045AE22EBFD25F00D90B7F /* NVRConfigurationCall2.swift */; };
+		34045AE52EC046FE00D90B7F /* ViewCameraDetails2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34045AE42EC046F900D90B7F /* ViewCameraDetails2.swift */; };
 		340616272BF91AFF00296130 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 340616262BF91AFF00296130 /* FirebaseAppCheck */; };
 		340616292BF91AFF00296130 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 340616282BF91AFF00296130 /* FirebaseInAppMessaging-Beta */; };
 		3406162B2BF91AFF00296130 /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 3406162A2BF91AFF00296130 /* FirebaseInAppMessagingSwift-Beta */; };
@@ -142,6 +144,8 @@
 
 /* Begin PBXFileReference section */
 		0F4C41C96EEF1EA69ED88916 /* Pods-NVR Viewer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NVR Viewer.release.xcconfig"; path = "Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer.release.xcconfig"; sourceTree = "<group>"; };
+		34045AE22EBFD25F00D90B7F /* NVRConfigurationCall2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVRConfigurationCall2.swift; sourceTree = "<group>"; };
+		34045AE42EC046F900D90B7F /* ViewCameraDetails2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCameraDetails2.swift; sourceTree = "<group>"; };
 		340AAFEE2BA0A5CB00EB69F4 /* NotificationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		340AAFF02BA0A5CC00EB69F4 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		340AAFF22BA0A5CC00EB69F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -349,6 +353,7 @@
 		348333D52BBB240900ED1DF2 /* NVR */ = {
 			isa = PBXGroup;
 			children = (
+				34045AE42EC046F900D90B7F /* ViewCameraDetails2.swift */,
 				348333D62BBB241E00ED1DF2 /* ViewNVRDetails.swift */,
 				348333DA2BC04CCD00ED1DF2 /* ViewCameraDetails.swift */,
 			);
@@ -459,6 +464,7 @@
 				34BBA47E2BAE164400A6004E /* DataController.swift */,
 				34BBA4802BAE3A9000A6004E /* EventStorage.swift */,
 				348333D32BBB1ACA00ED1DF2 /* NVRConfigurationCall.swift */,
+				34045AE22EBFD25F00D90B7F /* NVRConfigurationCall2.swift */,
 				34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */,
 				342103452C0EA08F00CBBF83 /* Log.swift */,
 				342103532C11645600CBBF83 /* NotificationTemplate.swift */,
@@ -719,9 +725,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NVR Viewer/Pods-NVR Viewer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -771,6 +781,7 @@
 				34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */,
 				343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */,
 				342103672C1B614000CBBF83 /* ViewOnBoarding.swift in Sources */,
+				34045AE52EC046FE00D90B7F /* ViewCameraDetails2.swift in Sources */,
 				34D5F0012B92B442002A84B0 /* ViewUIImage.swift in Sources */,
 				342103632C1B5C6000CBBF83 /* OnBoarding.swift in Sources */,
 				340AAFFB2BA2406D00EB69F4 /* APIRequestor.swift in Sources */,
@@ -778,6 +789,7 @@
 				342103462C0EA08F00CBBF83 /* Log.swift in Sources */,
 				34D5F00C2B92B57A002A84B0 /* Enums.swift in Sources */,
 				346542E42B983CE60037BA1D /* ViewEventInformation.swift in Sources */,
+				34045AE32EBFD25F00D90B7F /* NVRConfigurationCall2.swift in Sources */,
 				34D5EFFD2B92B3FD002A84B0 /* ViewLiveEvent.swift in Sources */,
 				34BBA48E2BAEA14F00A6004E /* ViewEventSlideShow.swift in Sources */,
 				342103522C11382D00CBBF83 /* ViewNotificationManager.swift in Sources */,
@@ -945,7 +957,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1002,7 +1014,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -1022,7 +1034,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1036,12 +1048,12 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1062,7 +1074,7 @@
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1076,12 +1088,12 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

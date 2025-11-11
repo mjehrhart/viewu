@@ -25,6 +25,9 @@ struct ViewCameraFullScreen: View {
 //            )
 //            .ignoresSafeArea()
             
+            Text("\(urlString)")
+            
+            
             VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
                 .rotationEffect(.degrees(90))
                 .aspectRatio(16/9, contentMode: .fit)

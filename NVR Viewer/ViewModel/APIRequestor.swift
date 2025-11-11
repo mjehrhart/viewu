@@ -70,7 +70,7 @@ class APIRequester: NSObject {
                     }
                       
                     var eps = EndpointOptions()
-                    eps.snapshot = url + "/api/events/\(id)/snapshot.jpg?bbox=1"
+                    eps.snapshot = url + "/api/events/\(id)/snapshot.jpg" //?bbox=1"
                     eps.cameraName = event.camera
                     eps.m3u8 = url + "/vod/event/\(id)/master.m3u8"
                     eps.frameTime = event.start_time
@@ -166,6 +166,8 @@ class APIRequester: NSObject {
 //            }
             
             
+            print("** APIREQUESTOR **")
+            //print(data ?? " no value shown yet ")
             
             completion(data, error)
         }
@@ -203,7 +205,7 @@ class APIRequester: NSObject {
                         return
                     }
                 }catch{
-                    print("Error Message goes here - 1001")
+                    print("Error Message goes here - 1001.a")
                 }
             }
             

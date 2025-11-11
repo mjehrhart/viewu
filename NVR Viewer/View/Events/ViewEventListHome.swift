@@ -26,11 +26,10 @@ struct ViewEventListHome: View {
     
     var body: some View {
         VStack {
-            ViewEventList(title: "Timeline") 
+            ViewEventList(title: "Event Timeline") 
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
-             
-            
+              
             if newPhase == .active {
                 print("Active")
             } else if newPhase == .inactive {
@@ -39,7 +38,7 @@ struct ViewEventListHome: View {
                 print("Background")
             }
         }
-        .navigationBarTitle("Timeline", displayMode: .inline)
+        .navigationBarTitle("Event Timeline", displayMode: .inline)
         .environmentObject(mqttManager)
         .environmentObject(nvrManager)
     }
@@ -69,7 +68,10 @@ struct ViewEventListHome: View {
                 //History 
                 ViewEventsHistory()
                 
-                //ViewTest()
+                ViewTest(title:"test")
+                    .frame(height: 30)
+                    //.background(.yellow)
+                    .padding(.vertical, 5)
             }
         }
         
@@ -97,6 +99,7 @@ struct ViewEventListHome: View {
         }
         
         private func subscribe(topic: String) {
+            print("private subscribe2", topic)
             mqttManager.subscribe(topic: topic)
         }
         

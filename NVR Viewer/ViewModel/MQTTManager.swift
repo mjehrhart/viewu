@@ -82,6 +82,7 @@ import UserNotifications
 
     func subscribe(topic: String) {
         self.topic = topic
+        print("subscribe", topic)
         mqttClient?.subscribe(topic, qos: .qos1)
     }
 
@@ -145,7 +146,11 @@ extension MQTTManager: CocoaMQTTDelegate {
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        
+        //print("inside mqtt")
+        
         if ack == .accept {
+            //print("ack == .accept")
             currentAppState.setAppConnectionState(state: .connected)
             //TODO clean this up 
             mqttClient?.subscribe("frigate/events")
@@ -156,6 +161,14 @@ extension MQTTManager: CocoaMQTTDelegate {
     //1 [4,
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
         let _ = message.string.description
+        print(101, message)
+//        print(101.1, message.string.description)
+//        let trimmedString = message.string.description.prefix(136)
+//        print(101.2, trimmedString)
+        
+//        print(101.0, message.string as Any)
+//        print(101.1, message.string.description)
+//        print(101.2, message.payload)
         //sendNotificationMessage()
     }
 
@@ -165,12 +178,20 @@ extension MQTTManager: CocoaMQTTDelegate {
     func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
         currentAppState.setReceivedMessage(text: message.string.description)
         
+//        print(102, message)
+//        print(102.0, message.string as Any)
+//        print(102.1, message.string.description)
+//        print(102.2, message.payload)
+        
         //TODO entry for eps which is currently in MQTTState
         //sendNotificationMessage()
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
         currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
+        
+        print(103, topic)
+        
         //-currentAppState.clearData()
     }
     //3

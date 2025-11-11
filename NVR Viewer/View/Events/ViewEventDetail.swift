@@ -42,12 +42,21 @@ struct ViewEventDetail: View {
                     Label("\(container.cameraName!.capitalized)", systemImage: "web.camera")
                         .frame( alignment: .leading)
                         .padding()
+                        .font(.system(size: 15))
+                        .fontWeight(.regular)
+                        .foregroundColor(.gray)
                     Label("\(container.label!.capitalized)", systemImage: "figure.walk.motion")
                         .frame(alignment: .trailing)
                         .padding()
+                        .font(.system(size: 15))
+                        .fontWeight(.regular)
+                        .foregroundColor(.gray)
                     Label("\(container.type!)", systemImage: "moonphase.new.moon.inverse")
                         .frame(alignment: .trailing)
                         .padding()
+                        .font(.system(size: 15))
+                        .fontWeight(.regular)
+                        .foregroundColor(.gray)
                 }
                 .padding([.top, .bottom], 0)
                  
@@ -61,6 +70,9 @@ struct ViewEventDetail: View {
                                 Text("Video Clip")
                                     .frame(width:UIScreen.screenWidth - 30, alignment: .leading)
                                     .padding(10)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.gray)
                             }
                             
                             ViewPlayVideo(urlString: container.m3u8!)
@@ -74,6 +86,9 @@ struct ViewEventDetail: View {
                 Text("Snapshot")
                     .frame(width: UIScreen.screenWidth-30, alignment: .leading)
                     .padding(10)
+                    .font(.system(size: 20))
+                    .fontWeight(.regular)
+                    .foregroundColor(.gray)
                  
                 if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
                     ViewUIImageFull(urlString: container.snapshot!)
@@ -119,9 +134,15 @@ struct ViewEventDetail: View {
                     Label("Zones", systemImage: "square.stack.3d.down.right.fill")
                         .frame( alignment: .leading)
                         .padding(0)
+                        .font(.system(size: 15))
+                        .fontWeight(.regular)
+                        .foregroundColor(.gray)
                     
                     ForEach(enteredZones, id: \.self) { zone in
                         Text(zone)
+                            .font(.system(size: 15))
+                            .fontWeight(.regular)
+                            .foregroundColor(.gray)
                     }
                 }
                 .frame( alignment: .leading)

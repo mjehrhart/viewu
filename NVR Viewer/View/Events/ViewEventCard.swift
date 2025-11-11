@@ -14,6 +14,9 @@ struct ViewEventCard: View {
     
     let nvr = NVRConfig.shared()
     let cNVR = APIRequester()
+    let fontSizeDate: CGFloat = 20
+    let fontSizeLabel: CGFloat = 13
+    
     //
     @State private var zoomIn: Bool = false
     var frigatePlusOn: Bool = UserDefaults.standard.bool(forKey: "frigatePlusOn")
@@ -40,21 +43,38 @@ struct ViewEventCard: View {
             VStack{
                 
                 HStack{
-                    VStack(alignment: .leading, spacing: 4) {
-                
+                    //VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 2) {
+                 
+                        //Time
                         NavigationLink(convertTime(time: containers[index].frameTime!), value: containers[index])
-                            .foregroundColor(.primary)
-                            .font(.title3)
+                            //.foregroundColor(.primary)
+                            //.font(.title3)
+                            .font(.system(size: fontSizeDate))
+                            //.fontWeight(.thin)
+                            //.foregroundColor(.gray)
+                            .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
                             .frame(width: setWidth(), alignment: .topLeading)
+                            .padding(.top,5)
                         
+                        //Date
                         Text(convertDate(time: containers[index].frameTime!))
-                            .foregroundColor(.primary)
-                            .font(.caption)
+                            .foregroundColor(.gray)
+                            //.font(.caption)
+                            .font(.system(size: fontSizeLabel))
+                            .fontWeight(.thin)
                         
+                        //Label
                         Text("\(containers[index].label!)")
-                            .foregroundColor(.secondary)
-                            .font(.caption)
+                            //.foregroundColor(.secondary)
+                            //.font(.caption)
+                            .font(.system(size: fontSizeLabel))
+                            .fontWeight(.thin)
+                            .foregroundColor(.gray)
                         
+                        //Text("\(containers[index].score ?? 0)")
+//                        Text("\()")
+//                        Text("\()")
                         if(containers[index].sublabel! != ""){
                             Text("\(containers[index].sublabel!)")
                                 .foregroundColor(.secondary)
@@ -67,7 +87,7 @@ struct ViewEventCard: View {
                                 .font(.caption)
                         }
                         
-                        EnteredZones(zones: containers[index].enteredZones!)
+                        //EnteredZones(zones: containers[index].enteredZones!)
                          
                         Spacer()
                          
