@@ -101,7 +101,7 @@ struct ContentView: View {
  
                     //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
                     
-                    print("_1_______________________________________________________")
+//                    print("_1_______________________________________________________")
                     
                     guard let data = data else { return }
                     
@@ -110,11 +110,11 @@ struct ContentView: View {
                         //config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
                         config.item = try JSONDecoder().decode(NVRConfigurationCall2.self, from: data)
                         
-                        print("_2_______________________________________________________")
-                        print(config.item)
-                        
-                        print("3")
-                        print(config.item.cameras["front"] as Any)
+//                        print("_2_______________________________________________________")
+//                        print(config.item)
+//                        
+//                        print("3")
+//                        print(config.item.cameras["front"] as Any)
                         
 //                        if let dataJson = jsonObject.data(using: .utf8) {
 //                            let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)

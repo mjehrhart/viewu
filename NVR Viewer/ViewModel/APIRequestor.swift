@@ -40,6 +40,9 @@ class APIRequester: NSObject {
    
     func fetchEventsInBackground(urlString: String, backgroundFetchEventsEpochtime: String, epsType: String){
         
+        print("APIRequestor-------------------fetchEventsInBackground")
+        print(backgroundFetchEventsEpochtime);
+        
         //DEV
         //Load Events
         //let urlEvents = nvr.getUrl()

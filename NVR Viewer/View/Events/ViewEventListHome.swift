@@ -68,10 +68,7 @@ struct ViewEventListHome: View {
                 //History 
                 ViewEventsHistory()
                 
-                ViewTest(title:"test")
-                    .frame(height: 30)
-                    //.background(.yellow)
-                    .padding(.vertical, 5)
+                ViewQuickDayFilter() 
             }
         }
         
