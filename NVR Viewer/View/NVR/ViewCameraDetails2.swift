@@ -180,7 +180,8 @@ struct ViewCameraDetails2: View {
                         Text("Max Dissapeared")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.detect.max_disappeared)")
+                        //Text("\(cameras.detect.max_disappeared)")
+                        Text("\(String(describing: cameras.detect.max_disappeared))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
@@ -381,7 +382,7 @@ struct ViewCameraDetails2: View {
                         ForEach(Array(cameras.objects.filters.keys), id: \.self) {filter in
                             
                             //Text("Threshold: \(cameras.objects.filters[filter]?.threshold)")
-                            Text("\(filter) Threshold: \(cameras.objects.filters[filter]?.threshold)")
+                            Text("\(filter) Threshold: \(String(describing: cameras.objects.filters[filter]?.threshold))")
                                 .frame(width: 400, alignment: .leading)
                                 .foregroundStyle(.gray)
                                 .textSelection(.enabled)
@@ -435,7 +436,7 @@ struct ViewCameraDetails2: View {
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                 .padding(.leading, 40)
                             ScrollView(.horizontal){
-                                Text("\(cameras.onvif.autotracking.enabled_in_config)")
+                                Text("\(String(describing: cameras.onvif.autotracking.enabled_in_config))")
                                     .frame( alignment: .leading)
                                     .foregroundStyle(.gray)
                             }
@@ -687,7 +688,7 @@ struct ViewCameraDetails2: View {
                         Text("height")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.snapshots.height)")
+                        Text("\(String(describing: cameras.snapshots.height))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }

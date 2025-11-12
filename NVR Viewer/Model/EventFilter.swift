@@ -47,7 +47,7 @@ class EventFilter: ObservableObject{
         zones.removeAll()
         zones.append("all")
         
-        for (name, value) in items{ 
+        for (_, value) in items{
             for zone in value.zones.keys {
                 zones.append(zone)
             }
@@ -61,7 +61,7 @@ class EventFilter: ObservableObject{
         cameras.removeAll()
         cameras.append("all")
         
-        for (name, value) in items{
+        for (name, _) in items{
             cameras.append(name)
         } 
     }
@@ -71,7 +71,7 @@ class EventFilter: ObservableObject{
         objects.removeAll()
         objects.append("all")
         
-        for (name, value) in items{
+        for (_, value) in items{
             let tmp = value.objects.filters
             
             for obj in tmp{

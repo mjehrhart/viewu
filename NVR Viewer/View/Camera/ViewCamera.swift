@@ -17,15 +17,15 @@ class AVRequester: NSObject {
         
     }
 }
- 
+
 struct ViewCamera: View {
-     
+    
     //11/09/25
     //@ObservedObject var config = NVRConfigurationSuper.shared()
     @ObservedObject var config = NVRConfigurationSuper2.shared()
     
     let title: String
-    @State var flagFull = false 
+    @State var flagFull = false
     let nvr = NVRConfig.shared()
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
@@ -39,20 +39,20 @@ struct ViewCamera: View {
     var counter = 0;
     
     var body: some View {
-         
+        
         ScrollView {
             VStack{
-                 
-                    TipView(tipCameraGeneral, arrowEdge: .bottom)
-                        .padding(.top, 10)
-                        .padding(.horizontal, 20)
-              
+                
+                TipView(tipCameraGeneral, arrowEdge: .bottom)
+                    .padding(.top, 10)
+                    .padding(.horizontal, 20)
+                
                 
                 Section{
                     
-                    Section{ 
+                    Section{
                         if ( config.item.go2rtc.streams != nil  ){
-                             
+                            
                             ForEach(Array(config.item.go2rtc.streams!.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, value in
                                 
                                 if cameraRTSPPath {
@@ -95,27 +95,19 @@ struct ViewCamera: View {
                         if camerGo2Rtc {
                             
                             VStack{
-                               
+                                
                                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
                                     
                                     let camera = config.item.cameras[cameraName];
-                                    //Text("1")
-                                    //Text("\(camera!.ffmpeg.inputs)")
-                                    //Text("2")
-                                    //Text("\(camera)")
-                                    //CameraName(name: cameraName)
-                                    
                                     ForEach(camera!.ffmpeg.inputs, id: \.self) {item in
                                         
-                                        //let url = item.path;
                                         let url = verifyGo2RTCUrl(urlString: item.path)
-                                        //Text("\(url)")
-                                        //Text("\(cameraName)")
                                         
                                         if cameraSubStream {
                                             if url.contains("sub") || cameraName.contains("sub"){
-                                                 
+                                                
                                                 if url.starts(with: "rtsp"){
+                                                
                                                     let name = cameraName + "_sub"
                                                     StreamRTSP2(urlString: url, cameraName: name)
                                                         .padding(0)
@@ -127,7 +119,7 @@ struct ViewCamera: View {
                                             }
                                         } else {
                                             if !url.contains("sub"){
-                                                 
+                                                
                                                 if url.starts(with: "rtsp"){
                                                     StreamRTSP2(urlString: url, cameraName: cameraName)
                                                         .padding(0)
@@ -143,17 +135,22 @@ struct ViewCamera: View {
                             }
                         }
                         if cameraHLS {
-                            
                             ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
                                 
-                                let url = nvr.getUrl()
-                                HLSPlayer2(urlString: url, cameraName: cameraName, flagFull: false)
+                                 
+                                    let url = nvr.getUrl()
+                                    HLSPlayer2(urlString: url, cameraName: cameraName, flagFull: false)
+                                        .onTapGesture {
+                                            print("--------ViewCamera HLSPlayer2-----------")
+                                        }
+                                    
+                                    if developerModeIsOn {
+                                        Text(url + "/api/\(cameraName)?h=480")
+                                            .textSelection(.enabled)
+                                    }
                                 
-                                if developerModeIsOn {
-                                    Text(url + "/api/\(cameraName)?h=480")
-                                        .textSelection(.enabled)
-                                }
                             }
+                            
                         }
                         
                     }
@@ -187,11 +184,11 @@ struct ViewCamera: View {
         var title: Text {
             Text("Cameras")
         }
-     
+        
         var message: Text? {
             Text("You can change the camera stream from the Settings page. To reduce load times, use a sub-stream whenever possible.")
         }
-     
+        
         var image: Image? {
             Image(systemName: "info.bubble")
         }
@@ -203,7 +200,7 @@ struct ViewCamera: View {
         }
         
         var options: [TipOption] = [MaxDisplayCount(1)]
-     
+        
     }
 }
 

@@ -3,12 +3,12 @@ PODS:
     - CocoaMQTT/Core (= 2.1.6)
   - CocoaMQTT/Core (2.1.6):
     - MqttCocoaAsyncSocket (~> 1.0.8)
-  - MobileVLCKit (3.3.17)
+  - MobileVLCKit (3.6.0)
   - MqttCocoaAsyncSocket (1.0.8)
 
 DEPENDENCIES:
   - CocoaMQTT
-  - MobileVLCKit (~> 3.3.0)
+  - MobileVLCKit (= 3.6.0)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -18,9 +18,9 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   CocoaMQTT: 1f206228b29318eabdacad0c2e4e88575922c27a
-  MobileVLCKit: c5dd1b0ae933dc9c2348099840e753496dcdd908
+  MobileVLCKit: 8fe98ae53b7464f32e4bdf527cc7d53053e4d3a5
   MqttCocoaAsyncSocket: 77d3b74f76228dd5a05d1f9526eab101d415b30c
 
-PODFILE CHECKSUM: 553ec353ccc6fffb0b62164c17aaa7467484994f
+PODFILE CHECKSUM: 92ec3177d2a8413c8722957381401c2d09df0ab2
 
 COCOAPODS: 1.15.2

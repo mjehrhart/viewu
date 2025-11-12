@@ -26,7 +26,7 @@ final class MQTTAppState: ObservableObject {
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
     func setReceivedMessage(text: String) {
-         
+        DispatchQueue.main.async { [self] in
          
 //        print("**********************:: setReceivedMessage")
 //        print(text)
@@ -74,6 +74,7 @@ final class MQTTAppState: ObservableObject {
             }
             
             return
+            
         } else if text.starts(with: "viewu_device_event"){
              
             //Do nothing as these are from the Viewu app itself
@@ -177,7 +178,8 @@ final class MQTTAppState: ObservableObject {
                 print(error)
                 Log.shared().print(page: "MQTTState", fn: "setReceivedMessage", type: "ERROR", text: "\(error)")
             }
-        } 
+        }
+        }
     }
      
     func setAppConnectionState(state: MQTTAppConnectionState) {

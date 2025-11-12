@@ -60,7 +60,7 @@ class PlayerUIView: UIView, VLCMediaPlayerDelegate, ObservableObject{
         mediaPlayer.delegate = self
         mediaPlayer.drawable = self
         //mediaPlayer.drawable = self.mediaPlayer
-        mediaPlayer.audio.isMuted = true
+        //mediaPlayer.audio.isMuted = true
         
         mediaPlayer.libraryInstance.debugLoggingLevel = 0
         mediaPlayer.libraryInstance.debugLogging = false

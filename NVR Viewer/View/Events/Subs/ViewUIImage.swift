@@ -32,7 +32,7 @@ struct ViewUIImage: View{
              
             return width
         } else {
-            var width = UIScreen.screenWidth
+            let width = UIScreen.screenWidth
             return width - 110
             //return 260
         }
@@ -40,7 +40,7 @@ struct ViewUIImage: View{
     
     func setHeight() -> CGFloat {
         
-        var height = UIScreen.screenHeight
+        //var height = UIScreen.screenHeight
         
         if idiom == .pad {
             return (setWidth() * 9/16)

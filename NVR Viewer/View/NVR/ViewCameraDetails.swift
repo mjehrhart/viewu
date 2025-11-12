@@ -53,7 +53,7 @@ struct ViewCameraDetails: View {
                         Text("Enabled Config")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.audio.enabled_in_config)")
+                        Text("\(String(describing: cameras.audio.enabled_in_config))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
@@ -63,7 +63,7 @@ struct ViewCameraDetails: View {
                         Text("Filters")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.audio.filters)")
+                        Text("\(String(describing: cameras.audio.filters))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
@@ -186,7 +186,7 @@ struct ViewCameraDetails: View {
                         Text("Max Dissapeared")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.detect.max_disappeared)")
+                        Text("\(String(describing: cameras.detect.max_disappeared))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
@@ -636,7 +636,7 @@ struct ViewCameraDetails: View {
                         ForEach(Array(cameras.objects.filters.keys), id: \.self) {filter in
                             
                             //Text("Threshold: \(cameras.objects.filters[filter]?.threshold)")
-                            Text("\(filter) Threshold: \(cameras.objects.filters[filter]?.threshold)")
+                            Text("\(filter) Threshold: \(String(describing: cameras.objects.filters[filter]?.threshold))")
                                 .frame(width: 400, alignment: .leading)
                                 .foregroundStyle(.gray)
                                 .textSelection(.enabled)
@@ -687,7 +687,7 @@ struct ViewCameraDetails: View {
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                 .padding(.leading, 40)
                             ScrollView(.horizontal){
-                                Text("\(cameras.onvif.autotracking.enabled_in_config)")
+                                Text("\(String(describing: cameras.onvif.autotracking.enabled_in_config))")
                                     .frame( alignment: .leading)
                                     .foregroundStyle(.gray)
                             }
@@ -771,7 +771,7 @@ struct ViewCameraDetails: View {
                         Text("password")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.onvif.password)")
+                        Text("\(String(describing: cameras.onvif.password))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
@@ -791,7 +791,7 @@ struct ViewCameraDetails: View {
                         Text("user")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.onvif.user)")
+                        Text("\(String(describing: cameras.onvif.user))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
@@ -818,7 +818,7 @@ struct ViewCameraDetails: View {
                         Text("enabled_in_config")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.record.enabled_in_config)")
+                        Text("\(String(describing: cameras.record.enabled_in_config))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }
@@ -962,7 +962,7 @@ struct ViewCameraDetails: View {
                         Text("height")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
-                        Text("\(cameras.snapshots.height)")
+                        Text("\(String(describing: cameras.snapshots.height))")
                             .frame( alignment: .leading)
                             .foregroundStyle(.gray)
                     }

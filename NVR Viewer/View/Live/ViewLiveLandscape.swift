@@ -43,10 +43,10 @@ struct ViewLiveLandscape: View {
                             //if Event Snapshot is empty, show this instead
                             cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
                                 
-                                if let error = error {
-                                } else {
+//                                if let error = error {
+//                                } else {
                                     self.data = data
-                                }
+//                                }
                             }
                             
                         } else {

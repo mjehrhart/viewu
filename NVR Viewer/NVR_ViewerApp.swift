@@ -45,7 +45,7 @@ struct NVR_ViewerApp: App {
   
             await cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "background" )
         }
-        .onChange(of: phase) { newPhase in
+        .onChange(of: phase) {  oldValue, newPhase in
             switch newPhase {
             case .background:
                 scheduleAppRefresh()

@@ -18,7 +18,8 @@ struct VlcPlayeyRTSP2: UIViewRepresentable{
     }
     
     func makeUIView(context: Context) -> UIView {
-        return PlayerUIView2(frame: .zero, urlString: urlString, mediaPlayer: mediaPlayer)
+         
+            return PlayerUIView2(frame: .zero, urlString: urlString, mediaPlayer: mediaPlayer)
     }
 }
 
@@ -27,58 +28,65 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
     //override
     init(frame: CGRect, urlString: String, mediaPlayer : VLCMediaPlayer) {
         
-        super.init(frame: UIScreen.screens[0].bounds)
-        //super.init(frame: CGRect(x:0,y:0, width:350, height: 250))
+        super.init(frame: CGRect(x:0,y:0, width:350, height: 250))
         
-        let url = URL(string: urlString)!
-        let media = VLCMedia(url: url)
-        
-        //https://wiki.videolan.org/VLC_command-line_help
-//        media.addOption("--vv")
-//        media.addOption("--codec=avcodec")
-//        media.addOption("--avcodec-hw=any")
-//        media.addOption("--avcodec-fast=true")
-//        media.addOption("--avcodec-threads=0")
-//        media.addOption("--network-caching=300")
-//        media.addOption("--rtsp-frame-buffer-size=200")
-//        media.addOption("--vout=ios")
-//        media.addOption("--glconv=glconv_cvpx")
-        media.addOption("--rtsp-caching=100")
-//        media.addOption("--tcp-caching=150")
-//        media.addOption("--realrtsp-caching=150")
-//        media.addOption("--mms-timeout=6000")
-//        media.addOption("--h264-fps=15.0")
-        
-        
-//        media.addOptions(
-//            [
-//                //"--rtsp-tcp": true,
-//                "codec":"avcodec",
-//                "avcodec-hw":"any", // none
-//                "avcodec-fast" : true,
-//                "avcodec-threads" : 0, // "1" 0=auto
-//                "network-caching": 300, //300, 500
-//                "rtsp-frame-buffer-size":100, //100, 500
-//                "vout": "ios",
-//                "glconv" : "glconv_cvpx",
-//                "rtsp-caching": 150, //rtsp-caching=
-//                "tcp-caching": 150, //tcp-caching=
-//                "realrtsp-caching": 150, //150, realrtsp-caching=
-//                //"--h264-fps": 20.0, //20.0
-//                "mms-timeout": 6000, //60000
-//            ]
-//        )
-        
-        mediaPlayer.media = media
-        mediaPlayer.delegate = self
-        mediaPlayer.drawable = self
-        mediaPlayer.audio.isMuted = true
-        mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
-        
-        //Logging
-        //mediaPlayer.libraryInstance.debugLoggingLevel = 1
-        //mediaPlayer.libraryInstance.debugLogging = true
-        //mediaPlayer.play()
+        //DispatchQueue.main.async {
+        DispatchQueue.global(qos: .userInteractive).async{
+            
+            //super.init(frame: UIScreen.screens[0].bounds)
+            //super.init(frame: self.view.window?.windowScene?.screen.bounds.size)
+            //super.init(frame: CGRect(x:0,y:0, width:350, height: 250))
+            
+            let url = URL(string: urlString)!
+            let media = VLCMedia(url: url)
+            
+            //https://wiki.videolan.org/VLC_command-line_help
+            //        media.addOption("--vv")
+            //        media.addOption("--codec=avcodec")
+            //        media.addOption("--avcodec-hw=any")
+            //        media.addOption("--avcodec-fast=true")
+            //        media.addOption("--avcodec-threads=0")
+            //        media.addOption("--network-caching=300")
+            //        media.addOption("--rtsp-frame-buffer-size=200")
+            //        media.addOption("--vout=ios")
+            //        media.addOption("--glconv=glconv_cvpx")
+            media.addOption("--rtsp-caching=100")
+            //        media.addOption("--tcp-caching=150")
+            //        media.addOption("--realrtsp-caching=150")
+            //        media.addOption("--mms-timeout=6000")
+            //        media.addOption("--h264-fps=15.0")
+            
+            
+            //        media.addOptions(
+            //            [
+            //                //"--rtsp-tcp": true,
+            //                "codec":"avcodec",
+            //                "avcodec-hw":"any", // none
+            //                "avcodec-fast" : true,
+            //                "avcodec-threads" : 0, // "1" 0=auto
+            //                "network-caching": 300, //300, 500
+            //                "rtsp-frame-buffer-size":100, //100, 500
+            //                "vout": "ios",
+            //                "glconv" : "glconv_cvpx",
+            //                "rtsp-caching": 150, //rtsp-caching=
+            //                "tcp-caching": 150, //tcp-caching=
+            //                "realrtsp-caching": 150, //150, realrtsp-caching=
+            //                //"--h264-fps": 20.0, //20.0
+            //                "mms-timeout": 6000, //60000
+            //            ]
+            //        )
+            
+            mediaPlayer.media = media
+            mediaPlayer.delegate = self
+            mediaPlayer.drawable = self
+            //mediaPlayer.audio.isMuted = true
+            mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
+            
+            //Logging
+            //        mediaPlayer.libraryInstance.debugLoggingLevel = 1
+            //        mediaPlayer.libraryInstance.debugLogging = true
+            //mediaPlayer.play()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -112,12 +120,14 @@ struct StreamRTSP2: View {
                 .modifier( CardBackground() )
                 .frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-5)
                 .onAppear(){
-                    mediaPlayer.audio.isMuted = flagMute
+                    print("onAppear RTSPPlyer2")
+                    //mediaPlayer.audio.isMuted = flagMute
                     mediaPlayer.play()
                 }
                 .onDisappear(){
+                    print("onDisappear")
                     mediaPlayer.stop()
-                }
+                } 
                 .onTapGesture{
                     print("tap")
                     flagFull.toggle()
@@ -125,10 +135,13 @@ struct StreamRTSP2: View {
                 .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
              
         }
+        .onTapGesture{
+            print("tap2")
+        }
         .padding(0)
         .navigationDestination(isPresented: $flagFull){ 
-            //ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
-            ViewTest(title: "11/09/2025")
+            ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
+            //ViewTest(title: "11/09/2025")
         }
     }
     

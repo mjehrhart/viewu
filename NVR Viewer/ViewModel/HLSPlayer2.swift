@@ -16,17 +16,24 @@ struct HLSPlayer2: View {
     
     var body: some View {
         
-        Webview(url: urlString + "/api/\(cameraName)?h=480")
-            .modifier(CardBackground())
-            .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-            .edgesIgnoringSafeArea(.all)
-            .onTapGesture{
-                flagFull.toggle()
-            }
-            .overlay(CameraOverlay(name: cameraName), alignment: .bottomTrailing)
-            .navigationDestination(isPresented: $flagFull){
-                ViewCameraHLSFullScreen(urlString: urlString, cameraName: cameraName) 
-            }
+        HStack{
+      
+                Webview(url: urlString + "/api/\(cameraName)?h=480")
+                    .modifier(CardBackground())
+                    .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
+                    .edgesIgnoringSafeArea(.all)
+                    .overlay(CameraOverlay(name: cameraName), alignment: .bottomTrailing)
+                    .navigationDestination(isPresented: $flagFull){
+                        ViewCameraHLSFullScreen(urlString: urlString, cameraName: cameraName)
+                    }
+                    .onTapGesture{
+                        DispatchQueue.main.async {
+                            print("----HLSPlayer2------")
+                            //flagFull.toggle()
+                        }
+                    }
+          
+        }
     }
     
     struct CameraOverlay: View {

@@ -230,11 +230,11 @@ class EventStorage: ObservableObject {
             let startDate4 = Calendar.current.date(byAdding: DateComponents(day: -1), to: filter2.startDate) ?? Date()
             let startDate3 = Calendar.current.nextDate(after: startDate4, matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTimePreservingSmallerComponents)!
  
-            var startDate = startDate3.timeIntervalSince1970
+            let startDate = startDate3.timeIntervalSince1970
    
             let endDate2 = Calendar.current.nextDate(after: filter2.endDate, matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTimePreservingSmallerComponents)!
  
-            var endDate = endDate2.timeIntervalSince1970
+            let endDate = endDate2.timeIntervalSince1970
              
             if filter2.selectedCamera == "all" && filter2.selectedObject == "all" && filter2.selectedType == "all" && filter2.selectedZone == "all" {
                   
@@ -777,8 +777,8 @@ class EventStorage: ObservableObject {
         guard let database = db else {
             return
         }
-        print("Databse Stuff")
-        print(database.userVersion)
+//        print("Databse Stuff")
+//        print(database.userVersion)
         do {
             try database.run(events.create { table in
                 table.column(sid, primaryKey: .autoincrement)

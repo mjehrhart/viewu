@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '17.0'
 
 source 'https://github.com/CocoaPods/Specs.git'
  
@@ -8,7 +8,9 @@ target 'NVR Viewer' do
   use_frameworks!
   pod 'CocoaMQTT'
   #pod 'MobileVLCKit', '~>3.3.0'
-  pod 'MobileVLCKit', '4.0.0a2'
+  #pod 'MobileVLCKit', '4.0.0a2'
+  #pod 'MobileVLCKit-unstable', '~> 3.0.0a38' #errors
+  pod 'MobileVLCKit', '3.6.0'
   # Pods for NVR Viewer
 
 end

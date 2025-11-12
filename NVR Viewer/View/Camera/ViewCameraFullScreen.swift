@@ -34,7 +34,7 @@ struct ViewCameraFullScreen: View {
                 .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth)
                 .edgesIgnoringSafeArea(.all)
                 .onAppear(){
-                    mediaPlayer.audio.isMuted = false
+                    //mediaPlayer.audio.isMuted = false
                     mediaPlayer.play()
                 }
                 .onDisappear(){
@@ -74,7 +74,7 @@ struct ViewCameraFullScreen: View {
                     HStack{
                         Button(name){
                             flagMute.toggle()
-                            mediaPlayer.audio.isMuted = flagMute
+                            //mediaPlayer.audio.isMuted = flagMute
                             print("button1")
                         }
                         .foregroundColor(.white)
@@ -85,7 +85,7 @@ struct ViewCameraFullScreen: View {
                         
                         Button("", systemImage: flagMute ? "speaker.slash" : "speaker"){
                             flagMute.toggle()
-                            mediaPlayer.audio.isMuted = flagMute
+                            //mediaPlayer.audio.isMuted = flagMute
                         }
                         .padding([.trailing], 80) //40 was good
                         .padding(.bottom, 10)
@@ -101,7 +101,7 @@ struct ViewCameraFullScreen: View {
             }
             .onTapGesture{
                 flagMute.toggle()
-                mediaPlayer.audio.isMuted = flagMute
+                //mediaPlayer.audio.isMuted = flagMute //11/12/25 Check this
             }
             .background(Color(.init(white: 10, alpha: 0))) 
             .rotationEffect(.degrees(90))
