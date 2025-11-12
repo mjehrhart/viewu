@@ -125,7 +125,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             
             var eps = EndpointOptions()
             var eps2 = EndpointOptionsSuper.EventMeta()
-            var eps3 = EndpointOptionsSuper.EventMeta3()
+            let eps3 = EndpointOptionsSuper.EventMeta3()
             
             eps.transportType = "didReceiveRemoteNotification"
             eps2.transportType = "didReceiveRemoteNotification"
@@ -216,8 +216,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             }
             
             if let msg = userInfo["start_time"] as? String? {
-                print("start_time")
-                print(msg)
                 
                 //TODO think this through
                 if (msg != nil) {
@@ -226,22 +224,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                     eps3.frameTime = Double(msg!)
                 }
             }
-            
-            if let msg = userInfo["end_time"] as? String? {
-                print("end_time")
-                print(msg)
-            }
-            
-            if let msg = userInfo["top_score"] as? String? {
-                print("top_score")
-                print(msg)
-            }
- 
-            if let msg = userInfo["image_url"] as? String {
-                print("---------------------------> image_url")
-                print(msg)
-                print()
-            }
+// 11/11/2025
+//            if let msg = userInfo["end_time"] as? String? {
+//            }
+//            
+//            if let msg = userInfo["top_score"] as? String? {
+//            }
+// 
+//            if let msg = userInfo["image_url"] as? String {
+//            }
  
             //THIS USES EPS"3"
             //using epsSup.list3 and not eps3

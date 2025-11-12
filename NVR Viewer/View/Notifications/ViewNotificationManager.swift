@@ -39,14 +39,13 @@ struct ViewAPN: View {
      
     init(title: String) {
         self.title = title
-        
-        print(viewuServerVersion)
+         
         let x = viewuServerVersion.split(separator: ".")
         let d1 = Int(x[0])
         let d2 = Int(x[1])
         let d3 = Int(x[2])
          
-        if d2! <= 2 && d3! <= 5 {
+        if d2! <= 3 && d3! <= 0 {
             version = true
         }
         
@@ -60,12 +59,10 @@ struct ViewAPN: View {
         if version {
             VStack{
                 Spacer()
-                Text("This page requires Viewu Server 0.2.6 or later.")
-                    //.multilineTextAlignment(.center)
+                Text("This page requires Viewu Server 0.3.0 or later.")
                     .frame(alignment: .center)
                     .padding(.leading, 35)
                 Text("You have \(viewuServerVersion) installed.")
-                    //.multilineTextAlignment(.center)
                     .padding(.leading, 25)
                     .frame(width: .infinity, alignment: .center)
                 Spacer()
@@ -79,27 +76,7 @@ struct ViewAPN: View {
                 Form {
                       
                     TipView(tipEventNotifcationManger, arrowEdge: .bottom)
-                    
-                    Section{
-                        Toggle("Pause", isOn: nts.$notificationPaused)
-                            .onChange(of: nts.notificationPaused){
-                                for i in 0..<1 {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
-                                        withAnimation(.easeInOut) {
-                                            print("isPaused :: \(nts.notificationPaused)")
-                                            let msg = "viewu_device_event::::paused::::\(nts.notificationPaused)"
-                                            mqttManager.publish(topic: "viewu/pairing", with: msg)
-                                            //nts.notificationPaused.toggle()
-                                        }
-                                    }
-                                }
-                            }
-                    } header: {
-                        Text("Notifications")
-                            .font(.caption)
-                            .foregroundColor(.orange)
-                    }
-                    
+                     
                     Section {
                         
                         TextField("Message Title", text: $apnTitle)
@@ -169,8 +146,8 @@ struct ViewAPN: View {
                         TipView(tipEventNotifcationTemplate, arrowEdge: .bottom)
                         List{
                             Text("")
-                                .frame(width: .infinity, height: 4, alignment: .leading)
-                                .overlay(IndicatorOverlay(offset: 265, flag: nts.flagTemplate))
+                                .frame(maxWidth: .infinity, maxHeight: 4, alignment: .leading)
+                                .overlay(IndicatorOverlay(offset: 285, flag: nts.flagTemplate))
                             
                             ForEach( 0..<nts.templates.count, id: \.self ){ index in
                                 Text("\(nts.templates[index].template)")
@@ -211,6 +188,26 @@ struct ViewAPN: View {
                     
                     ForEach( nts.templateList, id: \.self) { template in
                         template
+                    }
+                    
+                    Section{
+                        Toggle("Pause", isOn: nts.$notificationPaused)
+                            .onChange(of: nts.notificationPaused){
+                                for i in 0..<1 {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
+                                        withAnimation(.easeInOut) {
+                                            print("isPaused :: \(nts.notificationPaused)")
+                                            let msg = "viewu_device_event::::paused::::\(nts.notificationPaused)"
+                                            mqttManager.publish(topic: "viewu/pairing", with: msg)
+                                            //nts.notificationPaused.toggle()
+                                        }
+                                    }
+                                }
+                            }
+                    } header: {
+                        Text("Notifications")
+                            .font(.caption)
+                            .foregroundColor(.orange)
                     }
                 }
                 
@@ -255,7 +252,6 @@ struct ViewAPN: View {
                             .multilineTextAlignment(.center)
                             .font(.title)
                             .foregroundColor(.secondary)
-                            //.frame(maxWidth: .infinity, alignment: .center)
                             .frame(width: 300, alignment: .center)
                         Spacer()
                     }
@@ -323,7 +319,8 @@ struct ViewNotificationManager: View, Hashable, Equatable {
     
     @StateObject var nts = NotificationTemplateString.shared()
     @ObservedObject  var nt = NotificationTemplate()
-    @ObservedObject var config = NVRConfigurationSuper.shared()
+    //@ObservedObject var config = NVRConfigurationSuper.shared()
+    @ObservedObject var config = NVRConfigurationSuper2.shared()
     
     @State var cameraTemplate = ""
     @State var labelTemplate = ""
@@ -442,6 +439,11 @@ struct ViewNotificationManager: View, Hashable, Equatable {
                     
                     Toggle(nt.cameras[index].name, isOn: $nt.cameras[index].state)
                         .onChange(of: nt.cameras[index].state) {
+                            
+//                            print("ViewNotificationManager nt.cameras")
+//                            print("\(self.nt)")
+//                            print("\(self.nt.cameras[0])")
+                            
                             var tmp = ""
                             cameraTemplate = ""
                             for camera in nt.cameras {
@@ -553,7 +555,7 @@ struct ViewNotificationManager: View, Hashable, Equatable {
             ScrollView(.horizontal){
                 Text(templateString)
                     .font(.title2)
-                    .frame(width: .infinity, height: 50)
+                    .frame(maxWidth: .infinity, maxHeight: 50)
             }
             
             Button {

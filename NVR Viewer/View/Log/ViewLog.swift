@@ -44,7 +44,7 @@ struct ViewLog: View {
                         Divider().frame(width: 1)
                         Text(row.fn)
                             .font(.caption)
-                            .frame( width: .infinity, alignment: .topLeading)
+                            .frame( maxWidth: .infinity, alignment: .topLeading) //changed from width
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .topLeading)
                     

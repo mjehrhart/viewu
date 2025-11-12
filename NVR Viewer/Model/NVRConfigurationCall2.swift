@@ -16,6 +16,8 @@ final class NVRConfigurationSuper2: ObservableObject { // Codable,
     init(){
         
         item = NVRConfigurationCall2(
+            version : "",
+            record: RecordSettings2(detections: Detections2(retain: RetainClips2(days: 10, mode: "")), alerts: Alerts2(retain: RetainClips2(days: 0, mode: ""))),
             cameras: ["" : Cameras2(
                                    audio: Audio2(enabled: false, enabled_in_config: false, listen: [], max_not_heard: 0, min_volume: 0, num_threads: 1 ),
                                    best_image_timeout: 0,
@@ -67,11 +69,31 @@ final class NVRConfigurationSuper2: ObservableObject { // Codable,
 }
 
 struct NVRConfigurationCall2: Codable, Hashable  {
+    let version: String
+    let record: RecordSettings2
     let cameras: [String: Cameras2]
     let mqtt : MQTT2
     let go2rtc : Go2RTC2                //?
+    
 }
 
+struct RecordSettings2: Codable, Hashable {
+    let detections: Detections2
+    let alerts: Alerts2
+}
+
+struct Detections2: Codable, Hashable {
+    let retain: RetainClips2
+}
+
+struct Alerts2: Codable, Hashable {
+    let retain: RetainClips2
+}
+
+struct RetainClips2: Codable, Hashable {
+    let days: Int
+    let mode: String
+}
  
 struct Go2RTC2: Codable, Hashable {
     let streams: [String: [String]]?    //?

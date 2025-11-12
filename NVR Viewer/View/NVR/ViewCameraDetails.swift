@@ -78,7 +78,7 @@ struct ViewCameraDetails: View {
                             //ForEach(cameras.audio.listen, id: \.self) {item in
                             ScrollView(.horizontal){
                                 Text("\(cameras.audio.listen)")
-                                    .frame(width: .infinity, alignment: .leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading) //changed from width
                                     .foregroundStyle(.blue)
                             }
                             //}
@@ -398,7 +398,7 @@ struct ViewCameraDetails: View {
                             ForEach(item.roles, id: \.self) {role in
                                 ScrollView(.horizontal){
                                     Text("\(role)")
-                                        .frame(width: .infinity, alignment: .leading)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                         .foregroundStyle(.gray)
                                         .textSelection(.enabled)
                                 }

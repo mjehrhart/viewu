@@ -29,7 +29,7 @@ struct ViewOnBoarding: View {
     var body: some View {
         
       TabView {
-          ForEach(0..<instructions.count) { index in
+          ForEach(0..<instructions.count, id: \.self) { index in
               ViewInstructions(instruction: instructions[index])
         }
       }

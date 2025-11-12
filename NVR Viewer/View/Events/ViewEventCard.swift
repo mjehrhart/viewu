@@ -43,16 +43,11 @@ struct ViewEventCard: View {
             VStack{
                 
                 HStack{
-                    //VStack(alignment: .leading, spacing: 4) {
                     VStack(alignment: .leading, spacing: 2) {
                  
                         //Time
                         NavigationLink(convertTime(time: containers[index].frameTime!), value: containers[index])
-                            //.foregroundColor(.primary)
-                            //.font(.title3)
                             .font(.system(size: fontSizeDate))
-                            //.fontWeight(.thin)
-                            //.foregroundColor(.gray)
                             .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
                             .frame(width: setWidth(), alignment: .topLeading)
                             .padding(.top,5)
@@ -60,33 +55,30 @@ struct ViewEventCard: View {
                         //Date
                         Text(convertDate(time: containers[index].frameTime!))
                             .foregroundColor(.gray)
-                            //.font(.caption)
                             .font(.system(size: fontSizeLabel))
-                            .fontWeight(.thin)
+                            .fontWeight(.light)
                         
                         //Label
                         Text("\(containers[index].label!)")
-                            //.foregroundColor(.secondary)
-                            //.font(.caption)
                             .font(.system(size: fontSizeLabel))
-                            .fontWeight(.thin)
+                            .fontWeight(.light)
                             .foregroundColor(.gray)
-                        
-                        //Text("\(containers[index].score ?? 0)")
-//                        Text("\()")
-//                        Text("\()")
+ 
                         if(containers[index].sublabel! != ""){
                             Text("\(containers[index].sublabel!)")
-                                .foregroundColor(.secondary)
-                                .font(.caption)
+                                .font(.system(size: fontSizeLabel))
+                                .fontWeight(.thin)
+                                .foregroundColor(.gray)
                         }
                         
                         if developerModeIsOn {
                             Text("\(containers[index].type!)")
-                                .foregroundColor(.secondary)
-                                .font(.caption)
+                                .font(.system(size: fontSizeLabel))
+                                .fontWeight(.thin)
+                                .foregroundColor(.gray)
                         }
                         
+                        //Hide this view for now - i dont think people need to see this information
                         //EnteredZones(zones: containers[index].enteredZones!)
                          
                         Spacer()
@@ -138,21 +130,19 @@ struct ViewEventCard: View {
                                     Text("Frigate+")
                                         .padding(1)
                                 }
-                                .buttonStyle(.borderedProminent)
-//                                .tint(.gray).opacity(0.2)
-//                                .foregroundColor(.white).opacity(1.0)
-                                .font(.footnote)
-                                .foregroundColor(.black)
-                                .background(.gray).opacity(0.4)
-                                .cornerRadius(4)
-                                .padding(.bottom, 5)
+                                .font(.system(size: fontSizeLabel))
+                                .fontWeight(.bold)
+                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                .buttonStyle(.bordered)
+                                .cornerRadius(5) 
                             }
                         }
                         
                         if developerModeIsOn {
                             Text(containers[index].transportType!)
-                                .foregroundColor(.secondary)
-                                .font(.caption)
+                                .font(.system(size: fontSizeLabel))
+                                .fontWeight(.thin)
+                                .foregroundColor(.gray)
                                 .frame(width: setWidth(), alignment: .bottomLeading)
                         }
                          
@@ -166,8 +156,9 @@ struct ViewEventCard: View {
                 VStack{
                     if developerModeIsOn {
                         Text(containers[index].snapshot!)
-                            .foregroundColor(.secondary)
-                            .font(.caption)
+                            .font(.system(size: fontSizeLabel))
+                            //.fontWeight(.thin)
+                            .foregroundColor(.gray)
                             .textSelection(.enabled)
                     }
                 }

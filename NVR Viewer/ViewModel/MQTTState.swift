@@ -28,10 +28,10 @@ final class MQTTAppState: ObservableObject {
     func setReceivedMessage(text: String) {
          
          
-        print("**********************:: setReceivedMessage")
-        print(text)
-        print(text.count)
-        print("___________________________________________")
+//        print("**********************:: setReceivedMessage")
+//        print(text)
+//        print(text.count)
+//        print("___________________________________________")
         
         if text.count == 163 {
             //do nothing as this is a message response back to the viewu server
@@ -88,7 +88,7 @@ final class MQTTAppState: ObservableObject {
                 //let res = try JSONDecoder().decode(TopicFrigateEventHeader.self, from: data!)
                 
                 /******************************/
-                var res = try JSONDecoder().decode(TopicFrigateEventHeaderMQTT.self, from: data!)
+                let res = try JSONDecoder().decode(TopicFrigateEventHeaderMQTT.self, from: data!)
                   
                 var enteredZones = ""
                 for zone in res.after.entered_zones {
@@ -100,11 +100,11 @@ final class MQTTAppState: ObservableObject {
                     currentZones += zone! + "|"
                 }
                 
-                var before_topic = TopicFrigateEvent(id: res.before.id, camera: res.before.camera, frame_time: res.before.frame_time, label: res.before.label, sub_label: res.before.sub_label, top_score: res.before.top_score, false_positive: res.before.false_positive, start_time: res.before.start_time, end_time: res.before.end_time, score: res.before.score, box: res.before.box, area: res.before.area, ratio: res.before.ratio, region: res.before.region, stationary: res.before.stationary, motionless_count: res.before.motionless_count, position_changes: res.before.position_changes, current_zones: "", entered_zones: "", has_clip: res.before.has_clip)
+                let before_topic = TopicFrigateEvent(id: res.before.id, camera: res.before.camera, frame_time: res.before.frame_time, label: res.before.label, sub_label: res.before.sub_label, top_score: res.before.top_score, false_positive: res.before.false_positive, start_time: res.before.start_time, end_time: res.before.end_time, score: res.before.score, box: res.before.box, area: res.before.area, ratio: res.before.ratio, region: res.before.region, stationary: res.before.stationary, motionless_count: res.before.motionless_count, position_changes: res.before.position_changes, current_zones: "", entered_zones: "", has_clip: res.before.has_clip)
                 
-                var after_topic = TopicFrigateEvent(id: res.after.id, camera: res.after.camera, frame_time: res.after.frame_time, label: res.after.label, sub_label: res.after.sub_label, top_score: res.after.top_score, false_positive: res.after.false_positive, start_time: res.after.start_time, end_time: res.after.end_time, score: res.after.score, box: res.after.box, area: res.after.area, ratio: res.after.ratio, region: res.after.region, stationary: res.after.stationary, motionless_count: res.after.motionless_count, position_changes: res.after.position_changes, current_zones: currentZones, entered_zones: enteredZones, has_clip: res.after.has_clip)
+                let after_topic = TopicFrigateEvent(id: res.after.id, camera: res.after.camera, frame_time: res.after.frame_time, label: res.after.label, sub_label: res.after.sub_label, top_score: res.after.top_score, false_positive: res.after.false_positive, start_time: res.after.start_time, end_time: res.after.end_time, score: res.after.score, box: res.after.box, area: res.after.area, ratio: res.after.ratio, region: res.after.region, stationary: res.after.stationary, motionless_count: res.after.motionless_count, position_changes: res.after.position_changes, current_zones: currentZones, entered_zones: enteredZones, has_clip: res.after.has_clip)
                 
-                var message = TopicFrigateEventHeader(
+                let message = TopicFrigateEventHeader(
                     before: before_topic,
                     after: after_topic,
                     type: res.type

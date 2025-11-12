@@ -52,6 +52,7 @@ struct ViewSettings: View {
     
     @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
+    @AppStorage("frigateVersion") private var frigateVersion: String = "0.0-0"
     
     @StateObject var nts = NotificationTemplateString.shared()
     
@@ -132,9 +133,7 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         TextField("0.0.0.0", text: $mqttIPAddress)
                             .autocorrectionDisabled()
-                            .frame(alignment: .leading)
-                            
-                        //.foregroundStyle(.tertiary)
+                            .frame(alignment: .leading) 
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
 
@@ -144,7 +143,6 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         TextField("1883", text: $mqttPortAddress)
                             .frame(alignment: .leading)
-                            //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
 
@@ -154,7 +152,6 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         Text("viewu/pairing")
                             .frame(alignment: .leading)
-                            //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
@@ -165,7 +162,6 @@ struct ViewSettings: View {
                                 .padding(.leading, 40)
                             Text("frigate/events")
                                 .frame(alignment: .leading)
-                            //.foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                     }
@@ -180,7 +176,6 @@ struct ViewSettings: View {
                                     .padding(.leading, 40)
                                 TextField("", text: $mqttUser)
                                     .frame(alignment: .leading)
-                                //.foregroundStyle(.tertiary)
                                     .disabled(mqttIsAnonUser)
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading)
@@ -193,7 +188,6 @@ struct ViewSettings: View {
                                 SecureField("", text: $mqttPassword)
                                     .frame(alignment: .leading)
                                     .autocorrectionDisabled()
-                                //.foregroundStyle(.tertiary)
                                     .disabled(mqttIsAnonUser)
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading) 
@@ -217,10 +211,10 @@ struct ViewSettings: View {
                         mqttManager.initializeMQTT()
                         mqttManager.connect()
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(Color(white: 0.78)) //accentColor
-                    //.scaleEffect(scale)
-                    //.animation(.linear(duration: 1), value: scale)
+                    .buttonStyle(.bordered)
+                    .tint(Color(white: 0.58))
+                    .scaleEffect(scale)
+                    .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
                      
                 } header: {
@@ -238,7 +232,6 @@ struct ViewSettings: View {
                             TextField("0.0.0.0", text: $nvrIPAddress)
                                 .autocorrectionDisabled()
                                 .frame(alignment: .leading)
-                            //.foregroundStyle(.tertiary)
                         }
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
@@ -248,7 +241,6 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         TextField("5000", text: $nvrPortAddress)
                             .frame(alignment: .leading)
-                        //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     Toggle("Https", isOn: $nvrIsHttps)
@@ -270,10 +262,9 @@ struct ViewSettings: View {
                             Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(error)")
                         }
                     }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(.borderedProminent)
-                    .tint(Color(white: 0.7))
-                    //.scaleEffect(scale)
+                    .buttonStyle(.bordered)
+                    .tint(Color(white: 0.58))
+                    .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
                     
@@ -302,9 +293,10 @@ struct ViewSettings: View {
                                 await notificationManager.request()
                             }
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color(white: 0.78))
-                        //.buttonStyle(.bordered)
+                        .buttonStyle(.bordered)
+                        .tint(Color(white: 0.58))
+                        .scaleEffect(scale)
+                        .animation(.linear(duration: 1), value: scale)
                         .disabled(notificationManager.hasPermission)
                         .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
                         .task {
@@ -328,9 +320,8 @@ struct ViewSettings: View {
                             let _ = EventStorage.shared.delete()
                         }
                     }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(.borderedProminent)
-                    .tint(Color(white: 0.78))
+                    .buttonStyle(.bordered)
+                    .tint(Color(white: 0.58))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
@@ -359,24 +350,13 @@ struct ViewSettings: View {
                         for i in 0..<1 {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
                                     withAnimation(.easeInOut) {
-                                        //testing only on 11/04/2025
-                                        
-                                        //fcm.replace(":", with: "")
-                                        //mqttManager.publish(topic: "viewu/pairing", with: fcm)
-                                        
-                                        //print("VIEWSETTINGS")
-                                        //let trimmedString = fcm.prefix(136)
-                                        
-                                        //mqttManager.publish(topic: "viewu/pairing", with: fcm)
                                         mqttManager.publish(topic: "viewu/pairing", with: fcm)
-                                        //print("354", fcm)
                                     }
                                 }
                             }
                     }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(.borderedProminent)
-                    .tint(Color(white: 0.78))
+                    .buttonStyle(.bordered)
+                    .tint(Color(white: 0.58))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
@@ -399,17 +379,10 @@ struct ViewSettings: View {
                             .padding(0)
                             .frame(height: 20)
                     }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(.borderedProminent)
-                    .tint(Color(white: 0.78))
+                    .buttonStyle(.bordered)
+                    .tint(Color(white: 0.58))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
-                    //.buttonStyle(.borderedProminent)
-                    //.font(.footnote)
-                    //.foregroundColor(.black)
-                    //.background(.gray).opacity(0.4)
-                    //.cornerRadius(4)
-                    //.frame(width: .infinity, alignment: .center)
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
                     
                 } header: {
@@ -419,14 +392,12 @@ struct ViewSettings: View {
                 }
                 
                 Section{
-                    //VStack {
                         HStack{
                             Text("App:")
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                 .padding(.leading, 40)
                             Text(appVersion!)
                                 .frame(alignment: .leading)
-                            //.foregroundStyle(.tertiary)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
@@ -445,12 +416,18 @@ struct ViewSettings: View {
                                 .padding(.leading, 40)
                             Text(viewuServerVersion)
                                 .frame(alignment: .leading)
-                            //.foregroundStyle(.tertiary)
                         }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading) 
-                    //}
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        HStack{
+                            Text("Frigate:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(frigateVersion)
+                                .frame(alignment: .leading)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
                 } header: {
-                    Text("Viewu Version")
+                    Text("Versions")
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
@@ -460,7 +437,6 @@ struct ViewSettings: View {
                         ScrollView(.horizontal){
                             Text(fcm)
                                 .frame(alignment: .leading)
-                            //.foregroundStyle(.tertiary)
                                 .textSelection(.enabled)
                         }
                         

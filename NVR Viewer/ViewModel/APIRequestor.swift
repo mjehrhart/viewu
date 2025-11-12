@@ -203,7 +203,7 @@ class APIRequester: NSObject {
                     //                    print(de.message)
                     //                    print(de.success)
                     if de.success! == false {
-                        var errorTemp = NSError(domain:"com.john.matthew", code: 101,  userInfo:nil)
+                        let errorTemp = NSError(domain:"com.john.matthew", code: 101,  userInfo:nil)
                         completion(nil, errorTemp)
                         return
                     }

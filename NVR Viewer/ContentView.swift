@@ -40,34 +40,31 @@ struct ContentView: View {
     
     @AppStorage("developerModeIsOn") var developerModeIsOn = true
     @AppStorage("notificationModeIsOn") var notificationModeIsOn = UserDefaults.standard.bool(forKey: "notificationModeIsOn")
-    
-    //@State private var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
-    //var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
-    
-    @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0" 
-     
+    @AppStorage("frigateAlertsRetain")  var frigateAlertsRetain: Int = 10
+    @AppStorage("frigateDetectionsRetain")  var frigateDetectionsRetain: Int = 10
+    @AppStorage("frigateVersion")  var frigateVersion: String = "0.0-0"
+    @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0"
     @AppStorage("isOnboarding") var isOnboarding: Bool = true
-    //@State var isOnboarding = true
     
     @Environment(\.scenePhase) var scenePhase
     
     @State private var path = NavigationPath()
     
     init() {
-        //UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
     }
-     
+    
     var body: some View{
         
         NavigationStack (path: $path) {
             VStack {
-                 
+                
                 ZStack {
                     GeometryReader { reader in
                         Color.secondary
-                                .frame(height: reader.safeAreaInsets.top, alignment: .top)
-                                .ignoresSafeArea()
-                        }
+                            .frame(height: reader.safeAreaInsets.top, alignment: .top)
+                            .ignoresSafeArea()
+                    }
                     
                     switch selection {
                     case 0:
@@ -78,7 +75,7 @@ struct ContentView: View {
                         } else {
                             ViewEventListHome()
                         }
-                         
+                        
                     case 1:
                         //ViewLive(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: false)
                         ViewEventDetail(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: true, showClip: false)
@@ -98,10 +95,8 @@ struct ContentView: View {
                 let urlString = url + "/api/config"
                 print(urlString)
                 cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
- 
-                    //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
                     
-//                    print("_1_______________________________________________________")
+                    Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
                     
                     guard let data = data else { return }
                     
@@ -110,36 +105,33 @@ struct ContentView: View {
                         //config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
                         config.item = try JSONDecoder().decode(NVRConfigurationCall2.self, from: data)
                         
-//                        print("_2_______________________________________________________")
-//                        print(config.item)
-//                        
-//                        print("3")
-//                        print(config.item.cameras["front"] as Any)
+                        //                        if let dataJson = jsonObject.data(using: .utf8) {
+                        //                            let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
+                        //                            ViewEventInformation( endPointOptionsArray: epsArray)
+                        //                        }
                         
-//                        if let dataJson = jsonObject.data(using: .utf8) {
-//                            let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
-//                            ViewEventInformation( endPointOptionsArray: epsArray)
-//                        }
-                        
-          
                         //Commented out for Testing on 11/08/2025
                         filter2.setCameras(items: config.item.cameras)
                         filter2.setObject(items: config.item.cameras)
                         filter2.setZones(items: config.item.cameras)
                         
+                        frigateVersion = config.item.version
+                        frigateAlertsRetain = config.item.record.alerts.retain.days
+                        frigateDetectionsRetain = config.item.record.detections.retain.days
+                        
                         // Delete non-retained snapshots
                         for (_, value) in config.item.cameras{
-         
+                            
                             let daysBack = value.snapshots.retain.default
                             let db:Int = Int(daysBack)
                             let _ = EventStorage.shared.delete(daysBack:db, cameraName: value.name)
                         }
-                         
+                        
                     }catch (let err){
                         print("Error Message goes here - 1001.b")
                         print(err)
                         Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001", type: "ERROR", text: "\(err)")
-                         
+                        
                         do {
                             if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
                                 
@@ -152,8 +144,8 @@ struct ContentView: View {
                             Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001", type: "ERROR", text: "\(err)")
                         }
                     }
-                } 
-                 
+                }
+                
                 //Load Events
                 cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "ctask" )
             }
@@ -161,8 +153,8 @@ struct ContentView: View {
                 do{
                     //try? Tips.showAllTipsForTesting()
                     try? Tips.configure([
-                        .displayFrequency(.immediate), 
-                        .datastoreLocation(.applicationDefault)
+                        .displayFrequency(.immediate),
+                            .datastoreLocation(.applicationDefault)
                     ])
                 } catch (let error){
                     Log.shared().print(page: "ContentView", fn: "task", type: "ERROR", text: "\(error)")
@@ -176,29 +168,29 @@ struct ContentView: View {
             }
             //DEBGUGGIG ALL BELOW
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                            print("======================================================================================================")
-                            print("opened! 1")
-                            print("======================================================================================================") 
+                print("======================================================================================================")
+                print("opened! 1")
+                print("======================================================================================================")
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                            print("======================================================================================================")
-                            print("opened! 2")
-                            print("======================================================================================================")
+                print("======================================================================================================")
+                print("opened! 2")
+                print("======================================================================================================")
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                            print("======================================================================================================")
-                            print("opened! 3")
-                            print("======================================================================================================")
+                print("======================================================================================================")
+                print("opened! 3")
+                print("======================================================================================================")
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-                            print("======================================================================================================")
-                            print("opened! 4") // lll
-                            print("======================================================================================================")
+                print("======================================================================================================")
+                print("opened! 4") // lll
+                print("======================================================================================================")
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)) { _ in
-                            print("======================================================================================================")
-                            print("opened! 5") // ll
-                            print("======================================================================================================")
+                print("======================================================================================================")
+                print("opened! 5") // ll
+                print("======================================================================================================")
             }
             .onChange(of: scenePhase) { _, newScenePhase in
                 print(".onChange(of: scenePhase")
@@ -214,9 +206,9 @@ struct ContentView: View {
                 }
             }
             .onAppear{
-                  Task{
+                Task{
                     await sheduleBackgroundTask()
-                  }
+                }
                 
                 //check accesibilty to nvr
                 nvrManager.checkConnectionStatus(){data,error in
@@ -236,7 +228,7 @@ struct ContentView: View {
                 ViewEventListHome()
             }
             .navigationDestination(isPresented: $showNVR){
-                ViewNVRDetails() 
+                ViewNVRDetails()
             }
             .navigationDestination(isPresented: $showSettings){
                 ViewSettings(title: "Settings")
@@ -261,12 +253,12 @@ struct ContentView: View {
                 ViewAPN(title: "Notification Manager")
             }
             .navigationViewStyle(StackNavigationViewStyle())
-            .navigationDestination(for: Cameras.self){ config in 
-                 
+            .navigationDestination(for: Cameras.self){ config in
+                
                 ViewCameraDetails(text: "\(config.name.uppercased()) Camera Details", cameras: config)
             }
             .navigationDestination(for: Cameras2.self){ config in
-                 
+                
                 ViewCameraDetails2(text: "\(config.name.uppercased()) Camera Details", cameras: config)
             }
             .navigationDestination(for: EndpointOptions.self){ eps in
@@ -274,12 +266,12 @@ struct ContentView: View {
                 ViewEventDetail(text: convertDateTime(time: eps.frameTime!), container: eps, showButton: false, showClip: true)
             }
             .navigationDestination(for: String.self){ jsonObject in
-              
+                
                 if let dataJson = jsonObject.data(using: .utf8) {
                     let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
                     ViewEventInformation( endPointOptionsArray: epsArray)
                 }
-            } 
+            }
             .navigationDestination(for: Int.self){ page in
                 ViewTest(title: "cow")
             }
@@ -296,10 +288,10 @@ struct ContentView: View {
                         HStack{
                             Label("Filter", systemImage: "calendar.day.timeline.leading")
                                 .labelStyle(VerticalLabelStyle(show: false))
-                                //.foregroundStyle(.orange)
+                            //.foregroundStyle(.orange)
                                 .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                //.foregroundStyle(showSettings ? .blue : .blue)
-                                //.font(.system(size: 20))
+                            //.foregroundStyle(showSettings ? .blue : .blue)
+                            //.font(.system(size: 20))
                                 .fontWeight(.regular)
                                 .foregroundColor(.gray)
                                 .onTapGesture(perform: {
@@ -310,24 +302,24 @@ struct ContentView: View {
                             
                             Label("Cameras", systemImage: "web.camera")
                                 .labelStyle(VerticalLabelStyle(show: false))
-                                //.foregroundStyle(.orange)
+                            //.foregroundStyle(.orange)
                                 .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                //.foregroundStyle(showCamera ? .blue : .gray)
-                                //.font(.system(size: 20))
+                            //.foregroundStyle(showCamera ? .blue : .gray)
+                            //.font(.system(size: 20))
                                 .fontWeight(.regular)
                                 .foregroundColor(.gray)
                                 .onTapGesture(perform: {
                                     showCamera.toggle()
                                 })
-                             
+                            
                             if notificationModeIsOn {
                                 Spacer()
                                 Label("Notifications", systemImage: "app.badge")
                                     .labelStyle(VerticalLabelStyle(show: false))
-                                    //.foregroundStyle(.orange)
+                                //.foregroundStyle(.orange)
                                     .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                    //.foregroundStyle(showNotificationManager ? .blue : .gray)
-                                    //.font(.system(size: 20))
+                                //.foregroundStyle(showNotificationManager ? .blue : .gray)
+                                //.font(.system(size: 20))
                                     .fontWeight(.regular)
                                     .foregroundColor(.gray)
                                     .onTapGesture(perform: {
@@ -335,17 +327,17 @@ struct ContentView: View {
                                     })
                             }
                             
-                             
                             
-                             
+                            
+                            
                             
                             if developerModeIsOn {
                                 Spacer()
                                 Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
                                     .labelStyle(VerticalLabelStyle(show: false))
-                                    //.foregroundStyle(.orange)
+                                //.foregroundStyle(.orange)
                                     .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                    //.foregroundStyle(showNVR ? .blue : .gray)
+                                //.foregroundStyle(showNVR ? .blue : .gray)
                                     .fontWeight(.regular)
                                     .foregroundColor(.gray)
                                     .onTapGesture(perform: {
@@ -361,24 +353,24 @@ struct ContentView: View {
                                 Spacer()
                                 Label("Log", systemImage: "note.text")
                                     .labelStyle(VerticalLabelStyle(show: false))
-                                    //.foregroundStyle(.orange)
+                                //.foregroundStyle(.orange)
                                     .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                    //.foregroundStyle(showSettings ? .blue : .gray)
+                                //.foregroundStyle(showSettings ? .blue : .gray)
                                     .fontWeight(.regular)
                                     .foregroundColor(.gray)
                                     .onTapGesture(perform: {
                                         showLog.toggle()
                                     })
                             }
-                             
+                            
                             Spacer()
                             
                             Label("Settings", systemImage: "gearshape")
                                 .labelStyle(VerticalLabelStyle(show: false))
-                                //.foregroundStyle(.orange)
+                            //.foregroundStyle(.orange)
                                 .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                //.foregroundStyle(showSettings ? .blue : .gray)
-                                //.font(.system(size: 20))
+                            //.foregroundStyle(showSettings ? .blue : .gray)
+                            //.font(.system(size: 20))
                                 .fontWeight(.regular)
                                 .foregroundColor(.gray)
                                 .onTapGesture(perform: {
@@ -392,7 +384,7 @@ struct ContentView: View {
     }
     
     func sheduleBackgroundTask() async {
-       
+        
         let request = BGAppRefreshTaskRequest(identifier: "viewu_refresh")
         request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30 * 60, to: Date())
         do {
@@ -434,11 +426,11 @@ struct VerticalLabelStyle: LabelStyle {
     }
     
     func makeBody(configuration: Configuration) -> some View {
-         
-            VStack {
-                configuration.icon.font(.system(size: 18))
-                configuration.title.font(.system(size: 10))
-            }
+        
+        VStack {
+            configuration.icon.font(.system(size: 18))
+            configuration.title.font(.system(size: 10))
+        }
     }
 }
 

@@ -235,7 +235,7 @@ struct ViewCameraDetails2: View {
                             ForEach(item.roles, id: \.self) {role in
                                 ScrollView(.horizontal){
                                     Text("\(role)")
-                                        .frame(width: .infinity, alignment: .leading)
+                                        .frame(maxWidth: .infinity, alignment: .leading) //changed from width
                                         .foregroundStyle(.gray)
                                         .textSelection(.enabled)
                                 }

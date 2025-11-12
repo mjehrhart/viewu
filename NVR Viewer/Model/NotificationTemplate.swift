@@ -41,12 +41,13 @@ class NotificationTemplateString: ObservableObject {
     func pushTemplate(id: UUID, template: String) {
          
         flagTemplate = false
-        var found = templates.filter{$0.id == id}
+        let found = templates.filter{$0.id == id}
         if found.count == 0 {
             let item = Item(id: id, template: template.trimmingCharacters(in: .whitespaces))
             templates.append(item)
         } else {
-            if let index:Int = self.templates.index(where: {$0.id == id}) {
+            //if let index:Int = self.templates.index(where: {$0.id == id}) {//changed form index
+            if let index:Int = self.templates.firstIndex(where: {$0.id == id}) {//changed form index
                 self.templates.remove(at: index)
                 
                 let item = Item(id: id, template: template)
@@ -105,7 +106,7 @@ class NotificationTemplate: ObservableObject{
         return _new
     }
  
-    func setCameras(items: [String : Cameras]){
+    func setCameras(items: [String : Cameras2]){
         
         cameras.removeAll()
         
@@ -115,16 +116,16 @@ class NotificationTemplate: ObservableObject{
         }
     }
     
-    func setLabels(items: [String : Cameras]){
+    func setLabels(items: [String : Cameras2]){
         
         labels.removeAll()
         
-        for (name, value) in items{
+        for (_, value) in items{
             let tmp = value.objects.filters
             
             for obj in tmp{
                  
-                var found = labels.filter{$0.name == obj.key}
+                let found = labels.filter{$0.name == obj.key}
                 
                 if found.count == 0 {
                     let itemState = ItemState(id: UUID(), name: obj.key, state: false)
@@ -134,12 +135,12 @@ class NotificationTemplate: ObservableObject{
         } 
     }
     
-    func setZones(items: [String : Cameras]){
+    func setZones(items: [String : Cameras2]){
         
         currentZones.removeAll()
         enteredZones.removeAll()
         
-        for (name, value) in items{
+        for (_, value) in items{
             for zone in value.zones {
                  
                 let itemState = ItemState(id: UUID(), name: zone.key, state: false)
