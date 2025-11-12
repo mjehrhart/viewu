@@ -136,55 +136,66 @@ import UserNotifications
 
 extension MQTTManager: CocoaMQTTDelegate {
       
-    func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
-        currentAppState.setAppConnectionState(state: .connectedSubscribed)
+    nonisolated func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
+        Task { @MainActor in
+            currentAppState.setAppConnectionState(state: .connectedSubscribed)
+        }
     }
     
-    func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
-        currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
-        //-currentAppState.clearData()
+    nonisolated func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
+        Task { @MainActor in
+            currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
+            //-currentAppState.clearData()
+        }
     }
 
-    func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        
-        //print("inside mqtt")
-        
-        if ack == .accept {
-            //print("ack == .accept")
-            currentAppState.setAppConnectionState(state: .connected)
-            //TODO clean this up 
-            mqttClient?.subscribe("frigate/events")
-            mqttClient?.subscribe("viewu/pairing")
+    nonisolated func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        Task { @MainActor in
+            //print("inside mqtt")
+            
+            if ack == .accept {
+                //print("ack == .accept")
+                currentAppState.setAppConnectionState(state: .connected)
+                //TODO clean this up
+                mqttClient?.subscribe("frigate/events")
+                mqttClient?.subscribe("viewu/pairing")
+            }
         }
     }
      
     //1 [4,
-    func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
-        let _ = message.string.description
-        print(101, message)
-//        print(101.1, message.string.description)
-//        let trimmedString = message.string.description.prefix(136)
-//        print(101.2, trimmedString)
-        
-//        print(101.0, message.string as Any)
-//        print(101.1, message.string.description)
-//        print(101.2, message.payload)
-        //sendNotificationMessage()
+    nonisolated func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
+        Task { @MainActor in
+            let _ = message.string.description
+            print(101, message)
+            //        print(101.1, message.string.description)
+            //        let trimmedString = message.string.description.prefix(136)
+            //        print(101.2, trimmedString)
+            
+            //        print(101.0, message.string as Any)
+            //        print(101.1, message.string.description)
+            //        print(101.2, message.payload)
+            //sendNotificationMessage()
+        }
     }
 
-    func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+    nonisolated func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+        Task { @MainActor in
+        }
     }
     //2
-    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-        currentAppState.setReceivedMessage(text: message.string.description)
-        
-//        print(102, message)
-//        print(102.0, message.string as Any)
-//        print(102.1, message.string.description)
-//        print(102.2, message.payload)
-        
-        //TODO entry for eps which is currently in MQTTState
-        //sendNotificationMessage()
+    nonisolated func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+        Task { @MainActor in
+            currentAppState.setReceivedMessage(text: message.string.description)
+            
+            //        print(102, message)
+            //        print(102.0, message.string as Any)
+            //        print(102.1, message.string.description)
+            //        print(102.2, message.payload)
+            
+            //TODO entry for eps which is currently in MQTTState
+            //sendNotificationMessage()
+        }
     }
 
     func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
@@ -195,15 +206,21 @@ extension MQTTManager: CocoaMQTTDelegate {
         //-currentAppState.clearData()
     }
     //3
-    func mqttDidPing(_ mqtt: CocoaMQTT) {
+    nonisolated func mqttDidPing(_ mqtt: CocoaMQTT) {
+        Task { @MainActor in
+        }
     }
 
-    func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
+    nonisolated func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
+        Task { @MainActor in
+        }
     }
 
-    func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) { 
-        currentAppState.setAppConnectionState(state: .disconnected)
-    } 
+    nonisolated func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
+        Task { @MainActor in
+            currentAppState.setAppConnectionState(state: .disconnected)
+        }
+    }
 }
 
  

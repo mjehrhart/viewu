@@ -148,7 +148,7 @@ final class MQTTAppState: ObservableObject {
                 if eps.sublabel == nil {
                     eps.sublabel = ""
                 }
-                let id = EventStorage.shared.insertIfNone(
+                let id: () = EventStorage.shared.insertIfNone(
                       id: eps.id!,
                       frameTime: eps.frameTime!,
                       score: eps.score!,
@@ -169,7 +169,7 @@ final class MQTTAppState: ObservableObject {
                 
                 print("mqttState", id)
                 //TODO: does this need to be here
-                let epsA = EventStorage.shared.readAll()
+                ///-//-//let epsA = EventStorage.shared.readAll() //11/12/25
                 
                 //--------------------------------------------------------------------
                 

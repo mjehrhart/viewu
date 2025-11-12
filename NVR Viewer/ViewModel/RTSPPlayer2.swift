@@ -42,19 +42,20 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
             
             //https://wiki.videolan.org/VLC_command-line_help
             //        media.addOption("--vv")
-            //        media.addOption("--codec=avcodec")
-            //        media.addOption("--avcodec-hw=any")
-            //        media.addOption("--avcodec-fast=true")
+                    media.addOption("--codec=avcodec")
+                    media.addOption("--avcodec-hw=any")
+                    media.addOption("--avcodec-fast=true")
             //        media.addOption("--avcodec-threads=0")
             //        media.addOption("--network-caching=300")
             //        media.addOption("--rtsp-frame-buffer-size=200")
-            //        media.addOption("--vout=ios")
+                    media.addOption("--vout=ios")
             //        media.addOption("--glconv=glconv_cvpx")
             media.addOption("--rtsp-caching=100")
             //        media.addOption("--tcp-caching=150")
             //        media.addOption("--realrtsp-caching=150")
             //        media.addOption("--mms-timeout=6000")
             //        media.addOption("--h264-fps=15.0")
+                    media.addOption(":vcodec=h264")
             
             
             //        media.addOptions(
@@ -77,14 +78,16 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
             //        )
             
             mediaPlayer.media = media
-            mediaPlayer.delegate = self
+            mediaPlayer.delegate = self 
             mediaPlayer.drawable = self
-            //mediaPlayer.audio.isMuted = true
+            mediaPlayer.audio?.isMuted = true
             mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
             
             //Logging
-            //        mediaPlayer.libraryInstance.debugLoggingLevel = 1
-            //        mediaPlayer.libraryInstance.debugLogging = true
+            let logger = VLCConsoleLogger()
+            logger.level = .info
+            //mediaPlayer.libraryInstance.loggers = [logger]
+            
             //mediaPlayer.play()
         }
     }
@@ -108,7 +111,7 @@ struct StreamRTSP2: View {
         return ZStack{
              
             LinearGradient(
-                colors: [.clear, .clear],
+                colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -120,35 +123,29 @@ struct StreamRTSP2: View {
                 .modifier( CardBackground() )
                 .frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-5)
                 .onAppear(){
-                    print("onAppear RTSPPlyer2")
-                    //mediaPlayer.audio.isMuted = flagMute
+                    mediaPlayer.audio?.isMuted = flagMute
                     mediaPlayer.play()
                 }
-                .onDisappear(){
-                    print("onDisappear")
+                .onDisappear(){ 
                     mediaPlayer.stop()
-                } 
-                .onTapGesture{
-                    print("tap")
-                    flagFull.toggle()
                 }
-                .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+                .overlay(CameraOverlay(name: cameraName, urlString: urlString, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
              
         }
-        .onTapGesture{
-            print("tap2")
-        }
         .padding(0)
-        .navigationDestination(isPresented: $flagFull){ 
-            ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
-            //ViewTest(title: "11/09/2025")
-        }
+//        .navigationDestination(isPresented: $flagFull){ 
+//            ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
+//        }
     }
     
     struct CameraOverlay: View {
         let name: String
+        let urlString: String
+        
         @State var flagMute = true
         @State var mediaPlayer : VLCMediaPlayer
+        
+        @State var flagFull = false
         
         var body: some View {
              
@@ -158,6 +155,13 @@ struct StreamRTSP2: View {
                 .padding(.bottom, 5)
                 .foregroundColor(.white)
                 .fontWeight(.bold)
+                .onTapGesture {
+                    flagFull.toggle()
+                }
+                //Moved to here because was having issues otherwise
+                .navigationDestination(isPresented: $flagFull){
+                    ViewCameraFullScreen(urlString: urlString, cameraName: name)
+                }
         }
     }
      

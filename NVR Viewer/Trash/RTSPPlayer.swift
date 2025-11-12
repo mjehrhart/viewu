@@ -58,17 +58,16 @@ class PlayerUIView: UIView, VLCMediaPlayerDelegate, ObservableObject{
         //
         mediaPlayer.media = media
         mediaPlayer.delegate = self
-        mediaPlayer.drawable = self
-        //mediaPlayer.drawable = self.mediaPlayer
-        //mediaPlayer.audio.isMuted = true
-        
-        mediaPlayer.libraryInstance.debugLoggingLevel = 0
-        mediaPlayer.libraryInstance.debugLogging = false
+        //mediaPlayer.drawable = self
+        mediaPlayer.drawable = self.mediaPlayer
+        mediaPlayer.audio?.isMuted = true
+         
+        let logger = VLCConsoleLogger()
+        logger.level = .debug
+        mediaPlayer.libraryInstance.loggers = [logger]
+       
         mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
         mediaPlayer.play()
-        
-        //1224x662
-        
     }
     
     func checkConnection() -> Bool{

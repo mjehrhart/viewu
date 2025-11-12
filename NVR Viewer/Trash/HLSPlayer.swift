@@ -51,7 +51,7 @@ class PlayerUIViewHLS: UIView, VLCMediaPlayerDelegate, ObservableObject{
         mediaPlayer.media = media
         mediaPlayer.delegate = self
         mediaPlayer.drawable = self
-        //mediaPlayer.audio.isMuted = true
+        mediaPlayer.audio?.isMuted = true
         
         mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
         mediaPlayer.play()
