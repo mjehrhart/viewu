@@ -40,22 +40,24 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
             let url = URL(string: urlString)!
             let media = VLCMedia(url: url)
             
-            //https://wiki.videolan.org/VLC_command-line_help
-            //        media.addOption("--vv")
+            //https://wiki.videolan.org/VLC_command-line_help 
                     media.addOption("--codec=avcodec")
                     media.addOption("--avcodec-hw=any")
                     media.addOption("--avcodec-fast=true")
+                    media.addOption("--glconv-glconv_cvpx")
             //        media.addOption("--avcodec-threads=0")
-            //        media.addOption("--network-caching=300")
+                    media.addOption("--network-caching=100")
+                    media.addOption(":rtsp-caching=150")
             //        media.addOption("--rtsp-frame-buffer-size=200")
                     media.addOption("--vout=ios")
             //        media.addOption("--glconv=glconv_cvpx")
-            media.addOption("--rtsp-caching=100")
+            //        media.addOption("--rtsp-caching=100")
+            //        media.addOption("--rtsp-tcp")
             //        media.addOption("--tcp-caching=150")
             //        media.addOption("--realrtsp-caching=150")
             //        media.addOption("--mms-timeout=6000")
             //        media.addOption("--h264-fps=15.0")
-                    media.addOption(":vcodec=h264")
+            //        media.addOption("--vcodec=h264")
             
             
             //        media.addOptions(
@@ -87,7 +89,6 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
             let logger = VLCConsoleLogger()
             logger.level = .info
             //mediaPlayer.libraryInstance.loggers = [logger]
-            
             //mediaPlayer.play()
         }
     }
