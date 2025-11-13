@@ -73,13 +73,13 @@ final class NVRConfig: ObservableObject  {
         cNVR.checkConnectionStatus(urlString: urlString){ (data, error) in
              
             if error != nil {
-                print("Error: \(String(describing: error))")
+                //print("Error: \(String(describing: error))")
                 self.connectionState = .disconnected
                 Log.shared().print(page: "NVRConfig", fn: "checkConnectionStatus", type: "ERROR", text: " \(String(describing: error))")
                 
                 completion(nil, error)
             } else {
-                print("Received data: \(String(describing: data))")
+                //print("Received data: \(String(describing: data))")
                 self.connectionState = .connected
                 completion(data, nil)
             } 

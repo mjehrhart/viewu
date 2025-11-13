@@ -10,12 +10,7 @@ import SwiftUI
 import SwiftData
 
 struct ViewLiveEvent: View {
-     
-    //STOPPED HERE NEED TO GET PAST THIS HURDLE
-//    @Environment(\.managedObjectContext) var moc
-//    @FetchRequest(sortDescriptors: []) var events: FetchedResults<Event>
-    
-    
+ 
     var epsA: [EndpointOptions]
     var x: [EndpointOptions] = []
     
@@ -43,8 +38,6 @@ struct ViewLiveEvent: View {
         Spacer()
         .padding([.top, .bottom], 3)
         .background(Gradient(colors: [.blue]).opacity(0.3))
-        //.fixedSize(horizontal: false, vertical: true)
-        //.frame(width:300, height:50, alignment: .leading)
         .hidden()
         
     }
@@ -75,38 +68,6 @@ struct ViewLiveEvent: View {
 //        }
 //        sharedEndpointOptions.dics.removeValue(forKey: id)
     }
-    
-    private func convertDate(time: Double) -> String{
-        let date = Date(timeIntervalSince1970: time)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM YYYY dd" // hh:mm a"
-        dateFormatter.timeStyle = DateFormatter.Style.none
-        dateFormatter.dateStyle = DateFormatter.Style.medium
-        dateFormatter.timeZone = .current
-        let localDate = dateFormatter.string(from: date)
-        return localDate
-    }
-    
-    private func convertTime(time: Double) -> String{
-        let date = Date(timeIntervalSince1970: time)
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = DateFormatter.Style.short
-        dateFormatter.dateStyle = DateFormatter.Style.none
-        dateFormatter.timeZone = .current
-        let localDate = dateFormatter.string(from: date)
-        return localDate
-    }
-    
-    private func convertDateTime(time: Double) -> String{
-        let date = Date(timeIntervalSince1970: time)
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = DateFormatter.Style.short
-        dateFormatter.dateStyle = DateFormatter.Style.medium
-        dateFormatter.timeZone = .current
-        var localDate = dateFormatter.string(from: date)
-        localDate.replace("at", with: "")
-        return localDate
-    }
 }
 
 extension Array {
@@ -122,82 +83,6 @@ extension Array {
 //#Preview {
 //    ViewLiveEvent()
 //}
-
-
-//OPTION1 - Lists and Dictionaries
-//                ForEach(mqttAppState.sharedEndpointOptions.list, id: \.self) { key in
-//                    ForEach(mqttAppState.sharedEndpointOptions.dics[key]!.reversed(), id: \.self ){ eps in
-//
-//                        if eps.type == "new" {
-//                            Spacer()
-//                                .onAppear(){
-//
-//                                    var jsonObjectEPS: Data?
-//                                    do {
-//                                        jsonObjectEPS = try JSONEncoder().encode([eps])
-//                                    } catch(let error){
-//                                        print(error)
-//                                    }
-//
-//                                    storeImage(name: "\(eps.id)", urlString: eps.snapshot!, date: eps.frameTime!, camera: eps.cameraName!, label: eps.label!, endPointsData: jsonObjectEPS)
-//
-//                                    removeFromLiveView(type: eps.type!, id: eps.id! )
-//                                }
-//                        } else  {
-//
-//                            ViewEventUpdate(name: "\(eps.id!)", eps: eps)
-//                                .onAppear(){
-//                                    removeFromLiveView(type: eps.type!, id: eps.id!)
-//                                }
-//                        }
-//                    }
-//                }//end of first for each
-//            } //end of scroll
- 
-
-//OPTION 2 - SwiftData
-//        ScrollView {
-//            ForEach(x, id: \.self) { eps in
-//            //x.mutateEach { eps in
-//                if eps.id != nil {
-//                    if eps.type == "new" {
-//                        Text("1=\(eps.id)")
-//                        Spacer()
-//                            .onAppear(){
-//
-//                                var jsonObjectEPS: Data?
-//                                do {
-//                                    jsonObjectEPS = try JSONEncoder().encode([eps])
-//                                } catch(let error){
-//                                    print(error)
-//                                }
-//                                storeImage(name: "\(eps.id)", urlString: eps.snapshot!, date: eps.frameTime!, camera: eps.cameraName!, label: eps.label!, endPointsData: jsonObjectEPS)
-//                            }
-//                    }
-//                    else  {
-//                        ViewEventUpdate(name: "\(eps.id!)", eps: eps)
-//                    }
-//                }
-//            }
-//            .onDisappear(){
-//                print("onDisappear____________________________________________________________>")
-//
-//                var y: [EndpointOptions] = []
-//                let tmp = EndpointOptions()
-//                //y.append(tmp)
-//
-//                var yy: Data?
-//                do {
-//                    yy = try JSONEncoder().encode(y)
-//                } catch(let error){
-//                    print("ERROR MESSAGE 3------------------->", error)
-//                }
-//
-//                //part 2
-//                UserDefaults.standard.set(yy, forKey: "epsApnArray")
-//            }
-//        }
-
 
 
 

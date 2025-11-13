@@ -23,7 +23,6 @@ struct ViewEventSlideShow: View {
             Text("Event History: \(containers.count)")
                 .frame(width: UIScreen.screenWidth-30, alignment: .leading)
                 .padding(10)
-                //.background(.secondary, in: RoundedRectangle(cornerRadius: 5))
             
             TipView(tipEventHistory, arrowEdge: .bottom)
             
@@ -36,9 +35,8 @@ struct ViewEventSlideShow: View {
                     }
                 }
                 .padding(.trailing, 30)
-            }
-            //.popoverTip(tipEventHistory, arrowEdge: .top)
-        } 
+            } 
+        }
     }
 }
  

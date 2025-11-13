@@ -64,7 +64,6 @@ struct ViewEventDetail: View {
   
                 if showClip {
                     if( container.m3u8 != nil ){
-                        //if( container.m3u8! != nil ){
                             
                             HStack{
                                 Text("Video Clip")
@@ -78,8 +77,7 @@ struct ViewEventDetail: View {
                             ViewPlayVideo(urlString: container.m3u8!)
                                 .modifier(CardBackground())
                                 .padding(0)
-                                .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing) 
-                        //}
+                                .overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)  
                     }
                 }
                 

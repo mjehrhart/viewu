@@ -98,8 +98,6 @@ final class MQTTAppState: ObservableObject {
                  
                 let data = text.data(using: .utf8)
                 //let res = try JSONDecoder().decode(TopicFrigateEventHeader.self, from: data!)
-                
-                /******************************/
                 let res = try JSONDecoder().decode(TopicFrigateEventHeaderMQTT.self, from: data!)
                   
                 var enteredZones = ""
@@ -157,8 +155,7 @@ final class MQTTAppState: ObservableObject {
                 //--------------------------------------------------------------------
                 
             }
-            catch let error as NSError { 
-                print(error)
+            catch let error as NSError {  
                 Log.shared().print(page: "MQTTState", fn: "setReceivedMessage", type: "ERROR", text: "\(error)")
             }
         }

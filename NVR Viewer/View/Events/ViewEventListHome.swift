@@ -27,11 +27,11 @@ struct ViewEventListHome: View {
         .onChange(of: scenePhase) { oldPhase, newPhase in
             
             if newPhase == .active {
-                print("Active")
+                //print("Active")
             } else if newPhase == .inactive {
-                print("Inactive")
+                //print("Inactive")
             } else if newPhase == .background {
-                print("Background")
+                //print("Background")
             }
         }
         .navigationBarTitle("Event Timeline", displayMode: .inline)
@@ -42,14 +42,6 @@ struct ViewEventListHome: View {
     struct ViewEventList: View {
         
         let title: String
-        //        @State private var showEventList = true
-        //        @State private var showCamera = false
-        //        @State private var showSettings = false
-        //        @State private var showConnection = false
-        //        //
-        //        @State var topic: String = "frigate/events"
-        //        @State var message: String = ""
-        //
         @EnvironmentObject private var mqttManager: MQTTManager
         @EnvironmentObject private var nvrManager: NVRConfig
         

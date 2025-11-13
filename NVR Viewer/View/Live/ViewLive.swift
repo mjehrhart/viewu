@@ -32,25 +32,7 @@ struct ViewLive: View {
             ScrollView {
  
                 ViewLiveLandscape(urlString: container.snapshot!, cameraName: container.cameraName! ,zoomIn: false)
-                    .padding([.top], 147)
-                
-//                if let _ = container.snapshot{
-//                    
-//                    HStack{
-//                        Button{
-//                            UIPasteboard.general.string = container.snapshot!
-//                        } label: {
-//                            Image(systemName: "doc.on.doc")
-//                        }
-//                        .frame(width: 340, alignment: .trailing)
-//                        
-//                        ShareLink(item: container.snapshot!, preview: SharePreview("NVR Image", image: container.snapshot!)){
-//                            Image(systemName: "square.and.arrow.up")
-//                        }
-//                        .frame(alignment: .trailing)
-//                    }
-//                }
-                 
+                    .padding([.top], 147)  
             }
         } 
         .toolbar {

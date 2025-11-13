@@ -14,7 +14,7 @@ struct FrigateResponse: Codable {
 }
 
 class APIRequester: NSObject {
-     
+    
     func postImageToFrigatePlus(urlString: String, eventId: String, completion: @escaping (Data?, Error?) -> Void) {
         
         guard let url = URL(string: urlString) else {
@@ -26,33 +26,25 @@ class APIRequester: NSObject {
         
         let session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-             
+            
             guard let data = data else { return }
-             
+            
             completion(data, error)
         }
         task.progress.resume()
     }
-   
+    
     func fetchEventsInBackground(urlString: String, backgroundFetchEventsEpochtime: String, epsType: String){
         
         DispatchQueue.main.async { [self] in
             
-        print("APIRequestor-------------------fetchEventsInBackground")
-        print(backgroundFetchEventsEpochtime);
-        
-        //DEV
-        //Load Events
-        //let urlEvents = nvr.getUrl()
-        let urlStringEvents = urlString + "/api/events?limit=10000&after=\(backgroundFetchEventsEpochtime)"
-        print("===== fetchEventsInBackground::url")
-        print(urlStringEvents)
-        
-        let after = Int(Date().timeIntervalSince1970)
-        //backgroundFetchEventsEpochtime = String(after)
-        UserDefaults.standard.set(String(after), forKey: "background_fetch_events_epochtime")
-        
-         
+            let urlStringEvents = urlString + "/api/events?limit=10000&after=\(backgroundFetchEventsEpochtime)"
+            
+            let after = Int(Date().timeIntervalSince1970)
+            //backgroundFetchEventsEpochtime = String(after)
+            UserDefaults.standard.set(String(after), forKey: "background_fetch_events_epochtime")
+            
+            
             fetchNVREvents(urlString: urlStringEvents) { data, error in
                 
                 guard let data = data else { return }
@@ -121,12 +113,8 @@ class APIRequester: NSObject {
                         
                     }
                 } catch(let err) {
-                    print("Error Message goes here - 1002")
-                    print(err)
                     Log.shared().print(page: "APIRequestor", fn: "fetchEventsInBackground", type: "ERROR", text: "\(err)")
                 }
-                
-                
             }
         }
     }
@@ -143,7 +131,7 @@ class APIRequester: NSObject {
         
         let session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
- 
+            
             completion(data, error)
         }
         task.progress.resume()
@@ -160,18 +148,7 @@ class APIRequester: NSObject {
         
         let session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-//            do {
-//                let results = try JSONDecoder().decode(NVRConfigurationCall.self, from: data!)
-//                print("results=", results)
-//            }catch{
-//                print("Error Message goes here - 1001")
-//            }
-            
-            
-            print("** APIREQUESTOR **")
-            //print(data ?? " no value shown yet ")
-            
+ 
             completion(data, error)
         }
         task.progress.resume()
@@ -188,10 +165,7 @@ class APIRequester: NSObject {
         
         let session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            //print("APIRequester::fetchImage()------------------------------------------>")
-            
-            
+ 
             //FOR DEBUGGING
             //TODO add ! to data below
             guard let data = data else { return }
@@ -211,8 +185,6 @@ class APIRequester: NSObject {
                     print("Error Message goes here - 1001.a")
                 }
             }
-            
-            
             completion(data, error)
         }
         task.progress.resume()
@@ -231,12 +203,7 @@ class APIRequester: NSObject {
         
         let session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            //            print("---------------------->DATA")
-            //            print(data)
-            //
-            //            print("---------------------->ERROR")
-            //            print(error)
-            
+ 
             completion(data, error)
         }
         
@@ -260,16 +227,4 @@ extension APIRequester: URLSessionDelegate {
         }
     }
 }
-
-//    private func fetchURLImage(){
-//
-//        print("INSIDE fetchURLImage::VIEWUiImageFull")
-//        //guard let url = URL(string: "http://127.0.0.1:5555/api/events/1708968097.297187-7pf02z/snapshot.jpg?bbox=1") else {return}
-//        guard let url = URL(string: self.urlString) else {return}
-//
-//        let task = URLSession.shared.dataTask(with: url, completionHandler: { data, res, error in
-//            self.data = data
-//        })
-//
-//        task.progress.resume()
-//    }
+ 

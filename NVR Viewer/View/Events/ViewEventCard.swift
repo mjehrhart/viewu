@@ -37,7 +37,6 @@ struct ViewEventCard: View {
     }
     
     var body: some View {
-        //ForEach(containers, id: \.self){ container in
         ForEach( 0..<containers.count, id: \.self){ index in
             
             VStack{
@@ -78,7 +77,7 @@ struct ViewEventCard: View {
                                 .foregroundColor(.gray)
                         }
                         
-                        //Hide this view for now - i dont think people need to see this information
+                        //Hide this view for now - i dont think users need to see this information
                         //EnteredZones(zones: containers[index].enteredZones!)
                          
                         Spacer()
@@ -164,7 +163,6 @@ struct ViewEventCard: View {
                 }
                 .frame(width: UIScreen.screenWidth-20, alignment: .bottomLeading)
             }
-            //.background( container.frigatePlus! ? Color(.systemGreen).opacity(0.09) : Color.white)
         }
         .onDelete{ indexes in
             let flag = EventStorage.shared.delete(frameTime: containers[0].frameTime!)

@@ -15,7 +15,7 @@ struct ContentView: View {
     //Load Config
     @ObservedObject var filter2 = EventFilter.shared()
     let nvr = NVRConfig.shared()
-    //Commented out for testing on 11/08/2025
+    //FRIGATE 16+ reguires NVRConfigurationCall2
     //@ObservedObject var config = NVRConfigurationSuper.shared()
     @ObservedObject var config = NVRConfigurationSuper2.shared()
     
@@ -77,7 +77,6 @@ struct ContentView: View {
                         } else {
                             
                            ViewEventListHome()
-                           //StreamRTSP2(urlString: "rtsp://middle.viewu.app:8554/side_sub", cameraName: "test")
                         }
                         
                     case 1:
@@ -94,20 +93,19 @@ struct ContentView: View {
                 //DispatchQueue.global().async { }
                 //DispatchQueue.main.async { }
                 //Load Defaults for app
-                
-                //DispatchQueue.global(qos: .userInteractive).async {
+                 
                 DispatchQueue.main.async {
                     let url = nvr.getUrl()
                     let urlString = url + "/api/config"
                     print(urlString)
                     cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
                         
-                        Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
+                        //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
                         
                         guard let data = data else { return }
                         
                         do {
-                            //Commented out for Testing on 11/08/2025
+                            //FRIGATE 16+ reguires NVRConfigurationCall2
                             //config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
                             config.item = try JSONDecoder().decode(NVRConfigurationCall2.self, from: data)
                             
@@ -134,19 +132,14 @@ struct ContentView: View {
                             }
                             
                         }catch (let err){
-                            print("Error Message goes here - 1001.b")
-                            print(err)
                             Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001", type: "ERROR", text: "\(err)")
                             
                             do {
                                 if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
                                     
                                     Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001", type: "Info", text: "\(json)")
-                                    //print(json)
                                 }
                             } catch(let err) {
-                                print("Error Message goes here - 2001")
-                                print(err)
                                 Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001", type: "ERROR", text: "\(err)")
                             }
                         }
@@ -168,45 +161,17 @@ struct ContentView: View {
                 self.selection = notificationSelection
                 
             }
-            //DEBGUGGIG ALL BELOW
-//            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-//                print("======================================================================================================")
-//                print("opened! 1")
-//                print("======================================================================================================")
-//            }
-//            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-//                print("======================================================================================================")
-//                print("opened! 2")
-//                print("======================================================================================================")
-//            }
-//            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-//                print("======================================================================================================")
-//                print("opened! 3")
-//                print("======================================================================================================")
-//            }
-//            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-//                print("======================================================================================================")
-//                print("opened! 4") // lll
-//                print("======================================================================================================")
-//            }
-//            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)) { _ in
-//                print("======================================================================================================")
-//                print("opened! 5") // ll
-//                print("======================================================================================================")
-//            }
             .onChange(of: scenePhase) { _, newScenePhase in
                 
                 DispatchQueue.main.async {
-                    print(".onChange(of: scenePhase")
                     
                     if newScenePhase == .active {
-                        print("Active")
                         cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "scenePhase")
                     }
                     else if newScenePhase == .inactive {
-                        print("Inactive")
+                        //do nothing
                     } else if newScenePhase == .background {
-                        print("Background")
+                        //do nothing
                     }
                 }
             }
@@ -246,11 +211,9 @@ struct ContentView: View {
                     .environmentObject(mqttManager)
             }
             .navigationDestination(isPresented: $showLog){
-                //ViewTest(title:"test")
                 ViewLog()
             }
             .navigationDestination(isPresented: $showCamera){
-                //HERE
                 ViewCamera(title: "Live Cameras")
             }
             .navigationDestination(isPresented: $showNotificationManager){
@@ -293,10 +256,7 @@ struct ContentView: View {
                         HStack{
                             Label("Filter", systemImage: "calendar.day.timeline.leading")
                                 .labelStyle(VerticalLabelStyle(show: false))
-                            //.foregroundStyle(.orange)
                                 .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                            //.foregroundStyle(showSettings ? .blue : .blue)
-                            //.font(.system(size: 20))
                                 .fontWeight(.regular)
                                 .foregroundColor(.gray)
                                 .onTapGesture(perform: {
@@ -315,7 +275,6 @@ struct ContentView: View {
                                 })
                             
                             if notificationModeIsOn {
-                                //@StateObject var nts = NotificationTemplateString.shared()
                                 Spacer()
                                 Label("Notifications", systemImage: "app.badge")
                                     .labelStyle(VerticalLabelStyle(show: false))
@@ -326,8 +285,7 @@ struct ContentView: View {
                                         showNotificationManager.toggle()
                                     })
                             }
-                             
-                            
+                              
                             if developerModeIsOn {
                                 Spacer()
                                 Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
@@ -341,8 +299,6 @@ struct ContentView: View {
                                         self.selection = 2
                                     })
                             }
-                            
-                            
                             
                             if developerModeIsOn {
                                 Spacer()

@@ -15,11 +15,7 @@ struct ViewFilter: View {
     @State private var scale = 1.0
       
     
-    init(){
-        //        _selectedCamera = State(initialValue: filter.selectedCamera)
-        //        _selectedObject = State(initialValue: filter.selectedObject)
-        //        _selectedDaysBack = State(initialValue: 1)
-    }
+    init(){ }
     
     @State private var isPresented = false
     var body: some View {
@@ -74,19 +70,7 @@ struct ViewFilter: View {
                             .frame(minWidth: 100)
                             .padding(0)
                     }
-                    
-                    
-//                    HStack{
-//                        Label("", systemImage: "square.dashed")
-//                            .padding(0)
-//                        Picker("Zone", selection: $filter2.selectedZone) {
-//                            ForEach(filter2.zones, id: \.self) {
-//                                Text($0)
-//                            }
-//                        }.pickerStyle( .menu )
-//                            .frame(minWidth: 100)
-//                            .padding(0)
-//                    }
+ 
                 } header: {
                     Text("Filter")
                         .font(.largeTitle)
@@ -133,7 +117,6 @@ struct ViewFilter: View {
     let dateRange: ClosedRange<Date> = {
         let calendar = Calendar.current
         let startComponents = DateComponents(year: 2024, month: 1, day: 1)
-        //let endComponents = DateComponents(year: 2023, month: 12, day: 31, hour: 23, minute: 59, second: 59)
         let endComponents = DateComponents(year: 2024, month: 03, day: 23)
         return calendar.date(from:startComponents)!
         ...

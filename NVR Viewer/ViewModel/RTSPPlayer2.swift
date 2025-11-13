@@ -133,10 +133,7 @@ struct StreamRTSP2: View {
                 .overlay(CameraOverlay(name: cameraName, urlString: urlString, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
              
         }
-        .padding(0)
-//        .navigationDestination(isPresented: $flagFull){ 
-//            ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
-//        }
+        .padding(0) 
     }
     
     struct CameraOverlay: View {

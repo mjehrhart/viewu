@@ -11,7 +11,7 @@ import TipKit
 struct ViewSettings: View {
     
     let title: String
-    //let notify = NotificationHandler()
+ 
     let tipEventPairDevice = TipEventPairDevice()
     @StateObject var notificationManager = NotificationManager()
     
@@ -96,6 +96,8 @@ struct ViewSettings: View {
                             if camerGo2Rtc == true {
                                 cameraRTSPPath = false
                                 cameraHLS = false
+                            } else {
+                                cameraHLS = true
                             }
                         }
 //                    Toggle("RTSP", isOn: $cameraRTSPPath)
@@ -112,12 +114,16 @@ struct ViewSettings: View {
                                 cameraRTSPPath = false
                                 cameraSubStream = false
                             }
+                            else {
+                                camerGo2Rtc = true
+                            }
                         }
                     
                     Toggle("Use Sub Stream", isOn: $cameraSubStream)
                         .onChange(of: cameraSubStream) {
                             if cameraSubStream == true {
                                 cameraHLS = false
+                                camerGo2Rtc = true
                             }
                         }
                 } header: {

@@ -61,67 +61,8 @@ struct ViewEventsHistory: View {
             .environment(\.defaultMinListRowHeight, 50)
             .padding(0)
         }
-        //DEBGUGGIG ALL BELOW
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            //            print("======================================================================================================")
-            //            print("opened! 1")
-            //            print("======================================================================================================")
-            //
-            //            EventStorage.shared.readAll3(completion: { res in
-            //                epsSup3.list3 = res!
-            //            })
-            //            print("ViewEventsHistory --- \(epsSup3.list3.count)")
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-            //            print("======================================================================================================")
-            //            print("opened! 2")
-            //            print("======================================================================================================")
-            //
-            //            EventStorage.shared.readAll3(completion: { res in
-            //                epsSup3.list3 = res!
-            //            })
-            //            print("ViewEventsHistory --- \(epsSup3.list3.count)")
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-            //            print("======================================================================================================")
-            //            print("opened! 3")
-            //            print("======================================================================================================")
-            //
-            //            EventStorage.shared.readAll3(completion: { res in
-            //                epsSup3.list3 = res!
-            //            })
-            //            print("ViewEventsHistory --- \(epsSup3.list3.count)")
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-            //            print("======================================================================================================")
-            //            print("opened! 4") // lll
-            //            print("======================================================================================================")
-            //
-            //            EventStorage.shared.readAll3(completion: { res in
-            //                epsSup3.list3 = res!
-            //            })
-            //            print("ViewEventsHistory --- \(epsSup3.list3.count)")
-            //            //EndpointOptionsSuper.shared().addBlank()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)) { _ in
-            //            print("======================================================================================================")
-            //            print("opened! 5") // ll
-            //            print("======================================================================================================")
-            //
-            //            EventStorage.shared.readAll3(completion: { res in
-            //                epsSup3.list3 = res!
-            //            })
-            //            print("ViewEventsHistory --- \(epsSup3.list3.count)")
-        }
-        .onChange(of: scenePhase) { _, newScenePhase in
-            
-        }
     }
-    
-    func testMe(object: Data?){
-        print("Testme")
-    }
-    
+ 
     private func deserializeObject(object: Data?) ->  String{
         
         let jsonString = String(data: object!, encoding: .utf8)!

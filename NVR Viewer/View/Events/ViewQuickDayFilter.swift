@@ -54,9 +54,8 @@ struct ViewQuickDayFilter: View {
                                 .frame(width: metrics.size.width * 0.85)
                                 .cornerRadius(2.5)
                             
-                            Spacer() // Pushes the bar to the left, adjust as needed
+                            Spacer()  
                         }
-                        //.background(.yellow)
                         .frame(maxWidth: .infinity, maxHeight: 1.5) // Make HStack fill the GeometryReader
                     }
             
@@ -84,7 +83,6 @@ struct ViewQuickDayFilter: View {
             }
             .padding(.bottom, 5)
             .defaultScrollAnchor(.trailing)
-            //.padding(.horizontal, 10)
             .safeAreaPadding(.horizontal)
         }
         .frame(maxWidth: .infinity , maxHeight: 40)
@@ -99,36 +97,4 @@ struct ViewQuickDayFilter: View {
          
         return date.timeIntervalSince1970
     }
-    
-//    private func convertDateTime(time: Double) -> String{
-//        let date = Date(timeIntervalSince1970: time)
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.timeStyle = DateFormatter.Style.short
-//        dateFormatter.dateStyle = DateFormatter.Style.medium
-//        dateFormatter.timeZone = .current
-//        var localDate = dateFormatter.string(from: date)
-//        localDate.replace("at", with: "")
-//        return localDate
-//    }
-//    
-//    private func convertDate(time: Double) -> String{
-//        let date = Date(timeIntervalSince1970: time)
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "MMM YYYY dd" // hh:mm a"
-//        dateFormatter.timeStyle = DateFormatter.Style.none
-//        dateFormatter.dateStyle = DateFormatter.Style.medium
-//        dateFormatter.timeZone = .current
-//        let localDate = dateFormatter.string(from: date)
-//        return localDate
-//    }
-//    
-//    private func convertTime(time: Double) -> String{
-//        let date = Date(timeIntervalSince1970: time)
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.timeStyle = DateFormatter.Style.short
-//        dateFormatter.dateStyle = DateFormatter.Style.none
-//        dateFormatter.timeZone = .current
-//        let localDate = dateFormatter.string(from: date)
-//        return localDate
-//    }
 }

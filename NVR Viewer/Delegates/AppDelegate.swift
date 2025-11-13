@@ -28,8 +28,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             objectWillChange.send()
         }
     }
-    
-    
+     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         application.registerForRemoteNotifications()
@@ -50,27 +49,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             //print("fcm", fcm)
             fcmID = fcm
         } else {
-            print("Oh No!::UIApplicationDelegateAdaptor::messaging()")
             Log.shared().print(page: "AppDelegate", fn: "messaging", type: "ERROR", text: "Oh No!::UIApplicationDelegateAdaptor::messaging()")
         }
     }
-    
-    //-------------------------------------------------------------------------------------------------------//
-    //-------------------------------------------------------------------------------------------------------//
-    
-    //    //when:: .background
-    //    func userNotificationCenter(_ center: UNUserNotificationCenter,
-    //                                didReceive response: UNNotificationResponse,
-    //                                withCompletionHandler completionHandler: @escaping () -> Void) {
-    //
-    //        let userInfo = response.notification.request.content.userInfo
-    //        //DispatchQueue.main.async { [self] in
-    //            parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 1, applicationState: "default")
-    //        //}
-    //        completionHandler()
-    //    }
-    
-    //when:: .foreground
+ 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -82,9 +64,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         completionHandler([[.banner, .badge, .sound]])
     }
  
-    //-------------------------------------------------------------------------------------------------------//
-    //-------------------------------------------------------------------------------------------------------//
-    
     func application(
         _ application: UIApplication,
         didReceiveRemoteNotification userInfo: [AnyHashable : Any],
@@ -97,16 +76,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         DispatchQueue.main.async { [self] in
             switch application.applicationState {
             case .active:
-                print("1. do stuff in case App is active")
+                //print("1. do stuff in case App is active")
                 parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "active")
             case .inactive:
-                print("2. do stuff in case App is .inactive")
+                //print("2. do stuff in case App is .inactive")
                 parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "inactive")
             case .background:
-                print("3. do stuff in case App is .background")
+                //print("3. do stuff in case App is .background")
                 parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "background")
             @unknown default:
-                print("4. default")
+                //print("4. default")
                 parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "default")
             }
             
@@ -118,12 +97,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         
         DispatchQueue.main.async { [self] in
             if let info = userInfo["aps"] as? Dictionary<String, AnyObject> {
-                
-                print("parseUserInfo---------------------------------------------")
-                print("parseUserInfo---------------------------------------------")
-                print("parseUserInfo---------------------------------------------")
-                print(info)
-                
+ 
                 var eps = EndpointOptions()
                 var eps2 = EndpointOptionsSuper.EventMeta()
                 let eps3 = EndpointOptionsSuper.EventMeta3()
@@ -216,44 +190,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                     eps3.enteredZones = msg
                 }
                 
-                if let msg = userInfo["start_time"] as? String? {
-                    
-                    //TODO think this through
+                if let msg = userInfo["start_time"] as? String? { 
                     if (msg != nil) {
                         eps.frameTime = Double(msg!)
                         eps2.frameTime = Double(msg!)
                         eps3.frameTime = Double(msg!)
                     }
                 }
-                // 11/11/2025
-                //            if let msg = userInfo["end_time"] as? String? {
-                //            }
-                //
-                //            if let msg = userInfo["top_score"] as? String? {
-                //            }
-                //
-                //            if let msg = userInfo["image_url"] as? String {
-                //            }
-                
+ 
                 //THIS USES EPS"3"
                 //using epsSup.list3 and not eps3
-                //if applicationState == "active"{
-                //if eps3.type == "new"{
-                //                    if epsSup.list3.contains(where: {$0.frameTime == eps3.frameTime}) {
-                //                        // do nothing
-                //                        print("1==============================================================================")
-                //                        print("DO NOT INSERT INTO epsSup.list3.already has where frameTime == ", eps3.frameTime)
-                //                        print("==============================================================================")
-                //                    } else {
-                //                        print("2==============================================================================")
-                //                        print("INSERT epsSup.list3.insert at 0 frameTime == ", eps3.frameTime)
-                //                        print("==============================================================================")
-                //                        epsSup.list3.insert(eps3, at: 0)
-                //                    }
-                //}
-                //}
-                
-                //Check if value is nil
                 if eps.sublabel == nil {
                     eps.sublabel = ""
                     eps2.sublabel = ""
@@ -293,14 +239,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                                                            currentZones: eps.currentZones!,
                                                            enteredZones: eps.enteredZones!
                 )
-                //
+          
                 EventStorage.shared.readAll3(completion: { res in
                     self.epsSup3 = res!
                     //TODO
                     self.epsSup.list3 = res!
-                    
-                    //                self.epsSup.list3.insert(eps3, at: 0)
-                    //                self.epsSup3.insert(eps3, at: 0)
                 })
                 
                 

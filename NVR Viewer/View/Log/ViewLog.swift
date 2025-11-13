@@ -59,8 +59,7 @@ struct ViewLog: View {
             .frame(width: UIScreen.screenWidth, alignment: .topLeading)
         }
         .padding([.leading, .trailing], 5)
-        .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight - 140, alignment: .topLeading)
-        //.background(Color.yellow)
+        .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight - 140, alignment: .topLeading) 
     }
 }
 
