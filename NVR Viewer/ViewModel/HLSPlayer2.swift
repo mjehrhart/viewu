@@ -17,40 +17,39 @@ struct HLSPlayer2: View {
     var body: some View {
         
         HStack{
-      
-                Webview(url: urlString + "/api/\(cameraName)?h=480")
-                    .modifier(CardBackground())
-                    .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-                    .edgesIgnoringSafeArea(.all)
-                    .overlay(CameraOverlay(name: cameraName), alignment: .bottomTrailing)
-                    .navigationDestination(isPresented: $flagFull){
-                        ViewCameraHLSFullScreen(urlString: urlString, cameraName: cameraName)
-                    }
-                    .onTapGesture{
-                        DispatchQueue.main.async {
-                            print("----HLSPlayer2------")
-                            //flagFull.toggle()
-                        }
-                    }
-          
+            Webview(url: urlString + "/api/\(cameraName)?h=480")
+                .modifier(CardBackground())
+                .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
+                .edgesIgnoringSafeArea(.all)
+                .overlay(CameraOverlay(name: cameraName, urlString: urlString), alignment: .bottomTrailing)
         }
     }
     
     struct CameraOverlay: View {
         let name: String
+        let urlString: String
+        
         @State var flagMute = true
+        @State var flagFull = false
         
         var body: some View {
-             
+            
             Text(name)
                 .padding([.top, .trailing], 10)
                 .padding(.leading, 10)
                 .padding(.bottom, 5)
                 .foregroundColor(.white)
                 .fontWeight(.bold)
+                .onTapGesture {
+                    flagFull.toggle()
+                }
+            //Moved to here because was having issues otherwise
+                .navigationDestination(isPresented: $flagFull){
+                    ViewCameraHLSFullScreen(urlString: urlString, cameraName: name)
+                }
         }
     }
-
+    
     
 }
 

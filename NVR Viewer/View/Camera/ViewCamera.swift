@@ -107,7 +107,7 @@ struct ViewCamera: View {
                                             if url.contains("sub") || cameraName.contains("sub"){
                                                 
                                                 if url.starts(with: "rtsp"){
-                                                
+                                                    
                                                     let name = cameraName + "_sub"
                                                     StreamRTSP2(urlString: url, cameraName: name)
                                                         .padding(0)
@@ -134,25 +134,24 @@ struct ViewCamera: View {
                                 }
                             }
                         }
-                        if cameraHLS {
-                            ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
+                        if cameraHLS { 
+                                LinearGradient(
+                                    colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                                .ignoresSafeArea()
                                 
-                                 
+                                ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
+                                     
                                     let url = nvr.getUrl()
                                     HLSPlayer2(urlString: url, cameraName: cameraName, flagFull: false)
-                                        .onTapGesture {
-                                            print("--------ViewCamera HLSPlayer2-----------")
-                                        }
-                                    
                                     if developerModeIsOn {
                                         Text(url + "/api/\(cameraName)?h=480")
                                             .textSelection(.enabled)
                                     }
-                                
-                            }
-                            
+                                }
                         }
-                        
                     }
                 }
                 Spacer()
