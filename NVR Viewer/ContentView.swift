@@ -18,12 +18,14 @@ struct ContentView: View {
     //Commented out for testing on 11/08/2025
     //@ObservedObject var config = NVRConfigurationSuper.shared()
     @ObservedObject var config = NVRConfigurationSuper2.shared()
+    
     let cNVR = APIRequester()
     
     //
     @EnvironmentObject private var notificationManager2: NotificationManager
     @State var selection: Int = 0
     
+    @StateObject var nts = NotificationTemplateString.shared()
     @StateObject var mqttManager = MQTTManager.shared()
     @StateObject var nvrManager = NVRConfig.shared()
     @StateObject var notificationManager = NotificationManager() //this may not be needed here
@@ -313,10 +315,11 @@ struct ContentView: View {
                                 })
                             
                             if notificationModeIsOn {
+                                //@StateObject var nts = NotificationTemplateString.shared()
                                 Spacer()
                                 Label("Notifications", systemImage: "app.badge")
                                     .labelStyle(VerticalLabelStyle(show: false))
-                                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                    .foregroundStyle(nts.notificationPaused ? .orange : Color(red: 0.45, green: 0.45, blue: 0.45))
                                     .fontWeight(.regular)
                                     .foregroundColor(.gray)
                                     .onTapGesture(perform: {

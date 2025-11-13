@@ -71,6 +71,20 @@ struct ViewAPN: View {
             .background(.red.opacity(0.8))
         }
         
+        if nts.notificationPaused {
+            VStack{
+                //Spacer()
+                Text("Paused")
+                    .frame(maxWidth: .infinity, maxHeight: 100, alignment: .center)
+                    .fontWeight(.regular)
+                    .font(.largeTitle)
+                    .foregroundStyle(Color(red: 0.25, green: 0.25, blue: 0.25))
+                //Spacer()
+            }
+            .frame(width: UIScreen.screenWidth, height: 100, alignment: .topLeading)
+            .background(.red.opacity(0.75))
+        }
+        
         ZStack {
             
             Form {
@@ -84,7 +98,7 @@ struct ViewAPN: View {
                         .overlay(IndicatorOverlay(offset: -60, flag: nts.flagTitle))
                         .onChange(of: apnTitle){
                             nts.flagTitle = false
-                        }
+                        } 
                     Button("Save") {
                         for i in 0..<1 {
                             DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
@@ -443,11 +457,7 @@ struct ViewNotificationManager: View, Hashable, Equatable {
                     
                     Toggle(nt.cameras[index].name, isOn: $nt.cameras[index].state)
                         .onChange(of: nt.cameras[index].state) {
-                            
-                            //                            print("ViewNotificationManager nt.cameras")
-                            //                            print("\(self.nt)")
-                            //                            print("\(self.nt.cameras[0])")
-                            
+ 
                             var tmp = ""
                             cameraTemplate = ""
                             for camera in nt.cameras {

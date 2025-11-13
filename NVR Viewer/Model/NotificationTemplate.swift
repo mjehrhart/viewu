@@ -26,6 +26,10 @@ class NotificationTemplateString: ObservableObject {
     @AppStorage("flagDomain") var flagDomain: Bool = false
     @AppStorage("flagTemplate") var flagTemplate: Bool = false
     @AppStorage("templateString")  var templateString: String = ""
+    
+    @AppStorage("apnTitle") var apnTitle: String = ""
+    @AppStorage("apnDomain") var apnDomain: String = ""
+    @AppStorage("apnTemplate") var apnTemplate: String = ""
   
     init(){
          
@@ -82,13 +86,15 @@ class NotificationTemplateString: ObservableObject {
         }
     }
     
-    struct Item {
-        let id: UUID
-        let template: String
-    }
+ 
 }
 
-class NotificationTemplate: ObservableObject{ 
+struct Item {
+    let id: UUID
+    let template: String
+}
+
+class NotificationTemplate: ObservableObject{
     
     @Published var templateString = ""
     

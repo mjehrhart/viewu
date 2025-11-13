@@ -54,8 +54,7 @@ class EventFilter: ObservableObject{
         }
     }
     
-    //11/08/2025 - changed Cameras to Cameras2
-    //func setCameras(items: [String : Cameras]){
+    //11/08/2025 - changed Cameras to Cameras2 
     func setCameras(items: [String : Cameras2]){
         
         cameras.removeAll()

@@ -27,12 +27,7 @@ final class MQTTAppState: ObservableObject {
     
     func setReceivedMessage(text: String) {
         DispatchQueue.main.async { [self] in
-         
-//        print("**********************:: setReceivedMessage")
-//        print(text)
-//        print(text.count)
-//        print("___________________________________________")
-        
+ 
         if text.count == 163 {
             //do nothing as this is a message response back to the viewu server
             return
@@ -40,7 +35,7 @@ final class MQTTAppState: ObservableObject {
         else if text.contains("viewu_device_paired"){
             //device is now paired
             viewuDevicePaired = true
-            let version = text.components(separatedBy: ":") 
+            let version = text.components(separatedBy: ":#:") 
             viewuServerVersion = version[1]
             nts.alert = true
             nts.delayText()
@@ -48,21 +43,38 @@ final class MQTTAppState: ObservableObject {
             return
             
         } else if text.starts(with: "viewu_device_event_back"){
-            // viewu_device_event_back:title:200
+            // ie: viewu_device_event_back:title:200:dynamictextgoeshere
+            print("MQTT MEssage Recieved ------------------------------------------------------")
             print(text);
             
-            let sub = text.split(separator: ":")
-            
+            let sub = text.split(separator: ":#:")
+             
             if(sub[1] == "title"){
-                nts.flagTitle = true
+                nts.apnTitle = String(sub[3])
+                //Brief purposeful delay in updating the saved icon
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                    self.nts.flagTitle = true
+                }
             } else if(sub[1] == "domain"){
-                nts.flagDomain = true
+                nts.apnDomain = String(sub[3])
+                //Brief purposeful delay in updating the saved icon
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                    self.nts.flagDomain = true
+                }
             } else if(sub[1] == "template"){
-                nts.flagTemplate = true
+                nts.templateString = String(sub[3])
+                let sub = String(sub[3]).split(separator: "::")
+                nts.templates.removeAll()
+                for template in sub {
+                    let item = Item(id: UUID(), template: String(template).trimmingCharacters(in: .whitespaces))
+                    nts.templates.append(item)
+                }
+                //Brief purposeful delay in updating the saved icon
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                    self.nts.flagTemplate = true
+                }
             } else if(sub[1] == "paused"){
-                
-            } else if(sub[1] == "time_paused"){
-                
+                nts.notificationPaused = Bool(String(sub[3])) ?? false
             }
             
             
@@ -76,7 +88,6 @@ final class MQTTAppState: ObservableObject {
             return
             
         } else if text.starts(with: "viewu_device_event"){
-             
             //Do nothing as these are from the Viewu app itself
             return
         }
@@ -115,36 +126,8 @@ final class MQTTAppState: ObservableObject {
                 let frigateURLBuilder = APIBuilder(dataSet: message)
                 var eps = frigateURLBuilder.getAllEndpoint()
                 eps.transportType = "mqttState"
-                 
-                
-                //            var eps2 = EndpointOptionsSuper.EventMeta()
-                //            eps2.id = eps.id
-                //            eps2.camera = eps.camera
-                //            eps2.cameraName = eps.cameraName
-                //            eps2.debug = eps.debug
-                //            eps2.frameTime = eps.frameTime
-                //            eps2.image = eps.image
-                //            eps2.label = eps.label
-                //            eps2.m3u8 = eps.m3u8
-                //            eps2.score = eps.score
-                //            eps2.snapshot = eps.snapshot
-                //            eps2.thumbnail = eps.thumbnail
-                //            eps2.transportType = eps.transportType
-                //            eps2.type = eps.type
-                
-                
-                //------------------>
-                //epsSup.list2.insert(eps2, at: 0)
-                //            if epsSup.list2.contains(where: {$0.frameTime == eps2.frameTime}) {
-                //               // do nothing
-                //                print("epsSup.list2.contains where framTime == ", eps2.frameTime)
-                //            } else {
-                //                epsSup.list2.insert(eps2, at: 0)
-                //                print("epsSup.list2.insert at 0 framTime == ", eps2.frameTime)
-                //            }
-                //------------------>
-  
-                //Option 3 
+ 
+                //Option 3
                 if eps.sublabel == nil {
                     eps.sublabel = ""
                 }
@@ -167,7 +150,7 @@ final class MQTTAppState: ObservableObject {
                       enteredZones: eps.enteredZones!
                 )
                 
-                print("mqttState", id)
+                //print("mqttState", id)
                 //TODO: does this need to be here
                 ///-//-//let epsA = EventStorage.shared.readAll() //11/12/25
                 

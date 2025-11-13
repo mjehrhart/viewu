@@ -250,7 +250,6 @@ class EventStorage: ObservableObject {
                     frameTime <= endDate &&
                     entered_zones .like("%"+filter2.selectedZone+"%")
                     ).order(frameTime.desc)
-                print(filter)
                 
             } 
             
@@ -380,6 +379,15 @@ class EventStorage: ObservableObject {
                     frameTime <= endDate &&
                     entered_zones .like("%"+filter2.selectedZone+"%")
                     ).order(frameTime.desc)
+            } else if filter2.selectedCamera != "all" && filter2.selectedObject != "all" && filter2.selectedType == "all" && filter2.selectedZone == "all" {
+ 
+                filter = self.events.filter(
+                    cameraName == filter2.selectedCamera &&
+                    label == filter2.selectedObject &&
+                    frameTime >= startDate &&
+                    frameTime <= endDate
+                    ).order(frameTime.desc)
+ 
             }
              
             for events in try database.prepare(filter) {
