@@ -97,35 +97,37 @@ struct ViewCamera: View {
                             VStack{
                                 
                                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
-                                    
-                                    let camera = config.item.cameras[cameraName];
-                                    ForEach(camera!.ffmpeg.inputs, id: \.self) {item in
+                                    if config.item.cameras[cameraName]?.enabled == true {
                                         
-                                        let url = verifyGo2RTCUrl(urlString: item.path)
-                                        
-                                        if cameraSubStream {
-                                            if url.contains("sub") || cameraName.contains("sub"){
-                                                
-                                                if url.starts(with: "rtsp"){
+                                        let camera = config.item.cameras[cameraName];
+                                        ForEach(camera!.ffmpeg.inputs, id: \.self) {item in
+                                            
+                                            let url = verifyGo2RTCUrl(urlString: item.path)
+                                            
+                                            if cameraSubStream {
+                                                if url.contains("sub") || cameraName.contains("sub"){
                                                     
-                                                    let name = cameraName + "_sub"
-                                                    StreamRTSP2(urlString: url, cameraName: name)
-                                                        .padding(0)
-                                                    if developerModeIsOn {
-                                                        Text(url)
-                                                            .textSelection(.enabled)
+                                                    if url.starts(with: "rtsp"){
+                                                        
+                                                        let name = cameraName + "_sub"
+                                                        StreamRTSP2(urlString: url, cameraName: name)
+                                                            .padding(0)
+                                                        if developerModeIsOn {
+                                                            Text(url)
+                                                                .textSelection(.enabled)
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        } else {
-                                            if !url.contains("sub"){
-                                                
-                                                if url.starts(with: "rtsp"){
-                                                    StreamRTSP2(urlString: url, cameraName: cameraName)
-                                                        .padding(0)
-                                                    if developerModeIsOn {
-                                                        Text(url)
-                                                            .textSelection(.enabled)
+                                            } else {
+                                                if !url.contains("sub"){
+                                                    
+                                                    if url.starts(with: "rtsp"){
+                                                        StreamRTSP2(urlString: url, cameraName: cameraName)
+                                                            .padding(0)
+                                                        if developerModeIsOn {
+                                                            Text(url)
+                                                                .textSelection(.enabled)
+                                                        }
                                                     }
                                                 }
                                             }
@@ -144,11 +146,14 @@ struct ViewCamera: View {
                                 
                                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
                                      
-                                    let url = nvr.getUrl()
-                                    HLSPlayer2(urlString: url, cameraName: cameraName, flagFull: false)
-                                    if developerModeIsOn {
-                                        Text(url + "/api/\(cameraName)?h=480")
-                                            .textSelection(.enabled)
+                                    if config.item.cameras[cameraName]?.enabled == true {
+                                        
+                                        let url = nvr.getUrl()
+                                        HLSPlayer2(urlString: url, cameraName: cameraName, flagFull: false)
+                                        if developerModeIsOn {
+                                            Text(url + "/api/\(cameraName)?h=480")
+                                                .textSelection(.enabled)
+                                        }
                                     }
                                 }
                         }

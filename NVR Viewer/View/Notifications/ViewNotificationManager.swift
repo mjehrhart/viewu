@@ -109,7 +109,8 @@ struct ViewAPN: View {
                             }
                         }
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(CustomPressEffectButtonStyle())
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
@@ -145,7 +146,8 @@ struct ViewAPN: View {
                             }
                         }
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(CustomPressEffectButtonStyle())
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
@@ -189,7 +191,8 @@ struct ViewAPN: View {
                                 }
                             }
                         }
-                        .buttonStyle(.bordered)
+                        //.buttonStyle(.bordered)
+                        .buttonStyle(CustomPressEffectButtonStyle())
                         .scaleEffect(scale)
                         .animation(.linear(duration: 1), value: scale)
                         .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
@@ -218,6 +221,7 @@ struct ViewAPN: View {
                                 }
                             }
                         }
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
                     Text("Notifications")
                         .font(.caption)
@@ -286,6 +290,16 @@ struct ViewAPN: View {
             .ignoresSafeArea()
         }
     }
+    
+    struct CustomPressEffectButtonStyle: ButtonStyle {
+            func makeBody(configuration: Configuration) -> some View {
+                configuration.label
+                    .padding(8)
+                    .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+        }
 }
 
 struct PopupMiddle: View {
@@ -572,19 +586,15 @@ struct ViewNotificationManager: View, Hashable, Equatable {
                     .frame(maxWidth: .infinity, maxHeight: 50)
             }
             
-            Button {
+            Button("Add Template", systemImage: "plus.app") {
                 nts.templateList.removeAll()
                 nts.templateList.append(ViewNotificationManager(vid: UUID()))
-            } label: {
-                Text("Add Template")
-                Image(systemName: "plus.app")
             }
-            .buttonStyle(.bordered)
+            //.buttonStyle(.bordered)
+            .buttonStyle(CustomPressEffectButtonStyle())
             .scaleEffect(scale)
             .animation(.linear(duration: 1), value: scale)
             .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-            
-            
             
         } header: {
             Text("Template")
@@ -617,6 +627,16 @@ struct ViewNotificationManager: View, Hashable, Equatable {
             })
         }
     }
+    
+    struct CustomPressEffectButtonStyle: ButtonStyle {
+            func makeBody(configuration: Configuration) -> some View {
+                configuration.label
+                    .padding(8)
+                    .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+        }
 }
 
 struct TipEventNotifcationManger: Tip {

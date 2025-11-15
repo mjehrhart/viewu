@@ -66,17 +66,10 @@ struct ViewSettings: View {
         ZStack {
             
             Form {
-                 
-                Section{
-                    Toggle("Enabled", isOn: $developerModeIsOn)
-                } header: {
-                    Text("Developer Mode")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                } 
                 
                 Section{
                     Toggle("Enabled", isOn: $frigatePlusOn)
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
                     Text("Friagte+")
                         .foregroundColor(.orange)
@@ -84,6 +77,7 @@ struct ViewSettings: View {
                 
                 Section{
                     Toggle("Enabled", isOn: $notificationModeIsOn)
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
                     Text("Notification Manager")
                         .font(.caption)
@@ -100,6 +94,7 @@ struct ViewSettings: View {
                                 cameraHLS = true
                             }
                         }
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
 //                    Toggle("RTSP", isOn: $cameraRTSPPath)
 //                        .onChange(of: cameraRTSPPath) {
 //                            if cameraRTSPPath == true {
@@ -107,6 +102,7 @@ struct ViewSettings: View {
 //                                cameraHLS = false
 //                            }
 //                        }
+                    //.tint(Color(red: 0.153, green: 0.69, blue: 1))
                     Toggle("HLS", isOn: $cameraHLS)
                         .onChange(of: cameraHLS) {
                             if cameraHLS == true {
@@ -118,7 +114,7 @@ struct ViewSettings: View {
                                 camerGo2Rtc = true
                             }
                         }
-                    
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     Toggle("Use Sub Stream", isOn: $cameraSubStream)
                         .onChange(of: cameraSubStream) {
                             if cameraSubStream == true {
@@ -126,6 +122,7 @@ struct ViewSettings: View {
                                 camerGo2Rtc = true
                             }
                         }
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
                     Text("Camera Stream")
                         .font(.caption)
@@ -173,6 +170,7 @@ struct ViewSettings: View {
                     }
                     
                     Toggle("Anonymous", isOn: $mqttIsAnonUser)
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
  
                     if !mqttIsAnonUser {
                         VStack{
@@ -203,7 +201,7 @@ struct ViewSettings: View {
                     
                     Label(mqttManager.isConnected() ? "Connected" : "Disconnected", systemImage: "cable.connector")
                         .frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
-                        .foregroundStyle(mqttManager.isConnected() ? .green : .red)
+                        .foregroundStyle(mqttManager.isConnected() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
                     
                     Button("Save Connection") {
                         
@@ -217,7 +215,8 @@ struct ViewSettings: View {
                         mqttManager.initializeMQTT()
                         mqttManager.connect()
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(CustomPressEffectButtonStyle())
                     .tint(Color(white: 0.58))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
@@ -250,12 +249,13 @@ struct ViewSettings: View {
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     Toggle("Https", isOn: $nvrIsHttps)
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
 //                    LabeledContent("NVR Synced", value: "No")
                     
                     //TODO this doesnt refresh as expected
                     Label(nvrManager.getConnectionState() ? "Connected" : "Disconnected", systemImage: "cable.connector")
                         .frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
-                        .foregroundStyle(nvrManager.getConnectionState() ? .green : .red)
+                        .foregroundStyle(nvrManager.getConnectionState() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
                     
                     Button("Save Connection") {
                         //Sync data accross view and model
@@ -265,10 +265,13 @@ struct ViewSettings: View {
                         
                         nvrManager.checkConnectionStatus(){data,error in
                             //do nothing here
+//                            print("Connection ----------")
+//                            print(error as Any)
                             Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(String(describing: error))")
                         }
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(CustomPressEffectButtonStyle())
                     .tint(Color(white: 0.58))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
@@ -299,7 +302,8 @@ struct ViewSettings: View {
                                 await notificationManager.request()
                             }
                         }
-                        .buttonStyle(.bordered)
+                        //.buttonStyle(.bordered)
+                        .buttonStyle(CustomPressEffectButtonStyle())
                         .tint(Color(white: 0.58))
                         .scaleEffect(scale)
                         .animation(.linear(duration: 1), value: scale)
@@ -326,7 +330,8 @@ struct ViewSettings: View {
                             let _ = EventStorage.shared.delete()
                         }
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(CustomPressEffectButtonStyle())
                     .tint(Color(white: 0.58))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
@@ -361,13 +366,24 @@ struct ViewSettings: View {
                                 }
                             }
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(CustomPressEffectButtonStyle())
                     .tint(Color(white: 0.58))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
                 } header: {
                     Text("Pair Device")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                
+                Section{
+                    Toggle("Enabled", isOn: $developerModeIsOn)
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        
+                } header: {
+                    Text("Developer Mode")
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
@@ -385,7 +401,8 @@ struct ViewSettings: View {
                             .padding(0)
                             .frame(height: 20)
                     }
-                    .buttonStyle(.bordered)
+                    //.buttonStyle(.bordered)
+                    .buttonStyle(CustomPressEffectButtonStyle())
                     .tint(Color(white: 0.58))
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
@@ -456,8 +473,11 @@ struct ViewSettings: View {
                 
                 Section {
                     Text("[Viewu](https://www.viewu.app)")
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     Text("[Support](https://github.com/mjehrhart/viewu)")
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     Text("[Installation Guide](https://installation.viewu.app)")
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
                     Text("Information")
                         .font(.caption)
@@ -473,6 +493,16 @@ struct ViewSettings: View {
         }
         .navigationBarTitle(title, displayMode: .inline)
     }
+    
+    struct CustomPressEffectButtonStyle: ButtonStyle {
+            func makeBody(configuration: Configuration) -> some View {
+                configuration.label
+                    .padding(8)
+                    .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+        }
     
     struct TipEventPairDevice: Tip {
         

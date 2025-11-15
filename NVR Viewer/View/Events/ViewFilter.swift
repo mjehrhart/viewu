@@ -26,6 +26,7 @@ struct ViewFilter: View {
                     HStack{
                         Label("", systemImage: "web.camera")
                             .padding(0)
+                            .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
                         Picker("Camera", selection: $filter2.selectedCamera) {
                             ForEach(filter2.cameras, id: \.self) {
                                 Text($0)
@@ -33,11 +34,13 @@ struct ViewFilter: View {
                         }.pickerStyle( .menu )
                             .frame(minWidth: 100)
                             .padding(0)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     }
                     
                     HStack{
                         Label("", systemImage: "figure.walk.motion")
                             .padding(0)
+                            .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
                         Picker("Object", selection: $filter2.selectedObject) {
                             ForEach(filter2.objects, id: \.self) {
                                 Text($0)
@@ -45,11 +48,13 @@ struct ViewFilter: View {
                         }.pickerStyle( .menu )
                             .frame(minWidth: 100)
                             .padding(0)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     }
                     
                     HStack{
                         Label("", systemImage: "square.stack.3d.down.right.fill")
                             .padding(0)
+                            .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
                         Picker("Zones", selection: $filter2.selectedZone) {
                             ForEach(filter2.zones, id: \.self) {
                                 Text($0)
@@ -57,11 +62,13 @@ struct ViewFilter: View {
                         }.pickerStyle( .menu )
                             .frame(minWidth: 100)
                             .padding(0)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     }
                     
                     HStack{
                         Label("", systemImage: "lineweight")
                             .padding(0)
+                            .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
                         Picker("Type", selection: $filter2.selectedType) {
                             ForEach(filter2.types, id: \.self) {
                                 Text($0)
@@ -69,6 +76,7 @@ struct ViewFilter: View {
                         }.pickerStyle( .menu )
                             .frame(minWidth: 100)
                             .padding(0)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     }
  
                 } header: {
@@ -100,7 +108,7 @@ struct ViewFilter: View {
                 Button("Reset") {
                     filter2.reset() 
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(CustomPressEffectButtonStyle())
                 .scaleEffect(scale)
                 .animation(.linear(duration: 1), value: scale)
                 .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
@@ -122,6 +130,16 @@ struct ViewFilter: View {
         ...
         calendar.date(from:endComponents)!
     }()
+    
+    struct CustomPressEffectButtonStyle: ButtonStyle {
+            func makeBody(configuration: Configuration) -> some View {
+                configuration.label
+                    .padding(8)
+                    .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+        }
 }
 
 #Preview {
