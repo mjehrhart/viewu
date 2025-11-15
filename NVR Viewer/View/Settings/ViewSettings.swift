@@ -16,12 +16,14 @@ struct ViewSettings: View {
     @StateObject var notificationManager = NotificationManager()
     
     var currentAppState = MQTTAppState()
+    let connectionTip = ConnectionTip()
     
     @StateObject var mqttManager = MQTTManager.shared()
     @StateObject var nvrManager = NVRConfig.shared()
     
     @State private var scale = 1.0
     @State private var showingAlert = false
+    @State private var showPassword = false
     
     @AppStorage("nvrIPAddress") private var nvrIPAddress: String = ""
     @AppStorage("nvrPortAddress") private var nvrPortAddress: String = "5000"
@@ -71,7 +73,7 @@ struct ViewSettings: View {
                     Toggle("Enabled", isOn: $frigatePlusOn)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
-                    Text("Friagte+")
+                    Text("Frigate+")
                         .foregroundColor(.orange)
                 }
                 
@@ -186,13 +188,35 @@ struct ViewSettings: View {
                             
                             HStack{
                                 Text("Password:")
-                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                    //.frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                    .frame(width:150, alignment: .leading)
                                     .padding(.leading, 40)
                                  
-                                SecureField("", text: $mqttPassword)
-                                    .frame(alignment: .leading)
-                                    .autocorrectionDisabled()
-                                    .disabled(mqttIsAnonUser)
+                                ZStack {
+                                    
+                                    if !showPassword {
+                                        SecureField("", text: $mqttPassword)
+                                            .autocapitalization(.none)
+                                            .autocorrectionDisabled()
+                                            .frame(alignment: .leading)
+                                            .disabled(mqttIsAnonUser)
+                                    }
+                                    
+                                    if showPassword {
+                                        TextField("", text: $mqttPassword)
+                                            .autocapitalization(.none)
+                                            .autocorrectionDisabled()
+                                            .frame(alignment: .leading)
+                                            .disabled(mqttIsAnonUser)
+                                    }
+                                }
+                                
+                                Button("", systemImage: showPassword ? "eye.slash" : "eye") {
+                                    showPassword = !showPassword
+                                }
+                                .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
+                                .frame(alignment: .trailing)
+                                .padding(.trailing, 20)
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading) 
                         }
@@ -229,12 +253,16 @@ struct ViewSettings: View {
                 }
                    
                 Section {
+                    TipView(connectionTip)
+                        //.foregroundColor(Color(red: 0.153, green: 0.69, blue: 1))
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     HStack{
                         Text("Address:")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
                         ScrollView(.horizontal){
                             TextField("0.0.0.0", text: $nvrIPAddress)
+                                .autocapitalization(.none)
                                 .autocorrectionDisabled()
                                 .frame(alignment: .leading)
                         }
@@ -251,8 +279,7 @@ struct ViewSettings: View {
                     Toggle("Https", isOn: $nvrIsHttps)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
 //                    LabeledContent("NVR Synced", value: "No")
-                    
-                    //TODO this doesnt refresh as expected
+                     
                     Label(nvrManager.getConnectionState() ? "Connected" : "Disconnected", systemImage: "cable.connector")
                         .frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
                         .foregroundStyle(nvrManager.getConnectionState() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
@@ -264,9 +291,6 @@ struct ViewSettings: View {
                         nvrManager.setPort( port: nvrPortAddress )
                         
                         nvrManager.checkConnectionStatus(){data,error in
-                            //do nothing here
-//                            print("Connection ----------")
-//                            print(error as Any)
                             Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(String(describing: error))")
                         }
                     }
@@ -276,7 +300,6 @@ struct ViewSettings: View {
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
-                    
                 } header: {
                     Text("NVR Settings")
                         .font(.caption)
@@ -503,6 +526,23 @@ struct ViewSettings: View {
                     .cornerRadius(10)
             }
         }
+    
+    struct ConnectionTip: Tip {
+        
+        var title: Text {
+            Text("Connection Requirements")
+        }
+        var message: Text? {
+            Text("Connection must be secured and use HTTPS")
+        }
+        var image: Image? {
+            Image(systemName: "info.bubble")
+        }
+        
+        var options: [Option] {
+                [IgnoresDisplayFrequency(true)]
+            }
+    }
     
     struct TipEventPairDevice: Tip {
         
