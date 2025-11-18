@@ -40,13 +40,15 @@ struct ContentView: View {
     @State private var showLog = false
     @State private var showNotificationManager = false
     
-    @AppStorage("developerModeIsOn") var developerModeIsOn = true
+    //@AppStorage("resetTips") var resetTips = false
+    @AppStorage("developerModeIsOn") var developerModeIsOn = false
     @AppStorage("notificationModeIsOn") var notificationModeIsOn = UserDefaults.standard.bool(forKey: "notificationModeIsOn")
     @AppStorage("frigateAlertsRetain")  var frigateAlertsRetain: Int = 10
     @AppStorage("frigateDetectionsRetain")  var frigateDetectionsRetain: Int = 10
     @AppStorage("frigateVersion")  var frigateVersion: String = "0.0-0"
     @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0"
     @AppStorage("isOnboarding") var isOnboarding: Bool = true
+    @AppStorage("showTips") var showTips: Bool = true
     
     @Environment(\.scenePhase) var scenePhase
     
@@ -73,9 +75,7 @@ struct ContentView: View {
                         
                         if isOnboarding {
                             ViewOnBoarding()
-                            
-                        } else {
-                            
+                        } else { 
                            ViewEventListHome()
                         }
                         
@@ -149,12 +149,6 @@ struct ContentView: View {
                     cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "ctask" )
                     
                 }
-            }
-            .task {
-                    try? Tips.configure([
-                        .displayFrequency(.immediate),
-                            .datastoreLocation(.applicationDefault)
-                    ])
             }
             .onReceive(notificationManager2.$newPage) {
                 guard let notificationSelection = $0 else  { return }

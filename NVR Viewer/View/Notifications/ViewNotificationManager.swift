@@ -26,6 +26,8 @@ struct ViewAPN: View {
     @AppStorage("apnDomain") private var apnDomain: String = ""
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
+    @AppStorage("tipShowNotificationGeneral") private var tipShowNotificationGeneral: Bool = true
+    
     @State private var scale = 1.0
     @State var templateList:[UUID] = []
     @State var showingPopup = true
@@ -36,6 +38,7 @@ struct ViewAPN: View {
     @StateObject var nvrManager = NVRConfig.shared()
     @StateObject var mqttManager = MQTTManager.shared()
  
+    
     init(title: String) {
         
         self.title = title
@@ -64,7 +67,7 @@ struct ViewAPN: View {
                     .padding(.leading, 35)
                 Text("You have \(viewuServerVersion) installed.")
                     .padding(.leading, 25)
-                    .frame(width: .infinity, alignment: .center)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 Spacer()
             }
             .frame(width: UIScreen.screenWidth, height: 100, alignment: .topLeading)
@@ -73,25 +76,20 @@ struct ViewAPN: View {
         
         if nts.notificationPaused {
             VStack{
-                //Spacer()
                 Text("Paused")
                     .frame(maxWidth: .infinity, maxHeight: 100, alignment: .center)
                     .fontWeight(.regular)
                     .font(.largeTitle)
                     .foregroundStyle(Color(red: 0.25, green: 0.25, blue: 0.25))
-                //Spacer()
             }
             .frame(width: UIScreen.screenWidth, height: 100, alignment: .topLeading)
             .background(.red.opacity(0.75))
         }
-        
+ 
         ZStack {
-            
             Form {
-                
-                TipView(tipEventNotifcationManger, arrowEdge: .bottom)
-                
                 Section {
+                    ViewTipsNotificationManager(title: "Notification Manager", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device and resynce these values." )
                     
                     TextField("Message Title", text: $apnTitle)
                         .frame(alignment: .leading)
@@ -120,12 +118,10 @@ struct ViewAPN: View {
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
-                //.headerProminence(.increased)
-                //.foregroundColor(.white)
-                //.listRowBackground(Color.mint)
                 
                 Section {
-                    TipView(tipEventDomain, arrowEdge: .bottom)
+               
+                    ViewTipsNotificationDomain(title: "Accessible Domain", message: "For accessing the NVRs clips and snapshots, it's recommended to use a public domain name for Viewu. Your domain must start with https://. To enhance security, it's best practice to protect this domain with a VPN like Tailscale, ensuring that only authorized individuals can access it." )
                     
                     TextField("https://domaintoviewnvr.com", text: $apnDomain)
                         .frame(alignment: .leading)
@@ -134,7 +130,6 @@ struct ViewAPN: View {
                         .onChange(of: apnDomain){
                             nts.flagDomain = false
                         }
-                    //.popoverTip(tipEventDomain)
                     
                     Button("Save") {
                         for i in 0..<1 {
@@ -159,7 +154,9 @@ struct ViewAPN: View {
                 }
                 
                 Section {
-                    TipView(tipEventNotifcationTemplate, arrowEdge: .bottom)
+                    //TipView(tipEventNotifcationTemplate, arrowEdge: .bottom)
+                    ViewTipsNotificationTemplate(title: "Notification Templates", message: "This helps reduce the number of notifications received and allows you to specify which events you get notifications for. Filtering notifications based on the type field can significantly reduce noise and ensure users receive only the most relevant updates" )
+                    
                     List{
                         Text("")
                             .frame(maxWidth: .infinity, maxHeight: 4, alignment: .leading)

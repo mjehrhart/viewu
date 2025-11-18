@@ -35,18 +35,15 @@ struct ViewCamera: View {
     @State private var cameraHLS: Bool = UserDefaults.standard.bool(forKey: "cameraHLS")
     
     @State var flagAllowNonSub = false
-    let tipCameraGeneral = TipCameraGeneral()
     var counter = 0;
-    
+     
     var body: some View {
         
         ScrollView {
             VStack{
-                
-                TipView(tipCameraGeneral, arrowEdge: .bottom)
-                    .padding(.top, 10)
-                    .padding(.horizontal, 20)
-                
+ 
+                ViewTipsLiveCameras(title: "Live Cameras", message: "You can change the camera stream from the Settings page. To reduce load times, use a sub-stream whenever possible." )
+                    .padding(10)
                 
                 Section{
                     
@@ -97,6 +94,7 @@ struct ViewCamera: View {
                             VStack{
                                 
                                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
+                                    
                                     if config.item.cameras[cameraName]?.enabled == true {
                                         
                                         let camera = config.item.cameras[cameraName];
@@ -178,33 +176,6 @@ struct ViewCamera: View {
         }
         
         return urlString
-    }
-    
-    struct TipCameraGeneral: Tip {
-        
-        @Parameter
-        static var shownBefore: Bool = false
-        
-        var title: Text {
-            Text("Cameras")
-        }
-        
-        var message: Text? {
-            Text("You can change the camera stream from the Settings page. To reduce load times, use a sub-stream whenever possible.")
-        }
-        
-        var image: Image? {
-            Image(systemName: "info.bubble")
-        }
-        
-        var rules: [Rule] {
-            [
-                #Rule(Self.$shownBefore) { $0 == false }
-            ]
-        }
-        
-        var options: [TipOption] = [MaxDisplayCount(1)]
-        
     }
 }
 

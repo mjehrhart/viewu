@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -238,6 +238,10 @@
 		BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NVR_Viewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		343C6E732ECA6A8C00D0A5D3 /* Tips */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tips; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		340AAFEB2BA0A5CB00EB69F4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -441,6 +445,7 @@
 		34D5EFE32B92AB29002A84B0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				343C6E732ECA6A8C00D0A5D3 /* Tips */,
 				342103612C1B5C0100CBBF83 /* OnBoarding */,
 				342103502C11381000CBBF83 /* Notifications */,
 				342103472C0EA29000CBBF83 /* Log */,
@@ -624,6 +629,9 @@
 			);
 			dependencies = (
 				340AAFF42BA0A5CC00EB69F4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				343C6E732ECA6A8C00D0A5D3 /* Tips */,
 			);
 			name = "NVR Viewer";
 			packageProductDependencies = (

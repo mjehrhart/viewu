@@ -11,12 +11,10 @@ import TipKit
 struct ViewSettings: View {
     
     let title: String
- 
-    let tipEventPairDevice = TipEventPairDevice()
+  
     @StateObject var notificationManager = NotificationManager()
     
     var currentAppState = MQTTAppState()
-    let connectionTip = ConnectionTip()
     
     @StateObject var mqttManager = MQTTManager.shared()
     @StateObject var nvrManager = NVRConfig.shared()
@@ -27,7 +25,7 @@ struct ViewSettings: View {
     
     @AppStorage("nvrIPAddress") private var nvrIPAddress: String = ""
     @AppStorage("nvrPortAddress") private var nvrPortAddress: String = "5000"
-    @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = false
+    @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = true
     
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
     @AppStorage("notificationModeIsOn") private var notificationModeIsOn: Bool = false
@@ -46,8 +44,13 @@ struct ViewSettings: View {
     @AppStorage("mqttPassword") private var mqttPassword: String = ""
      
     @AppStorage("isOnboarding") var isOnboarding: Bool?
-    @State private var resetTipsAndInstructions: Bool = false
-    
+    @AppStorage("tipsSettingsPairDevice") private var tipsSettingsPairDevice: Bool = true
+    @AppStorage("tipsSettingsNVR") private var tipsSettingsNVR: Bool = true
+    @AppStorage("tipsNotificationTemplate") private var tipsNotificationTemplate: Bool = true
+    @AppStorage("tipsNotificationDomain") private var tipsNotificationDomain: Bool = true
+    @AppStorage("tipsNotificationDefault") private var tipsNotificationDefault: Bool = true
+    @AppStorage("tipsLiveCameras") private var tipsLiveCameras: Bool = true
+ 
     //FIX THIS
     //11/05/2025 
     var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
@@ -183,6 +186,8 @@ struct ViewSettings: View {
                                 TextField("", text: $mqttUser)
                                     .frame(alignment: .leading)
                                     .disabled(mqttIsAnonUser)
+                                    .autocapitalization(.none)
+                                    .autocorrectionDisabled()
                             }
                             .frame(width: UIScreen.screenWidth, alignment: .leading)
                             
@@ -253,9 +258,9 @@ struct ViewSettings: View {
                 }
                    
                 Section {
-                    TipView(connectionTip)
-                        //.foregroundColor(Color(red: 0.153, green: 0.69, blue: 1))
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    
+                    ViewTipsSettingsNVR(title: "Connection Requirements", message: "Connection must be secured and use HTTPS")
+                    
                     HStack{
                         Text("Address:")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -368,14 +373,14 @@ struct ViewSettings: View {
                 }
                 
                 Section{
-                    TipView(tipEventPairDevice, arrowEdge: .bottom)
+                    ViewTipsSettingsPairDevie(title: "Pair Device", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device")
+                    
                     HStack{
                         Text("Paired:")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                             .padding(.leading, 40)
                         Text(viewuDevicePairedArg ? "Enabled" : "Disabled")
                             .frame(alignment: .leading)
-                        //.foregroundStyle(.tertiary)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                      
@@ -414,17 +419,17 @@ struct ViewSettings: View {
                 Section{
                     Button( action: {
                         isOnboarding = true
-                        try? Tips.resetDatastore()
-                        try? Tips.configure([
-                            .displayFrequency(.immediate),
-                            .datastoreLocation(.applicationDefault)
-                        ])
+                        tipsSettingsPairDevice = true
+                        tipsSettingsNVR = true
+                        tipsNotificationTemplate = true
+                        tipsNotificationDomain = true
+                        tipsNotificationDefault = true
+                        tipsLiveCameras = true
                     }) {
                         Text("Reset Tips")
                             .padding(0)
                             .frame(height: 20)
                     }
-                    //.buttonStyle(.bordered)
                     .buttonStyle(CustomPressEffectButtonStyle())
                     .tint(Color(white: 0.58))
                     .scaleEffect(scale)
@@ -499,6 +504,8 @@ struct ViewSettings: View {
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     Text("[Support](https://github.com/mjehrhart/viewu)")
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    Text("[Reddit](https://www.reddit.com/r/viewu/)")
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
                     Text("[Installation Guide](https://installation.viewu.app)")
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
@@ -526,53 +533,9 @@ struct ViewSettings: View {
                     .cornerRadius(10)
             }
         }
-    
-    struct ConnectionTip: Tip {
-        
-        var title: Text {
-            Text("Connection Requirements")
-        }
-        var message: Text? {
-            Text("Connection must be secured and use HTTPS")
-        }
-        var image: Image? {
-            Image(systemName: "info.bubble")
-        }
-        
-        var options: [Option] {
-                [IgnoresDisplayFrequency(true)]
-            }
-    }
-    
-    struct TipEventPairDevice: Tip {
-        
-        @Parameter
-        static var shownBefore: Bool = false
-        
-        var title: Text {
-            Text("Pairing Device")
-        }
-     
-        var message: Text? {
-            Text("Important. Anytime you update or restart the Viewu Server, you will need to repair your device")
-        }
-     
-        var image: Image? {
-            Image(systemName: "info.bubble")
-        }
-        
-        var rules: [Rule] {
-            [
-                #Rule(Self.$shownBefore) { $0 == false }
-            ]
-        }
-        
-        var options: [TipOption] = [MaxDisplayCount(1)]
-     
-    }
 }
 
-#Preview {
-    ViewSettings(title: "Settings")
-}
+//#Preview {
+//    ViewSettings(title: "Settings")
+//}
 
