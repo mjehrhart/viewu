@@ -75,8 +75,8 @@ struct ContentView: View {
                         
                         if isOnboarding {
                             ViewOnBoarding()
-                        } else { 
-                           ViewEventListHome()
+                        } else {
+                            ViewEventListHome()
                         }
                         
                     case 1:
@@ -93,16 +93,24 @@ struct ContentView: View {
                 //DispatchQueue.global().async { }
                 //DispatchQueue.main.async { }
                 //Load Defaults for app
-                 
+                
                 DispatchQueue.main.async {
                     let url = nvr.getUrl()
                     let urlString = url + "/api/config"
                     print(urlString)
                     cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
-                        
-                        //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
-                        
+                         
                         guard let data = data else { return }
+                        
+                        if developerModeIsOn {
+                            do {
+                                Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
+                                if let responseString = String(data: data, encoding: .utf8) {
+                                    print("Raw response data: \(responseString)")
+                                    Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Result", text: "\(responseString)")
+                                }
+                            }
+                        }
                         
                         do {
                             //FRIGATE 16+ reguires NVRConfigurationCall2
@@ -113,8 +121,7 @@ struct ContentView: View {
                             //                            let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
                             //                            ViewEventInformation( endPointOptionsArray: epsArray)
                             //                        }
-                            
-                            //Commented out for Testing on 11/08/2025
+                             
                             filter2.setCameras(items: config.item.cameras)
                             filter2.setObject(items: config.item.cameras)
                             filter2.setZones(items: config.item.cameras)
@@ -132,15 +139,22 @@ struct ContentView: View {
                             }
                             
                         }catch (let err){
-                            Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001", type: "ERROR", text: "\(err)")
+                            Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001.1", type: "ERROR", text: "\(err)")
                             
                             do {
                                 if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
                                     
-                                    Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001", type: "Info", text: "\(json)")
+                                    if developerModeIsOn {
+                                        if let responseString = String(data: data, encoding: .utf8) {
+                                            print("Raw response data: \(responseString)")
+                                        }
+                                    }
+                                    
+                                    Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001.1", type: "Info", text: "\(json)")
                                 }
                             } catch(let err) {
-                                Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001", type: "ERROR", text: "\(err)")
+                                 
+                                Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001.2", type: "ERROR", text: "\(err)")
                             }
                         }
                     }
@@ -279,7 +293,7 @@ struct ContentView: View {
                                         showNotificationManager.toggle()
                                     })
                             }
-                              
+                            
                             if developerModeIsOn {
                                 Spacer()
                                 Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
@@ -310,7 +324,7 @@ struct ContentView: View {
                             
                             Label("Settings", systemImage: "gearshape")
                                 .labelStyle(VerticalLabelStyle(show: false))
-                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45)) 
+                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
                                 .fontWeight(.regular)
                                 .foregroundColor(.gray)
                                 .onTapGesture(perform: {

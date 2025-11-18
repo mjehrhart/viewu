@@ -90,7 +90,7 @@ struct ViewSettings: View {
                 }
                   
                 Section {
-                    Toggle("go2rtc", isOn: $camerGo2Rtc)
+                    Toggle("RTSP", isOn: $camerGo2Rtc)
                         .onChange(of: camerGo2Rtc) {
                             if camerGo2Rtc == true {
                                 cameraRTSPPath = false
