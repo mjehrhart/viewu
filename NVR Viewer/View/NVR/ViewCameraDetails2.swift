@@ -91,9 +91,7 @@ struct ViewCameraDetails2: View {
                 Text("Audio")
                     .font(.caption)
             }
-            
-            */
-            
+             
             HStack{
                 Text("Best Image Timeout")
                     .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -741,8 +739,7 @@ struct ViewCameraDetails2: View {
              
             
             Section{
-             
-                /*
+     
                 HStack{
                     Text("color")
                         .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -779,8 +776,7 @@ struct ViewCameraDetails2: View {
                     }
                 }
                 .frame(width: UIScreen.screenWidth, alignment: .leading)
-             */
-            
+     
                 HStack{
                     Text("format")
                         .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -845,7 +841,7 @@ struct ViewCameraDetails2: View {
                 Text("Ui")
                     .font(.caption)
             }
- 
+             */
           
         }
         .navigationBarTitle(text, displayMode: .inline)

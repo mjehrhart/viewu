@@ -106,17 +106,23 @@ struct ContentView: View {
                             do {
                                 Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
                                 if let responseString = String(data: data, encoding: .utf8) {
-                                    print("Raw response data: \(responseString)")
-                                    Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Result", text: "\(responseString)")
+                                    //print("Raw response data: \(responseString)")
+                                    //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Result", text: "\(responseString)")
                                 }
                             }
                         }
                         
                         do {
+                            
+                            //print("=1===============================================================================================")
+                            
                             //FRIGATE 16+ reguires NVRConfigurationCall2
                             //config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
                             config.item = try JSONDecoder().decode(NVRConfigurationCall2.self, from: data)
                             
+                             
+                            //print("=2===============================================================================================")
+                            //print(config.item)
                             //                        if let dataJson = jsonObject.data(using: .utf8) {
                             //                            let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
                             //                            ViewEventInformation( endPointOptionsArray: epsArray)
@@ -139,16 +145,14 @@ struct ContentView: View {
                             }
                             
                         }catch (let err){
+                            
+                            //print("=3==========")
+                            print(err)
+                            
                             Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001.1", type: "ERROR", text: "\(err)")
                             
                             do {
                                 if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                    
-                                    if developerModeIsOn {
-                                        if let responseString = String(data: data, encoding: .utf8) {
-                                            print("Raw response data: \(responseString)")
-                                        }
-                                    }
                                     
                                     Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001.1", type: "Info", text: "\(json)")
                                 }
