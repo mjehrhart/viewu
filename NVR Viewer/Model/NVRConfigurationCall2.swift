@@ -17,12 +17,12 @@ final class NVRConfigurationSuper2: ObservableObject { // Codable,
         
         item = NVRConfigurationCall2(
             version : "",
-            record: RecordSettings2(detections: Detections2(retain: RetainClips2(days: 10, mode: "")), alerts: Alerts2(retain: RetainClips2(days: 0, mode: ""))),
+            record: RecordSettings2(detections: Detections2(retain: RetainClips2(days: 10, mode: "")),
+                                    alerts: Alerts2(retain: RetainClips2(days: 0, mode: ""))),
             cameras: ["" : Cameras2(
                 enabled: false,
                 ffmpeg: FFMPEG2(
-                    inputs: [],
-                    output_args: CameraOutputArgs2(detect: [], record: "" ), //, rtmp: ""
+                    inputs: [], 
                     retry_interval: 0
                 ),
                 name: "",
@@ -117,7 +117,7 @@ struct FFMPEG2: Codable, Hashable {
     //    let hwaccel_args: String
     //    let input_args: String
     let inputs: [CameraInputs2]
-    let output_args: CameraOutputArgs2
+    //let output_args: CameraOutputArgs2
     let retry_interval: Int
 }
 

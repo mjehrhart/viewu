@@ -178,6 +178,11 @@ struct ViewCamera: View {
             return newAddress
         }
         
+        if ip == "localhost" {
+            let newAddress = tmp[0] + "://" + nvr.getIP() + ":" + String(tmp[2])
+            return newAddress
+        }
+        
         return urlString
     }
 }
