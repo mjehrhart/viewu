@@ -121,7 +121,7 @@ struct ViewAPN: View {
                 
                 Section {
                
-                    ViewTipsNotificationDomain(title: "Accessible Domain", message: "For accessing the NVRs clips and snapshots, it's recommended to use a public domain name for Viewu. Your domain must start with https://. To enhance security, it's best practice to protect this domain with a VPN like Tailscale, ensuring that only authorized individuals can access it." )
+                    ViewTipsNotificationDomain(title: "Accessible Domain", message: "For secure access to clips and snapshots, Viewu should be configured with a public domain name using an https:// endpoint. To enhance security and ensure only authorized users can reach the service, it is best practice to place this domain behind a VPN solution such as Tailscale. If a secure public endpoint is not available, you may use http:// for local-network access only, including viewing notification images on your LAN." )
                     
                     TextField("https://domaintoviewnvr.com", text: $apnDomain)
                         .frame(alignment: .leading)
