@@ -259,7 +259,7 @@ struct ViewSettings: View {
                    
                 Section {
                     
-                    ViewTipsSettingsNVR(title: "Connection Requirements", message: "Connection must be secured and use HTTPS")
+                    ViewTipsSettingsNVR(title: "Connection Requirements", message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN.")
                     
                     HStack{
                         Text("Address:")
