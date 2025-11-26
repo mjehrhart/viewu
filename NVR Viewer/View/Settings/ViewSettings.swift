@@ -50,6 +50,7 @@ struct ViewSettings: View {
     @AppStorage("tipsNotificationDefault") private var tipsNotificationDefault: Bool = true
     @AppStorage("tipsLiveCameras") private var tipsLiveCameras: Bool = true
     
+    
     //FIX THIS
     //11/05/2025
     var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
@@ -258,8 +259,6 @@ struct ViewSettings: View {
                 
                 Section {
                     
-                    ViewTipsSettingsNVR(title: "Connection Requirements", message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN.")
-                    
                     HStack{
                         Text("Address:")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -305,9 +304,15 @@ struct ViewSettings: View {
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
                 } header: {
-                    Text("NVR Settings")
-                        .font(.caption)
-                        .foregroundColor(.orange)
+                    HStack{
+                        if !tipsSettingsNVR {
+                            Text("NVR Settings")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                        
+                        ViewTipsSettingsNVR(title: "Connection Requirements", message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN.")
+                    }
                 }
                 
                 Section {
@@ -372,7 +377,6 @@ struct ViewSettings: View {
                 }
                 
                 Section{
-                    ViewTipsSettingsPairDevie(title: "Pair Device", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device")
                     
                     HStack{
                         Text("Paired:")
@@ -400,9 +404,15 @@ struct ViewSettings: View {
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
                 } header: {
-                    Text("Pair Device")
-                        .font(.caption)
-                        .foregroundColor(.orange)
+                    HStack{
+                        if !tipsSettingsPairDevice {
+                            Text("Pair Device")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                        
+                        ViewTipsSettingsPairDevie(title: "Pair Device", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device.")
+                    }
                 }
                 
                 Section{

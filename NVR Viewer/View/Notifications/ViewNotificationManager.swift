@@ -27,6 +27,9 @@ struct ViewAPN: View {
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     
     @AppStorage("tipShowNotificationGeneral") private var tipShowNotificationGeneral: Bool = true
+    @AppStorage("tipsNotificationTemplate") private var tipsNotificationTemplate: Bool = true
+    @AppStorage("tipsNotificationDomain") private var tipsNotificationDomain: Bool = true
+    @AppStorage("tipsNotificationDefault") private var tipsNotificationDefault: Bool = true
     
     @State private var scale = 1.0
     @State var templateList:[UUID] = []
@@ -37,7 +40,7 @@ struct ViewAPN: View {
     @StateObject var nts = NotificationTemplateString.shared()
     @StateObject var nvrManager = NVRConfig.shared()
     @StateObject var mqttManager = MQTTManager.shared()
- 
+    
     
     init(title: String) {
         
@@ -85,18 +88,17 @@ struct ViewAPN: View {
             .frame(width: UIScreen.screenWidth, height: 100, alignment: .topLeading)
             .background(.red.opacity(0.75))
         }
- 
+        
         ZStack {
             Form {
                 Section {
-                    ViewTipsNotificationManager(title: "Notification Manager", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device and resynce these values." )
                     
                     TextField("Message Title", text: $apnTitle)
                         .frame(alignment: .leading)
                         .overlay(IndicatorOverlay(offset: -60, flag: nts.flagTitle))
                         .onChange(of: apnTitle){
                             nts.flagTitle = false
-                        } 
+                        }
                     Button("Save") {
                         for i in 0..<1 {
                             DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
@@ -114,14 +116,18 @@ struct ViewAPN: View {
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
                     
                 } header: {
-                    Text("Notification Title")
-                        .font(.caption)
-                        .foregroundColor(.orange)
+                    HStack{
+                        
+                        if !tipsNotificationDefault{
+                            Text("Notification Title")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                        ViewTipsNotificationManager(title: "Notification Manager", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device and resynce these values." )
+                    }
                 }
                 
                 Section {
-               
-                    ViewTipsNotificationDomain(title: "Accessible Domain", message: "For secure access to clips and snapshots, Viewu should be configured with a public domain name using an https:// endpoint. To enhance security and ensure only authorized users can reach the service, it is best practice to place this domain behind a VPN solution such as Tailscale. If a secure public endpoint is not available, you may use http:// for local-network access only, including viewing notification images on your LAN." )
                     
                     TextField("https://domaintoviewnvr.com", text: $apnDomain)
                         .frame(alignment: .leading)
@@ -148,14 +154,19 @@ struct ViewAPN: View {
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
                     
                 } header: {
-                    Text("Accessible Domain")
-                        .font(.caption)
-                        .foregroundColor(.orange)
+                    HStack{
+                        if !tipsNotificationDomain{
+                            Text("Accessible Domain")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                        
+                        ViewTipsNotificationDomain(title: "Accessible Domain", message: "For secure access to clips and snapshots, Viewu should be configured with a public domain name using an https:// endpoint. To enhance security and ensure only authorized users can reach the service, it is best practice to place this domain behind a VPN solution such as Tailscale. If a secure public endpoint is not available, you may use http:// for local-network access only, including viewing notification images on your LAN." )
+                    }
                 }
                 
                 Section {
                     //TipView(tipEventNotifcationTemplate, arrowEdge: .bottom)
-                    ViewTipsNotificationTemplate(title: "Notification Templates", message: "This helps reduce the number of notifications received and allows you to specify which events you get notifications for. Filtering notifications based on the type field can significantly reduce noise and ensure users receive only the most relevant updates" )
                     
                     List{
                         Text("")
@@ -196,8 +207,13 @@ struct ViewAPN: View {
                         
                     }
                 } header: {
-                    Text("Saved Templates")
-                        .foregroundColor(.orange)
+                    HStack{
+                        if !tipsNotificationTemplate {
+                            Text("Saved Templates")
+                                .foregroundColor(.orange)
+                        }
+                        ViewTipsNotificationTemplate(title: "Notification Templates", message: "This helps reduce the number of notifications received and allows you to specify which events you get notifications for. Filtering notifications based on the type field can significantly reduce noise and ensure users receive only the most relevant updates" )
+                    }
                 }
                 
                 ForEach( nts.templateList, id: \.self) { template in
@@ -220,6 +236,7 @@ struct ViewAPN: View {
                         }
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
+                    
                     Text("Notifications")
                         .font(.caption)
                         .foregroundColor(.orange)
@@ -237,7 +254,7 @@ struct ViewAPN: View {
         }
         .navigationBarTitle(title, displayMode: .inline)
         .onAppear {
- 
+            
         }
     }
     
@@ -289,14 +306,14 @@ struct ViewAPN: View {
     }
     
     struct CustomPressEffectButtonStyle: ButtonStyle {
-            func makeBody(configuration: Configuration) -> some View {
-                configuration.label
-                    .padding(8)
-                    .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .padding(8)
+                .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
+                .foregroundColor(.white)
+                .cornerRadius(10)
         }
+    }
 }
 
 struct PopupMiddle: View {
@@ -468,7 +485,7 @@ struct ViewNotificationManager: View, Hashable, Equatable {
                     
                     Toggle(nt.cameras[index].name, isOn: $nt.cameras[index].state)
                         .onChange(of: nt.cameras[index].state) {
- 
+                            
                             var tmp = ""
                             cameraTemplate = ""
                             for camera in nt.cameras {
@@ -626,14 +643,14 @@ struct ViewNotificationManager: View, Hashable, Equatable {
     }
     
     struct CustomPressEffectButtonStyle: ButtonStyle {
-            func makeBody(configuration: Configuration) -> some View {
-                configuration.label
-                    .padding(8)
-                    .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .padding(8)
+                .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
+                .foregroundColor(.white)
+                .cornerRadius(10)
         }
+    }
 }
 
 struct TipEventNotifcationManger: Tip {

@@ -31,8 +31,7 @@ struct ViewTipsNotificationManager: View {
                     
                     Image(systemName: "info.bubble")
                         .resizable()
-                        //.foregroundColor(iconColor)
-                        .foregroundColor(.blue)
+                        .foregroundColor(iconColor)
                         .frame(width: 40, height: 40)
                         .frame(alignment: .top)
                         .padding(.top, 10)
@@ -48,15 +47,18 @@ struct ViewTipsNotificationManager: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 17, weight: .semibold))
+                        .textCase(nil)
                         .padding(.bottom, 1)
                     
                     Text(message)
                         .foregroundStyle(.gray)
-                        .font(.system(size: 15.2))
+                        //.font(.system(size: 15.2))
+                        .textCase(nil)
+                        .font(.system(size: 13.2))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                 }
-                .padding(.leading, 7)
+                //.padding(.leading, 7)
                 .padding(.bottom, 7)
                 .frame(maxWidth: .infinity)
                 
@@ -65,6 +67,7 @@ struct ViewTipsNotificationManager: View {
                         .padding(.trailing, 10)
                         .padding(.top, 10)
                         .foregroundStyle(.gray)
+                        //.foregroundStyle(.blue)
                         .font(.system(size: 16, weight: .semibold))
                         .frame(alignment: .top)
                         .onTapGesture {
@@ -73,12 +76,13 @@ struct ViewTipsNotificationManager: View {
                     Spacer()
                 }
             }
-            .padding(.top, 5)
-            .padding(.leading, 3)
-            .padding(.trailing, 3)
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .frame( maxHeight: .infinity)
+            .padding(10)
+            //.background(Color(.systemGray6))
+            .background(Color(.white))
+            .cornerRadius(15)
+            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+            .frame(width: UIScreen.screenWidth - 30 )
+            //.background(Color.white)
         }
         else {
             
@@ -124,8 +128,7 @@ struct ViewTipsNotificationDomain: View {
                     
                     Image(systemName: "info.bubble")
                         .resizable()
-                        //.foregroundColor(iconColor)
-                        .foregroundColor(.blue)
+                        .foregroundColor(iconColor)
                         .frame(width: 40, height: 40)
                         .frame(alignment: .top)
                         .padding(.top, 10)
@@ -141,15 +144,18 @@ struct ViewTipsNotificationDomain: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 17, weight: .semibold))
+                        .textCase(nil)
                         .padding(.bottom, 1)
                     
                     Text(message)
                         .foregroundStyle(.gray)
-                        .font(.system(size: 15.2))
+                        //.font(.system(size: 15.2))
+                        .textCase(nil)
+                        .font(.system(size: 13.2))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                 }
-                .padding(.leading, 7)
+                //.padding(.leading, 7)
                 .padding(.bottom, 7)
                 .frame(maxWidth: .infinity)
                 
@@ -158,6 +164,7 @@ struct ViewTipsNotificationDomain: View {
                         .padding(.trailing, 10)
                         .padding(.top, 10)
                         .foregroundStyle(.gray)
+                        //.foregroundStyle(.blue)
                         .font(.system(size: 16, weight: .semibold))
                         .frame(alignment: .top)
                         .onTapGesture {
@@ -166,12 +173,13 @@ struct ViewTipsNotificationDomain: View {
                     Spacer()
                 }
             }
-            .padding(.top, 5)
-            .padding(.leading, 3)
-            .padding(.trailing, 3)
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .frame( maxHeight: .infinity)
+            .padding(10)
+            //.background(Color(.systemGray6))
+            .background(Color(.white))
+            .cornerRadius(15)
+            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+            .frame(width: UIScreen.screenWidth - 30 )
+            //.background(Color.white)
         }
         else {
             
@@ -217,8 +225,7 @@ struct ViewTipsNotificationTemplate: View {
                     
                     Image(systemName: "info.bubble")
                         .resizable()
-                        //.foregroundColor(iconColor)
-                        .foregroundColor(.blue)
+                        .foregroundColor(iconColor)
                         .frame(width: 40, height: 40)
                         .frame(alignment: .top)
                         .padding(.top, 10)
@@ -234,15 +241,18 @@ struct ViewTipsNotificationTemplate: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 17, weight: .semibold))
+                        .textCase(nil)
                         .padding(.bottom, 1)
                     
                     Text(message)
                         .foregroundStyle(.gray)
-                        .font(.system(size: 15.2))
+                        //.font(.system(size: 15.2))
+                        .textCase(nil)
+                        .font(.system(size: 13.2))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                 }
-                .padding(.leading, 7)
+                //.padding(.leading, 7)
                 .padding(.bottom, 7)
                 .frame(maxWidth: .infinity)
                 
@@ -251,6 +261,7 @@ struct ViewTipsNotificationTemplate: View {
                         .padding(.trailing, 10)
                         .padding(.top, 10)
                         .foregroundStyle(.gray)
+                        //.foregroundStyle(.blue)
                         .font(.system(size: 16, weight: .semibold))
                         .frame(alignment: .top)
                         .onTapGesture {
@@ -259,12 +270,13 @@ struct ViewTipsNotificationTemplate: View {
                     Spacer()
                 }
             }
-            .padding(.top, 5)
-            .padding(.leading, 3)
-            .padding(.trailing, 3)
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .frame( maxHeight: .infinity)
+            .padding(10)
+            //.background(Color(.systemGray6))
+            .background(Color(.white))
+            .cornerRadius(15)
+            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+            .frame(width: UIScreen.screenWidth - 30 )
+            //.background(Color.white)
         }
         else {
             
@@ -310,8 +322,7 @@ struct ViewTipsSettingsNVR: View {
                     
                     Image(systemName: "info.bubble")
                         .resizable()
-                        //.foregroundColor(iconColor)
-                        .foregroundColor(.blue)
+                        .foregroundColor(iconColor)
                         .frame(width: 40, height: 40)
                         .frame(alignment: .top)
                         .padding(.top, 10)
@@ -327,15 +338,18 @@ struct ViewTipsSettingsNVR: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 17, weight: .semibold))
+                        .textCase(nil)
                         .padding(.bottom, 1)
                     
                     Text(message)
                         .foregroundStyle(.gray)
-                        .font(.system(size: 15.2))
+                        //.font(.system(size: 15.2))
+                        .textCase(nil)
+                        .font(.system(size: 13.2))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                 }
-                .padding(.leading, 7)
+                //.padding(.leading, 7)
                 .padding(.bottom, 7)
                 .frame(maxWidth: .infinity)
                 
@@ -344,6 +358,7 @@ struct ViewTipsSettingsNVR: View {
                         .padding(.trailing, 10)
                         .padding(.top, 10)
                         .foregroundStyle(.gray)
+                        //.foregroundStyle(.blue)
                         .font(.system(size: 16, weight: .semibold))
                         .frame(alignment: .top)
                         .onTapGesture {
@@ -352,12 +367,13 @@ struct ViewTipsSettingsNVR: View {
                     Spacer()
                 }
             }
-            .padding(.top, 5)
-            .padding(.leading, 3)
-            .padding(.trailing, 3)
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .frame( maxHeight: .infinity)
+            .padding(10)
+            //.background(Color(.systemGray6))
+            .background(Color(.white))
+            .cornerRadius(15)
+            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+            .frame(width: UIScreen.screenWidth - 30 )
+            //.background(Color.white)
         }
         else {
             
@@ -403,8 +419,7 @@ struct ViewTipsSettingsPairDevie: View {
                     
                     Image(systemName: "info.bubble")
                         .resizable()
-                        //.foregroundColor(iconColor)
-                        .foregroundColor(.blue)
+                        .foregroundColor(iconColor)
                         .frame(width: 40, height: 40)
                         .frame(alignment: .top)
                         .padding(.top, 10)
@@ -420,15 +435,18 @@ struct ViewTipsSettingsPairDevie: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 17, weight: .semibold))
+                        .textCase(nil)
                         .padding(.bottom, 1)
                     
                     Text(message)
                         .foregroundStyle(.gray)
-                        .font(.system(size: 15.2))
+                        //.font(.system(size: 15.2))
+                        .textCase(nil)
+                        .font(.system(size: 13.2))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .multilineTextAlignment(.leading)
                 }
-                .padding(.leading, 7)
+                //.padding(.leading, 7)
                 .padding(.bottom, 7)
                 .frame(maxWidth: .infinity)
                 
@@ -437,6 +455,7 @@ struct ViewTipsSettingsPairDevie: View {
                         .padding(.trailing, 10)
                         .padding(.top, 10)
                         .foregroundStyle(.gray)
+                        //.foregroundStyle(.blue)
                         .font(.system(size: 16, weight: .semibold))
                         .frame(alignment: .top)
                         .onTapGesture {
@@ -445,12 +464,13 @@ struct ViewTipsSettingsPairDevie: View {
                     Spacer()
                 }
             }
-            .padding(.top, 5)
-            .padding(.leading, 3)
-            .padding(.trailing, 3)
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .frame( maxHeight: .infinity)
+            .padding(10)
+            //.background(Color(.systemGray6))
+            .background(Color(.white))
+            .cornerRadius(15)
+            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+            .frame(width: UIScreen.screenWidth - 30 )
+            //.background(Color.white)
         }
         else {
             

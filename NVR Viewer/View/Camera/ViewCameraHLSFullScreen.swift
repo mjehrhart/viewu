@@ -13,6 +13,9 @@ struct ViewCameraHLSFullScreen: View {
     let urlString: String
     let cameraName: String
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
     var body: some View {
         ZStack{
             
@@ -23,12 +26,22 @@ struct ViewCameraHLSFullScreen: View {
             )
             .ignoresSafeArea()
             
-            Webview(url: urlString + "/api/\(cameraName)?h=480")
-                .rotationEffect(.degrees(90))
-                .aspectRatio(16/9, contentMode: .fit)
-                .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth)
-                .edgesIgnoringSafeArea(.all)
-                .overlay(CameraOverlay(name: cameraName ), alignment: .bottomTrailing) 
+            if horizontalSizeClass == .regular && verticalSizeClass == .regular {
+                Webview(url: urlString + "/api/\(cameraName)?h=480")
+                    .rotationEffect(.degrees(90))
+                    .aspectRatio(16/9, contentMode: .fill)
+                    .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth )
+                    //.edgesIgnoringSafeArea(.all)
+                    .overlay(CameraOverlay(name: cameraName ), alignment: .bottomTrailing) 
+            } else {
+                Webview(url: urlString + "/api/\(cameraName)?h=480")
+                    .rotationEffect(.degrees(90))
+                    .aspectRatio(16/9, contentMode: .fit)
+                    .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth)
+                    .edgesIgnoringSafeArea(.all)
+                    .overlay(CameraOverlay(name: cameraName ), alignment: .bottomTrailing)
+            }
+             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

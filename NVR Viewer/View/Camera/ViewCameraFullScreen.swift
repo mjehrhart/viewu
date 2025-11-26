@@ -17,6 +17,9 @@ struct ViewCameraFullScreen: View {
     let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
     let menuTextColor = Color.white
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+ 
     var body: some View {
         
         
@@ -37,19 +40,39 @@ struct ViewCameraFullScreen: View {
                     .labelStyle(VerticalLabelStyle(show: false))
                     .foregroundStyle(menuTextColor)
                 
-                VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
-                    .rotationEffect(.degrees(90))
-                    .aspectRatio(16/9, contentMode: .fit)
-                    .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth + 22)
-                    .edgesIgnoringSafeArea(.all)
-                    .onAppear(){
-                        mediaPlayer.audio?.isMuted = false
-                        mediaPlayer.play()
-                    }
-                    .onDisappear(){
-                        mediaPlayer.stop()
-                    }
-                    .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+                if horizontalSizeClass == .regular && verticalSizeClass == .regular {
+                    // UI optimized for a regular-sized screen (typical of iPad in most orientations)
+                    VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+                        .rotationEffect(.degrees(90))
+                        .aspectRatio(16/9, contentMode: .fill)
+                        .frame(width: UIScreen.screenHeight , height: UIScreen.screenWidth )
+                        .edgesIgnoringSafeArea(.all)
+                        .onAppear(){
+                            mediaPlayer.audio?.isMuted = false
+                            mediaPlayer.play()
+                        }
+                        .onDisappear(){
+                            mediaPlayer.stop()
+                        }
+                        .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+                } else {
+                    // UI optimized for compact-sized screens (iPhone, or iPad in certain multitasking modes)
+                    VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+                        .rotationEffect(.degrees(90))
+                        .aspectRatio(16/9, contentMode: .fit)
+                        .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth + 22)
+                        .edgesIgnoringSafeArea(.all)
+                        .onAppear(){
+                            mediaPlayer.audio?.isMuted = false
+                            mediaPlayer.play()
+                        }
+                        .onDisappear(){
+                            mediaPlayer.stop()
+                        }
+                        .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+                }
+    
+                 
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
