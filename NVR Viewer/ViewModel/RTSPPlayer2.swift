@@ -18,8 +18,8 @@ struct VlcPlayeyRTSP2: UIViewRepresentable{
     }
     
     func makeUIView(context: Context) -> UIView {
-         
-            return PlayerUIView2(frame: .zero, urlString: urlString, mediaPlayer: mediaPlayer)
+        
+        return PlayerUIView2(frame: .zero, urlString: urlString, mediaPlayer: mediaPlayer)
     }
 }
 
@@ -40,16 +40,16 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
             let url = URL(string: urlString)!
             let media = VLCMedia(url: url)
             
-            //https://wiki.videolan.org/VLC_command-line_help 
-                    media.addOption("--codec=avcodec")
-                    media.addOption("--avcodec-hw=any")
-                    media.addOption("--avcodec-fast=true")
-                    media.addOption("--glconv-glconv_cvpx")
+            //https://wiki.videolan.org/VLC_command-line_help
+            media.addOption("--codec=avcodec")
+            media.addOption("--avcodec-hw=any")
+            media.addOption("--avcodec-fast=true")
+            media.addOption("--glconv-glconv_cvpx")
             //        media.addOption("--avcodec-threads=0")
-                    media.addOption("--network-caching=100")
-                    media.addOption(":rtsp-caching=150")
+            media.addOption("--network-caching=100")
+            media.addOption(":rtsp-caching=150")
             //        media.addOption("--rtsp-frame-buffer-size=200")
-                    media.addOption("--vout=ios")
+            media.addOption("--vout=ios")
             //        media.addOption("--glconv=glconv_cvpx")
             //        media.addOption("--rtsp-caching=100")
             //        media.addOption("--rtsp-tcp")
@@ -80,7 +80,7 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
             //        )
             
             mediaPlayer.media = media
-            mediaPlayer.delegate = self 
+            mediaPlayer.delegate = self
             mediaPlayer.drawable = self
             mediaPlayer.audio?.isMuted = true
             mediaPlayer.videoAspectRatio = UnsafeMutablePointer<Int8>(mutating: ("16:9" as NSString).utf8String)
@@ -107,35 +107,116 @@ struct StreamRTSP2: View {
     @State var mediaPlayer : VLCMediaPlayer = VLCMediaPlayer()
     @State var flagMute = true
     @State var flagFull = false
+    @State var isLoading = true
+    
+    //Color.orange.opacity(0.6)
+    //Color.gray.opacity(0.125)
+    //Color(red: 0.45, green: 0.45, blue: 0.45)
+    let menuBGColor = Color.orange.opacity(0.6)
+    let menuTextColor = Color.white
+    let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
     
     var body: some View {
-        return ZStack{
-             
-            LinearGradient(
-                colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+        return
+        
+        VStack{
             
-            VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
-                .padding(0)
-                .aspectRatio(16/9, contentMode: .fit)
-                .modifier( CardBackground() )
-                .frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-5)
-                .onAppear(){
-                    mediaPlayer.audio?.isMuted = flagMute
-                    mediaPlayer.play()
+            ZStack{
+                
+                if isLoading{
+                    
+                    LinearGradient(
+                        colors: [.clear, cBlue, .clear],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .ignoresSafeArea()
                 }
-                .onDisappear(){ 
-                    mediaPlayer.stop()
+                 
+                Text("Loading: \(urlString)")
+                    .labelStyle(VerticalLabelStyle(show: false))
+                    .foregroundStyle(menuTextColor)
+                
+                VStack{
+                    VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+                        .padding(0)
+                        .aspectRatio(16/9, contentMode: .fit)
+                        //.modifier( CardBackground2() )
+                        //.frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-5)
+                        .onAppear(){
+                            //isLoading = false
+                            mediaPlayer.audio?.isMuted = flagMute
+                            mediaPlayer.play()
+                        }
+                        .onDisappear(){
+                            mediaPlayer.stop()
+                        }
+                        //.overlay(CameraOverlay(name: cameraName, urlString: urlString, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+ 
                 }
-                .overlay(CameraOverlay(name: cameraName, urlString: urlString, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
-             
+                .background(Color.gray.opacity(0.125))
+ 
+            }
+            .padding(0)
+            
+            HStack(alignment: .firstTextBaseline){
+                 
+                Text(cameraName)
+                    .labelStyle(VerticalLabelStyle(show: false))
+                    .foregroundStyle(menuTextColor)
+                    .fontWeight(.bold)
+                    .onTapGesture(perform: {
+                        
+                    })
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom,5)
+                    .frame(alignment: .leading)
+                 
+                HStack(alignment: .lastTextBaseline){
+                    Spacer()
+                    
+                    Label("", systemImage: flagMute ? "speaker.slash" : "speaker")
+                        //.labelStyle(VerticalLabelStyle(show: false))
+                        .foregroundStyle(menuTextColor)
+                        .font(.system(size: 24))
+                        .onTapGesture(perform: {
+                            flagMute.toggle()
+                            mediaPlayer.audio?.isMuted = flagMute 
+                        })
+                        .padding(.trailing,20)
+                    
+                    Label("", systemImage: "arrow.down.left.and.arrow.up.right.rectangle")
+                        //.labelStyle(VerticalLabelStyle(show: false))
+                        .foregroundStyle(menuTextColor)
+                        .font(.system(size: 24)) 
+                        .onTapGesture(perform: {
+                            flagFull.toggle()
+                        })
+                        .padding(.trailing,20)
+                }
+                Spacer()
+            }
+            .padding(.top, 3)
+            .padding(.bottom, 8)
         }
-        .padding(0) 
+        .background(menuBGColor)
+        .modifier( CardBackground2() )
+        .padding(.leading,10)
+        .padding(.trailing,10)
+        .padding(.bottom,15)
+        .navigationDestination(isPresented: $flagFull){
+            ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
+        }
     }
     
+    struct CardBackground2: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.2), radius: 4)
+        }
+    }
+     
     struct CameraOverlay: View {
         let name: String
         let urlString: String
@@ -146,7 +227,7 @@ struct StreamRTSP2: View {
         @State var flagFull = false
         
         var body: some View {
-             
+            
             Text(name)
                 .padding([.top, .trailing], 10)
                 .padding(.leading, 10)
@@ -156,12 +237,13 @@ struct StreamRTSP2: View {
                 .onTapGesture {
                     flagFull.toggle()
                 }
-                //Moved to here because was having issues otherwise
+            //Moved to here because was having issues otherwise
                 .navigationDestination(isPresented: $flagFull){
                     ViewCameraFullScreen(urlString: urlString, cameraName: name)
                 }
         }
     }
-     
+    
 }
+
 

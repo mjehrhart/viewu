@@ -14,14 +14,84 @@ struct HLSPlayer2: View {
     let cameraName: String
     @State var flagFull = false
     
+    //Color.orange.opacity(0.6)
+    //Color.gray.opacity(0.125)
+    //Color(red: 0.45, green: 0.45, blue: 0.45)
+    let menuBGColor = Color.orange.opacity(0.6)
+    let menuTextColor = Color.white
+    
     var body: some View {
         
-        HStack{
-            Webview(url: urlString + "/api/\(cameraName)?h=480")
-                .modifier(CardBackground())
-                .frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
-                .edgesIgnoringSafeArea(.all)
-                .overlay(CameraOverlay(name: cameraName, urlString: urlString), alignment: .bottomTrailing)
+        VStack{
+            
+            HStack{
+                
+                ZStack{
+                    LinearGradient(
+                        colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80), .clear],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .ignoresSafeArea()
+                    VStack{
+                        Webview(url: urlString + "/api/\(cameraName)?h=720") 
+                            //.modifier(CardBackground2())
+                            //.frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
+                            .aspectRatio(16/9, contentMode: .fill)
+                            //.frame(width: UIScreen.screenWidth)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .edgesIgnoringSafeArea(.all)
+                            .background(Color.gray.opacity(0.125))
+                            //.overlay(CameraOverlay(name: cameraName, urlString: urlString), alignment: .bottomTrailing)
+                    }
+                    .background(Color.gray.opacity(0.125))
+                }
+            }
+            
+            HStack(alignment: .firstTextBaseline){
+                
+                Text(cameraName)
+                    .labelStyle(VerticalLabelStyle(show: false))
+                    .foregroundStyle(menuTextColor)
+                    .fontWeight(.bold)
+                    .onTapGesture(perform: {
+                        
+                    })
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom,5)
+                    .frame(alignment: .leading)
+                
+                HStack(alignment: .lastTextBaseline){
+                    Spacer()
+                     
+                    Label("", systemImage: "arrow.down.left.and.arrow.up.right.rectangle")
+                        .foregroundStyle(menuTextColor)
+                        .font(.system(size: 24))
+                        .onTapGesture(perform: {
+                            flagFull.toggle()
+                        })
+                        .padding(.trailing,20)
+                }
+                Spacer()
+            }
+            .padding(.top, 3)
+            .padding(.bottom, 8)
+        }
+        .background(menuBGColor)
+        .modifier( CardBackground2() )
+        .padding(.leading,10)
+        .padding(.trailing,10)
+        .padding(.bottom,15)
+        .navigationDestination(isPresented: $flagFull){
+            ViewCameraHLSFullScreen(urlString: urlString, cameraName: cameraName)
+        }
+    }
+    
+    struct CardBackground2: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.2), radius: 4)
         }
     }
     

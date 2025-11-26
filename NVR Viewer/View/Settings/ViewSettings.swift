@@ -11,7 +11,7 @@ import TipKit
 struct ViewSettings: View {
     
     let title: String
-  
+    
     @StateObject var notificationManager = NotificationManager()
     
     var currentAppState = MQTTAppState()
@@ -29,7 +29,6 @@ struct ViewSettings: View {
     
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
     @AppStorage("notificationModeIsOn") private var notificationModeIsOn: Bool = false
-    
     @AppStorage("frigatePlusOn") private var frigatePlusOn: Bool = false
     
     @AppStorage("cameraSubStream") private var cameraSubStream: Bool = false
@@ -42,7 +41,7 @@ struct ViewSettings: View {
     @AppStorage("mqttIsAnonUser") private var mqttIsAnonUser: Bool = true
     @AppStorage("mqttUser") private var mqttUser: String = ""
     @AppStorage("mqttPassword") private var mqttPassword: String = ""
-     
+    
     @AppStorage("isOnboarding") var isOnboarding: Bool?
     @AppStorage("tipsSettingsPairDevice") private var tipsSettingsPairDevice: Bool = true
     @AppStorage("tipsSettingsNVR") private var tipsSettingsNVR: Bool = true
@@ -50,9 +49,9 @@ struct ViewSettings: View {
     @AppStorage("tipsNotificationDomain") private var tipsNotificationDomain: Bool = true
     @AppStorage("tipsNotificationDefault") private var tipsNotificationDefault: Bool = true
     @AppStorage("tipsLiveCameras") private var tipsLiveCameras: Bool = true
- 
+    
     //FIX THIS
-    //11/05/2025 
+    //11/05/2025
     var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
     
     @AppStorage("viewu_device_paired") private var viewuDevicePairedArg: Bool = false
@@ -67,7 +66,7 @@ struct ViewSettings: View {
     let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
     
     var body: some View {
-
+        
         ZStack {
             
             Form {
@@ -88,7 +87,7 @@ struct ViewSettings: View {
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
-                  
+                
                 Section {
                     Toggle("RTSP", isOn: $camerGo2Rtc)
                         .onChange(of: camerGo2Rtc) {
@@ -100,13 +99,13 @@ struct ViewSettings: View {
                             }
                         }
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
-//                    Toggle("RTSP", isOn: $cameraRTSPPath)
-//                        .onChange(of: cameraRTSPPath) {
-//                            if cameraRTSPPath == true {
-//                                camerGo2Rtc = false
-//                                cameraHLS = false
-//                            }
-//                        }
+                    //                    Toggle("RTSP", isOn: $cameraRTSPPath)
+                    //                        .onChange(of: cameraRTSPPath) {
+                    //                            if cameraRTSPPath == true {
+                    //                                camerGo2Rtc = false
+                    //                                cameraHLS = false
+                    //                            }
+                    //                        }
                     //.tint(Color(red: 0.153, green: 0.69, blue: 1))
                     Toggle("HLS", isOn: $cameraHLS)
                         .onChange(of: cameraHLS) {
@@ -141,10 +140,10 @@ struct ViewSettings: View {
                             .padding(.leading, 40)
                         TextField("0.0.0.0", text: $mqttIPAddress)
                             .autocorrectionDisabled()
-                            .frame(alignment: .leading) 
+                            .frame(alignment: .leading)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
-
+                    
                     HStack{
                         Text("Port:")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -153,7 +152,7 @@ struct ViewSettings: View {
                             .frame(alignment: .leading)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
-
+                    
                     HStack{
                         Text("Topic:")
                             .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
@@ -176,7 +175,7 @@ struct ViewSettings: View {
                     
                     Toggle("Anonymous", isOn: $mqttIsAnonUser)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
- 
+                    
                     if !mqttIsAnonUser {
                         VStack{
                             HStack{
@@ -193,10 +192,10 @@ struct ViewSettings: View {
                             
                             HStack{
                                 Text("Password:")
-                                    //.frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                //.frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                     .frame(width:150, alignment: .leading)
                                     .padding(.leading, 40)
-                                 
+                                
                                 ZStack {
                                     
                                     if !showPassword {
@@ -223,7 +222,7 @@ struct ViewSettings: View {
                                 .frame(alignment: .trailing)
                                 .padding(.trailing, 20)
                             }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading) 
+                            .frame(width: UIScreen.screenWidth, alignment: .leading)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                     }
@@ -250,13 +249,13 @@ struct ViewSettings: View {
                     .scaleEffect(scale)
                     .animation(.linear(duration: 1), value: scale)
                     .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                     
+                    
                 } header: {
                     Text("MQTT Settings")
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
-                   
+                
                 Section {
                     
                     ViewTipsSettingsNVR(title: "Connection Requirements", message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN.")
@@ -283,8 +282,8 @@ struct ViewSettings: View {
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
                     Toggle("Https", isOn: $nvrIsHttps)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
-//                    LabeledContent("NVR Synced", value: "No")
-                     
+                    //                    LabeledContent("NVR Synced", value: "No")
+                    
                     Label(nvrManager.getConnectionState() ? "Connected" : "Disconnected", systemImage: "cable.connector")
                         .frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
                         .foregroundStyle(nvrManager.getConnectionState() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
@@ -346,7 +345,7 @@ struct ViewSettings: View {
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
-                 
+                
                 Section{
                     Button("Clear All Storage") {
                         showingAlert = true
@@ -383,16 +382,16 @@ struct ViewSettings: View {
                             .frame(alignment: .leading)
                     }
                     .frame(width: UIScreen.screenWidth, alignment: .leading)
-                     
+                    
                     Button("Pair") {
                         viewuDevicePairedArg = false
                         for i in 0..<1 {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
-                                    withAnimation(.easeInOut) {
-                                        mqttManager.publish(topic: "viewu/pairing", with: fcm)
-                                    }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
+                                withAnimation(.easeInOut) {
+                                    mqttManager.publish(topic: "viewu/pairing", with: fcm)
                                 }
                             }
+                        }
                     }
                     //.buttonStyle(.bordered)
                     .buttonStyle(CustomPressEffectButtonStyle())
@@ -409,7 +408,7 @@ struct ViewSettings: View {
                 Section{
                     Toggle("Enabled", isOn: $developerModeIsOn)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                        
+                    
                 } header: {
                     Text("Developer Mode")
                         .font(.caption)
@@ -443,46 +442,46 @@ struct ViewSettings: View {
                 }
                 
                 Section{
-                        HStack{
-                            Text("App:")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            Text(appVersion!)
-                                .frame(alignment: .leading)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    HStack{
+                        Text("App:")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text(appVersion!)
+                            .frame(alignment: .leading)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
-                        HStack{
-                            Text("Build:")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            Text(appBuild!)
-                                .frame(alignment: .leading)
-                            //.foregroundStyle(.tertiary)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        HStack{
-                            Text("Server:")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            Text(viewuServerVersion)
-                                .frame(alignment: .leading)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        HStack{
-                            Text("Frigate:")
-                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                .padding(.leading, 40)
-                            Text(frigateVersion)
-                                .frame(alignment: .leading)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    HStack{
+                        Text("Build:")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text(appBuild!)
+                            .frame(alignment: .leading)
+                        //.foregroundStyle(.tertiary)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    HStack{
+                        Text("Server:")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text(viewuServerVersion)
+                            .frame(alignment: .leading)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    HStack{
+                        Text("Frigate:")
+                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                            .padding(.leading, 40)
+                        Text(frigateVersion)
+                            .frame(alignment: .leading)
+                    }
+                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                 } header: {
                     Text("Versions")
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
-                 
+                
                 if developerModeIsOn {
                     Section{
                         ScrollView(.horizontal){
@@ -525,14 +524,14 @@ struct ViewSettings: View {
     }
     
     struct CustomPressEffectButtonStyle: ButtonStyle {
-            func makeBody(configuration: Configuration) -> some View {
-                configuration.label
-                    .padding(8)
-                    .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .padding(8)
+                .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
+                .foregroundColor(.white)
+                .cornerRadius(10)
         }
+    }
 }
 
 //#Preview {

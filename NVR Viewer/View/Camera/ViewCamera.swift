@@ -37,13 +37,22 @@ struct ViewCamera: View {
     @State var flagAllowNonSub = false
     var counter = 0;
      
+//    var sortedCameraKeys: Cameras2  {
+//        config.item.cameras.keys.sorted { $0.cameraName < $1.cameraName }
+//    }
+    
+    func getCameraKeys() -> [String] {
+        let cameraDictionary: [String: Cameras2] = config.item.cameras
+        return Array(cameraDictionary.keys)
+    }
+    
     var body: some View {
         
         ScrollView {
             VStack{
  
                 ViewTipsLiveCameras(title: "Live Cameras", message: "You can change the camera stream from the Settings page. To reduce load times, use a sub-stream whenever possible." )
-                    .padding(10)
+                    .padding(15)
                 
                 Section{
                     
@@ -97,7 +106,7 @@ struct ViewCamera: View {
                             VStack{
                                 
                                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
-                                    
+ 
                                     if config.item.cameras[cameraName]?.enabled == true {
                                         
                                         let camera = config.item.cameras[cameraName];
@@ -138,12 +147,12 @@ struct ViewCamera: View {
                             }
                         }
                         if cameraHLS { 
-                                LinearGradient(
-                                    colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                                .ignoresSafeArea()
+//                                LinearGradient(
+//                                    colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80)],
+//                                    startPoint: .topLeading,
+//                                    endPoint: .bottomTrailing
+//                                )
+//                                .ignoresSafeArea()
                                 
                                 ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
                                      

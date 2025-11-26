@@ -554,7 +554,7 @@ struct ViewTipsLiveCameras: View {
                 Image(systemName: "info.circle")
                     .resizable()
                     .frame(width: 15, height: 15)
-                    .padding(.top, 10)
+                    //.padding(.top, 10)
                     .foregroundStyle(.gray)
                     .font(.system(size: 18, weight: .bold))
                     .onTapGesture {
