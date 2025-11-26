@@ -15,7 +15,7 @@ struct ViewSettings: View {
     @StateObject var notificationManager = NotificationManager()
     
     var currentAppState = MQTTAppState()
-    
+     
     @StateObject var mqttManager = MQTTManager.shared()
     @StateObject var nvrManager = NVRConfig.shared()
     
@@ -49,7 +49,7 @@ struct ViewSettings: View {
     @AppStorage("tipsNotificationDomain") private var tipsNotificationDomain: Bool = true
     @AppStorage("tipsNotificationDefault") private var tipsNotificationDefault: Bool = true
     @AppStorage("tipsLiveCameras") private var tipsLiveCameras: Bool = true
-    
+     
     
     //FIX THIS
     //11/05/2025
@@ -192,11 +192,11 @@ struct ViewSettings: View {
                             .frame(width: UIScreen.screenWidth, alignment: .leading)
                             
                             HStack{
+
                                 Text("Password:")
-                                //.frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                    .frame(width:150, alignment: .leading)
+                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                     .padding(.leading, 40)
-                                
+                             
                                 ZStack {
                                     
                                     if !showPassword {
@@ -215,6 +215,7 @@ struct ViewSettings: View {
                                             .disabled(mqttIsAnonUser)
                                     }
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 Button("", systemImage: showPassword ? "eye.slash" : "eye") {
                                     showPassword = !showPassword

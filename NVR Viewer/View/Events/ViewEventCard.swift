@@ -8,6 +8,7 @@
 import SwiftUI
 struct ViewEventCard: View {
     
+    @State private var scale = 1.0
     @State var containers: [EndpointOptions]
     @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
@@ -33,6 +34,16 @@ struct ViewEventCard: View {
             return 200
         } else {
             return 110
+        }
+    }
+    
+    struct CustomPressEffectButtonStyle: ButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .padding(8)
+                .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
+                .foregroundColor(.white)
+                .cornerRadius(10)
         }
     }
     
@@ -128,12 +139,15 @@ struct ViewEventCard: View {
                                 } ){
                                     Text("Frigate+")
                                         .padding(1)
-                                }
-                                .font(.system(size: fontSizeLabel))
-                                .fontWeight(.bold)
-                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                .buttonStyle(.bordered)
-                                .cornerRadius(5) 
+                                } 
+                                //.buttonStyle(.bordered)
+                                .buttonStyle(CustomPressEffectButtonStyle())
+                                .tint(Color(white: 0.58))
+                                .scaleEffect(scale)
+                                .animation(.linear(duration: 1), value: scale)
+                                .frame( height: 20, alignment: .topLeading)
+                                //.padding(.bottom, 10)
+                                .padding(EdgeInsets(top: 5, leading: 0, bottom: 20, trailing: 0))
                             }
                         }
                         

@@ -92,10 +92,10 @@ struct ViewTipsNotificationManager: View {
                 
                 Image(systemName: "info.circle")
                     .resizable()
-                    .frame(width: 15, height: 15)
+                    .frame(width: 18, height: 18)
                     .padding(.top, 10)
                     .foregroundStyle(.gray)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 32, weight: .bold))
                     .onTapGesture {
                         tipsNotificationDefault.toggle()
                     }
@@ -189,10 +189,10 @@ struct ViewTipsNotificationDomain: View {
                 
                 Image(systemName: "info.circle")
                     .resizable()
-                    .frame(width: 15, height: 15)
+                    .frame(width: 17, height: 17)
                     .padding(.top, 10)
                     .foregroundStyle(.gray)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 32, weight: .bold))
                     .onTapGesture {
                         tipsNotificationDomain.toggle()
                     }
@@ -286,10 +286,10 @@ struct ViewTipsNotificationTemplate: View {
                 
                 Image(systemName: "info.circle")
                     .resizable()
-                    .frame(width: 15, height: 15)
+                    .frame(width: 17, height: 17)
                     .padding(.top, 10)
                     .foregroundStyle(.gray)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 32, weight: .bold))
                     .onTapGesture {
                         tipsNotificationTemplate.toggle()
                     }
@@ -383,10 +383,10 @@ struct ViewTipsSettingsNVR: View {
                 
                 Image(systemName: "info.circle")
                     .resizable()
-                    .frame(width: 15, height: 15)
+                    .frame(width: 17, height: 17)
                     .padding(.top, 10)
                     .foregroundStyle(.gray)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 32, weight: .bold))
                     .onTapGesture {
                         tipsSettingsNVR.toggle()
                     }
@@ -480,10 +480,10 @@ struct ViewTipsSettingsPairDevie: View {
                 
                 Image(systemName: "info.circle")
                     .resizable()
-                    .frame(width: 15, height: 15)
+                    .frame(width: 17, height: 17)
                     .padding(.top, 10)
                     .foregroundStyle(.gray)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 32, weight: .bold))
                     .onTapGesture {
                         tipsSettingsPairDevice.toggle()
                     }
@@ -573,10 +573,10 @@ struct ViewTipsLiveCameras: View {
                 
                 Image(systemName: "info.circle")
                     .resizable()
-                    .frame(width: 15, height: 15)
+                    .frame(width: 17, height: 17)
                     //.padding(.top, 10)
                     .foregroundStyle(.gray)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 32, weight: .bold))
                     .onTapGesture {
                         tipsLiveCameras.toggle()
                     }

@@ -19,6 +19,8 @@ struct ViewEventDetail: View {
     @State private var path = NavigationPath()
     
     var frigatePlusOn: Bool = UserDefaults.standard.bool(forKey: "frigatePlusOn")
+    var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
+    
     //
     @EnvironmentObject private var notificationManager2: NotificationManager
     @State var selection: Int = 0
@@ -51,12 +53,15 @@ struct ViewEventDetail: View {
                         .font(.system(size: 15))
                         .fontWeight(.regular)
                         .foregroundColor(.gray)
-                    Label("\(container.type!)", systemImage: "moonphase.new.moon.inverse")
-                        .frame(alignment: .trailing)
-                        .padding()
-                        .font(.system(size: 15))
-                        .fontWeight(.regular)
-                        .foregroundColor(.gray)
+                    
+                    if developerModeIsOn {
+                        Label("\(container.type!)", systemImage: "moonphase.new.moon.inverse")
+                            .frame(alignment: .trailing)
+                            .padding()
+                            .font(.system(size: 15))
+                            .fontWeight(.regular)
+                            .foregroundColor(.gray)
+                    }
                 }
                 .padding([.top, .bottom], 0)
                  
