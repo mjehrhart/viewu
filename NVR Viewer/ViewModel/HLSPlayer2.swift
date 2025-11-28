@@ -36,9 +36,7 @@ struct HLSPlayer2: View {
                     VStack{
                         Webview(url: urlString + "/api/\(cameraName)?h=720") 
                             //.modifier(CardBackground2())
-                            //.frame(width: UIScreen.screenWidth-20, height: (UIScreen.screenWidth * 9/16)-20)
                             .aspectRatio(16/9, contentMode: .fill)
-                            //.frame(width: UIScreen.screenWidth)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .edgesIgnoringSafeArea(.all)
                             .background(Color.gray.opacity(0.125))
@@ -48,34 +46,29 @@ struct HLSPlayer2: View {
                 }
             }
             
-            HStack(alignment: .firstTextBaseline){
-                
-                Text(cameraName)
-                    .labelStyle(VerticalLabelStyle(show: false))
+            HStack(alignment: .lastTextBaseline){
+
+                //Text(cameraName)
+                Label("\(cameraName)", systemImage: "")
                     .foregroundStyle(menuTextColor)
-                    .fontWeight(.bold)
+                    .font(.system(size: 22))
                     .onTapGesture(perform: {
                         
                     })
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom,5)
-                    .frame(alignment: .leading)
+                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 00, trailing: 0))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+ 
                 
-                HStack(alignment: .lastTextBaseline){
-                    Spacer()
-                     
-                    Label("", systemImage: "arrow.down.left.and.arrow.up.right.rectangle")
-                        .foregroundStyle(menuTextColor)
-                        .font(.system(size: 24))
-                        .onTapGesture(perform: {
-                            flagFull.toggle()
-                        })
-                        .padding(.trailing,20)
-                }
-                Spacer()
+                Label("", systemImage: "arrow.down.left.and.arrow.up.right.rectangle")
+                    //.labelStyle(VerticalLabelStyle(show: false))
+                    .foregroundStyle(menuTextColor)
+                    .font(.system(size: 24))
+                    .onTapGesture(perform: {
+                        flagFull.toggle()
+                    })
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 20))
             }
-            .padding(.top, 3)
-            .padding(.bottom, 8)
+            .padding(EdgeInsets(top: 3, leading: 0, bottom: 3, trailing: 0))
         }
         .background(menuBGColor)
         .modifier( CardBackground2() )

@@ -53,73 +53,23 @@ struct ViewCamera: View {
  
                 ViewTipsLiveCameras(title: "Live Cameras", message: "You can change the camera stream from the Settings page. To reduce load times, use a sub-stream whenever possible." )
                     .padding(15)
-                
+         
                 Section{
-                    
-                    Section{
-                        if ( config.item.go2rtc.streams != nil  ){
+                    if ( config.item.go2rtc.streams != nil  ){
+                        
+                        ForEach(Array(config.item.go2rtc.streams!.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, value in
                             
-                            ForEach(Array(config.item.go2rtc.streams!.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, value in
+                            if config.item.cameras[value]?.enabled == true {
                                 
-                                if config.item.cameras[value]?.enabled == true {
+                                if cameraRTSPPath {
                                     
-                                    if cameraRTSPPath {
-                                        
-                                        if cameraSubStream {
-                                            if value.contains("sub"){
-                                                ForEach(config.item.go2rtc.streams![value]!, id: \.self) { url in
-                                                    ScrollView(.horizontal){
-                                                        
-                                                        if url.starts(with: "rtsp"){
-                                                            let name = value + "_sub"
-                                                            StreamRTSP2(urlString: url, cameraName: name)
-                                                                .padding(0)
-                                                            if developerModeIsOn {
-                                                                Text(url)
-                                                                    .textSelection(.enabled)
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }else if !value.contains("sub"){
+                                    if cameraSubStream {
+                                        if value.contains("sub"){
                                             ForEach(config.item.go2rtc.streams![value]!, id: \.self) { url in
                                                 ScrollView(.horizontal){
                                                     
                                                     if url.starts(with: "rtsp"){
-                                                        StreamRTSP2(urlString: url, cameraName: value)
-                                                            .padding(0)
-                                                        if developerModeIsOn {
-                                                            Text(url)
-                                                                .textSelection(.enabled)
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if camerGo2Rtc {
-                            
-                            VStack{
-                                
-                                ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
- 
-                                    if config.item.cameras[cameraName]?.enabled == true {
-                                        
-                                        let camera = config.item.cameras[cameraName];
-                                        ForEach(camera!.ffmpeg.inputs, id: \.self) {item in
-                                            
-                                            let url = verifyGo2RTCUrl(urlString: item.path)
-                                            
-                                            if cameraSubStream {
-                                                if url.contains("sub") || cameraName.contains("sub"){
-                                                    
-                                                    if url.starts(with: "rtsp"){
-                                                        
-                                                        let name = cameraName + "_sub"
+                                                        let name = value + "_sub"
                                                         StreamRTSP2(urlString: url, cameraName: name)
                                                             .padding(0)
                                                         if developerModeIsOn {
@@ -128,16 +78,18 @@ struct ViewCamera: View {
                                                         }
                                                     }
                                                 }
-                                            } else {
-                                                if !url.contains("sub"){
-                                                    
-                                                    if url.starts(with: "rtsp"){
-                                                        StreamRTSP2(urlString: url, cameraName: cameraName)
-                                                            .padding(0)
-                                                        if developerModeIsOn {
-                                                            Text(url)
-                                                                .textSelection(.enabled)
-                                                        }
+                                            }
+                                        }
+                                    }else if !value.contains("sub"){
+                                        ForEach(config.item.go2rtc.streams![value]!, id: \.self) { url in
+                                            ScrollView(.horizontal){
+                                                
+                                                if url.starts(with: "rtsp"){
+                                                    StreamRTSP2(urlString: url, cameraName: value)
+                                                        .padding(0)
+                                                    if developerModeIsOn {
+                                                        Text(url)
+                                                            .textSelection(.enabled)
                                                     }
                                                 }
                                             }
@@ -146,34 +98,80 @@ struct ViewCamera: View {
                                 }
                             }
                         }
-                        if cameraHLS { 
+                    }
+                    if camerGo2Rtc {
+                        
+                        VStack{
+                            
+                            ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
+
+                                if config.item.cameras[cameraName]?.enabled == true {
+                                    
+                                    let camera = config.item.cameras[cameraName];
+                                    ForEach(camera!.ffmpeg.inputs, id: \.self) {item in
+                                        
+                                        let url = verifyGo2RTCUrl(urlString: item.path)
+                                        
+                                        if cameraSubStream {
+                                            if url.contains("sub") || cameraName.contains("sub"){
+                                                
+                                                if url.starts(with: "rtsp"){
+                                                    
+                                                    let name = cameraName + "_sub"
+                                                    StreamRTSP2(urlString: url, cameraName: name)
+                                                        .padding(0)
+                                                    if developerModeIsOn {
+                                                        Text(url)
+                                                            .textSelection(.enabled)
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            if !url.contains("sub"){
+                                                
+                                                if url.starts(with: "rtsp"){
+                                                    StreamRTSP2(urlString: url, cameraName: cameraName)
+                                                        .padding(0)
+                                                    if developerModeIsOn {
+                                                        Text(url)
+                                                            .textSelection(.enabled)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if cameraHLS { 
 //                                LinearGradient(
 //                                    colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80)],
 //                                    startPoint: .topLeading,
 //                                    endPoint: .bottomTrailing
 //                                )
 //                                .ignoresSafeArea()
-                                
-                                ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
-                                     
-                                    if config.item.cameras[cameraName]?.enabled == true {
-                                        
-                                        let url = nvr.getUrl()
-                                        HLSPlayer2(urlString: url, cameraName: cameraName, flagFull: false)
-                                        if developerModeIsOn {
-                                            Text(url + "/api/\(cameraName)?h=480")
-                                                .textSelection(.enabled)
-                                        }
+                            
+                            ForEach(Array(config.item.cameras.keys).enumerated().sorted(by: {$0 < $1} ), id: \.element) { index, cameraName in
+                                    
+                                if config.item.cameras[cameraName]?.enabled == true {
+                                    
+                                    let url = nvr.getUrl()
+                                    HLSPlayer2(urlString: url, cameraName: cameraName, flagFull: false)
+                                    if developerModeIsOn {
+                                        Text(url + "/api/\(cameraName)?h=480")
+                                            .textSelection(.enabled)
                                     }
                                 }
-                        }
+                            }
                     }
                 }
-                Spacer()
+           
             }
         }
         .navigationBarTitle(title, displayMode: .inline)
         .toolbarBackground(.visible, for: .navigationBar)
+        .scrollIndicators(.hidden)
     }
     
     func verifyGo2RTCUrl(urlString: String) -> String {

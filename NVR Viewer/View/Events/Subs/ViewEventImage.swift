@@ -1,20 +1,25 @@
 //
-//  ViewUIImage.swift
+//  ViewEventImage.swift
 //  NVR Viewer
 //
-//  Created by Matthew Ehrhart on 3/1/24.
+//  Created by Matthew Ehrhart on 11/26/25.
 //
 
 import Foundation
 import SwiftUI
 import SwiftData
+import UIKit
 
-struct ViewUIImage: View{
+
+struct ViewEventImage: View{
     
     let cNVR = APIRequester()
     let urlString: String
     let frameTime: Double
     let frigatePlus: Bool
+    
+    let widthG: CGFloat
+    let heightG: CGFloat
     
     @State var data: Data?
     @State private var zoomIn: Bool = false
@@ -31,8 +36,6 @@ struct ViewUIImage: View{
         if idiom == .pad {
             var width = UIScreen.screenWidth
             width = width - 200
-            //            var w = width * 16/9
-            //            w = (-w + width) * -1
             
             return width
         } else {
@@ -53,65 +56,46 @@ struct ViewUIImage: View{
         }
     }
     
-    //TODO Overlays
     var body: some View {
+ 
+        SubView(urlString: urlString, frameTime: frameTime, widthGap: widthG, heightGap: heightG)
+            .overlay(ImageOverlay(frigatePlus: frigatePlus), alignment: .bottomTrailing)
+    }
+    
+    struct SubView: View {
         
-        GeometryReader { geometry in
+        let cNVR = APIRequester()
+        let urlString: String
+        let frameTime: Double
+        let widthGap: CGFloat
+        let heightGap: CGFloat
+        
+        //let frigatePlus: Bool
+        
+        @State var data: Data?
+        @State private var zoomIn: Bool = false
+        @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
+        
+        private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
+        @State var orientation = UIDevice.current.orientation
+        let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
+            .makeConnectable()
+            .autoconnect()
+        
+        var body: some View {
             
             if let data = data, let uiimage = UIImage(data: data){
                 
-                ScrollView(.horizontal){
-                    
-                    if orientation.isLandscape {
-                        
-                        if idiom == .pad {
-                            
-                        } else {
-                            Image(uiImage: uiimage)
-                                .resizable()
-                                .aspectRatio(16/9, contentMode: .fill)
-                            //.frame(maxWidth: geometry.size.width )
-                                .onTapGesture{
-                                    withAnimation {
-                                        zoomIn.toggle()
-                                    }
-                                }
-                                .background(.orange)
-                                .overlay(ImageOverlay(frigatePlus: frigatePlus), alignment: .bottomTrailing)
-                        }
-                    } else {
-                        
-                        if idiom == .pad {
-                            Image(uiImage: uiimage)
-                                .resizable()
-                                .aspectRatio(16/9, contentMode: .fit)
-                                .frame(maxWidth: geometry.size.width)
-                                .onTapGesture{
-                                    withAnimation {
-                                        zoomIn.toggle()
-                                    }
-                                }
-                                .background(.teal)
-                                .overlay(ImageOverlay(frigatePlus: frigatePlus), alignment: .bottomTrailing)
-                        } else {
-                            //iphone max portrait mode
-                            Image(uiImage: uiimage)
-                                .resizable()
-                                .aspectRatio(16/9, contentMode: .fit)
-                                .frame(maxWidth: geometry.size.width)
-                                .onTapGesture{
-                                    withAnimation {
-                                        zoomIn.toggle()
-                                    }
-                                }
-                                .background(.teal)
-                                .overlay(ImageOverlay(frigatePlus: frigatePlus), alignment: .bottomTrailing)
-                        }
-                    }
-                    
+                GeometryReader { geometry in
+                    Image(uiImage: uiimage)
+                        .resizable()
+                        .scaledToFill()
+                        .aspectRatio( contentMode: .fill)
+                        .frame(width: max(geometry.size.width, widthGap), height: max(geometry.size.height, heightGap))
+                         
                 }
-                
-            } else {
+  
+            } else  {
                 //Dummy Space
                 Text("")
                     .aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
@@ -145,7 +129,6 @@ struct ViewUIImage: View{
                     }
             }
         }
-        
     }
     
     struct ImageOverlay: View {
@@ -158,7 +141,7 @@ struct ViewUIImage: View{
             if(frigatePlusOn) {
                 if(frigatePlus) {
                     Text("Frigate+")
-                        .padding( .trailing, 35)
+                        .padding( .trailing, 5)
                         .padding(.bottom, 10)
                         .foregroundColor(.white)
                         .fontWeight(.semibold)
@@ -167,4 +150,3 @@ struct ViewUIImage: View{
         }
     }
 }
-

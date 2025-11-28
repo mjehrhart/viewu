@@ -70,269 +70,236 @@ struct ViewSettings: View {
         
         ZStack {
             
-            Form {
-                
-                Section{
-                    Toggle("Enabled", isOn: $frigatePlusOn)
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                } header: {
-                    Text("Frigate+")
-                        .foregroundColor(.orange)
-                }
-                
-                Section{
-                    Toggle("Enabled", isOn: $notificationModeIsOn)
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                } header: {
-                    Text("Notification Manager")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Section {
-                    Toggle("RTSP", isOn: $camerGo2Rtc)
-                        .onChange(of: camerGo2Rtc) {
-                            if camerGo2Rtc == true {
-                                cameraRTSPPath = false
-                                cameraHLS = false
-                            } else {
-                                cameraHLS = true
-                            }
-                        }
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    //                    Toggle("RTSP", isOn: $cameraRTSPPath)
-                    //                        .onChange(of: cameraRTSPPath) {
-                    //                            if cameraRTSPPath == true {
-                    //                                camerGo2Rtc = false
-                    //                                cameraHLS = false
-                    //                            }
-                    //                        }
-                    //.tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    Toggle("HLS", isOn: $cameraHLS)
-                        .onChange(of: cameraHLS) {
-                            if cameraHLS == true {
-                                camerGo2Rtc = false
-                                cameraRTSPPath = false
-                                cameraSubStream = false
-                            }
-                            else {
-                                camerGo2Rtc = true
-                            }
-                        }
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    Toggle("Use Sub Stream", isOn: $cameraSubStream)
-                        .onChange(of: cameraSubStream) {
-                            if cameraSubStream == true {
-                                cameraHLS = false
-                                camerGo2Rtc = true
-                            }
-                        }
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                } header: {
-                    Text("Camera Stream")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Section {
-                    HStack{
-                        Text("Broker Address:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        TextField("0.0.0.0", text: $mqttIPAddress)
-                            .autocorrectionDisabled()
-                            .frame(alignment: .leading)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+            GeometryReader { geometry in
+                Form {
                     
-                    HStack{
-                        Text("Port:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        TextField("1883", text: $mqttPortAddress)
-                            .frame(alignment: .leading)
+                    Section{
+                        Toggle("Enabled", isOn: $frigatePlusOn)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    } header: {
+                        Text("Frigate+")
+                            .foregroundColor(.orange)
                     }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
-                    HStack{
-                        Text("Topic:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text("viewu/pairing")
-                            .frame(alignment: .leading)
+                    Section{
+                        Toggle("Enabled", isOn: $notificationModeIsOn)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    } header: {
+                        Text("Notification Manager")
+                            .font(.caption)
+                            .foregroundColor(.orange)
                     }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
-                    if developerModeIsOn {
+                    Section {
+                        Toggle("RTSP", isOn: $camerGo2Rtc)
+                            .onChange(of: camerGo2Rtc) {
+                                if camerGo2Rtc == true {
+                                    cameraRTSPPath = false
+                                    cameraHLS = false
+                                } else {
+                                    cameraHLS = true
+                                }
+                            }
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        //                    Toggle("RTSP", isOn: $cameraRTSPPath)
+                        //                        .onChange(of: cameraRTSPPath) {
+                        //                            if cameraRTSPPath == true {
+                        //                                camerGo2Rtc = false
+                        //                                cameraHLS = false
+                        //                            }
+                        //                        }
+                        //.tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        Toggle("HLS", isOn: $cameraHLS)
+                            .onChange(of: cameraHLS) {
+                                if cameraHLS == true {
+                                    camerGo2Rtc = false
+                                    cameraRTSPPath = false
+                                    cameraSubStream = false
+                                }
+                                else {
+                                    camerGo2Rtc = true
+                                }
+                            }
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        Toggle("Use Sub Stream", isOn: $cameraSubStream)
+                            .onChange(of: cameraSubStream) {
+                                if cameraSubStream == true {
+                                    cameraHLS = false
+                                    camerGo2Rtc = true
+                                }
+                            }
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    } header: {
+                        Text("Camera Stream")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                    
+                    Section {
                         HStack{
-                            Text("")
+                            Text("Broker Address:")
                                 .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
                                 .padding(.leading, 40)
-                            Text("frigate/events")
-                                .frame(alignment: .leading)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    }
-                    
-                    Toggle("Anonymous", isOn: $mqttIsAnonUser)
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    
-                    if !mqttIsAnonUser {
-                        VStack{
-                            HStack{
-                                Text("User:")
-                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                    .padding(.leading, 40)
-                                TextField("", text: $mqttUser)
-                                    .frame(alignment: .leading)
-                                    .disabled(mqttIsAnonUser)
-                                    .autocapitalization(.none)
-                                    .autocorrectionDisabled()
-                            }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-                            
-                            HStack{
-
-                                Text("Password:")
-                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                                    .padding(.leading, 40)
-                             
-                                ZStack {
-                                    
-                                    if !showPassword {
-                                        SecureField("", text: $mqttPassword)
-                                            .autocapitalization(.none)
-                                            .autocorrectionDisabled()
-                                            .frame(alignment: .leading)
-                                            .disabled(mqttIsAnonUser)
-                                    }
-                                    
-                                    if showPassword {
-                                        TextField("", text: $mqttPassword)
-                                            .autocapitalization(.none)
-                                            .autocorrectionDisabled()
-                                            .frame(alignment: .leading)
-                                            .disabled(mqttIsAnonUser)
-                                    }
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Button("", systemImage: showPassword ? "eye.slash" : "eye") {
-                                    showPassword = !showPassword
-                                }
-                                .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
-                                .frame(alignment: .trailing)
-                                .padding(.trailing, 20)
-                            }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    }
-                    
-                    Label(mqttManager.isConnected() ? "Connected" : "Disconnected", systemImage: "cable.connector")
-                        .frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
-                        .foregroundStyle(mqttManager.isConnected() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
-                    
-                    Button("Save Connection") {
-                        
-                        //Sync data accross view and model
-                        mqttManager.setAnonymous(anonymous: mqttIsAnonUser )
-                        mqttManager.setIP(ip: mqttIPAddress )
-                        mqttManager.setPort( port: mqttPortAddress )
-                        mqttManager.setCredentials(user: mqttUser, password: mqttPassword)
-                        
-                        //connect to mqtt broker
-                        mqttManager.initializeMQTT()
-                        mqttManager.connect()
-                    }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(CustomPressEffectButtonStyle())
-                    .tint(Color(white: 0.58))
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
-                    .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                    
-                } header: {
-                    Text("MQTT Settings")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Section {
-                    
-                    HStack{
-                        Text("Address:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        ScrollView(.horizontal){
-                            TextField("0.0.0.0", text: $nvrIPAddress)
-                                .autocapitalization(.none)
+                            TextField("0.0.0.0", text: $mqttIPAddress)
                                 .autocorrectionDisabled()
                                 .frame(alignment: .leading)
                         }
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    HStack{
-                        Text("Port:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        TextField("5000", text: $nvrPortAddress)
-                            .frame(alignment: .leading)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    Toggle("Https", isOn: $nvrIsHttps)
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    //                    LabeledContent("NVR Synced", value: "No")
-                    
-                    Label(nvrManager.getConnectionState() ? "Connected" : "Disconnected", systemImage: "cable.connector")
-                        .frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
-                        .foregroundStyle(nvrManager.getConnectionState() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
-                    
-                    Button("Save Connection") {
-                        //Sync data accross view and model
-                        nvrManager.setHttps(http: nvrIsHttps )
-                        nvrManager.setIP(ip: nvrIPAddress )
-                        nvrManager.setPort( port: nvrPortAddress )
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
                         
-                        nvrManager.checkConnectionStatus(){data,error in
-                            Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(String(describing: error))")
+                        HStack{
+                            Text("Port:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            TextField("1883", text: $mqttPortAddress)
+                                .frame(alignment: .leading)
                         }
-                    }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(CustomPressEffectButtonStyle())
-                    .tint(Color(white: 0.58))
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
-                    .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
-                } header: {
-                    HStack{
-                        if !tipsSettingsNVR {
-                            Text("NVR Settings")
-                                .font(.caption)
-                                .foregroundColor(.orange)
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        HStack{
+                            Text("Topic:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text("viewu/pairing")
+                                .frame(alignment: .leading)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        if developerModeIsOn {
+                            HStack{
+                                Text("")
+                                    .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                    .padding(.leading, 40)
+                                Text("frigate/events")
+                                    .frame(alignment: .leading)
+                            }
+                            .frame(width: UIScreen.screenWidth, alignment: .leading)
                         }
                         
-                        ViewTipsSettingsNVR(title: "Connection Requirements", message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN.")
+                        Toggle("Anonymous", isOn: $mqttIsAnonUser)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        
+                        if !mqttIsAnonUser {
+                            VStack{
+                                HStack{
+                                    Text("User:")
+                                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                        .padding(.leading, 40)
+                                    TextField("", text: $mqttUser)
+                                        .frame(alignment: .leading)
+                                        .disabled(mqttIsAnonUser)
+                                        .autocapitalization(.none)
+                                        .autocorrectionDisabled()
+                                }
+                                .frame(width: UIScreen.screenWidth, alignment: .leading)
+                                
+                                HStack{
+                                    
+                                    Text("Password:")
+                                        .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                        .padding(.leading, 40)
+                                    
+                                    ZStack {
+                                        
+                                        if !showPassword {
+                                            SecureField("", text: $mqttPassword)
+                                                .autocapitalization(.none)
+                                                .autocorrectionDisabled()
+                                                .frame(alignment: .leading)
+                                                .disabled(mqttIsAnonUser)
+                                        }
+                                        
+                                        if showPassword {
+                                            TextField("", text: $mqttPassword)
+                                                .autocapitalization(.none)
+                                                .autocorrectionDisabled()
+                                                .frame(alignment: .leading)
+                                                .disabled(mqttIsAnonUser)
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    Button("", systemImage: showPassword ? "eye.slash" : "eye") {
+                                        showPassword = !showPassword
+                                    }
+                                    .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
+                                    .frame(alignment: .trailing)
+                                    .padding(.trailing, 20)
+                                }
+                                .frame(width: UIScreen.screenWidth, alignment: .leading)
+                            }
+                            .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        }
+                        
+                        Label(mqttManager.isConnected() ? "Connected" : "Disconnected", systemImage: "cable.connector")
+                            //.frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
+                            .frame(width: geometry.size.width - 70, alignment: .trailing)
+                            .foregroundStyle(mqttManager.isConnected() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
+                        
+                        Button("Save Connection") {
+                            
+                            //Sync data accross view and model
+                            mqttManager.setAnonymous(anonymous: mqttIsAnonUser )
+                            mqttManager.setIP(ip: mqttIPAddress )
+                            mqttManager.setPort( port: mqttPortAddress )
+                            mqttManager.setCredentials(user: mqttUser, password: mqttPassword)
+                            
+                            //connect to mqtt broker
+                            mqttManager.initializeMQTT()
+                            mqttManager.connect()
+                        }
+                        //.buttonStyle(.bordered)
+                        .buttonStyle(CustomPressEffectButtonStyle())
+                        .tint(Color(white: 0.58))
+                        .scaleEffect(scale)
+                        .animation(.linear(duration: 1), value: scale)
+                        //.frame(width: UIScreen.screenWidth-50, alignment: .trailing)
+                        .frame(width: geometry.size.width - 50, alignment: .trailing)
+                        
+                    } header: {
+                        Text("MQTT Settings")
+                            .font(.caption)
+                            .foregroundColor(.orange)
                     }
-                }
-                
-                Section {
-                    HStack{
-                        Text("Allowed")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text(notificationManager.hasPermission  ? "Enabled" : "Disabled")
-                            .frame(alignment: .leading)
-                        //.foregroundStyle(.tertiary)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
                     
-                    //Text("Allowed: \(notificationManager.hasPermission ? "Enabled" : "Disabled")" as String)
-                    
-                    if !notificationManager.hasPermission{
-                        Button("Request Notification"){
-                            Task{
-                                await notificationManager.request()
+                    Section {
+                        
+                        HStack{
+                            Text("Address:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            ScrollView(.horizontal){
+                                TextField("0.0.0.0", text: $nvrIPAddress)
+                                    .autocapitalization(.none)
+                                    .autocorrectionDisabled()
+                                    .frame(alignment: .leading)
+                            }
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        HStack{
+                            Text("Port:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            TextField("5000", text: $nvrPortAddress)
+                                .frame(alignment: .leading)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        Toggle("Https", isOn: $nvrIsHttps)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        //                    LabeledContent("NVR Synced", value: "No")
+                        
+                        Label(nvrManager.getConnectionState() ? "Connected" : "Disconnected", systemImage: "cable.connector")
+                            //.frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
+                            .frame(width: geometry.size.width - 70, alignment: .trailing)
+                            .foregroundStyle(nvrManager.getConnectionState() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
+                        
+                        Button("Save Connection") {
+                            //Sync data accross view and model
+                            nvrManager.setHttps(http: nvrIsHttps )
+                            nvrManager.setIP(ip: nvrIPAddress )
+                            nvrManager.setPort( port: nvrPortAddress )
+                            
+                            nvrManager.checkConnectionStatus(){data,error in
+                                Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(String(describing: error))")
                             }
                         }
                         //.buttonStyle(.bordered)
@@ -340,193 +307,235 @@ struct ViewSettings: View {
                         .tint(Color(white: 0.58))
                         .scaleEffect(scale)
                         .animation(.linear(duration: 1), value: scale)
-                        .disabled(notificationManager.hasPermission)
-                        .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
-                        .task {
-                            await notificationManager.getAuthStatus()
+                        //.frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
+                        .frame(width: geometry.size.width - 50, alignment: .trailing)
+                    } header: {
+                        HStack{
+                            if !tipsSettingsNVR {
+                                Text("NVR Settings")
+                                    .font(.caption)
+                                    .foregroundColor(.orange)
+                            }
+                            
+                            ViewTipsSettingsNVR(title: "Connection Requirements", message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN.")
                         }
                     }
-                } header: {
-                    Text("Notifications")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Section{
-                    Button("Clear All Storage") {
-                        showingAlert = true
-                    }
-                    .alert("Remove All Events", isPresented: $showingAlert) {
-                        Button("OK", role: .destructive ) {
-                            print("Clear All Storage")
-                            //Delete SQLite
-                            let _ = EventStorage.shared.delete()
+                    
+                    Section {
+                        HStack{
+                            Text("Allowed")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(notificationManager.hasPermission  ? "Enabled" : "Disabled")
+                                .frame(alignment: .leading)
+                            //.foregroundStyle(.tertiary)
                         }
-                    }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(CustomPressEffectButtonStyle())
-                    .tint(Color(white: 0.58))
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
-                    .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                    
-                    
-                } header: {
-                    Text("SQLite")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Section{
-                    
-                    HStack{
-                        Text("Paired:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text(viewuDevicePairedArg ? "Enabled" : "Disabled")
-                            .frame(alignment: .leading)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    Button("Pair") {
-                        viewuDevicePairedArg = false
-                        for i in 0..<1 {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
-                                withAnimation(.easeInOut) {
-                                    mqttManager.publish(topic: "viewu/pairing", with: fcm)
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        //Text("Allowed: \(notificationManager.hasPermission ? "Enabled" : "Disabled")" as String)
+                        
+                        if !notificationManager.hasPermission{
+                            Button("Request Notification"){
+                                Task{
+                                    await notificationManager.request()
                                 }
                             }
+                            //.buttonStyle(.bordered)
+                            .buttonStyle(CustomPressEffectButtonStyle())
+                            .tint(Color(white: 0.58))
+                            .scaleEffect(scale)
+                            .animation(.linear(duration: 1), value: scale)
+                            .disabled(notificationManager.hasPermission)
+                            //.frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
+                            .frame(width: geometry.size.width - 50, alignment: .trailing)
+                            .task {
+                                await notificationManager.getAuthStatus()
+                            }
                         }
-                    }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(CustomPressEffectButtonStyle())
-                    .tint(Color(white: 0.58))
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
-                    .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
-                } header: {
-                    HStack{
-                        if !tipsSettingsPairDevice {
-                            Text("Pair Device")
-                                .font(.caption)
-                                .foregroundColor(.orange)
-                        }
-                        
-                        ViewTipsSettingsPairDevie(title: "Pair Device", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device.")
-                    }
-                }
-                
-                Section{
-                    Toggle("Enabled", isOn: $developerModeIsOn)
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    
-                } header: {
-                    Text("Developer Mode")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Section{
-                    Button( action: {
-                        isOnboarding = true
-                        tipsSettingsPairDevice = true
-                        tipsSettingsNVR = true
-                        tipsNotificationTemplate = true
-                        tipsNotificationDomain = true
-                        tipsNotificationDefault = true
-                        tipsLiveCameras = true
-                    }) {
-                        Text("Reset Tips")
-                            .padding(0)
-                            .frame(height: 20)
-                    }
-                    .buttonStyle(CustomPressEffectButtonStyle())
-                    .tint(Color(white: 0.58))
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
-                    .frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                    
-                } header: {
-                    Text("Instructions and Tips")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Section{
-                    HStack{
-                        Text("App:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text(appVersion!)
-                            .frame(alignment: .leading)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    
-                    HStack{
-                        Text("Build:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text(appBuild!)
-                            .frame(alignment: .leading)
-                        //.foregroundStyle(.tertiary)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    HStack{
-                        Text("Server:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text(viewuServerVersion)
-                            .frame(alignment: .leading)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    HStack{
-                        Text("Frigate:")
-                            .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
-                            .padding(.leading, 40)
-                        Text(frigateVersion)
-                            .frame(alignment: .leading)
-                    }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                } header: {
-                    Text("Versions")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                if developerModeIsOn {
-                    Section{
-                        ScrollView(.horizontal){
-                            Text(fcm)
-                                .frame(alignment: .leading)
-                                .textSelection(.enabled)
-                        }
-                        
                     } header: {
-                        Text("APN ID")
+                        Text("Notifications")
                             .font(.caption)
                             .foregroundColor(.orange)
                     }
+                    
+                    Section{
+                        Button("Clear All Storage") {
+                            showingAlert = true
+                        }
+                        .alert("Remove All Events", isPresented: $showingAlert) {
+                            Button("OK", role: .destructive ) {
+                                print("Clear All Storage")
+                                //Delete SQLite
+                                let _ = EventStorage.shared.delete()
+                            }
+                        }
+                        //.buttonStyle(.bordered)
+                        .buttonStyle(CustomPressEffectButtonStyle())
+                        .tint(Color(white: 0.58))
+                        .scaleEffect(scale)
+                        .animation(.linear(duration: 1), value: scale)
+                        //.frame(width: UIScreen.screenWidth-50, alignment: .trailing)
+                        .frame(width: geometry.size.width - 50, alignment: .trailing)
+                        
+                        
+                    } header: {
+                        Text("SQLite")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                    
+                    Section{
+                        
+                        HStack{
+                            Text("Paired:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(viewuDevicePairedArg ? "Enabled" : "Disabled")
+                                .frame(alignment: .leading)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        Button("Pair") {
+                            viewuDevicePairedArg = false
+                            for i in 0..<1 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
+                                    withAnimation(.easeInOut) {
+                                        mqttManager.publish(topic: "viewu/pairing", with: fcm)
+                                    }
+                                }
+                            }
+                        }
+                        //.buttonStyle(.bordered)
+                        .buttonStyle(CustomPressEffectButtonStyle())
+                        .tint(Color(white: 0.58))
+                        .scaleEffect(scale)
+                        .animation(.linear(duration: 1), value: scale)
+                        //.frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
+                        .frame(width: geometry.size.width - 50, alignment: .trailing)
+                    } header: {
+                        HStack{
+                            if !tipsSettingsPairDevice {
+                                Text("Pair Device")
+                                    .font(.caption)
+                                    .foregroundColor(.orange)
+                            }
+                            
+                            ViewTipsSettingsPairDevie(title: "Pair Device", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device.")
+                        }
+                    }
+                    
+                    Section{
+                        Toggle("Enabled", isOn: $developerModeIsOn)
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        
+                    } header: {
+                        Text("Developer Mode")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                    
+                    Section{
+                        Button( action: {
+                            isOnboarding = true
+                            tipsSettingsPairDevice = true
+                            tipsSettingsNVR = true
+                            tipsNotificationTemplate = true
+                            tipsNotificationDomain = true
+                            tipsNotificationDefault = true
+                            tipsLiveCameras = true
+                        }) {
+                            Text("Reset Tips")
+                                .padding(0)
+                                .frame(height: 20)
+                        }
+                        .buttonStyle(CustomPressEffectButtonStyle())
+                        .tint(Color(white: 0.58))
+                        .scaleEffect(scale)
+                        .animation(.linear(duration: 1), value: scale)
+                        //.frame(width: UIScreen.screenWidth-50, alignment: .trailing)
+                        .frame(width: geometry.size.width - 50, alignment: .trailing)
+                        
+                    } header: {
+                        Text("Instructions and Tips")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                    
+                    Section{
+                        HStack{
+                            Text("App:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(appVersion!)
+                                .frame(alignment: .leading)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        
+                        HStack{
+                            Text("Build:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(appBuild!)
+                                .frame(alignment: .leading)
+                            //.foregroundStyle(.tertiary)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        HStack{
+                            Text("Server:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(viewuServerVersion)
+                                .frame(alignment: .leading)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                        HStack{
+                            Text("Frigate:")
+                                .frame(width:UIScreen.screenWidth*widthMultiplier, alignment: .leading)
+                                .padding(.leading, 40)
+                            Text(frigateVersion)
+                                .frame(alignment: .leading)
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    } header: {
+                        Text("Versions")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                    
+                    if developerModeIsOn {
+                        Section{
+                            ScrollView(.horizontal){
+                                Text(fcm)
+                                    .frame(alignment: .leading)
+                                    .textSelection(.enabled)
+                            }
+                            
+                        } header: {
+                            Text("APN ID")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                    }
+                    
+                    
+                    Section {
+                        Text("[Viewu](https://www.viewu.app)")
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        Text("[Support](https://github.com/mjehrhart/viewu)")
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        Text("[Reddit](https://www.reddit.com/r/viewu/)")
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                        Text("[Installation Guide](https://installation.viewu.app)")
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    } header: {
+                        Text("Information")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                    
+                    Text("Viewu™ 2024")
                 }
-                
-                
-                Section {
-                    Text("[Viewu](https://www.viewu.app)")
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    Text("[Support](https://github.com/mjehrhart/viewu)")
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    Text("[Reddit](https://www.reddit.com/r/viewu/)")
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    Text("[Installation Guide](https://installation.viewu.app)")
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                } header: {
-                    Text("Information")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                
-                Text("Viewu™ 2024")
             }
-            
             if( nts.alert ){
                 PopupMiddle( onClose: {})
             }
