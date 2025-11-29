@@ -26,6 +26,6 @@
 		<string>remote-notification</string>
 	</array>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Your app needs access to save images to your photo library.</string>
+    <string>This permission allows Viewu to communicate with your Frigate server over the local network. For optimal security and reliability, it is recommended to access your servers using an FQDN secured with a valid SSL certificate over HTTPS.</string>
 </dict>
 </plist>
