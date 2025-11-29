@@ -129,7 +129,7 @@ struct ViewEventDetail: View {
                                    EnteredZones(zones: container.enteredZones!)
                                        .frame( maxWidth: .infinity, alignment: .leading)
                                }
-                               .frame( maxWidth: .infinity, alignment: .leading)
+                               .frame( maxWidth: geometry.size.width * 2, alignment: .leading)
                            }
                            else {
                                VStack(spacing:2){
@@ -144,7 +144,7 @@ struct ViewEventDetail: View {
                                     EnteredZones(zones: container.enteredZones!)
                                         .frame( maxWidth: .infinity, alignment: .leading)
                                 }
-                                .frame( maxWidth: .infinity, alignment: .leading)
+                                .frame( maxWidth: geometry.size.width * 2, alignment: .leading)
                             }
                             else {
                                 VStack(spacing:2){
@@ -417,6 +417,7 @@ struct ViewEventDetail: View {
         
         var body: some View {
             
+            //iPAD
             if idiom == .pad {
                 if orientation.isLandscape {
                     if !enteredZones.isEmpty {
@@ -452,7 +453,7 @@ struct ViewEventDetail: View {
                             Rectangle()
                                 .fill(Color.blue.opacity(0.6))
                                 .padding(0)
-                                .frame(maxWidth:(UIScreen.screenWidth / 2), maxHeight: .infinity)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .modifier(CardBackground2())
                                 .overlay(
                                     Label("No Zones Detected", systemImage: "")
@@ -461,9 +462,9 @@ struct ViewEventDetail: View {
                                         .foregroundColor(.white)
                                         .frame(maxWidth: .infinity, maxHeight: 20)
                                 )
-                                .padding(.trailing, 40)
+                                //.padding(.trailing, 40)
                         }
-                        .frame( maxWidth: UIScreen.screenWidth / 2, alignment: .leading)
+                        .frame( maxWidth: .infinity, alignment: .leading)
                         .padding(0)
                     }
                 }
@@ -496,27 +497,30 @@ struct ViewEventDetail: View {
                         }
                     }
                     else {
-                        VStack(spacing:2){
-                            
-                            Rectangle()
-                                .fill(Color.blue.opacity(0.6))
-                                .padding(0)
-                                .frame(maxWidth:(UIScreen.screenWidth / 2), maxHeight: .infinity)
-                                .modifier(CardBackground2())
-                                .overlay(
-                                    Label("No Zones Detected", systemImage: "")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.regular)
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity, maxHeight: 20)
-                                )
-                                .padding(.trailing, 40)
+                        GeometryReader{ geometry in
+                            VStack(spacing:2){
+                                
+                                Rectangle()
+                                    .fill(Color.blue.opacity(0.6))
+                                    .padding(0)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .modifier(CardBackground2())
+                                    .overlay(
+                                        Label("No Zones Detected", systemImage: "")
+                                            .font(.system(size: 15))
+                                            .fontWeight(.regular)
+                                            .foregroundColor(.white)
+                                            .frame(maxWidth: .infinity, maxHeight: 20)
+                                    )
+                                    //.padding(.trailing, 40)
+                            }
+                            .frame( maxWidth: geometry.size.width  * 2, alignment: .leading)
+                            .padding(0)
                         }
-                        .frame( maxWidth: UIScreen.screenWidth / 2, alignment: .leading)
-                        .padding(0)
                     }
                 }
             }
+            //iPHONE
             else {
                 if orientation.isLandscape {
                     if !enteredZones.isEmpty {
@@ -547,24 +551,26 @@ struct ViewEventDetail: View {
                         }
                     }
                     else {
-                        VStack(spacing:2){
-                            
-                            Rectangle()
-                                .fill(Color.blue.opacity(0.6))
-                                .padding(0)
-                                .frame(maxWidth:(UIScreen.screenWidth / 2), maxHeight: .infinity)
-                                .modifier(CardBackground2())
-                                .overlay(
-                                    Label("No Zones Detected", systemImage: "")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.regular)
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity, maxHeight: 20)
-                                )
-                                .padding(.trailing, 40)
+                        GeometryReader{ geometry in
+                            VStack(spacing:2){
+                                
+                                Rectangle()
+                                    .fill(Color.blue.opacity(0.6))
+                                    .padding(0)
+                                    .frame(maxWidth: geometry.size.width  * 2, maxHeight: .infinity)
+                                    .modifier(CardBackground2())
+                                    .overlay(
+                                        Label("No Zones Detected", systemImage: "")
+                                            .font(.system(size: 15))
+                                            .fontWeight(.regular)
+                                            .foregroundColor(.white)
+                                            .frame(maxWidth: .infinity, maxHeight: 20)
+                                    )
+                                    //.padding(.trailing, 40)
+                            }
+                            .frame( maxWidth: geometry.size.width  * 2, alignment: .leading)
+                            .padding(0)
                         }
-                        .frame( maxWidth: UIScreen.screenWidth / 2, alignment: .leading)
-                        .padding(0)
                     }
                 }
                 else {
@@ -595,24 +601,26 @@ struct ViewEventDetail: View {
                         }
                     }
                     else {
-                        VStack(spacing:2){
-                            
-                            Rectangle()
-                                .fill(Color.blue.opacity(0.6))
-                                .padding(0)
-                                .frame(maxWidth:(UIScreen.screenWidth / 2), maxHeight: .infinity)
-                                .modifier(CardBackground2())
-                                .overlay(
-                                    Label("No Zones Detected", systemImage: "")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.regular)
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity, maxHeight: 20)
-                                )
-                                .padding(.trailing, 40)
+                        GeometryReader{ geometry in
+                            VStack(spacing:2){
+                                
+                                Rectangle()
+                                    .fill(Color.blue.opacity(0.6))
+                                    .padding(0)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .modifier(CardBackground2())
+                                    .overlay(
+                                        Label("No Zones Detected", systemImage: "")
+                                            .font(.system(size: 15))
+                                            .fontWeight(.regular)
+                                            .foregroundColor(.white)
+                                            .frame(maxWidth: .infinity, maxHeight: 20)
+                                    )
+                                    .padding(.trailing, 40)
+                            }
+                            .frame( maxWidth: geometry.size.width  * 2, alignment: .leading)
+                            .padding(0)
                         }
-                        .frame( maxWidth: UIScreen.screenWidth / 2, alignment: .leading)
-                        .padding(0)
                     }
                 }
             }

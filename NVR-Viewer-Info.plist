@@ -26,6 +26,9 @@
 		<string>remote-notification</string>
 	</array>
     <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Viewu requests permission to access your photo library in order to save event snapshot images directly to your device.</string>
+    <key>NSLocalNetworkUsageDescription</key>
     <string>This permission allows Viewu to communicate with your Frigate server over the local network. For optimal security and reliability, it is recommended to access your servers using an FQDN secured with a valid SSL certificate over HTTPS.</string>
+
 </dict>
 </plist>
