@@ -82,17 +82,41 @@ struct ViewEventImage: View{
             .makeConnectable()
             .autoconnect()
         
+        @State private var currentScale: CGFloat = 1.0
+        @State private var finalScale: CGFloat = 1.0
+        
         var body: some View {
             
             if let data = data, let uiimage = UIImage(data: data){
                 
                 GeometryReader { geometry in
+//                    Image(uiImage: uiimage)
+//                        .resizable()
+//                        .scaledToFill()
+//                        .aspectRatio( contentMode: .fill)
+//                        .frame(width: max(geometry.size.width, widthGap), height: max(geometry.size.height, heightGap))
+//                        .modifier(CardBackground2())
+                    
                     Image(uiImage: uiimage)
                         .resizable()
-                        .scaledToFill()
-                        .aspectRatio( contentMode: .fill)
                         .frame(width: max(geometry.size.width, widthGap), height: max(geometry.size.height, heightGap))
                         .modifier(CardBackground2())
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                        .aspectRatio( contentMode: .fill)
+                        .scaledToFill()
+                        .scaleEffect(currentScale * finalScale)
+                        .gesture(
+                            MagnifyGesture()
+                                .onChanged { value in
+                                    // Access the magnification property of the value
+                                    currentScale = value.magnification
+                                }
+                                .onEnded { value in
+                                    // Combine the final and current scales
+                                    finalScale *= value.magnification
+                                    currentScale = 1.0 // Reset current scale for the next gesture
+                                }
+                        )
                          
                 }
   

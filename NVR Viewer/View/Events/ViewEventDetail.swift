@@ -65,7 +65,7 @@ struct ViewEventDetail: View {
             Spacer()
         }
         .padding(.top, 20)
-        .padding(.bottom, 20)
+        .padding(.bottom, 30)
         .frame(maxWidth: .infinity,maxHeight: 1.5 )
         
         

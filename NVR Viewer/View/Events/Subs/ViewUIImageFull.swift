@@ -25,8 +25,13 @@ struct ViewUIImageFull: View{
         .autoconnect()
     
     @State private var showingAlert = false
+     
+//    @GestureState private var currentZoom = 1.0 // Temporary state for active gesture
+//    @State private var totalZoom = 1.0 // Final stored zoom level
+     
+    @State private var currentScale: CGFloat = 1.0
+    @State private var finalScale: CGFloat = 1.0
     
-    //TODO Overlays
     var body: some View {
         
         GeometryReader { geometry in
@@ -36,17 +41,34 @@ struct ViewUIImageFull: View{
                 if idiom == .pad {
                     if orientation.isLandscape {
                         VStack{
+//                            Image(uiImage: uiimage)
+//                                .resizable()
+//                                .aspectRatio(16/9, contentMode: .fill)
+//                                .frame(width: geometry.size.width, height: 690,  alignment: .leading)
+//                                .onTapGesture{
+//                                    withAnimation {
+//                                        zoomIn.toggle()
+//                                    }
+//                                }
                             Image(uiImage: uiimage)
                                 .resizable()
-                                .aspectRatio(16/9, contentMode: .fill)
                                 .frame(width: geometry.size.width, height: 690,  alignment: .leading)
-                                //.offset(x: 0,y: 0)
-                                //.transition(.slide)
-                                .onTapGesture{
-                                    withAnimation {
-                                        zoomIn.toggle()
-                                    }
-                                }
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                .aspectRatio( contentMode: .fill)
+                                .scaledToFill()
+                                .scaleEffect(currentScale * finalScale)
+                                .gesture(
+                                    MagnifyGesture()
+                                        .onChanged { value in
+                                            // Access the magnification property of the value
+                                            currentScale = value.magnification
+                                        }
+                                        .onEnded { value in
+                                            // Combine the final and current scales
+                                            finalScale *= value.magnification
+                                            currentScale = 1.0 // Reset current scale for the next gesture
+                                        }
+                                )
                             
                             HStack(alignment: .lastTextBaseline){
                                 
@@ -89,17 +111,36 @@ struct ViewUIImageFull: View{
                     else {
                         VStack{
                             VStack( spacing: 0){
+//                                Image(uiImage: uiimage)
+//                                    .resizable()
+//                                    .aspectRatio(16/9, contentMode: .fill)
+//                                    .frame(width: geometry.size.width, height: 450,  alignment: .leading)
+//                                    //.offset(x: 0,y: 0)
+//                                    //.transition(.slide)
+//                                    .onTapGesture{
+//                                        withAnimation {
+//                                            zoomIn.toggle()
+//                                        }
+//                                    }
                                 Image(uiImage: uiimage)
                                     .resizable()
-                                    .aspectRatio(16/9, contentMode: .fill)
                                     .frame(width: geometry.size.width, height: 450,  alignment: .leading)
-                                    //.offset(x: 0,y: 0)
-                                    //.transition(.slide)
-                                    .onTapGesture{
-                                        withAnimation {
-                                            zoomIn.toggle()
-                                        }
-                                    }
+                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .aspectRatio( contentMode: .fill)
+                                    .scaledToFill()
+                                    .scaleEffect(currentScale * finalScale)
+                                    .gesture(
+                                        MagnifyGesture()
+                                            .onChanged { value in
+                                                // Access the magnification property of the value
+                                                currentScale = value.magnification
+                                            }
+                                            .onEnded { value in
+                                                // Combine the final and current scales
+                                                finalScale *= value.magnification
+                                                currentScale = 1.0 // Reset current scale for the next gesture
+                                            }
+                                    )
                                 
                                 HStack(alignment: .lastTextBaseline){
                                     
@@ -144,17 +185,37 @@ struct ViewUIImageFull: View{
                 else {
                     if orientation.isLandscape {
                         VStack( spacing: 0){
+//                            Image(uiImage: uiimage)
+//                                .resizable()
+//                                .aspectRatio( contentMode: .fill)
+//                                .scaledToFill()
+//                                .frame(maxWidth: geometry.size.width, maxHeight: 450, alignment: .leading)
+//                                .onTapGesture{
+//                                    withAnimation {
+//                                        zoomIn.toggle()
+//                                    }
+//                                }
+//                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            
                             Image(uiImage: uiimage)
                                 .resizable()
+                                .frame(maxWidth: geometry.size.width, maxHeight: 450, alignment: .leading)
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 .aspectRatio( contentMode: .fill)
                                 .scaledToFill()
-                                .frame(maxWidth: geometry.size.width, maxHeight: 450, alignment: .leading)
-                                .onTapGesture{
-                                    withAnimation {
-                                        zoomIn.toggle()
-                                    }
-                                }
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                .scaleEffect(currentScale * finalScale)
+                                .gesture(
+                                    MagnifyGesture()
+                                        .onChanged { value in
+                                            // Access the magnification property of the value
+                                            currentScale = value.magnification
+                                        }
+                                        .onEnded { value in
+                                            // Combine the final and current scales
+                                            finalScale *= value.magnification
+                                            currentScale = 1.0 // Reset current scale for the next gesture
+                                        }
+                                )
                             
                             HStack(alignment: .lastTextBaseline){
                                 
@@ -194,17 +255,37 @@ struct ViewUIImageFull: View{
                     }
                     else {
                         VStack( spacing: 0){
+//                            Image(uiImage: uiimage)
+//                                .resizable()
+//                                .aspectRatio( contentMode: .fill)
+//                                .scaledToFill()
+//                                .frame(maxWidth: geometry.size.width, maxHeight: 250, alignment: .leading)
+//                                .onTapGesture{
+//                                    withAnimation {
+//                                        zoomIn.toggle()
+//                                    }
+//                                }
+//                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            
                             Image(uiImage: uiimage)
                                 .resizable()
+                                .frame(maxWidth: geometry.size.width, maxHeight: 250, alignment: .leading)
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 .aspectRatio( contentMode: .fill)
                                 .scaledToFill()
-                                .frame(maxWidth: geometry.size.width, maxHeight: 250, alignment: .leading)
-                                .onTapGesture{
-                                    withAnimation {
-                                        zoomIn.toggle()
-                                    }
-                                }
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                .scaleEffect(currentScale * finalScale)
+                                .gesture(
+                                    MagnifyGesture()
+                                        .onChanged { value in
+                                            // Access the magnification property of the value
+                                            currentScale = value.magnification
+                                        }
+                                        .onEnded { value in
+                                            // Combine the final and current scales
+                                            finalScale *= value.magnification
+                                            currentScale = 1.0 // Reset current scale for the next gesture
+                                        }
+                                )
                             
                             HStack(alignment: .lastTextBaseline){
                                 
