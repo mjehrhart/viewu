@@ -14,6 +14,9 @@ struct ViewUIImageFull: View{
     @State var data: Data?
     @State var zoomIn: Bool = false
     
+    let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
+    let menuTextColor = Color.white
+    
     @State var orientation = UIDevice.current.orientation
     private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     
@@ -21,63 +24,228 @@ struct ViewUIImageFull: View{
         .makeConnectable()
         .autoconnect()
     
+    @State private var showingAlert = false
+    
     //TODO Overlays
     var body: some View {
         
         GeometryReader { geometry in
             if let data = data, let uiimage = UIImage(data: data){
                 
-                if orientation.isLandscape {
-                    if idiom == .pad { 
-                        Image(uiImage: uiimage)
-                            .resizable()
-                            .aspectRatio(16/9, contentMode: .fill)
-                            .frame(width: geometry.size.width - 18)
-                            .offset(x: 0,y: 0)
-                            .transition(.slide)
-                        //.opacity(self.zoomIn ? 0 : 0.5)
-                            .onTapGesture{
-                                withAnimation {
-                                    zoomIn.toggle()
+                //iPAD
+                if idiom == .pad {
+                    if orientation.isLandscape {
+                        VStack{
+                            Image(uiImage: uiimage)
+                                .resizable()
+                                .aspectRatio(16/9, contentMode: .fill)
+                                .frame(width: geometry.size.width, height: 690,  alignment: .leading)
+                                //.offset(x: 0,y: 0)
+                                //.transition(.slide)
+                                .onTapGesture{
+                                    withAnimation {
+                                        zoomIn.toggle()
+                                    }
+                                }
+                            
+                            HStack(alignment: .lastTextBaseline){
+                                
+                                ZStack{
+                                    //Setting the background white so that the blue may be opaque below
+                                    Label("", systemImage: "")
+                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
+                                        .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                        .background(.white)
+                                    
+                                    Label("", systemImage: "square.and.arrow.down")
+                                        .foregroundStyle(menuTextColor)
+                                        .foregroundStyle(.blue.opacity(0.6))
+                                        .font(.system(size: 24))
+                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
+                                        .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                        .background(cBlue.opacity(0.6))
+                                        .onTapGesture {
+                                            Task {
+                                                let urlString = urlString
+                                                if let image = await downloadImage(from: urlString) {
+                                                    ImageSaver().saveToPhotoLibrary(image)
+                                                    
+                                                    showingAlert = true
+                                                }
+                                            }
+                                        }
+                                        .alert(isPresented: $showingAlert) {
+                                            Alert(title: Text("Image Saved"),
+                                                  message: Text("This image has been saved to Photos"),
+                                                  dismissButton: .default(Text("OK")))
+                                        }
                                 }
                             }
-                    } else {
-                        Image(uiImage: uiimage)
-                            .resizable()
-                            .aspectRatio(16/9, contentMode: .fill)
-                            .frame(width: geometry.size.width - 18, alignment: .leading)
-                            .onTapGesture{
-                                withAnimation {
-                                    zoomIn.toggle()
-                                }
-                            }
+                        }
+                        .modifier( CardBackground2() )
+                        //.frame(maxHeight: .infinity)
+                        
                     }
-                } else {
-                    
-                    if idiom == .pad {
-                        Image(uiImage: uiimage)
-                            .resizable()
-                            .aspectRatio(16/9, contentMode: .fill)
-                            .frame(width: geometry.size.width - 18)
-                            //.offset(x: 0,y: 0)
-                            //.transition(.slide)
-                            .onTapGesture{
-                                withAnimation {
-                                    zoomIn.toggle()
+                    else {
+                        VStack{
+                            VStack( spacing: 0){
+                                Image(uiImage: uiimage)
+                                    .resizable()
+                                    .aspectRatio(16/9, contentMode: .fill)
+                                    .frame(width: geometry.size.width, height: 450,  alignment: .leading)
+                                    //.offset(x: 0,y: 0)
+                                    //.transition(.slide)
+                                    .onTapGesture{
+                                        withAnimation {
+                                            zoomIn.toggle()
+                                        }
+                                    }
+                                
+                                HStack(alignment: .lastTextBaseline){
+                                    
+                                    ZStack{
+                                        //Setting the background white so that the blue may be opaque below
+                                        Label("", systemImage: "")
+                                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
+                                            .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                            .background(.white)
+                                        
+                                        Label("", systemImage: "square.and.arrow.down")
+                                            .foregroundStyle(menuTextColor)
+                                            .foregroundStyle(.blue.opacity(0.6))
+                                            .font(.system(size: 24))
+                                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
+                                            .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                            .background(cBlue.opacity(0.6))
+                                            .onTapGesture {
+                                                Task {
+                                                    let urlString = urlString
+                                                    if let image = await downloadImage(from: urlString) {
+                                                        ImageSaver().saveToPhotoLibrary(image)
+                                                        
+                                                        showingAlert = true
+                                                    }
+                                                }
+                                            }
+                                            .alert(isPresented: $showingAlert) {
+                                                Alert(title: Text("Image Saved"),
+                                                      message: Text("This image has been saved to Photos"),
+                                                      dismissButton: .default(Text("OK")))
+                                            }
+                                    }
                                 }
                             }
-                    } else {
-                        Image(uiImage: uiimage)
-                            .resizable()
-                            .aspectRatio(16/9, contentMode: .fill)
-                            .frame(width: geometry.size.width - 18, alignment: .leading)
-                            .onTapGesture{
-                                withAnimation {
-                                    zoomIn.toggle()
-                                }
-                            }
+                            .modifier( CardBackground2() )
+                            //.frame(maxHeight: .infinity)
+                        }
                     }
                 }
+                // iPHONE
+                else {
+                    if orientation.isLandscape {
+                        VStack( spacing: 0){
+                            Image(uiImage: uiimage)
+                                .resizable()
+                                .aspectRatio( contentMode: .fill)
+                                .scaledToFill()
+                                .frame(maxWidth: geometry.size.width, maxHeight: 450, alignment: .leading)
+                                .onTapGesture{
+                                    withAnimation {
+                                        zoomIn.toggle()
+                                    }
+                                }
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            
+                            HStack(alignment: .lastTextBaseline){
+                                
+                                ZStack{
+                                    //Setting the background white so that the blue may be opaque below
+                                    Label("", systemImage: "")
+                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
+                                        .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                        .background(.white)
+                                    
+                                    Label("", systemImage: "square.and.arrow.down")
+                                        .foregroundStyle(menuTextColor)
+                                        .foregroundStyle(.blue.opacity(0.6))
+                                        .font(.system(size: 24))
+                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
+                                        .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                        .background(cBlue.opacity(0.6))
+                                        .onTapGesture {
+                                            Task {
+                                                let urlString = urlString
+                                                if let image = await downloadImage(from: urlString) {
+                                                    ImageSaver().saveToPhotoLibrary(image)
+                                                    
+                                                    showingAlert = true
+                                                }
+                                            }
+                                        }
+                                        .alert(isPresented: $showingAlert) {
+                                            Alert(title: Text("Image Saved"),
+                                                  message: Text("This image has been saved to Photos"),
+                                                  dismissButton: .default(Text("OK")))
+                                        }
+                                }
+                            }
+                        }
+                        .modifier( CardBackground2() )
+                    }
+                    else {
+                        VStack( spacing: 0){
+                            Image(uiImage: uiimage)
+                                .resizable()
+                                .aspectRatio( contentMode: .fill)
+                                .scaledToFill()
+                                .frame(maxWidth: geometry.size.width, maxHeight: 250, alignment: .leading)
+                                .onTapGesture{
+                                    withAnimation {
+                                        zoomIn.toggle()
+                                    }
+                                }
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            
+                            HStack(alignment: .lastTextBaseline){
+                                
+                                ZStack{
+                                    //Setting the background white so that the blue may be opaque below
+                                    Label("", systemImage: "")
+                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
+                                        .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                        .background(.white)
+                                    
+                                    Label("", systemImage: "square.and.arrow.down")
+                                        .foregroundStyle(menuTextColor)
+                                        .foregroundStyle(.blue.opacity(0.6))
+                                        .font(.system(size: 24))
+                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
+                                        .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                        .background(cBlue.opacity(0.6))
+                                        .onTapGesture {
+                                            Task {
+                                                let urlString = urlString
+                                                if let image = await downloadImage(from: urlString) {
+                                                    ImageSaver().saveToPhotoLibrary(image)
+                                                    
+                                                    showingAlert = true
+                                                }
+                                            }
+                                        }
+                                        .alert(isPresented: $showingAlert) {
+                                            Alert(title: Text("Image Saved"),
+                                                  message: Text("This image has been saved to Photos"),
+                                                  dismissButton: .default(Text("OK")))
+                                        }
+                                }
+                            }
+                        }
+                        .modifier( CardBackground2() )
+                    }
+                }
+                
+                
+                
             } else {
                 //Dummy Space
                 Text("")
@@ -104,5 +272,20 @@ struct ViewUIImageFull: View{
         }
     }
     
- 
+    struct CardBackground2: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+                .cornerRadius(25)
+                .shadow(color: Color.black.opacity(0.2), radius: 4)
+        }
+    }
+    
+    struct CardBackground3: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+            //.cornerRadius(25)
+                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 15, bottomTrailingRadius: 15))
+                .shadow(color: Color.black.opacity(0.2), radius: 4)
+        }
+    }
 }

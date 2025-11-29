@@ -792,7 +792,8 @@ class EventStorage: ObservableObject {
                 table.column(transportType)
             })
             
-            database.userVersion = 1
+            //database.userVersion = 1
+            database.userVersion = 2
             
         } catch (let error){
             Log.shared().print(page: "EventStorage", fn: "createEventsTable", type: "ERROR", text: "\(error)")

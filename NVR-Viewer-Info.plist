@@ -25,5 +25,7 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Your app needs access to save images to your photo library.</string>
 </dict>
 </plist>

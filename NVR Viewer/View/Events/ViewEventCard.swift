@@ -71,7 +71,8 @@ struct ViewEventCard: View {
                             //Time
                             NavigationLink(convertTime(time: containers[index].frameTime!), value: containers[index])
                                 .font(.system(size: fontSizeDate))
-                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                                .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
+                                //.foregroundStyle(Color.orange)
                                 .frame(width: setWidth(), alignment: .topLeading)
                                 .padding(.top,5)
                             

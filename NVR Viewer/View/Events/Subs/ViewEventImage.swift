@@ -92,6 +92,7 @@ struct ViewEventImage: View{
                         .scaledToFill()
                         .aspectRatio( contentMode: .fill)
                         .frame(width: max(geometry.size.width, widthGap), height: max(geometry.size.height, heightGap))
+                        .modifier(CardBackground2())
                          
                 }
   
@@ -100,6 +101,7 @@ struct ViewEventImage: View{
                 Text("")
                     .aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
                     .frame(width: 250,height: 150)
+                    .modifier(CardBackground2())
                     .onAppear{
                         
                         cNVR.fetchImage(urlString: urlString){ (data, error) in
@@ -148,5 +150,13 @@ struct ViewEventImage: View{
                 }
             }
         }
+    }
+}
+
+struct CardBackground2: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .cornerRadius(25)
+            .shadow(color: Color.black.opacity(0.2), radius: 4)
     }
 }
