@@ -240,8 +240,16 @@ struct ViewEventDetail: View {
                         }
                         
                     } else {
-                        Spacer()
-                            .frame(height: 40)
+                        //Text("\(UIScreen.main.nativeBounds.height / UIScreen.main.nativeScale)")
+                        if isLargeiPhone() {
+                            //Text("Large iPhone")
+                            Spacer()
+                                .frame(height: 36)
+                        } else {
+                            //Text("Small iPhone")
+                            Spacer()
+                                .frame(height: 65)
+                        }
                     }
                     
                      
@@ -279,16 +287,17 @@ struct ViewEventDetail: View {
                     }
                     //iPhone
                     else {
-                        HStack{
-                            Text("Snapshot")
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                .font(.system(size: 20))
-                                .fontWeight(.regular)
-                                .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                .frame(width: geometry.size.width, alignment: .leading)
-                        }
+                        
                         
                         if orientation.isLandscape {
+                            HStack{
+                                Text("Snapshot")
+                                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+                                    .font(.system(size: 20))
+                                    .fontWeight(.regular)
+                                    .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
+                                    .frame(width: geometry.size.width, alignment: .leading)
+                            }
                             
                             if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
                                 ViewUIImageFull(urlString: container.snapshot!)
@@ -298,6 +307,15 @@ struct ViewEventDetail: View {
                             }
                         }
                         else {
+                            HStack{
+                                Text("Snapshot")
+                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .font(.system(size: 20))
+                                    .fontWeight(.regular)
+                                    .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
+                                    .frame(width: geometry.size.width, alignment: .leading)
+                            }
+                            
                             if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
                                 
                                 ViewUIImageFull(urlString: container.snapshot!)
@@ -1105,9 +1123,18 @@ func isLargeiPad() -> Bool {
     let screenHeight = UIScreen.main.bounds.height
     let screenWidth = UIScreen.main.bounds.width
     let longerDimension = max(screenHeight, screenWidth)
-    
-    // The 12.9-inch/13-inch iPads have a consistent 1366pt dimension when in portrait.
-    // The 11-inch models have a smaller longer dimension (e.g., 1180pt or 1194pt).
-    // The value 1300 is a safe threshold to differentiate.
+     
     return longerDimension > 1300
 }
+
+func isLargeiPhone() -> Bool {
+    
+    if UIDevice.current.userInterfaceIdiom == .phone {
+        let screenHeight = UIScreen.main.nativeBounds.height / UIScreen.main.nativeScale
+         
+        return screenHeight >= 900.0
+        
+    }
+    return false
+}
+ 
