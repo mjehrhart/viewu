@@ -29,13 +29,13 @@ struct ViewPlayVideo: View {
         
         GeometryReader { geometry in
             
+            //iPad
             if idiom == .pad {
                 if orientation.isLandscape {
                     VStack( spacing: 0){
                         PlayerViewController(videoURL: URL(string: urlString), player: player)
                             .aspectRatio(16/9, contentMode: .fill)
                             .frame(width: geometry.size.width, height: 740,  alignment: .leading)
-                            //.edgesIgnoringSafeArea(.all)
                             .onAppear {
                                 player.pause()
                             }
@@ -58,8 +58,7 @@ struct ViewPlayVideo: View {
                     VStack( spacing: 0){
                         PlayerViewController(videoURL: URL(string: urlString), player: player)
                             .aspectRatio(16/9, contentMode: .fill)
-                            .frame(width: geometry.size.width, height: 540, alignment: .leading)
-                            //.edgesIgnoringSafeArea(.all)
+                            .frame(width: geometry.size.width, height: 550, alignment: .leading)
                             .onAppear {
                                 player.pause()
                             }
@@ -78,6 +77,7 @@ struct ViewPlayVideo: View {
                     .overlay(CameraOverlayVideoClip2(toCopy: urlString ), alignment: .bottomTrailing)
                 }
             }
+            //iPhone
             else {
                 if orientation.isLandscape {
                     
@@ -128,8 +128,6 @@ struct ViewPlayVideo: View {
                     
                 }
             }
-            
-            
         }
     }
     
@@ -143,8 +141,7 @@ struct ViewPlayVideo: View {
     
     struct CardBackground3: ViewModifier {
         func body(content: Content) -> some View {
-            content
-            //.cornerRadius(25)
+            content 
                 .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 15, bottomTrailingRadius: 15))
                 .shadow(color: Color.black.opacity(0.2), radius: 4)
         }
@@ -218,7 +215,7 @@ struct CameraOverlayVideoClip2: View {
                 HStack{
                     
                     ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
-                        Image(systemName: "document.on.document")
+                        Image(systemName: "square.and.arrow.up")
                     }
                     .foregroundStyle(.white)
                     .font(.system(size: 24))
@@ -233,7 +230,7 @@ struct CameraOverlayVideoClip2: View {
                 HStack{
                     
                     ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
-                        Image(systemName: "document.on.document")
+                        Image(systemName: "square.and.arrow.up")
                     }
                     .foregroundStyle(.white)
                     .font(.system(size: 24))

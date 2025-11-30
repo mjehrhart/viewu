@@ -51,9 +51,8 @@ struct ContentView: View {
     @AppStorage("showTips") var showTips: Bool = true
     
     @Environment(\.scenePhase) var scenePhase
-    
     @State private var path = NavigationPath()
-    
+     
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
     }
@@ -105,7 +104,8 @@ struct ContentView: View {
                         if developerModeIsOn {
                             do {
                                 Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
-                                if let responseString = String(data: data, encoding: .utf8) {
+                                //if let responseString = String(data: data, encoding: .utf8) {
+                                if String(data: data, encoding: .utf8) != nil {
                                     //print("Raw response data: \(responseString)")
                                     //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Result", text: "\(responseString)")
                                 }
@@ -188,6 +188,7 @@ struct ContentView: View {
                 }
             }
             .onAppear{
+                 
                 Task{
                     await sheduleBackgroundTask()
                 }

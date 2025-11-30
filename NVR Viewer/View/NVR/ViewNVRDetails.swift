@@ -19,8 +19,13 @@ struct ViewNVRDetails: View {
     //var sup = NVRConfigurationSuper()
     var sup = NVRConfigurationSuper2()
     let widthMultiplier:CGFloat = 2/5
+    
+    //Use the dismiss action
+    @Environment(\.dismiss) var dismiss
+    
     init(){
     }
+    
     var body: some View {
           
         Form{
@@ -127,36 +132,17 @@ struct ViewNVRDetails: View {
         .toolbar {
             ToolbarItemGroup(placement: .navigation) {
                 
-                Label("Timeline", systemImage: "chevron.left")
+                Label("Back", systemImage: "chevron.backward")
                     .labelStyle(HorizontalLabelStyle())
                     .foregroundStyle(.blue)
                     .onTapGesture(perform: {
+                        dismiss() // Manually dismiss the view
                         notificationManager2.newPage = 0
                     })
-                
-//                Button{
-//                    
-//                    let url = nvr.getUrl()
-//                    let urlString = url + "/api/config"
-//                    print(1001, urlString)
-//                    
-//                    cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
-//                        
-//                        guard let data = data else { return }
-//                        
-//                        do {
-//                            config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
-//                            //print("nvr = ", config.item)
-//                        }catch(let error){
-//                            print("Error Message goes here - 1001", error)
-//                        }
-//                    }
-//                } label: {Label("play", systemImage: "play")}
-//                    .foregroundStyle(.gray)
-//                    .frame(alignment: .trailing)
             }
         }
         .navigationBarTitle("NVR Configuration", displayMode: .inline)
+        .navigationBarBackButtonHidden(true) 
     }
     
 }
@@ -170,6 +156,6 @@ struct HorizontalLabelStyle: LabelStyle {
     }
 }
 
-#Preview {
-    ViewNVRDetails()
-}
+//#Preview {
+//    ViewNVRDetails()
+//}

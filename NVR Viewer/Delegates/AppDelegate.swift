@@ -96,7 +96,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     func parseUserInfo(userInfo: [AnyHashable : Any], transportType: String, newPage: Int, applicationState: String ) {
         
         DispatchQueue.main.async { [self] in
-            if let info = userInfo["aps"] as? Dictionary<String, AnyObject> {
+            if let _ = userInfo["aps"] as? Dictionary<String, AnyObject> {
  
                 var eps = EndpointOptions()
                 var eps2 = EndpointOptionsSuper.EventMeta()

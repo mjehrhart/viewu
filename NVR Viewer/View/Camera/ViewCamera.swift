@@ -36,6 +36,9 @@ struct ViewCamera: View {
     
     @State var flagAllowNonSub = false
     var counter = 0;
+    
+    //Use the dismiss action
+    @Environment(\.dismiss) var dismiss
      
 //    var sortedCameraKeys: Cameras2  {
 //        config.item.cameras.keys.sorted { $0.cameraName < $1.cameraName }
@@ -172,6 +175,19 @@ struct ViewCamera: View {
         .navigationBarTitle(title, displayMode: .inline)
         .toolbarBackground(.visible, for: .navigationBar)
         .scrollIndicators(.hidden)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        dismiss() // Manually dismiss the view
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("Back")
+                        }
+                    }
+                }
+            }
     }
     
     func verifyGo2RTCUrl(urlString: String) -> String {

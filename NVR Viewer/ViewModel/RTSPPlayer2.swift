@@ -132,7 +132,7 @@ struct StreamRTSP2: View {
                     )
                     .ignoresSafeArea()
                 }
-                 
+                
                 Text("Loading: \(urlString)")
                     .labelStyle(VerticalLabelStyle(show: false))
                     .foregroundStyle(menuTextColor)
@@ -141,8 +141,8 @@ struct StreamRTSP2: View {
                     VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
                         .padding(0)
                         .aspectRatio(16/9, contentMode: .fit)
-                        //.modifier( CardBackground2() )
-                        //.frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-5)
+                    //.modifier( CardBackground2() )
+                    //.frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-5)
                         .onAppear(){
                             //isLoading = false
                             mediaPlayer.audio?.isMuted = flagMute
@@ -151,18 +151,18 @@ struct StreamRTSP2: View {
                         .onDisappear(){
                             mediaPlayer.stop()
                         }
-                        //.overlay(CameraOverlay(name: cameraName, urlString: urlString, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
- 
+                    //.overlay(CameraOverlay(name: cameraName, urlString: urlString, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+                    
                 }
                 .background(Color.gray.opacity(0.125))
- 
+                
             }
             .padding(0)
             
             HStack(alignment: .firstTextBaseline){
-                 
+                
                 HStack(alignment: .lastTextBaseline){
- 
+                    
                     //Text(cameraName)
                     Label("\(cameraName)", systemImage: "")
                         .foregroundStyle(menuTextColor)
@@ -172,9 +172,9 @@ struct StreamRTSP2: View {
                         })
                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 00, trailing: 0))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                     
+                    
                     Label("", systemImage: flagMute ? "speaker.slash" : "speaker")
-                        //.labelStyle(VerticalLabelStyle(show: false))
+                    //.labelStyle(VerticalLabelStyle(show: false))
                         .foregroundStyle(menuTextColor)
                         .font(.system(size: 24))
                         .onTapGesture(perform: {
@@ -184,7 +184,7 @@ struct StreamRTSP2: View {
                         .padding(.trailing,20)
                     
                     Label("", systemImage: "arrow.down.left.and.arrow.up.right.rectangle")
-                        //.labelStyle(VerticalLabelStyle(show: false))
+                    //.labelStyle(VerticalLabelStyle(show: false))
                         .foregroundStyle(menuTextColor)
                         .font(.system(size: 24))
                         .onTapGesture(perform: {
@@ -194,7 +194,7 @@ struct StreamRTSP2: View {
                 }
                 .padding(EdgeInsets(top: 3, leading: 0, bottom: 3, trailing: 0))
                 //.background(.yellow)
-                 
+                
                 Spacer()
             }
         }
@@ -215,7 +215,7 @@ struct StreamRTSP2: View {
                 .shadow(color: Color.black.opacity(0.2), radius: 4)
         }
     }
-     
+    
     struct CameraOverlay: View {
         let name: String
         let urlString: String

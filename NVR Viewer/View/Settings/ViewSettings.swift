@@ -66,6 +66,9 @@ struct ViewSettings: View {
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
     
+    //Use the dismiss action
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         
         ZStack {
@@ -142,6 +145,7 @@ struct ViewSettings: View {
                                 .padding(.leading, 40)
                             TextField("0.0.0.0", text: $mqttIPAddress)
                                 .autocorrectionDisabled()
+                                .autocapitalization(.none)
                                 .frame(alignment: .leading)
                         }
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
@@ -541,6 +545,19 @@ struct ViewSettings: View {
             }
         }
         .navigationBarTitle(title, displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        dismiss() // Manually dismiss the view
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("Back")
+                        }
+                    }
+                }
+            }
     }
     
     struct CustomPressEffectButtonStyle: ButtonStyle {

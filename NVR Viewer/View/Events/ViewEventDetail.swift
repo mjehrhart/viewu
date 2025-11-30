@@ -35,7 +35,8 @@ struct ViewEventDetail: View {
     let menuBGColor = Color.orange.opacity(0.6)
     let menuTextColor = Color.white
     let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
-    
+  
+    //Orientation and Landscape/Portrait Mode
     private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     @State var orientation = UIDevice.current.orientation
     let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
@@ -167,19 +168,21 @@ struct ViewEventDetail: View {
                             .frame(height: 10)
                         
                         if( container.m3u8 != nil ){
-                            HStack{
-                                Text("Video Segment")
-                                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-                                    .font(.system(size: 20))
-                                    .fontWeight(.regular)
-                                    .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                    .frame(width: geometry.size.width, alignment: .leading)
-                            }
-                            
+                              
+                            //iPad
                             if idiom == .pad {
+                                
+                                HStack{
+                                    Text("Video Segment")
+                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
+                                        .font(.system(size: 20))
+                                        .fontWeight(.regular)
+                                        .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
+                                        .frame(width: geometry.size.width, alignment: .leading)
+                                }
+                                
                                 if orientation.isLandscape {
                                     ViewPlayVideo(urlString: container.m3u8!)
-                                    //.modifier(CardBackground())
                                     //.overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                                         .aspectRatio(16/9, contentMode: .fill)
@@ -190,39 +193,69 @@ struct ViewEventDetail: View {
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                                         .aspectRatio(16/9, contentMode: .fill)
                                         .frame(width: (geometry.size.width ),  alignment: .leading)
-                                    //.background(.green)
                                 }
+                            //iPhone
                             } else {
+                                 
                                 if orientation.isLandscape {
+                                    HStack{
+                                        Text("Video Segment")
+                                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+                                            .font(.system(size: 20))
+                                            .fontWeight(.regular)
+                                            .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
+                                            .frame(width: geometry.size.width, alignment: .leading)
+                                    }
                                     ViewPlayVideo(urlString: container.m3u8!)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
                                         .aspectRatio(16/9, contentMode: .fill)
                                         .frame(width: (geometry.size.width + 20) ,  alignment: .leading)
-                                    //.background(.orange)
                                 }
                                 else {
+                                    HStack{
+                                        Text("Video Segment")
+                                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                            .font(.system(size: 20))
+                                            .fontWeight(.regular)
+                                            .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
+                                            .frame(width: geometry.size.width, alignment: .leading)
+                                    }
                                     ViewPlayVideo(urlString: container.m3u8!)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 60))
                                         .aspectRatio(16/9, contentMode: .fill)
                                         .frame(width: geometry.size.width + 40, alignment: .leading)
-                                    //.background(.brown)
                                 }
                             } 
                         }
                     }
-                    
+ 
                     //Snapshot
-                    Spacer()
-                        .frame(height: 40)
-                    HStack{
-                        Text("Snapshot")
-                            .padding(10)
-                            .font(.system(size: 20))
-                            .fontWeight(.regular)
-                            .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                            .frame(width: geometry.size.width, alignment: .leading)
+                    if idiom == .pad{
+                        if isLargeiPad() {
+                            Spacer()
+                                .frame(height: 40)
+                        } else { 
+                            Spacer()
+                                .frame(height: 145)
+                        }
+                        
+                    } else {
+                        Spacer()
+                            .frame(height: 40)
                     }
+                    
+                     
+                    //iPad
                     if idiom == .pad {
+                        HStack{
+                            Text("Snapshot")
+                                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
+                                .font(.system(size: 20))
+                                .fontWeight(.regular)
+                                .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
+                                .frame(width: geometry.size.width, alignment: .leading)
+                        }
+                        
                         if orientation.isLandscape {
                             if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
                                 ViewUIImageFull(urlString: container.snapshot!)
@@ -244,7 +277,17 @@ struct ViewEventDetail: View {
                             }
                         }
                     }
+                    //iPhone
                     else {
+                        HStack{
+                            Text("Snapshot")
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                .font(.system(size: 20))
+                                .fontWeight(.regular)
+                                .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
+                                .frame(width: geometry.size.width, alignment: .leading)
+                        }
+                        
                         if orientation.isLandscape {
                             
                             if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
@@ -268,103 +311,30 @@ struct ViewEventDetail: View {
                     
                     //Dumbest fix ever! =)
                     if idiom == .pad {
-                   
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
+                        
+                        if orientation.isLandscape {
+                            ForEach(0..<52) { index in
+                                Text("")
+                            }
+                        }
+                        else {
+                            ForEach(0..<35) { index in
+                                Text("")
+                            }
+                        }
                     } else {
-                     
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
-                        Text("")
+                        if orientation.isLandscape {
+                            ForEach(0..<35) { index in
+                                Text("")
+                            }
+                        }
+                        else {
+                            ForEach(0..<17) { index in
+                                Text("")
+                            }
+                        }
                     }
+                    
                     
                 } // End of ScrollView
                 
@@ -1129,4 +1099,15 @@ class ImageSaver: NSObject {
             print("Image saved successfully!")
         }
     }
+}
+
+func isLargeiPad() -> Bool {
+    let screenHeight = UIScreen.main.bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    let longerDimension = max(screenHeight, screenWidth)
+    
+    // The 12.9-inch/13-inch iPads have a consistent 1366pt dimension when in portrait.
+    // The 11-inch models have a smaller longer dimension (e.g., 1180pt or 1194pt).
+    // The value 1300 is a safe threshold to differentiate.
+    return longerDimension > 1300
 }

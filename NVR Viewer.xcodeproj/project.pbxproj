@@ -49,6 +49,7 @@
 		342103632C1B5C6000CBBF83 /* OnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103622C1B5C6000CBBF83 /* OnBoarding.swift */; };
 		342103652C1B5CFE00CBBF83 /* ViewInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103642C1B5CFE00CBBF83 /* ViewInstructions.swift */; };
 		342103672C1B614000CBBF83 /* ViewOnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103662C1B614000CBBF83 /* ViewOnBoarding.swift */; };
+		342554BE2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */; };
 		343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343676B82BA3C48400BD765F /* HLSPlayer.swift */; };
 		34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34640F2B2BA4D3430085F726 /* AVResource.swift */; };
 		346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542DF2B9783860037BA1D /* ViewEventsHistory.swift */; };
@@ -180,6 +181,7 @@
 		342103622C1B5C6000CBBF83 /* OnBoarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoarding.swift; sourceTree = "<group>"; };
 		342103642C1B5CFE00CBBF83 /* ViewInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewInstructions.swift; sourceTree = "<group>"; };
 		342103662C1B614000CBBF83 /* ViewOnBoarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOnBoarding.swift; sourceTree = "<group>"; };
+		342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUIImageFull2.swift; sourceTree = "<group>"; };
 		343676B82BA3C48400BD765F /* HLSPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlayer.swift; sourceTree = "<group>"; };
 		34640F2B2BA4D3430085F726 /* AVResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVResource.swift; sourceTree = "<group>"; };
 		346542DF2B9783860037BA1D /* ViewEventsHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventsHistory.swift; sourceTree = "<group>"; };
@@ -382,6 +384,7 @@
 				34D5F0022B92B453002A84B0 /* ViewUIImageFull.swift */,
 				34D5F0002B92B442002A84B0 /* ViewUIImage.swift */,
 				34CF050F2ED7DCE100B8B494 /* ViewEventImage.swift */,
+				342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */,
 			);
 			path = Subs;
 			sourceTree = "<group>";
@@ -807,6 +810,7 @@
 				34D5EFFD2B92B3FD002A84B0 /* ViewLiveEvent.swift in Sources */,
 				34BBA48E2BAEA14F00A6004E /* ViewEventSlideShow.swift in Sources */,
 				342103522C11382D00CBBF83 /* ViewNotificationManager.swift in Sources */,
+				342554BE2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift in Sources */,
 				34D5EFE72B92AB76002A84B0 /* ViewEventListHome.swift in Sources */,
 				34D5EFFB2B92B3DB002A84B0 /* ViewEventDetail.swift in Sources */,
 				348333A22BB8AB9700ED1DF2 /* RTSPPlayer2.swift in Sources */,
@@ -869,7 +873,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 53;
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -882,7 +886,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.12;
+				MARKETING_VERSION = 2.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer.NotificationExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -897,7 +901,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 53;
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -910,7 +914,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.12;
+				MARKETING_VERSION = 2.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer.NotificationExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1051,7 +1055,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 53;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1073,7 +1077,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.12;
+				MARKETING_VERSION = 2.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1094,7 +1098,7 @@
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 53;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1116,7 +1120,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.12;
+				MARKETING_VERSION = 2.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
