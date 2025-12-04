@@ -15,7 +15,7 @@ struct ViewConnection: View {
     @EnvironmentObject private var mqttManager: MQTTManager
     
     var body: some View {
-        
+         
         VStack {
             VStack(spacing: 50) {
                 Button(action: initAndConnect) {

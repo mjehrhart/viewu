@@ -14,7 +14,7 @@ struct NVR_ViewerApp: App {
     @AppStorage("background_fetch_events_epochtime")  var backgroundFetchEventsEpochtime: String = "0"
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
      
-    let cNVR = APIRequester()
+    let api = APIRequester()
     let nvr = NVRConfig.shared()
     let notificationManager = NotificationManager()
     
@@ -43,7 +43,7 @@ struct NVR_ViewerApp: App {
         .modelContainer(for: [ImageContainer.self]) 
         .backgroundTask(.appRefresh("viewu_refresh")) {
   
-            await cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "background" )
+            await api.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "background", authType: nvr.getAuthType() )
         }
         .onChange(of: phase) {  oldValue, newPhase in
             switch newPhase {

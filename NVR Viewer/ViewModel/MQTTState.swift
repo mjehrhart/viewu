@@ -44,8 +44,8 @@ final class MQTTAppState: ObservableObject {
             
         } else if text.starts(with: "viewu_device_event_back"){
             // ie: viewu_device_event_back:title:200:dynamictextgoeshere
-            print("MQTT MEssage Recieved ------------------------------------------------------")
-            print(text);
+            //print("MQTT MEssage Recieved ------------------------------------------------------")
+            //print(text);
             
             let sub = text.split(separator: ":#:")
              

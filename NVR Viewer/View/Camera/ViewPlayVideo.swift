@@ -14,8 +14,8 @@ struct ViewPlayVideo: View {
     @State private var player = AVPlayer()
     
     @State var orientation = UIDevice.current.orientation
+    var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
-    
     let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
         .makeConnectable()
         .autoconnect()
@@ -49,6 +49,15 @@ struct ViewPlayVideo: View {
                                 .frame(width: geometry.size.width, height: 50, alignment: .trailing)
                                 .background(cBlue.opacity(0.6))
                         }
+                        
+                        if developerModeIsOn {
+                            Text("\(urlString)")
+                                .font(.system(size: 15))
+                                .fontWeight(.regular)
+                                .foregroundColor(.gray)
+                                .lineLimit(1)
+                                .textSelection(.enabled)
+                        }
                     }
                     .modifier(CardBackground2())
                     .overlay(CameraOverlayVideoClip2(toCopy: urlString ), alignment: .bottomTrailing)
@@ -71,6 +80,15 @@ struct ViewPlayVideo: View {
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
                                 .frame(width: geometry.size.width, height: 50, alignment: .trailing)
                                 .background(cBlue.opacity(0.6))
+                        }
+                        
+                        if developerModeIsOn {
+                            Text("\(urlString)")
+                                .font(.system(size: 15))
+                                .fontWeight(.regular)
+                                .foregroundColor(.gray)
+                                .lineLimit(1)
+                                .textSelection(.enabled)
                         }
                     }
                     .modifier(CardBackground2())
@@ -96,8 +114,17 @@ struct ViewPlayVideo: View {
                             Label("", systemImage: "")
                                 .font(.system(size: 24))
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
-                                .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                .frame(width: geometry.size.width, height: 50, alignment: .topTrailing)
                                 .background(cBlue.opacity(0.6))
+                        }
+                        
+                        if developerModeIsOn {
+                            Text("\(urlString)")
+                                .font(.system(size: 15))
+                                .fontWeight(.regular)
+                                .foregroundColor(.gray)
+                                .lineLimit(1)
+                                .textSelection(.enabled)
                         }
                     }
                     .modifier(CardBackground2())
@@ -119,12 +146,21 @@ struct ViewPlayVideo: View {
                             Label("", systemImage: "")
                                 .font(.system(size: 24))
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 30))
-                                .frame(width: geometry.size.width, height: 50, alignment: .trailing)
+                                .frame(width: geometry.size.width, height: 50, alignment: .topTrailing)
                                 .background(cBlue.opacity(0.6))
+                        }
+                        
+                        if developerModeIsOn {
+                            Text("\(urlString)")
+                                .font(.system(size: 15))
+                                .fontWeight(.regular)
+                                .foregroundColor(.gray)
+                                .lineLimit(1)
+                                .textSelection(.enabled)
                         }
                     }
                     .modifier(CardBackground2())
-                    .overlay(CameraOverlayVideoClip2(toCopy: urlString ), alignment: .bottomTrailing)
+                    .overlay(CameraOverlayVideoClip2(toCopy: urlString ), alignment: .topTrailing)
                     
                 }
             }

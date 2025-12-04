@@ -107,8 +107,7 @@ struct ViewCameraFullScreen: View {
                     HStack{
                         Button(name){
                             flagMute.toggle()
-                            mediaPlayer.audio?.isMuted = flagMute
-                            print("button1")
+                            mediaPlayer.audio?.isMuted = flagMute 
                         }
                         .foregroundColor(.white)
                         .font(.title)

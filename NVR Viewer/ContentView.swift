@@ -10,6 +10,7 @@ import CocoaMQTT
 import SwiftData
 import TipKit
 import BackgroundTasks
+import JWTKit
 
 struct ContentView: View {
     //Load Config
@@ -19,7 +20,7 @@ struct ContentView: View {
     //@ObservedObject var config = NVRConfigurationSuper.shared()
     @ObservedObject var config = NVRConfigurationSuper2.shared()
     
-    let cNVR = APIRequester()
+    let api = APIRequester()
     
     //
     @EnvironmentObject private var notificationManager2: NotificationManager
@@ -52,7 +53,9 @@ struct ContentView: View {
     
     @Environment(\.scenePhase) var scenePhase
     @State private var path = NavigationPath()
-     
+    
+    @AppStorage("authType") private var authType: AuthType = .none
+    
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "Georgia-Bold", size: 20)!]
     }
@@ -79,6 +82,7 @@ struct ContentView: View {
                         }
                         
                     case 1:
+                        
                         //ViewLive(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: false)
                         ViewEventDetail(text: convertDateTime(time: notificationManager2.frameTime!), container: notificationManager2.eps!, showButton: true, showClip: false)
                     case 2:
@@ -92,81 +96,55 @@ struct ContentView: View {
                 //DispatchQueue.global().async { }
                 //DispatchQueue.main.async { }
                 //Load Defaults for app
-                
-                DispatchQueue.main.async {
-                    let url = nvr.getUrl()
-                    let urlString = url + "/api/config"
-                    print(urlString)
-                    cNVR.fetchNVRConfig(urlString: urlString ){ (data, error) in
-                         
-                        guard let data = data else { return }
-                        
-                        if developerModeIsOn {
-                            do {
-                                Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: "Entry")
-                                //if let responseString = String(data: data, encoding: .utf8) {
-                                if String(data: data, encoding: .utf8) != nil {
-                                    //print("Raw response data: \(responseString)")
-                                    //Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Result", text: "\(responseString)")
-                                }
-                            }
-                        }
-                        
-                        do {
-                            
-                            //print("=1===============================================================================================")
-                            
-                            //FRIGATE 16+ reguires NVRConfigurationCall2
-                            //config.item = try JSONDecoder().decode(NVRConfigurationCall.self, from: data)
-                            config.item = try JSONDecoder().decode(NVRConfigurationCall2.self, from: data)
-                            
-                             
-                            //print("=2===============================================================================================")
-                            //print(config.item)
-                            //                        if let dataJson = jsonObject.data(using: .utf8) {
-                            //                            let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
-                            //                            ViewEventInformation( endPointOptionsArray: epsArray)
-                            //                        }
-                             
-                            filter2.setCameras(items: config.item.cameras)
-                            filter2.setObject(items: config.item.cameras)
-                            filter2.setZones(items: config.item.cameras)
-                            
-                            frigateVersion = config.item.version
-                            frigateAlertsRetain = config.item.record.alerts.retain.days
-                            frigateDetectionsRetain = config.item.record.detections.retain.days
-                            
-                            // Delete non-retained snapshots
-                            for (_, value) in config.item.cameras{
-                                
-                                let daysBack = value.snapshots.retain.default
-                                let db:Int = Int(daysBack)
-                                let _ = EventStorage.shared.delete(daysBack:db, cameraName: value.name)
-                            }
-                            
-                        }catch (let err){
-                            
-                            //print("=3==========")
-                            print(err)
-                            
-                            Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001.1", type: "ERROR", text: "\(err)")
-                            
-                            do {
-                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                    
-                                    Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001.1", type: "Info", text: "\(json)")
-                                }
-                            } catch(let err) {
-                                 
-                                Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001.2", type: "ERROR", text: "\(err)")
-                            }
-                        }
+                let url = nvr.getUrl()
+                await api.fetchNVRConfig(urlString: url, authType: nvr.getAuthType() ){ (data, error) in
+                    
+                    //printData(data ?? "NO DATA FOUND".data(using: .utf8)!)
+                    guard let data = data else { return }
+                    
+                    if developerModeIsOn {
+                        Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig", type: "Info", text: readData(data))
                     }
                     
-                    //Load Events
-                    cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "ctask" )
-                    
+                    do {
+                        config.item = try JSONDecoder().decode(NVRConfigurationCall2.self, from: data)
+                        
+                        filter2.setCameras(items: config.item.cameras)
+                        filter2.setObject(items: config.item.cameras)
+                        filter2.setZones(items: config.item.cameras)
+                        
+                        frigateVersion = config.item.version
+                        frigateAlertsRetain = config.item.record.alerts.retain.days
+                        frigateDetectionsRetain = config.item.record.detections.retain.days
+                        
+                        // Delete non-retained snapshots
+                        for (_, value) in config.item.cameras{
+                            
+                            let daysBack = value.snapshots.retain.default
+                            let db:Int = Int(daysBack)
+                            let _ = EventStorage.shared.delete(daysBack:db, cameraName: value.name)
+                        }
+                        
+                    }catch (let err){
+                        
+                        print("=3==========")
+                        print(err)
+                        
+                        Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 1001.1", type: "ERROR", text: "\(err)")
+                        
+                        do {
+                            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                                Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001.1", type: "Info", text: "\(json)")
+                            }
+                        } catch(let err) {
+                            Log.shared().print(page: "ContentView", fn: "task::cnvr.fetchNVRConfig 2001.2", type: "ERROR", text: "\(err)")
+                        }
+                    }
                 }
+                
+                //Load Events
+                await api.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "ctask", authType: nvr.getAuthType() )
+                  
             }
             .onReceive(notificationManager2.$newPage) {
                 guard let notificationSelection = $0 else  { return }
@@ -175,10 +153,11 @@ struct ContentView: View {
             }
             .onChange(of: scenePhase) { _, newScenePhase in
                 
-                DispatchQueue.main.async {
+                //DispatchQueue.main.async {
+                Task{
                     
                     if newScenePhase == .active {
-                        cNVR.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "scenePhase")
+                        await api.fetchEventsInBackground(urlString: nvr.getUrl(), backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime, epsType: "scenePhase", authType: nvr.getAuthType())
                     }
                     else if newScenePhase == .inactive {
                         //do nothing
@@ -188,14 +167,26 @@ struct ContentView: View {
                 }
             }
             .onAppear{
-                 
+                
                 Task{
                     await sheduleBackgroundTask()
                 }
                 
-                //check accesibilty to nvr
-                nvrManager.checkConnectionStatus(){data,error in
-                    //do nothing
+                Task {
+                    let url = nvr.getUrl()
+                    let urlString = url
+                    print("ContentView: onAppear() Task() - \(urlString)")
+                          
+                    try await api.checkConnectionStatus(urlString: urlString, authType: authType){ (data, error) in
+                         
+                        if let error = error {
+                            print("\(error.localizedDescription)")
+                            nvrManager.connectionState = .disconnected
+                            return
+                        }
+                        
+                        nvrManager.connectionState = .connected
+                    } 
                 }
                 
                 //TODO check if connection is disconnected first
@@ -405,4 +396,14 @@ extension AnyTransition {
     static var moveAndFade: AnyTransition {
         AnyTransition.slide
     }
+}
+
+func printData(_ data: Data) {
+    let string = String(data: data, encoding: .utf8) ?? "Unable to decode data"
+    print("\(string)")
+}
+
+func readData(_ data: Data) -> String{
+    let string = String(data: data, encoding: .utf8) ?? "Unable to decode data"
+    return string
 }

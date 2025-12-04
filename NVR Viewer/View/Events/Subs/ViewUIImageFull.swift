@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ViewUIImageFull: View{
     
-    let cNVR = APIRequester()
+    let api = APIRequester()
+    let nvr = NVRConfig.shared()
+    
     let urlString: String
     @State var data: Data?
     @State var zoomIn: Bool = false
@@ -17,9 +19,10 @@ struct ViewUIImageFull: View{
     let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
     let menuTextColor = Color.white
     
+    var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
+    
     @State var orientation = UIDevice.current.orientation
     private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
-    
     let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
         .makeConnectable()
         .autoconnect()
@@ -115,9 +118,17 @@ struct ViewUIImageFull: View{
                                     .background(cBlue.opacity(0.6))
                                 }
                             }
+                            
+                            if developerModeIsOn {
+                                Text("\(urlString)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.gray)
+                                    .lineLimit(1)
+                                    .textSelection(.enabled)
+                            }
                         }
                         .modifier( CardBackground2() )
-                        
                     }
                     else {
                         VStack( spacing: 0){
@@ -192,6 +203,15 @@ struct ViewUIImageFull: View{
                                     .frame(width: geometry.size.width, height: 50, alignment: .trailing)
                                     .background(cBlue.opacity(0.6))
                                 }
+                            }
+                            
+                            if developerModeIsOn {
+                                Text("\(urlString)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.gray)
+                                    .lineLimit(1)
+                                    .textSelection(.enabled)
                             }
                         }
                         .modifier( CardBackground2() )
@@ -274,6 +294,15 @@ struct ViewUIImageFull: View{
                                     .background(cBlue.opacity(0.6))
                                 }
                             }
+                            
+                            if developerModeIsOn {
+                                Text("\(urlString)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.gray)
+                                    .lineLimit(1)
+                                    .textSelection(.enabled)
+                            }
                         }
                         .modifier( CardBackground2() )
                         
@@ -352,8 +381,18 @@ struct ViewUIImageFull: View{
                                     .background(cBlue.opacity(0.6))
                                 }
                             }
+                            
+                            if developerModeIsOn {
+                                Text("\(urlString)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.gray)
+                                    .lineLimit(1)
+                                    .textSelection(.enabled)
+                            }
                         }
                         .modifier( CardBackground2() )
+                         
                     }
                 }
                 
@@ -365,18 +404,20 @@ struct ViewUIImageFull: View{
                     .frame(width: 250,height: 150)
                     .onAppear{
                         
-                        cNVR.fetchImage(urlString: urlString){ (data, error) in
-                            
-                            if let error = error {
-                                
-                                Log.shared().print(page: "ViewUIImageFull", fn: "onAppear", type: "ERROR", text: "\(error)")
-                                //if Event Snapshot is empty, show this instead
-                                cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
+                        Task {
+                            await api.fetchImage(urlString: urlString, authType: nvr.getAuthType()){ (data, error) in
+                                 
+                                if let error = error {
+                                    
+//                                    Log.shared().print(page: "ViewUIImageFull", fn: "onAppear", type: "ERROR", text: "\(error)")
+//                                    //if Event Snapshot is empty, show this instead
+////                                    await api.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU", authType: nvr.getAuthType()){ (data, error) in
+////                                        self.data = data
+////                                    }
+                                    
+                                } else {
                                     self.data = data
                                 }
-                                
-                            } else {
-                                self.data = data
                             }
                         }
                     }

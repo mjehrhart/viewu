@@ -8,6 +8,57 @@
 import Combine
 import Foundation
 
+enum AuthType:  String, Codable, CaseIterable, RawRepresentable  {
+    
+    case none
+    case bearer
+    case frigate
+    case cloudflare
+    case custom
+    
+    var description: String {
+        switch self {
+        case .none:
+            return "None"
+        case .bearer:
+            return "Bearer"
+        case .frigate:
+            return "FrigatePort8971"
+        case .cloudflare:
+            return "CloudFlare"
+        case .custom:
+            return "Custom"
+        }
+    }
+}
+
+extension AuthType {
+    var isNone: Bool {
+        get { self == .none }
+        set { if newValue { self = .none } }
+    }
+    
+    var isFrigate: Bool {
+        get { self == .frigate }
+        set { if newValue { self = .frigate } }
+    }
+    
+    var isCustom: Bool {
+        get { self == .custom }
+        set { if newValue { self = .custom } }
+    }
+    
+    var isBearer: Bool {
+        get { self == .bearer }
+        set { if newValue { self = .bearer } }
+    }
+    
+    var isCloudFlare: Bool {
+        get { self == .cloudflare }
+        set { if newValue { self = .cloudflare } }
+    }
+}
+
 enum NVRConnectionState {
     case connected
     case disconnected

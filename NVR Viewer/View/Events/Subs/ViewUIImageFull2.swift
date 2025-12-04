@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ViewUIImageFull2: View {
     
-    let cNVR = APIRequester()
+    let api = APIRequester()
+    let nvr = NVRConfig.shared()
+    
     let urlString: String
     @State var data: Data?
     
@@ -31,11 +33,11 @@ struct ViewUIImageFull2: View {
         
         HStack {
             if let data = data, let uiimage = UIImage(data: data){
-                 
+                
                 if orientation.isLandscape {
                     Image(uiImage: uiimage)
                         .resizable()
-                        //.rotationEffect(.degrees(90)) //this is correct
+                    //.rotationEffect(.degrees(90)) //this is correct
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                         .aspectRatio( contentMode: .fit)
@@ -73,11 +75,11 @@ struct ViewUIImageFull2: View {
                                     }
                             )
                         
-//                        WatermarkContentView()
-//                            .font(.system(size: 100))
-//                            .opacity(0.6)
-//                            .modifier(CardBackground2())
-                    
+                        //                        WatermarkContentView()
+                        //                            .font(.system(size: 100))
+                        //                            .opacity(0.6)
+                        //                            .modifier(CardBackground2())
+                        
                     }
                 }
             }
@@ -88,18 +90,20 @@ struct ViewUIImageFull2: View {
                     .frame(width: 250,height: 150)
                     .onAppear{
                         
-                        cNVR.fetchImage(urlString: urlString){ (data, error) in
-                            
-                            if let error = error {
+                        Task{
+                            await api.fetchImage(urlString: urlString, authType: nvr.getAuthType()){ (data, error) in
                                 
-                                Log.shared().print(page: "ViewUIImageFull", fn: "onAppear", type: "ERROR", text: "\(error)")
-                                //if Event Snapshot is empty, show this instead
-                                cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
+                                if let error = error {
+                                    
+                                    Log.shared().print(page: "ViewUIImageFull", fn: "onAppear", type: "ERROR", text: "\(error)")
+                                    //if Event Snapshot is empty, show this instead
+                                    //                                api.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
+                                    //                                    self.data = data
+                                    //                                }
+                                    
+                                } else {
                                     self.data = data
                                 }
-                                
-                            } else {
-                                self.data = data
                             }
                         }
                     }
@@ -108,17 +112,17 @@ struct ViewUIImageFull2: View {
         .navigationTitle("Snapshot Image")
         .navigationBarBackButtonHidden(true)
         .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
-                        dismiss() // Manually dismiss the view
-                    }) {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("Back")
-                        }
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: {
+                    dismiss() // Manually dismiss the view
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                        Text("Back")
                     }
                 }
             }
+        }
     }
 }
 
@@ -126,13 +130,13 @@ struct WatermarkContentView: View {
     var body: some View {
         
         Bundle.main.iconFileName
-                    .flatMap { UIImage(named: $0) }
-                    .map { Image(uiImage: $0) }
- 
+            .flatMap { UIImage(named: $0) }
+            .map { Image(uiImage: $0) }
+        
     }
 }
 
- 
+
 extension Bundle {
     var iconFileName: String? {
         guard let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],

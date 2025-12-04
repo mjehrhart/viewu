@@ -11,6 +11,9 @@ import SwiftData
 struct ViewEventsHistory: View {
     //
     @State var index = 0
+    @AppStorage("authType") private var authType: AuthType = .none
+    @AppStorage("developerModeIsOn") var developerModeIsOn = false
+    
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let cNVR = APIRequester()
     
@@ -39,6 +42,12 @@ struct ViewEventsHistory: View {
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
                     HStack{
+                        if developerModeIsOn {
+                            Text("\(authType.description)")
+                                .font(.system(size: 20))
+                                .fontWeight(.regular)
+                                .foregroundColor(.gray)
+                        }
                         Text("\(epsSup3.list3.count)")
                             //.font(.system(size: 16, weight: .medium, design: .default))
                             .font(.system(size: 20))
@@ -47,7 +56,7 @@ struct ViewEventsHistory: View {
                         Label(!nvrManager.getConnectionState() ? "" : "", systemImage: "cable.connector")
                             .frame(alignment: .leading)
                             .foregroundStyle(nvrManager.getConnectionState() ? .white : .red)
-                    } 
+                    }
                 }
             }
             .task{

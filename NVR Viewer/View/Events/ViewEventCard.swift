@@ -14,7 +14,7 @@ struct ViewEventCard: View {
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
     let nvr = NVRConfig.shared()
-    let cNVR = APIRequester()
+    let api = APIRequester()
     let fontSizeDate: CGFloat = 20
     let fontSizeLabel: CGFloat = 13
     
@@ -111,45 +111,49 @@ struct ViewEventCard: View {
                                 if frigatePlusOn {
                                     Button( action: {
                                         
-                                        containers[index].frigatePlus!.toggle()
-                                        
-                                        let url = nvr.getUrl()
-                                        let urlString = url + "/api/events/\(containers[index].id!)/plus"
-                                        cNVR.postImageToFrigatePlus(urlString: urlString, eventId: containers[index].id! ){ (data, error) in
+                                        Task {
+                                            containers[index].frigatePlus!.toggle()
                                             
-                                            guard let data = data else { return }
+                                            let url = nvr.getUrl()
+                                            let urlString = url
+                                            let endpoint = "/api/events/\(containers[index].id!)/plus"
                                             
-                                            do {
-                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                    
-                                                    if let res = json["success"] as? Int {
-                                                        print(res)
-                                                        if res == 1 {
-                                                            
-                                                            EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: true)
-                                                            EventStorage.shared.readAll3(completion: { res in
-                                                                //self.epsSup3 = res!
-                                                                epsSuper.list3 = res!
-                                                                return
-                                                            })
-                                                        } else {
-                                                            if let msg = json["message"] as? String {
-                                                                print(msg)
+                                            await api.postImageToFrigatePlus(urlString: urlString, endpoint: endpoint, eventId: containers[index].id!, authType: nvr.getAuthType() ){ (data, error) in
+                                                
+                                                guard let data = data else { return }
+                                                
+                                                do {
+                                                    if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                                                        
+                                                        if let res = json["success"] as? Int {
+                                                            //print(res)
+                                                            if res == 1 {
                                                                 
-                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                    containers[index].frigatePlus!.toggle()
-                                                                    EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: false)
+                                                                EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: true)
+                                                                EventStorage.shared.readAll3(completion: { res in
+                                                                    //self.epsSup3 = res!
+                                                                    epsSuper.list3 = res!
+                                                                    return
+                                                                })
+                                                            } else {
+                                                                if let msg = json["message"] as? String {
+                                                                    //print(msg)
+                                                                    
+                                                                    if (msg == "PLUS_API_KEY environment variable is not set" ){
+                                                                        containers[index].frigatePlus!.toggle()
+                                                                        EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: false)
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                     }
+                                                } catch(let error) {
+                                                    Log.shared().print(page: "ViewEventCard", fn: "button", type: "ERROR", text: "\(error)")
+                                                    print(error)
                                                 }
-                                            } catch(let error) {
-                                                Log.shared().print(page: "ViewEventCard", fn: "button", type: "ERROR", text: "\(error)")
-                                                print(error)
                                             }
+                                            return
                                         }
-                                        return
                                     } ){
                                         Text("Frigate+")
                                             .padding(1)
@@ -182,10 +186,14 @@ struct ViewEventCard: View {
                 
                 VStack{
                     if developerModeIsOn {
-                        Text(containers[index].snapshot!)
-                            .font(.system(size: fontSizeLabel))
-                            .foregroundColor(.gray)
-                            .textSelection(.enabled)
+                        ScrollView(.horizontal){
+                            Text(containers[index].snapshot!)
+                                .font(.system(size: fontSizeLabel))
+                                .foregroundColor(.gray)
+                                .lineLimit(1)
+                                .textSelection(.enabled)
+                        }
+                        .scrollIndicators(.hidden)
                     }
                 }
                 .frame(width: UIScreen.screenWidth-20, alignment: .bottomLeading)

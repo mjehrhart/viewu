@@ -6,34 +6,170 @@
 //
 
 import Foundation
-
-//removed final
+import SwiftUI
+ 
 final class NVRConfig: ObservableObject  {
     
-    let cNVR = APIRequester()
+    var https = false
+    var url = "0.0.0.1"
+    var port = "5000"
     
-    var https: Bool = UserDefaults.standard.bool(forKey: "nvrIsHttps")
-    var url: String = UserDefaults.standard.string(forKey: "nvrIPAddress") ?? "0.0.0.0"
-    var port: String = UserDefaults.standard.string(forKey: "nvrPortAddress") ?? "5000"
+    let api = APIRequester()
+    static let _shared = NVRConfig() 
     
-    @Published var connectionState: NVRConnectionState = .disconnected
+    @AppStorage("nvrIsHttps") var httpsNVR: Bool = true
+    @AppStorage("nvrIPAddress") var urlNVR: String = "0.0.0.0"
+    @AppStorage("nvrPortAddress") var portNVR: String = "5000"
+      
+    @AppStorage("frigateIsHttps") var httpsFrigate: Bool = true
+    @AppStorage("frigateIPAddress") var urlFrigate: String = "0.0.0.0"
+    @AppStorage("frigatePortAddress") var portFrigate: String = "8971"
     
-    private static let _shared = NVRConfig()
+    @AppStorage("bearerIsHttps") var httpsJWTBearer: Bool = true
+    @AppStorage("bearerIPAddress") var urlJWTBearer: String = "0.0.0.0"
+    @AppStorage("bearerPortAddress") var portJWTBearer: String = "5000"
+     
+    @AppStorage("authType") private var authType: AuthType = .none
+    @Published var tmpAuthType: AuthType = .none {
+        didSet {
+            authType = tmpAuthType // Update AppStorage when authType changes
+        }
+    }
+ 
+    @Published var connectionState: NVRConnectionState = .disconnected {
+        willSet {
+            objectWillChange.send()
+        }
+    }
     
     class func shared() -> NVRConfig {
         return _shared
     }
     
+    init() {
+        self.tmpAuthType = authType
+        self.url = self.getInitIP()
+        //self.https = self.getInitHttps()
+        self.port = getInitPort()
+    }
+    private func getInitIP() -> String {
+        switch authType{
+        case .none:
+            return  urlNVR
+        case .bearer:
+            return urlJWTBearer
+        case .frigate:
+            return urlFrigate
+        case .cloudflare:
+            return ""
+        case .custom:
+            return ""
+        }
+    }
+    private func getInitPort() -> String {
+        switch authType{
+        case .none:
+            return  portNVR
+        case .bearer:
+            return portJWTBearer
+        case .frigate:
+            return portFrigate
+        case .cloudflare:
+            return ""
+        case .custom:
+            return ""
+        }
+    }
+    
+    private func getInitHttps() -> Bool {
+        switch authType{
+        case .none:
+            if httpsNVR {
+                return true
+            } else {
+                return false
+            }
+        case .bearer:
+            if httpsJWTBearer {
+                return true
+            } else {
+                return false
+            }
+        case .frigate:
+            if httpsFrigate {
+                return true
+            } else {
+                return false
+            }
+        case .cloudflare:
+            // do nothing
+            return true
+        case .custom:
+            // do nothing
+            return true
+        }
+    }
+    
+    func getAuthType() -> AuthType{
+        return authType
+    }
+    
+    func setAuthType(authType: AuthType) {
+        self.authType = authType
+    }
+    
     func setHttps(http:Bool) {
-        self.https = http
+         
+        switch authType{
+        case .none:
+            self.https = httpsNVR
+        case .bearer:
+            self.https = httpsJWTBearer
+        case .frigate:
+            self.https = httpsFrigate
+        case .cloudflare:
+            break
+            // do nothing
+        case .custom:
+            break
+            // do nothing
+        }
+        //self.https = http
     }
-    
+     
     func setIP(ip:String) {
-        self.url = ip
+        switch authType{
+        case .none:
+            self.url = ip
+        case .bearer:
+            self.url = urlJWTBearer
+        case .frigate:
+            self.url = urlFrigate
+        case .cloudflare:
+            break
+            // do nothing
+        case .custom:
+            break
+            // do nothing
+        }
+        //self.url = ip
     }
     
-    func setPort(port:String) {
-        self.port = port
+    func setPort(ports:String) { 
+        
+        switch authType{
+        case .none:
+            self.port = portNVR
+        case .bearer:
+            self.port = portJWTBearer
+        case .frigate:
+            self.port = portFrigate
+        case .cloudflare:
+            break
+        case .custom:
+            break
+        }
+        //self.port = port
     }
     
     func getIP() -> String {
@@ -43,14 +179,37 @@ final class NVRConfig: ObservableObject  {
     func getUrl() -> String {
         
         var http: String {
-            if https {
-                return "https://"
-            } else {
-                return "http://"
+             
+            switch authType{
+            case .none:
+                if httpsNVR {
+                    return "https://"
+                } else {
+                    return "http://"
+                }
+            case .bearer:
+                if httpsJWTBearer {
+                    return "https://"
+                } else {
+                    return "http://"
+                }
+            case .frigate:
+                if httpsFrigate {
+                    return "https://"
+                } else {
+                    return "http://"
+                }
+            case .cloudflare:
+                // do nothing
+                return ""
+            case .custom:
+                // do nothing
+                return ""
             }
         }
         
-        let url: String = http + url + ":" + port
+        let url: String = http + self.url + ":" + self.port
+        print("getUrl = \(url)")
         return url
     }
     
@@ -58,7 +217,7 @@ final class NVRConfig: ObservableObject  {
         
         var isConnected: Bool {
             switch self.connectionState {
-            case .connected: 
+            case .connected:
                 return true
             case .disconnected:
                 return false
@@ -66,24 +225,4 @@ final class NVRConfig: ObservableObject  {
         }
         return isConnected
     }
-    
-    func checkConnectionStatus( completion: @escaping (Data?, Error?) -> Void) {
-        let urlString = self.getUrl()
-        
-        cNVR.checkConnectionStatus(urlString: urlString){ (data, error) in
-             
-            if error != nil {
-                //print("Error: \(String(describing: error))")
-                self.connectionState = .disconnected
-                Log.shared().print(page: "NVRConfig", fn: "checkConnectionStatus", type: "ERROR", text: " \(String(describing: error))")
-                
-                completion(nil, error)
-            } else {
-                //print("Received data: \(String(describing: data))")
-                self.connectionState = .connected
-                completion(data, nil)
-            } 
-        }
-    }
 }
-

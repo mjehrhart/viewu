@@ -183,9 +183,9 @@ struct ViewAPN: View {
                                 Text("\(nts.templates[index].template)")
                             }
                             .onDelete{ indexes in
-                                print(indexes)
+                                //print(indexes)
                                 for index in indexes{
-                                    print(index)
+                                    //print(index)
                                     nts.templates.remove(at: index)
                                 }
                                 
@@ -233,7 +233,7 @@ struct ViewAPN: View {
                                 for i in 0..<1 {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
                                         withAnimation(.easeInOut) {
-                                            print("isPaused :: \(nts.notificationPaused)")
+                                            //print("isPaused :: \(nts.notificationPaused)")
                                             let msg = "viewu_device_event::::paused::::\(nts.notificationPaused)"
                                             mqttManager.publish(topic: "viewu/pairing", with: msg)
                                             //nts.notificationPaused.toggle()

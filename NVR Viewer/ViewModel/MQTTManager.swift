@@ -82,7 +82,7 @@ import UserNotifications
 
     func subscribe(topic: String) {
         self.topic = topic
-        print("subscribe", topic)
+        //"subscribe", topic)
         mqttClient?.subscribe(topic, qos: .qos1)
     }
 

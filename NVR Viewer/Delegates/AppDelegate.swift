@@ -58,6 +58,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
  
+        //TODO verify this doesnt work correctly
         parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 1, applicationState: "active")
         
         
@@ -117,15 +118,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                     eps3.cameraName = msg
                 }
                 if let msg = userInfo["types"] as? String {
-                    print(200, msg)
+                    //print(200, msg)
                     eps.type = msg
                     eps2.type = msg
                     eps3.type = msg
                 }
                 
                 if let msg = userInfo["frameTime"] as? String {
-                    print("frameTime")
-                    print(msg)
+                    //print("frameTime")
+                    //print(msg)
                     
                     eps.frameTime = Double(msg)
                     eps2.frameTime = Double(msg)

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ViewLiveLandscape: View {
     
-    let cNVR = APIRequester()
+    let api = APIRequester()
+    let nvr = NVRConfig.shared()
+    
     let urlString: String
     let cameraName: String
     @State var data: Data?
@@ -33,22 +35,24 @@ struct ViewLiveLandscape: View {
                 .aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
                 .frame(width: 250,height: 150)
                 .onAppear{
-                    
-                    cNVR.fetchImage(urlString: urlString){ (data, error) in
-                        
-                        if let error = error {
+                    Task{
+                        await api.fetchImage(urlString: urlString, authType: nvr.getAuthType()){ (data, error) in
                             
-                            Log.shared().print(page: "ViewLiveLandscape", fn: "onAppear", type: "ERROR", text: "\(error)")
-                            
-                            //if Event Snapshot is empty, show this instead
-                            cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
-                                    self.data = data
-                            } 
-                        } else {
-                            self.data = data
+                            if let error = error {
+                                
+                                Log.shared().print(page: "ViewLiveLandscape", fn: "onAppear", type: "ERROR", text: "\(error)")
+                                
+                                //if Event Snapshot is empty, show this instead
+                                //await api.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU", authType:  nvr.getAuthType()){ (data2, error2) in
+                                //    self.data = data2
+                                //}
+                                
+                            } else {
+                                self.data = data
+                            }
                         }
                     }
-                } 
+                }
         }
     }
     
@@ -59,33 +63,32 @@ struct ViewLiveLandscape: View {
         @State var showCameras = false;
         
         var body: some View {
-             
+            
             HStack{
                 
                 VStack{
- 
+                    
                     HStack{
-                        Button(name){ 
-                            print("button1")
+                        Button(name){
                         }
                         .foregroundColor(.white)
                         .font(.title)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                         .padding(.bottom, 10)
                         .padding([.trailing], 95)
- 
+                        
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                 
+                
             }
             .onTapGesture{
             }
             .background(Color(.init(white: 10, alpha: 0)))
             .rotationEffect(.degrees(90))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-             
+            
         }
     }
     

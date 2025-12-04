@@ -13,7 +13,8 @@ import UIKit
 
 struct ViewEventImage: View{
     
-    let cNVR = APIRequester()
+    let api = APIRequester()
+    
     let urlString: String
     let frameTime: Double
     let frigatePlus: Bool
@@ -64,7 +65,9 @@ struct ViewEventImage: View{
     
     struct SubView: View {
         
-        let cNVR = APIRequester()
+        let api = APIRequester()
+        let nvr = NVRConfig.shared()
+        
         let urlString: String
         let frameTime: Double
         let widthGap: CGFloat
@@ -128,28 +131,30 @@ struct ViewEventImage: View{
                     .modifier(CardBackground2())
                     .onAppear{
                         
-                        cNVR.fetchImage(urlString: urlString){ (data, error) in
-                            
-                            if let _ = error {
+                        Task {
+                            await api.fetchImage(urlString: urlString, authType: nvr.getAuthType()){ (data, error) in
                                 
-                                //TODO
-                                //Not sure i like this approach as it forces the list to reload when an image is removed
-                                //print("Found ERROR ======================================================================")
-                                let flag = EventStorage.shared.delete(frameTime: frameTime)
-                                if flag {
+                                if let _ = error {
                                     
-                                    //if Event Snapshot is empty, show this instead
-                                    cNVR.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
+                                    //TODO
+                                    //Not sure i like this approach as it forces the list to reload when an image is removed
+                                    //print("Found ERROR ======================================================================")
+                                    let flag = EventStorage.shared.delete(frameTime: frameTime)
+                                    if flag {
                                         
-                                        if let _ = error {
-                                        } else {
-                                            self.data = data
-                                        }
+                                        //if Event Snapshot is empty, show this instead
+                                        //                                    api.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
+                                        //
+                                        //                                        if let _ = error {
+                                        //                                        } else {
+                                        //                                            self.data = data
+                                        //                                        }
+                                        //                                    }
                                     }
+                                    
+                                } else {
+                                    self.data = data
                                 }
-                                
-                            } else {
-                                self.data = data
                             }
                         }
                     }

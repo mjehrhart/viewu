@@ -69,7 +69,7 @@ class EventStorage: ObservableObject {
                 db = try Connection(dbPath)
                 
                 createEventsTable()
-                print("SQLiteDataStore init successfully at: \(dbPath) ")
+                //print("SQLiteDataStore init successfully at: \(dbPath) ")
             } catch {
                 db = nil
                 print("SQLiteDataStore init error: \(error)")
@@ -102,7 +102,7 @@ class EventStorage: ObservableObject {
             return false
         } catch(let error) {
             Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
-            print(error)
+            //print(error)
             return false
         }
     }
@@ -119,7 +119,7 @@ class EventStorage: ObservableObject {
              
             return true
         } catch (let error){
-            print(error)
+            //print(error)
             Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
             return false
         }
@@ -136,7 +136,7 @@ class EventStorage: ObservableObject {
             return true
         } catch (let error){
             Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
-            print(error)
+            //print(error)
             return false
         }
     }
@@ -172,7 +172,7 @@ class EventStorage: ObservableObject {
             }
         } catch(let error) {
             Log.shared().print(page: "EventStorage", fn: "getEventByFrameTime", type: "ERROR", text: "\(error)")
-            print(error)
+            //print(error)
         }
         return [eps]
     }
@@ -208,7 +208,7 @@ class EventStorage: ObservableObject {
             }
         } catch(let error) {
             Log.shared().print(page: "EventStorage", fn: "getEventById", type: "ERROR", text: "\(error)")
-            print(error)
+            //print(error)
         }
        
         return eps
@@ -505,7 +505,7 @@ class EventStorage: ObservableObject {
             }
         } catch (let error){
             Log.shared().print(page: "EventStorage", fn: "readAll2", type: "ERROR", text: "\(error)")
-            print(error)
+            //print(error)
         }
         
         //DispatchQueue.main.async { [self] in
@@ -514,7 +514,7 @@ class EventStorage: ObservableObject {
         //}
         
         //TODO
-        print("------////////----------count::\(eps.count)")
+        //"------////////----------count::\(eps.count)")
         epsSup = eps  
         return eps
     }
@@ -764,7 +764,7 @@ class EventStorage: ObservableObject {
             return rowID
         } catch (let error){
             Log.shared().print(page: "EventStorage", fn: "insert", type: "ERROR", text: "\(error)")
-            print(error)
+            //print(error)
             return nil
         }
     }

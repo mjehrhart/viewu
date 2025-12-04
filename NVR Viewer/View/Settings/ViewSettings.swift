@@ -23,9 +23,13 @@ struct ViewSettings: View {
     @State private var showingAlert = false
     @State private var showPassword = false
     
-    @AppStorage("nvrIPAddress") private var nvrIPAddress: String = ""
-    @AppStorage("nvrPortAddress") private var nvrPortAddress: String = "5000"
-    @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = true
+    //@State private var isAuthType = false
+    let nvr = NVRConfig.shared()
+    let api = APIRequester()
+    
+//    @AppStorage("nvrIPAddress") private var nvrIPAddress: String = ""
+//    @AppStorage("nvrPortAddress") private var nvrPortAddress: String = "5000"
+//    @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = true
     
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
     @AppStorage("notificationModeIsOn") private var notificationModeIsOn: Bool = false
@@ -71,10 +75,18 @@ struct ViewSettings: View {
     
     var body: some View {
         
+         
         ZStack {
             
             GeometryReader { geometry in
+                 
                 Form {
+                    
+//                    HStack{
+//                        ViewAuthTypes()
+//                    }
+//                    .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    
                     
                     Section{
                         Toggle("Enabled", isOn: $frigatePlusOn)
@@ -266,6 +278,23 @@ struct ViewSettings: View {
                     }
                     
                     Section {
+                        HStack{
+                            ViewAuthTypes()
+                        }
+                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                    } header: {
+                        HStack{
+                            if !tipsSettingsNVR {
+                                Text("NVR Settings")
+                                    .font(.caption)
+                                    .foregroundColor(.orange)
+                            }
+                            
+                            ViewTipsSettingsNVR(title: "Connection Requirements", message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN.")
+                        }
+                    }
+                    /*
+                    Section {
                         
                         HStack{
                             Text("Address:")
@@ -290,7 +319,7 @@ struct ViewSettings: View {
                         Toggle("Https", isOn: $nvrIsHttps)
                             .tint(Color(red: 0.153, green: 0.69, blue: 1))
                         //                    LabeledContent("NVR Synced", value: "No")
-                        
+                     
                         Label(nvrManager.getConnectionState() ? "Connected" : "Disconnected", systemImage: "cable.connector")
                             //.frame(width: UIScreen.screenWidth - 70, alignment: .trailing)
                             .frame(width: geometry.size.width - 70, alignment: .trailing)
@@ -300,10 +329,23 @@ struct ViewSettings: View {
                             //Sync data accross view and model
                             nvrManager.setHttps(http: nvrIsHttps )
                             nvrManager.setIP(ip: nvrIPAddress )
-                            nvrManager.setPort( port: nvrPortAddress )
+                            nvrManager.setPort( ports: nvrPortAddress )
                             
-                            nvrManager.checkConnectionStatus(){data,error in
-                                Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(String(describing: error))")
+                            Task {
+                                let url = nvr.getUrl()
+                                let urlString = url
+                                try await api.checkConnectionStatus(urlString: urlString, authType: nvr.getAuthType()) { (data, error) in
+                                       
+                                    if let error = error {
+                                        print("\(error.localizedDescription)")
+                                        Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(String(describing: error))")
+                                        nvrManager.connectionState = .disconnected
+                                        return
+                                    }
+                                         
+                                    nvrManager.connectionState = .connected
+                                  
+                                }
                             }
                         }
                         //.buttonStyle(.bordered)
@@ -313,6 +355,7 @@ struct ViewSettings: View {
                         .animation(.linear(duration: 1), value: scale)
                         //.frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
                         .frame(width: geometry.size.width - 50, alignment: .trailing)
+                         
                     } header: {
                         HStack{
                             if !tipsSettingsNVR {
@@ -324,6 +367,7 @@ struct ViewSettings: View {
                             ViewTipsSettingsNVR(title: "Connection Requirements", message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN.")
                         }
                     }
+                     */
                     
                     Section {
                         HStack{
@@ -368,7 +412,7 @@ struct ViewSettings: View {
                         }
                         .alert("Remove All Events", isPresented: $showingAlert) {
                             Button("OK", role: .destructive ) {
-                                print("Clear All Storage")
+                                
                                 //Delete SQLite
                                 let _ = EventStorage.shared.delete()
                             }

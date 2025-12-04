@@ -155,7 +155,6 @@ struct ViewEventDetail: View {
                                 .frame( maxWidth: .infinity, alignment: .leading)
                             }
                         }
-                        
                          
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -228,7 +227,7 @@ struct ViewEventDetail: View {
                             } 
                         }
                     }
- 
+  
                     //Snapshot
                     if idiom == .pad{
                         if isLargeiPad() {
@@ -239,16 +238,23 @@ struct ViewEventDetail: View {
                                 .frame(height: 145)
                         }
                         
-                    } else {
-                        //Text("\(UIScreen.main.nativeBounds.height / UIScreen.main.nativeScale)")
+                        if developerModeIsOn {
+                            Spacer()
+                                .frame(height: 40)
+                        }
+                        
+                    } else { 
                         if isLargeiPhone() {
-                            //Text("Large iPhone")
                             Spacer()
                                 .frame(height: 36)
                         } else {
-                            //Text("Small iPhone")
                             Spacer()
                                 .frame(height: 65)
+                        }
+                        
+                        if developerModeIsOn {
+                            Spacer()
+                                .frame(height: 40)
                         }
                     }
                     
@@ -325,8 +331,7 @@ struct ViewEventDetail: View {
                             }
                         }
                     }
-                    
-                    
+                      
                     //Dumbest fix ever! =)
                     if idiom == .pad {
                         
@@ -336,7 +341,7 @@ struct ViewEventDetail: View {
                             }
                         }
                         else {
-                            ForEach(0..<35) { index in
+                            ForEach(0..<38) { index in
                                 Text("")
                             }
                         }
@@ -347,7 +352,7 @@ struct ViewEventDetail: View {
                             }
                         }
                         else {
-                            ForEach(0..<17) { index in
+                            ForEach(0..<21) { index in
                                 Text("")
                             }
                         }
@@ -694,7 +699,7 @@ struct ViewEventDetail: View {
     struct CameraOverlaySnapShot: View {
         
         let nvr = NVRConfig.shared()
-        let cNVR = APIRequester()
+        let api = APIRequester()
         
         let eventId: String
         let toCopy: String
@@ -740,47 +745,50 @@ struct ViewEventDetail: View {
                                     
                                     frigatePlus = true
                                     
-                                    let url = nvr.getUrl()
-                                    let urlString = url + "/api/events/\(eventId)/plus"
-                                    cNVR.postImageToFrigatePlus(urlString: urlString, eventId: eventId ){ (data, error) in
+                                    Task {
+                                        let url = nvr.getUrl()
+                                        let urlString = url
+                                        let endpoint = "/api/events/\(eventId)/plus"
                                         
-                                        guard let data = data else { return }
-                                        
-                                        do {
-                                            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                
-                                                if let res = json["success"] as? Int {
-                                                    //print(res)
-                                                    if res == 1 {
-                                                        
-                                                        EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
-                                                        
-                                                        EventStorage.shared.readAll3(completion: { res in
-                                                            //self.epsSup3 = res!
-                                                            epsSuper.list3 = res!
-                                                            return
-                                                        })
-                                                    } else {
-                                                        
-                                                        if let msg = json["message"] as? String {
-                                                            print(msg)
+                                        await api.postImageToFrigatePlus(urlString: urlString,endpoint: endpoint, eventId: eventId, authType: nvr.getAuthType()){ (data, error) in
+                                            
+                                            guard let data = data else { return }
+                                            
+                                            do {
+                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                                                    
+                                                    if let res = json["success"] as? Int {
+                                                        //print(res)
+                                                        if res == 1 {
                                                             
-                                                            if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                frigatePlus = false
-                                                                EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
-                                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
+                                                            EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
+                                                            
+                                                            EventStorage.shared.readAll3(completion: { res in
+                                                                //self.epsSup3 = res!
+                                                                epsSuper.list3 = res!
+                                                                return
+                                                            })
+                                                        } else {
+                                                            
+                                                            if let msg = json["message"] as? String {
+                                                                //print(msg)
+                                                                
+                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
+                                                                    frigatePlus = false
+                                                                    EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
+                                                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
+                                            } catch(let error) {
+                                                
+                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
+                                                print(error)
                                             }
-                                        } catch(let error) {
-                                            
-                                            Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
-                                            print(error)
                                         }
                                     }
-                                    
                                 } label: {
                                     Image(systemName: "plus.rectangle")
                                 }
@@ -816,44 +824,48 @@ struct ViewEventDetail: View {
                                     
                                     frigatePlus = true
                                     
-                                    let url = nvr.getUrl()
-                                    let urlString = url + "/api/events/\(eventId)/plus"
-                                    cNVR.postImageToFrigatePlus(urlString: urlString, eventId: eventId ){ (data, error) in
+                                    Task {
+                                        let url = nvr.getUrl()
+                                        let urlString = url
+                                        let endpoint = "/api/events/\(eventId)/plus"
                                         
-                                        guard let data = data else { return }
-                                        
-                                        do {
-                                            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                
-                                                if let res = json["success"] as? Int {
-                                                    //print(res)
-                                                    if res == 1 {
-                                                        
-                                                        EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
-                                                        
-                                                        EventStorage.shared.readAll3(completion: { res in
-                                                            //self.epsSup3 = res!
-                                                            epsSuper.list3 = res!
-                                                            return
-                                                        })
-                                                    } else {
-                                                        
-                                                        if let msg = json["message"] as? String {
-                                                            print(msg)
+                                        await api.postImageToFrigatePlus(urlString: urlString, endpoint: endpoint, eventId: eventId, authType: nvr.getAuthType() ){ (data, error) in
+                                            
+                                            guard let data = data else { return }
+                                            
+                                            do {
+                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                                                    
+                                                    if let res = json["success"] as? Int {
+                                                        //print(res)
+                                                        if res == 1 {
                                                             
-                                                            if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                frigatePlus = false
-                                                                EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
-                                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
+                                                            EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
+                                                            
+                                                            EventStorage.shared.readAll3(completion: { res in
+                                                                //self.epsSup3 = res!
+                                                                epsSuper.list3 = res!
+                                                                return
+                                                            })
+                                                        } else {
+                                                            
+                                                            if let msg = json["message"] as? String {
+                                                                //msg)
+                                                                
+                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
+                                                                    frigatePlus = false
+                                                                    EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
+                                                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
+                                            } catch(let error) {
+                                                
+                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
+                                                print(error)
                                             }
-                                        } catch(let error) {
-                                            
-                                            Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
-                                            print(error)
                                         }
                                     }
                                     
@@ -894,44 +906,47 @@ struct ViewEventDetail: View {
                                     
                                     frigatePlus = true
                                     
-                                    let url = nvr.getUrl()
-                                    let urlString = url + "/api/events/\(eventId)/plus"
-                                    cNVR.postImageToFrigatePlus(urlString: urlString, eventId: eventId ){ (data, error) in
-                                        
-                                        guard let data = data else { return }
-                                        
-                                        do {
-                                            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                
-                                                if let res = json["success"] as? Int {
-                                                    //print(res)
-                                                    if res == 1 {
-                                                        
-                                                        EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
-                                                        
-                                                        EventStorage.shared.readAll3(completion: { res in
-                                                            //self.epsSup3 = res!
-                                                            epsSuper.list3 = res!
-                                                            return
-                                                        })
-                                                    } else {
-                                                        
-                                                        if let msg = json["message"] as? String {
-                                                            print(msg)
+                                    Task {
+                                        let url = nvr.getUrl()
+                                        let urlString = url
+                                        let endpoint = "/api/events/\(eventId)/plus"
+                                        await api.postImageToFrigatePlus(urlString: urlString, endpoint: endpoint, eventId: eventId, authType: nvr.getAuthType() ){ (data, error) in
+                                            
+                                            guard let data = data else { return }
+                                            
+                                            do {
+                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                                                    
+                                                    if let res = json["success"] as? Int {
+                                                        //print(res)
+                                                        if res == 1 {
                                                             
-                                                            if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                frigatePlus = false
-                                                                EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
-                                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
+                                                            EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
+                                                            
+                                                            EventStorage.shared.readAll3(completion: { res in
+                                                                //self.epsSup3 = res!
+                                                                epsSuper.list3 = res!
+                                                                return
+                                                            })
+                                                        } else {
+                                                            
+                                                            if let msg = json["message"] as? String {
+                                                                //print(msg)
+                                                                
+                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
+                                                                    frigatePlus = false
+                                                                    EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
+                                                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
+                                            } catch(let error) {
+                                                
+                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
+                                                print(error)
                                             }
-                                        } catch(let error) {
-                                            
-                                            Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
-                                            print(error)
                                         }
                                     }
                                     
@@ -994,44 +1009,47 @@ struct ViewEventDetail: View {
                                     
                                     frigatePlus = true
                                     
-                                    let url = nvr.getUrl()
-                                    let urlString = url + "/api/events/\(eventId)/plus"
-                                    cNVR.postImageToFrigatePlus(urlString: urlString, eventId: eventId ){ (data, error) in
-                                        
-                                        guard let data = data else { return }
-                                        
-                                        do {
-                                            if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                
-                                                if let res = json["success"] as? Int {
-                                                    //print(res)
-                                                    if res == 1 {
-                                                        
-                                                        EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
-                                                        
-                                                        EventStorage.shared.readAll3(completion: { res in
-                                                            //self.epsSup3 = res!
-                                                            epsSuper.list3 = res!
-                                                            return
-                                                        })
-                                                    } else {
-                                                        
-                                                        if let msg = json["message"] as? String {
-                                                            print(msg)
+                                    Task {
+                                        let url = nvr.getUrl()
+                                        let urlString = url
+                                        let endpoint = "/api/events/\(eventId)/plus"
+                                        await api.postImageToFrigatePlus(urlString: urlString, endpoint: endpoint,  eventId: eventId, authType: nvr.getAuthType() ){ (data, error) in
+                                            
+                                            guard let data = data else { return }
+                                            
+                                            do {
+                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
+                                                    
+                                                    if let res = json["success"] as? Int {
+                                                        //print(res)
+                                                        if res == 1 {
                                                             
-                                                            if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                frigatePlus = false
-                                                                EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
-                                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
+                                                            EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
+                                                            
+                                                            EventStorage.shared.readAll3(completion: { res in
+                                                                //self.epsSup3 = res!
+                                                                epsSuper.list3 = res!
+                                                                return
+                                                            })
+                                                        } else {
+                                                            
+                                                            if let msg = json["message"] as? String {
+                                                                //print(msg)
+                                                                
+                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
+                                                                    frigatePlus = false
+                                                                    EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
+                                                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
+                                            } catch(let error) {
+                                                
+                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
+                                                print(error)
                                             }
-                                        } catch(let error) {
-                                            
-                                            Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
-                                            print(error)
                                         }
                                     }
                                     
@@ -1048,40 +1066,7 @@ struct ViewEventDetail: View {
             }
             
             
-        }
-        
-        
-        
-        /*
-         func saveImageToPhotos(image: UIImage) {
-         PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
-         switch status {
-         case .authorized:
-         UIImageWriteToSavedPhotosAlbum(image, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
-         case .denied, .restricted:
-         print("Access to photo library denied or restricted.")
-         // Handle denied/restricted access (e.g., show an alert)
-         case .notDetermined:
-         // This case should ideally not be reached if requestAuthorization is called
-         print("Photo library access not determined.")
-         case .limited:
-         // Handle limited access in iOS 14+
-         print("Limited access to photo library.")
-         @unknown default:
-         fatalError("Unknown PHAuthorizationStatus")
-         }
-         }
-         }
-         
-         //@objc
-         func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-         if let error = error {
-         print("Error saving image: \(error.localizedDescription)")
-         } else {
-         print("Image saved successfully to Photos.")
-         }
-         }
-         */
+        } 
     }
 }
 

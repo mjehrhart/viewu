@@ -14,6 +14,7 @@
 		340616292BF91AFF00296130 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 340616282BF91AFF00296130 /* FirebaseInAppMessaging-Beta */; };
 		3406162B2BF91AFF00296130 /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 3406162A2BF91AFF00296130 /* FirebaseInAppMessagingSwift-Beta */; };
 		340616372BF91BB200296130 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 340616362BF91BB200296130 /* SQLite */; };
+		3407678F2EDE5C8C00CFEC0C /* JWTKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3407678E2EDE5C8C00CFEC0C /* JWTKit */; };
 		340AAFF12BA0A5CC00EB69F4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340AAFF02BA0A5CC00EB69F4 /* NotificationService.swift */; };
 		340AAFF52BA0A5CC00EB69F4 /* NotificationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 340AAFEE2BA0A5CB00EB69F4 /* NotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		340AAFFB2BA2406D00EB69F4 /* APIRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340AAFFA2BA2406C00EB69F4 /* APIRequestor.swift */; };
@@ -51,6 +52,7 @@
 		342103672C1B614000CBBF83 /* ViewOnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103662C1B614000CBBF83 /* ViewOnBoarding.swift */; };
 		342554BE2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */; };
 		343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343676B82BA3C48400BD765F /* HLSPlayer.swift */; };
+		3444DF492EDE6E9000D67D5A /* JWTKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3444DF482EDE6E9000D67D5A /* JWTKit */; };
 		34640F2C2BA4D3430085F726 /* AVResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34640F2B2BA4D3430085F726 /* AVResource.swift */; };
 		346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542DF2B9783860037BA1D /* ViewEventsHistory.swift */; };
 		346542E22B982EAD0037BA1D /* ViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542E12B982EAD0037BA1D /* ViewTest.swift */; };
@@ -65,6 +67,7 @@
 		348AB7BA2BA55E58001ADE6C /* ViewEventUpdateDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348AB7B92BA55E58001ADE6C /* ViewEventUpdateDetails.swift */; };
 		348C50AC2BB1ED7900A15446 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 348C50AB2BB1ED7900A15446 /* .gitignore */; };
 		34A4F4B02C066F0D0052B08A /* NVRConfigurationHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */; };
+		34A5DE732EDE69E3002A299E /* JWTKit in Frameworks */ = {isa = PBXBuildFile; productRef = 34A5DE722EDE69E3002A299E /* JWTKit */; };
 		34BBA4762BAB449C00A6004E /* ViewFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4752BAB449C00A6004E /* ViewFilter.swift */; };
 		34BBA4782BAB45C300A6004E /* EventFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4772BAB45C300A6004E /* EventFilter.swift */; };
 		34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4792BABC40C00A6004E /* AppDelegate.swift */; };
@@ -244,6 +247,8 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		343C6E732ECA6A8C00D0A5D3 /* Tips */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tips; sourceTree = "<group>"; };
+		3444DF4A2EDF4DAA00D67D5A /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
+		3484EA2D2EDFC1D800B8C44D /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -251,6 +256,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3407678F2EDE5C8C00CFEC0C /* JWTKit in Frameworks */,
+				34A5DE732EDE69E3002A299E /* JWTKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +284,7 @@
 				340AB0112BA38AB200EB69F4 /* libbz2.tbd in Frameworks */,
 				342103572C13F56000CBBF83 /* FirebaseAnalytics in Frameworks */,
 				34D9253D2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				3444DF492EDE6E9000D67D5A /* JWTKit in Frameworks */,
 				342103602C1A493D00CBBF83 /* PopupView in Frameworks */,
 				340616272BF91AFF00296130 /* FirebaseAppCheck in Frameworks */,
 				340AB00F2BA38AA600EB69F4 /* Foundation.framework in Frameworks */,
@@ -469,6 +477,7 @@
 		34D5EFE42B92AB2D002A84B0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3484EA2D2EDFC1D800B8C44D /* Auth */,
 				34BBA4772BAB45C300A6004E /* EventFilter.swift */,
 				34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */,
 				3421034E2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift */,
@@ -535,6 +544,7 @@
 		34D5F00F2B940E0E002A84B0 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				3444DF4A2EDF4DAA00D67D5A /* Auth */,
 				34D5EFEA2B92ABDC002A84B0 /* ViewSettings.swift */,
 			);
 			path = Settings;
@@ -638,6 +648,8 @@
 			);
 			fileSystemSynchronizedGroups = (
 				343C6E732ECA6A8C00D0A5D3 /* Tips */,
+				3444DF4A2EDF4DAA00D67D5A /* Auth */,
+				3484EA2D2EDFC1D800B8C44D /* Auth */,
 			);
 			name = "NVR Viewer";
 			packageProductDependencies = (
@@ -665,6 +677,7 @@
 				3421035A2C13F56000CBBF83 /* FirebaseCrashlytics */,
 				3421035C2C13F56000CBBF83 /* FirebaseMessaging */,
 				3421035F2C1A493D00CBBF83 /* PopupView */,
+				3444DF482EDE6E9000D67D5A /* JWTKit */,
 			);
 			productName = "NVR Viewer";
 			productReference = 34D5EFD22B92AB1F002A84B0 /* NVR Viewer.app */;
@@ -701,6 +714,7 @@
 				340616352BF91BB200296130 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 				342103552C13F56000CBBF83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3421035E2C1A493D00CBBF83 /* XCRemoteSwiftPackageReference "PopupView" */,
+				3444DF472EDE6E9000D67D5A /* XCRemoteSwiftPackageReference "jwt-kit" */,
 			);
 			productRefGroup = 34D5EFD32B92AB1F002A84B0 /* Products */;
 			projectDirPath = "";
@@ -886,7 +900,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.13;
+				MARKETING_VERSION = 2.14;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer.NotificationExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -914,7 +928,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.13;
+				MARKETING_VERSION = 2.14;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer.NotificationExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -931,6 +945,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_WARNINGS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -995,6 +1010,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_WARNINGS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1053,9 +1069,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_WARNINGS = NO;
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 55;
+				CURRENT_PROJECT_VERSION = 56;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1077,7 +1094,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.13;
+				MARKETING_VERSION = 2.14;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1095,10 +1112,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_WARNINGS = NO;
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 55;
+				CURRENT_PROJECT_VERSION = 56;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1120,7 +1138,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.13;
+				MARKETING_VERSION = 2.14;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1172,6 +1190,14 @@
 				minimumVersion = 0.15.3;
 			};
 		};
+		3407678D2EDE5C8C00CFEC0C /* XCRemoteSwiftPackageReference "jwt-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/jwt-kit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
 		342103552C13F56000CBBF83 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1186,6 +1212,22 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.10.1;
+			};
+		};
+		3444DF472EDE6E9000D67D5A /* XCRemoteSwiftPackageReference "jwt-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/jwt-kit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.0.0;
+			};
+		};
+		34A5DE712EDE69E3002A299E /* XCRemoteSwiftPackageReference "jwt-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/jwt-kit.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.3.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1207,6 +1249,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 340616352BF91BB200296130 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
 			productName = SQLite;
+		};
+		3407678E2EDE5C8C00CFEC0C /* JWTKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3407678D2EDE5C8C00CFEC0C /* XCRemoteSwiftPackageReference "jwt-kit" */;
+			productName = JWTKit;
 		};
 		342103562C13F56000CBBF83 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1232,6 +1279,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3421035E2C1A493D00CBBF83 /* XCRemoteSwiftPackageReference "PopupView" */;
 			productName = PopupView;
+		};
+		3444DF482EDE6E9000D67D5A /* JWTKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3444DF472EDE6E9000D67D5A /* XCRemoteSwiftPackageReference "jwt-kit" */;
+			productName = JWTKit;
+		};
+		34A5DE722EDE69E3002A299E /* JWTKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34A5DE712EDE69E3002A299E /* XCRemoteSwiftPackageReference "jwt-kit" */;
+			productName = JWTKit;
 		};
 		34D9253C2BB770B10005DB70 /* FirebaseAnalyticsOnDeviceConversion */ = {
 			isa = XCSwiftPackageProductDependency;
