@@ -29,6 +29,10 @@
     <string>Viewu requests permission to access your photo library in order to save event snapshot images directly to your device.</string>
     <key>NSLocalNetworkUsageDescription</key>
     <string>This permission allows Viewu to communicate with your Frigate server over the local network. For optimal security and reliability, it is recommended to access your servers using an FQDN secured with a valid SSL certificate over HTTPS.</string>
-
+    <key>UIFileSharingEnabled</key>
+    <true/> <!-- Use <true/> instead of <Boolean>YES</Boolean> for clarity/modern XML -->
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/> <!-- Value should be <true/> -->
+    
 </dict>
 </plist>

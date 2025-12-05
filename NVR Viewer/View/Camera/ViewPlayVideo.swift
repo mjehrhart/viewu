@@ -11,7 +11,10 @@ import AVKit
 struct ViewPlayVideo: View {
     
     let urlString: String
+    let urlMp4String: String?
+    let frameTime: Double
     @State private var player = AVPlayer()
+    @StateObject var viewModel: DownloadViewModel = .init()
     
     @State var orientation = UIDevice.current.orientation
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
@@ -60,7 +63,7 @@ struct ViewPlayVideo: View {
                         }
                     }
                     .modifier(CardBackground2())
-                    .overlay(CameraOverlayVideoClip2(toCopy: urlString ), alignment: .bottomTrailing)
+                    .overlay(CameraOverlayVideoClip2(toCopy: urlString, urlMp4: urlMp4String ?? "", fileName: frameTime ), alignment: .bottomTrailing)
                 }
                 else {
                     
@@ -92,7 +95,7 @@ struct ViewPlayVideo: View {
                         }
                     }
                     .modifier(CardBackground2())
-                    .overlay(CameraOverlayVideoClip2(toCopy: urlString ), alignment: .bottomTrailing)
+                    .overlay(CameraOverlayVideoClip2(toCopy: urlString, urlMp4: urlMp4String ?? "", fileName: frameTime ), alignment: .bottomTrailing)
                 }
             }
             //iPhone
@@ -128,7 +131,7 @@ struct ViewPlayVideo: View {
                         }
                     }
                     .modifier(CardBackground2())
-                    .overlay(CameraOverlayVideoClip2(toCopy: urlString ), alignment: .bottomTrailing)
+                    .overlay(CameraOverlayVideoClip2(toCopy: urlString, urlMp4: urlMp4String ?? "", fileName: frameTime ), alignment: .bottomTrailing)
                 }
                 else {
                     VStack( spacing: 0){
@@ -149,7 +152,7 @@ struct ViewPlayVideo: View {
                                 .frame(width: geometry.size.width, height: 50, alignment: .topTrailing)
                                 .background(cBlue.opacity(0.6))
                         }
-                        
+                         
                         if developerModeIsOn {
                             Text("\(urlString)")
                                 .font(.system(size: 15))
@@ -160,7 +163,7 @@ struct ViewPlayVideo: View {
                         }
                     }
                     .modifier(CardBackground2())
-                    .overlay(CameraOverlayVideoClip2(toCopy: urlString ), alignment: .topTrailing)
+                    .overlay(CameraOverlayVideoClip2(toCopy: urlString, urlMp4: urlMp4String ?? "", fileName: frameTime ), alignment: .bottomTrailing)
                     
                 }
             }
@@ -209,6 +212,9 @@ struct PlayerViewController: UIViewControllerRepresentable {
 struct CameraOverlayVideoClip2: View {
     
     let toCopy: String
+    let urlMp4: String
+    let fileName: Double
+    
     private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     @State var orientation = UIDevice.current.orientation
     let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
@@ -222,11 +228,16 @@ struct CameraOverlayVideoClip2: View {
             if orientation.isLandscape {
                 HStack{
                     
+                    if isMP4InvalidURL(urlMp4) {
+                        DownloadView(urlString: urlMp4, fileName: fileName)
+                    }
+                    
                     ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
                         Image(systemName: "square.and.arrow.up")
                     }
                     .foregroundStyle(.white)
                     .font(.system(size: 24))
+                    .frame(maxWidth: 15, maxHeight: 730, alignment: .trailing)
                 }
                 .padding(EdgeInsets(top: 700, leading: 0, bottom: 20, trailing: 40))
                 .frame(maxWidth: .infinity, maxHeight: 730, alignment: .trailing)
@@ -235,11 +246,16 @@ struct CameraOverlayVideoClip2: View {
                 
                 HStack{
                     
+                    if isMP4InvalidURL(urlMp4) {
+                        DownloadView(urlString: urlMp4, fileName: fileName)
+                    }
+                    
                     ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
                         Image(systemName: "square.and.arrow.up")
                     }
                     .foregroundStyle(.white)
                     .font(.system(size: 24))
+                    .frame(maxWidth: 15, maxHeight: 530, alignment: .trailing)
                 }
                 .padding(EdgeInsets(top: 470, leading: 0, bottom: 0, trailing: 40))
                 .frame(maxWidth: .infinity, maxHeight: 530, alignment: .trailing)
@@ -250,12 +266,16 @@ struct CameraOverlayVideoClip2: View {
             if orientation.isLandscape {
                 HStack{
                     
+                    if isMP4InvalidURL(urlMp4) {
+                        DownloadView(urlString: urlMp4, fileName: fileName)
+                    }
+                    
                     ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
                         Image(systemName: "square.and.arrow.up")
                     }
                     .foregroundStyle(.white)
                     .font(.system(size: 24))
-                    .frame(maxWidth: .infinity, maxHeight: 300, alignment: .trailing)
+                    .frame(maxWidth: 15, maxHeight: 300, alignment: .trailing)
                 }
                 //TODO check if this is effecting the ShareLink
                 .padding(EdgeInsets(top: 250, leading: 0, bottom: 0, trailing: 45))
@@ -265,12 +285,17 @@ struct CameraOverlayVideoClip2: View {
                 
                 HStack{
                     
+                    if isMP4InvalidURL(urlMp4) {
+                        DownloadView(urlString: urlMp4, fileName: fileName)
+                    }
+                    
                     ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
+                    //ShareLink(item: toCopyAlt, preview: SharePreview("Viewu Video", image: "https://middle.viewu.app/api/events/1764807972.940936-4ym9k8/snapshot.jpg")){
                         Image(systemName: "square.and.arrow.up")
                     }
                     .foregroundStyle(.white)
                     .font(.system(size: 24))
-                    .frame(maxWidth: .infinity, maxHeight: 300, alignment: .trailing)
+                    .frame(maxWidth: 15, maxHeight: 300, alignment: .trailing)
                 }
                 .padding(EdgeInsets(top: 250, leading: 0, bottom: 0, trailing: 45))
                 .frame(maxWidth: .infinity, maxHeight: 300, alignment: .trailing)

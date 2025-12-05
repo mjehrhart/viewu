@@ -43,6 +43,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         x.image = ""                // yes
         x.label = ""                // yes
         x.m3u8 = ""                 // yes
+        x.mp4 = ""                  // yes
         x.score = 0.0               // maybe
         x.snapshot  = ""            // yes
         x.thumbnail  = ""           // yes
@@ -58,6 +59,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         var thumbnail: String?
         var snapshot: String?
         var m3u8: String?
+        var mp4: String?
         var camera: String?
         var debug: String?
         var image: String?
@@ -84,6 +86,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         var thumbnail: String?
         var snapshot: String?
         var m3u8: String?
+        var mp4: String?
         var camera: String?
         var debug: String?
         var image: String?
@@ -113,6 +116,7 @@ struct EndpointOptions: Hashable, Codable, Identifiable {
     var thumbnail: String?
     var snapshot: String?
     var m3u8: String?
+    var mp4: String?
     var camera: String?
     var debug: String?
     var image: String?

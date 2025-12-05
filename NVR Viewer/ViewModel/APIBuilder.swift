@@ -36,6 +36,8 @@ struct APIBuilder {
             return url + "/api/\(camera)/recordings/\(frameTime)/snapshot.png"
         case .M3U8:
             return url + "/vod/event/\(id)/master.m3u8"
+        case .MP4:
+            return url + "/api/events/\(id)/clip.mp4"
         case .Camera:
             return url + "/cameras/\(camera)"
         case .Debug:
@@ -53,6 +55,7 @@ struct APIBuilder {
         endpointOptions.thumbnail = self.buildAPIURL(endpoint: FrigateAPIEndpoint.Thumbnail)
         endpointOptions.snapshot = self.buildAPIURL(endpoint: FrigateAPIEndpoint.Snapshot)
         endpointOptions.m3u8 = self.buildAPIURL(endpoint: FrigateAPIEndpoint.M3U8)
+        endpointOptions.mp4 = self.buildAPIURL(endpoint: FrigateAPIEndpoint.MP4)
         endpointOptions.camera = self.buildAPIURL(endpoint: FrigateAPIEndpoint.Camera)
         endpointOptions.debug = self.buildAPIURL(endpoint: FrigateAPIEndpoint.Debug)
         endpointOptions.image = self.buildAPIURL(endpoint:  .Image)

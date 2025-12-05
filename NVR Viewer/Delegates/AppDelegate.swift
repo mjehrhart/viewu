@@ -152,6 +152,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                     eps2.m3u8 = msg
                     eps3.m3u8 = msg
                 }
+                if let msg = userInfo["mp4"] as? String {
+                    eps.mp4 = msg
+                    eps2.mp4 = msg
+                    eps3.mp4 = msg
+                }
                 if let msg = userInfo["snapshot"] as? String {
                     eps.snapshot = msg
                     eps2.snapshot = msg
@@ -232,6 +237,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                                                            thumbnail: eps.thumbnail!,
                                                            snapshot: eps.snapshot!,
                                                            m3u8: eps.m3u8!,
+                                                           mp4: eps.mp4 ?? "",
                                                            camera: eps.camera!,
                                                            debug: eps.debug!,
                                                            image: eps.image!,

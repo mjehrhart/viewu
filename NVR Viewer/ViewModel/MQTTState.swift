@@ -139,6 +139,7 @@ final class MQTTAppState: ObservableObject {
                       thumbnail: eps.thumbnail!,
                       snapshot: eps.snapshot!,
                       m3u8: eps.m3u8!,
+                      mp4: eps.mp4!,
                       camera: eps.camera!,
                       debug: eps.debug!,
                       image: eps.image!,

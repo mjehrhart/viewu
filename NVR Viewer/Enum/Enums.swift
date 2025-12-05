@@ -126,6 +126,7 @@ enum FrigateAPIEndpoint {
     case Thumbnail
     case Snapshot
     case M3U8
+    case MP4
     case Image
     case Camera
     case Debug

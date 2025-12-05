@@ -38,6 +38,7 @@ class EventStorage: ObservableObject {
     private let thumbnail = Expression<String>("thumbnail")
     private let snapshot = Expression<String>("snapshot")
     private let m3u8 = Expression<String>("m3u8")
+    private let mp4 = Expression<String>("mp4")
     private let camera = Expression<String>("camera")
     private let debug = Expression<String>("debug")
     private let image = Expression<String>("image")
@@ -143,7 +144,7 @@ class EventStorage: ObservableObject {
      
     func getEventByFrameTime(frameTime3: Double) -> [EndpointOptions] {
         
-        var eps: EndpointOptions = EndpointOptions(thumbnail: "", snapshot: "", m3u8: "", camera: "", debug: "", image: "", id: "", type: "", cameraName: "", score: 0.0, frameTime: 0.0, label: "", sublabel: "", currentZones: "", enteredZones: "", transportType: "")
+        var eps: EndpointOptions = EndpointOptions(thumbnail: "", snapshot: "", m3u8: "", mp4: "", camera: "", debug: "", image: "", id: "", type: "", cameraName: "", score: 0.0, frameTime: 0.0, label: "", sublabel: "", currentZones: "", enteredZones: "", transportType: "")
         
         guard let database = db else { return [] }
 
@@ -153,6 +154,7 @@ class EventStorage: ObservableObject {
                 eps.thumbnail = events[thumbnail]
                 eps.snapshot = events[snapshot]
                 eps.m3u8 = events[m3u8]
+                eps.mp4 = events[mp4]
                 eps.camera = events[camera]
                 eps.debug = events[debug]
                 eps.image = events[image]
@@ -190,6 +192,7 @@ class EventStorage: ObservableObject {
                 eps.append( EndpointOptions(thumbnail: events[thumbnail],
                     snapshot: events[snapshot],
                     m3u8: events[m3u8],
+                    mp4: events[mp4],
                     camera: events[camera],
                     debug: events[debug],
                     image: events[image],
@@ -397,6 +400,7 @@ class EventStorage: ObservableObject {
                 x.thumbnail = events[thumbnail]
                 x.snapshot = events[snapshot]
                 x.m3u8 = events[m3u8]
+                x.mp4 = events[mp4]
                 x.camera = events[camera]
                 x.debug = events[debug]
                 x.image = events[image]
@@ -486,6 +490,7 @@ class EventStorage: ObservableObject {
                 eps.append( EndpointOptionsSuper.EventMeta(thumbnail: events[thumbnail],
                                             snapshot: events[snapshot],
                                             m3u8: events[m3u8],
+                                            mp4: events[mp4],
                                             camera: events[camera],
                                             debug: events[debug],
                                             image: events[image],
@@ -533,6 +538,7 @@ class EventStorage: ObservableObject {
                 eps.append( EndpointOptions(thumbnail: events[thumbnail],
                                             snapshot: events[snapshot],
                                             m3u8: events[m3u8],
+                                            mp4: events[mp4],
                                             camera: events[camera],
                                             debug: events[debug],
                                             image: events[image],
@@ -588,7 +594,7 @@ class EventStorage: ObservableObject {
             
         }
     }
-    func insertOrUpdate(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
+    func insertOrUpdate(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
            
         //TODO is this needed DispatchQueue.main.async
         DispatchQueue.main.async { [self] in
@@ -610,6 +616,7 @@ class EventStorage: ObservableObject {
                    self.thumbnail <- thumbnail,
                    self.snapshot <- snapshot,
                    self.m3u8 <- m3u8,
+                   self.mp4 <- mp4,
                    self.camera <- camera,
                    self.debug <- debug,
                    self.image <- image,
@@ -650,6 +657,7 @@ class EventStorage: ObservableObject {
                    self.thumbnail <- thumbnail,
                    self.snapshot <- snapshot,
                    self.m3u8 <- m3u8,
+                   self.mp4 <- mp4,
                    self.camera <- camera,
                    self.debug <- debug,
                    self.image <- image,
@@ -678,7 +686,7 @@ class EventStorage: ObservableObject {
         }
     }
     
-    func insertIfNone(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
+    func insertIfNone(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
            
         //TODO is this needed DispatchQueue.main.async
         DispatchQueue.main.async { [self] in
@@ -700,6 +708,7 @@ class EventStorage: ObservableObject {
                    self.thumbnail <- thumbnail,
                    self.snapshot <- snapshot,
                    self.m3u8 <- m3u8,
+                   self.mp4 <- mp4,
                    self.camera <- camera,
                    self.debug <- debug,
                    self.image <- image,
@@ -731,7 +740,7 @@ class EventStorage: ObservableObject {
     }
      
     
-    func insert(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) -> Int64? {
+    func insert(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) -> Int64? {
         
         guard let database = db else { return nil }
 
@@ -744,6 +753,7 @@ class EventStorage: ObservableObject {
                                   self.thumbnail <- thumbnail,
                                   self.snapshot <- snapshot,
                                   self.m3u8 <- m3u8,
+                                  self.mp4 <- mp4,
                                   self.camera <- camera,
                                   self.debug <- debug,
                                   self.image <- image,
@@ -785,7 +795,7 @@ class EventStorage: ObservableObject {
                 table.column(label)
                 table.column(thumbnail)
                 table.column(snapshot)
-                table.column(m3u8)
+                table.column(m3u8)      //added mp4 through below
                 table.column(camera)
                 table.column(debug)
                 table.column(image)
@@ -830,6 +840,14 @@ class EventStorage: ObservableObject {
             )
         } catch (let error){
             Log.shared().print(page: "EventStorage", fn: "createEventsTable*", type: "ERROR", text: "\(error)") 
+        }
+        
+        do {
+            try database.run(
+                events.addColumn(mp4, defaultValue: "")
+            )
+        } catch (let error){
+            Log.shared().print(page: "EventStorage", fn: "createEventsTable*", type: "ERROR", text: "\(error)")
         }
     }
 }

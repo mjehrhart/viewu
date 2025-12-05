@@ -52,7 +52,8 @@ struct ViewEventDetail: View {
     }
     
     @State private var showingAlert = false
-    
+    @StateObject private var viewModel = DownloadViewModel()
+    @StateObject private var vm = DownloadViewModel()
     
     //TODO Overlays
     var body: some View {
@@ -68,8 +69,7 @@ struct ViewEventDetail: View {
         .padding(.top, 20)
         .padding(.bottom, 30)
         .frame(maxWidth: .infinity,maxHeight: 1.5 )
-        
-        
+          
         GeometryReader { geometry in
             
             VStack {
@@ -165,7 +165,7 @@ struct ViewEventDetail: View {
                     if showClip {
                         Spacer()
                             .frame(height: 10)
-                        
+                         
                         if( container.m3u8 != nil ){
                               
                             //iPad
@@ -179,16 +179,16 @@ struct ViewEventDetail: View {
                                         .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
                                         .frame(width: geometry.size.width, alignment: .leading)
                                 }
-                                
+                                 
                                 if orientation.isLandscape {
-                                    ViewPlayVideo(urlString: container.m3u8!)
+                                    ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!)
                                     //.overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                                         .aspectRatio(16/9, contentMode: .fill)
                                         .frame(width: ((geometry.size.width) ), alignment: .leading)
                                 }
                                 else {
-                                    ViewPlayVideo(urlString: container.m3u8!)
+                                    ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                                         .aspectRatio(16/9, contentMode: .fill)
                                         .frame(width: (geometry.size.width ),  alignment: .leading)
@@ -205,7 +205,7 @@ struct ViewEventDetail: View {
                                             .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
                                             .frame(width: geometry.size.width, alignment: .leading)
                                     }
-                                    ViewPlayVideo(urlString: container.m3u8!)
+                                    ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
                                         .aspectRatio(16/9, contentMode: .fill)
                                         .frame(width: (geometry.size.width + 20) ,  alignment: .leading)
@@ -219,7 +219,7 @@ struct ViewEventDetail: View {
                                             .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
                                             .frame(width: geometry.size.width, alignment: .leading)
                                     }
-                                    ViewPlayVideo(urlString: container.m3u8!)
+                                    ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!)
                                         .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 60))
                                         .aspectRatio(16/9, contentMode: .fill)
                                         .frame(width: geometry.size.width + 40, alignment: .leading)
@@ -713,10 +713,11 @@ struct ViewEventDetail: View {
             .autoconnect()
         
         @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
-        
         @State private var showingAlert = false
+         
         
         var body: some View {
+             
             
             if idiom == .pad{
                 
@@ -963,22 +964,6 @@ struct ViewEventDetail: View {
                 else {
                     HStack{
                         
-                        //                        Button{
-                        //                            UIPasteboard.general.string = toCopy
-                        //                        } label: {
-                        //                            Image(systemName: "doc.on.doc")
-                        //                        }
-                        //                        .frame(width: 340, alignment: .trailing)
-                        //                        .foregroundColor(.white)
-                        //                        .fontWeight(.bold)
-                        
-                        //                        ShareLink(item: toCopy, preview: SharePreview("Viewu SnapshotE", image: toCopy)){
-                        //                            Image(systemName: "square.and.arrow.up")
-                        //                        }
-                        //                        .frame(alignment: .trailing)
-                        //                        .foregroundColor(.white)
-                        //                        .fontWeight(.bold)
-                        
                         Label("", systemImage: "square.and.arrow.down")
                             .onTapGesture {
                                 Task {
@@ -1071,6 +1056,7 @@ struct ViewEventDetail: View {
 }
 
 func downloadImage(from urlString: String) async -> UIImage? {
+     
     guard let url = URL(string: urlString) else {
         print("Invalid URL")
         return nil
@@ -1079,7 +1065,7 @@ func downloadImage(from urlString: String) async -> UIImage? {
     do {
         // Asynchronously download the data
         let (data, _) = try await URLSession.shared.data(from: url)
-        // Create a UIImage from the downloaded data
+ 
         return UIImage(data: data)
     } catch {
         print("Error downloading image: \(error.localizedDescription)")
@@ -1121,5 +1107,16 @@ func isLargeiPhone() -> Bool {
         
     }
     return false
+}
+ 
+func isMP4InvalidURL(_ option: String?) -> Bool {
+    guard let value = option?.trimmingCharacters(in: .whitespacesAndNewlines),
+          !value.isEmpty,
+          URL(string: value) != nil else {
+        print("Invalid mp4 URL: \(option ?? "nil")")
+        return false
+    }
+    
+    return true
 }
  

@@ -93,6 +93,7 @@ class APIRequester: NSObject {
                         eps.snapshot = url + "/api/events/\(id)/snapshot.jpg" //?bbox=1"
                         eps.cameraName = event.camera
                         eps.m3u8 = url + "/vod/event/\(id)/master.m3u8"
+                        eps.mp4 = url + "/api/events/\(id)/clip.mp4"
                         eps.frameTime = event.start_time
                         eps.label = event.label
                         eps.id = event.id
@@ -128,6 +129,7 @@ class APIRequester: NSObject {
                             thumbnail: eps.thumbnail!,
                             snapshot: eps.snapshot!,
                             m3u8: eps.m3u8!,
+                            mp4: eps.mp4!,
                             camera: eps.camera!,
                             debug: eps.debug!,
                             image: eps.image!,
