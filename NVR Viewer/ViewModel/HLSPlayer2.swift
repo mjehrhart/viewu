@@ -1,85 +1,140 @@
-//
-//  HLSPlayer2.swift
-//  NVR Viewer
-//
-//  Created by Matthew Ehrhart on 5/31/24.
-//
-
 import SwiftUI
 import WebKit
 
 struct HLSPlayer2: View {
-    
+
     let urlString: String
     let cameraName: String
+    let menuTextColor = Color.white
+    let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
+
     @State var flagFull = false
     
-    //Color.orange.opacity(0.6)
-    //Color.gray.opacity(0.125)
-    //Color(red: 0.45, green: 0.45, blue: 0.45)
-    let menuBGColor = Color.orange.opacity(0.6)
-    let menuTextColor = Color.white
-    
+    var isNotIPOnHTTPS: Bool {
+            !isHttpsLanURL(urlString)
+        }
+ 
+    var message: String {
+        if isHttpsLanURL(urlString) {
+            return "Streaming may fail with self-signed certs on IP addresses. Apple explecitly blocks this for security reasons"
+        } else {
+            return "Live HLS stream"
+        }
+    }
+ 
     var body: some View {
-        
-        VStack{
-            
-            HStack{
-                
-                ZStack{
+
+         
+            let pillShape = BottomRoundedRectangle(radius: 22)
+            VStack(spacing: 0) {
+
+                // MARK: HLS WebView (video area)
+                ZStack {
+                    // Soft grey/blue gradient background
                     LinearGradient(
-                        colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80), .clear],
+                        colors: [
+                            Color.clear,
+                            Color(red: 0.80, green: 0.80, blue: 0.80),
+                            Color.clear
+                        ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
-                    .ignoresSafeArea()
-                    VStack{
-                        Webview(url: urlString + "/api/\(cameraName)?h=720") 
-                            //.modifier(CardBackground2())
-                            .aspectRatio(16/9, contentMode: .fill)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .edgesIgnoringSafeArea(.all)
-                            .background(Color.gray.opacity(0.125))
-                            //.overlay(CameraOverlay(name: cameraName, urlString: urlString), alignment: .bottomTrailing)
-                    }
-                    .background(Color.gray.opacity(0.125))
-                }
-            }
-            
-            HStack(alignment: .lastTextBaseline){
 
-                //Text(cameraName)
-                Label("\(cameraName)", systemImage: "")
-                    .foregroundStyle(menuTextColor)
-                    .font(.system(size: 22))
-                    .onTapGesture(perform: {
-                        
-                    })
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 00, trailing: 0))
-                    .frame(maxWidth: .infinity, alignment: .leading)
- 
-                
-                Label("", systemImage: "arrow.down.left.and.arrow.up.right.rectangle")
-                    //.labelStyle(VerticalLabelStyle(show: false))
-                    .foregroundStyle(menuTextColor)
-                    .font(.system(size: 24))
-                    .onTapGesture(perform: {
-                        flagFull.toggle()
-                    })
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 20))
+                    Webview(url: urlString + "/api/\(cameraName)?h=720")
+                        .aspectRatio(16/9, contentMode: .fill)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.black.opacity(0.75))
+                        .clipped()
+                }
+                .frame(maxWidth: .infinity)
+
+                // MARK: Bottom pill controls – same style as RTSP / Save Clip
+                HStack(spacing: 12) {
+
+                    // Left: icon + camera name
+                    HStack(spacing: 10) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.20))
+
+                            Image(systemName: "video.badge.waveform")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundStyle(.white)
+                        }
+                        .frame(width: 34, height: 34)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(cameraName)
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(.white)
+
+                            Text(message)
+                                .font(.system(size: 12))
+                                .foregroundStyle(.white.opacity(0.85))
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }
+                    }
+
+                    Spacer()
+
+                    // Right: fullscreen circle button
+                    HStack(spacing: 10) {
+                        Button {
+                            flagFull.toggle()
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.white.opacity(0.60))
+
+                                Image(systemName: "arrow.down.left.and.arrow.up.right.rectangle")
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundStyle(cBlue)
+                            }
+                            .frame(width: 32, height: 32)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .frame(maxWidth: .infinity)
+                .background(
+                    LinearGradient(
+                        colors: [
+                            .orange.opacity(0.6),
+                            .orange.opacity(0.95)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .clipShape(pillShape)
+                .overlay(
+                    ZStack {
+                        // Outer border
+                        pillShape
+                            .stroke(Color.white.opacity(0.25), lineWidth: 0.8)
+
+                        // Inner border (slightly inset)
+                        pillShape
+                            .inset(by: 4)
+                            .stroke(Color.white.opacity(0.15), lineWidth: 0.8)
+                    }
+                )
+                .shadow(color: cBlue.opacity(0.35), radius: 8, x: 0, y: 4)
             }
-            .padding(EdgeInsets(top: 3, leading: 0, bottom: 3, trailing: 0))
-        }
-        .background(menuBGColor)
-        .modifier( CardBackground2() )
-        .padding(.leading,10)
-        .padding(.trailing,10)
-        .padding(.bottom,15)
-        .navigationDestination(isPresented: $flagFull){
-            ViewCameraHLSFullScreen(urlString: urlString, cameraName: cameraName)
-        }
+            .background(Color.white)
+            .modifier(CardBackground2())
+            .padding(.horizontal, 10)
+            .padding(.bottom, 15)
+            .navigationDestination(isPresented: $flagFull) {
+                ViewCameraHLSFullScreen(urlString: urlString, cameraName: cameraName)
+            }
+         
     }
-    
+
     struct CardBackground2: ViewModifier {
         func body(content: Content) -> some View {
             content
@@ -88,50 +143,72 @@ struct HLSPlayer2: View {
         }
     }
     
-    struct CameraOverlay: View {
-        let name: String
-        let urlString: String
-        
-        @State var flagMute = true
-        @State var flagFull = false
-        
-        var body: some View {
-            
-            Text(name)
-                .padding([.top, .trailing], 10)
-                .padding(.leading, 10)
-                .padding(.bottom, 5)
-                .foregroundColor(.white)
-                .fontWeight(.bold)
-                .onTapGesture {
-                    flagFull.toggle()
-                }
-            //Moved to here because was having issues otherwise
-                .navigationDestination(isPresented: $flagFull){
-                    ViewCameraHLSFullScreen(urlString: urlString, cameraName: name)
-                }
-        }
-    }
-    
-    
+
 }
 
+// unchanged Webview
 struct Webview: UIViewRepresentable {
-    
+
     var url: String
+
     func makeUIView(context: Context) -> WKWebView {
-        
         guard let url = URL(string: self.url) else {
             return WKWebView()
         }
-        
         let request = URLRequest(url: url)
-        
         let wkWebview = WKWebView()
         wkWebview.load(request)
         return wkWebview
     }
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
+}
+
+
+func isHttpsLanURL(_ urlString: String) -> Bool {
+    // Parse URL safely
+    guard
+        let url = URL(string: urlString),
+        let scheme = url.scheme?.lowercased(),
+        scheme == "https",
+        let host = url.host
+    else {
+        return false
+    }
     
-    func updateUIView(_ uiView: Webview.UIViewType, context: UIViewRepresentableContext<Webview>) {
+    // localhost counts as "LAN"
+    if host == "localhost" || host == "127.0.0.1" {
+        return true
+    }
+    
+    // Try to parse as IPv4
+    let parts = host.split(separator: ".")
+    guard parts.count == 4,
+          let o1 = Int(parts[0]),
+          let o2 = Int(parts[1]),
+          let o3 = Int(parts[2]),
+          let o4 = Int(parts[3]),
+          (0...255).contains(o1),
+          (0...255).contains(o2),
+          (0...255).contains(o3),
+          (0...255).contains(o4)
+    else {
+        // Not a numeric IPv4 address -> we can’t be sure it’s LAN,
+        // so treat as not-LAN.
+        return false
+    }
+    
+    // Check common private/LAN ranges
+    switch (o1, o2) {
+    case (10, _):                // 10.0.0.0 – 10.255.255.255
+        return true
+    case (172, 16...31):         // 172.16.0.0 – 172.31.255.255
+        return true
+    case (192, 168):             // 192.168.0.0 – 192.168.255.255
+        return true
+    case (169, 254):             // 169.254.x.x (link-local)
+        return true
+    default:
+        return false
     }
 }

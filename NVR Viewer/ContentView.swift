@@ -238,11 +238,11 @@ struct ContentView: View {
                 ViewEventDetail(text: convertDateTime(time: eps.frameTime!), container: eps, showButton: false, showClip: true)
             }
             .navigationDestination(for: String.self){ jsonObject in
-                
-                if let dataJson = jsonObject.data(using: .utf8) {
-                    let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
-                    ViewEventInformation( endPointOptionsArray: epsArray)
-                }
+                //check if this is obsolete
+//                if let dataJson = jsonObject.data(using: .utf8) {
+//                    let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
+//                    ViewEventInformation( endPointOptionsArray: epsArray)
+//                }
             }
             .navigationDestination(for: Int.self){ page in
                 ViewTest(title: "cow")
@@ -251,85 +251,180 @@ struct ContentView: View {
                 ViewFilter()
                     .presentationDetents([.large])
             }
-            //added this 5/9
-            .toolbarBackground(.visible, for: .navigationBar)
+//            .safeAreaInset(edge: .bottom) {
+//                // invisible spacer to account for the taller toolbar
+//                Color.clear
+//                    .frame(height: 10)   // tweak until the strip is fully visible
+//            }
+            .toolbarBackground(.clear, for: .bottomBar)        // let our own card be the background
+            .toolbarBackground(.visible, for: .navigationBar)  // keep whatever you had for the top
             .toolbar {
                 if !isOnboarding {
                     ToolbarItemGroup(placement: .bottomBar) {
-                        
-                        HStack{
-                            Label("Filter", systemImage: "calendar.day.timeline.leading")
-                                .labelStyle(VerticalLabelStyle(show: false))
-                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                .fontWeight(.regular)
-                                .foregroundColor(.gray)
-                                .onTapGesture(perform: {
-                                    showFilter.toggle()
-                                })
-                            
-                            Spacer()
-                            
-                            Label("Cameras", systemImage: "web.camera")
-                                .labelStyle(VerticalLabelStyle(show: false))
-                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                .fontWeight(.regular)
-                                .foregroundColor(.gray)
-                                .onTapGesture(perform: {
-                                    showCamera.toggle()
-                                })
-                            
+                        Spacer(minLength: 0)
+
+                        HStack(spacing: 20) {
+                            // MARK: - Filter
+                            BottomBarItem(
+                                title: "Filter",
+                                systemImage: "calendar.day.timeline.leading",
+                                isHighlighted: showFilter
+                            ) {
+                                showFilter.toggle()
+                            }
+
+                            // MARK: - Cameras
+                            BottomBarItem(
+                                title: "Cameras",
+                                systemImage: "web.camera",
+                                isHighlighted: showCamera
+                            ) {
+                                showCamera.toggle()
+                            }
+
+                            // MARK: - Notifications
                             if notificationModeIsOn {
-                                Spacer()
-                                Label("Notifications", systemImage: "app.badge")
-                                    .labelStyle(VerticalLabelStyle(show: false))
-                                    .foregroundStyle(nts.notificationPaused ? .orange : Color(red: 0.45, green: 0.45, blue: 0.45))
-                                    .fontWeight(.regular)
-                                    .foregroundColor(.gray)
-                                    .onTapGesture(perform: {
-                                        showNotificationManager.toggle()
-                                    })
+                                BottomBarItem(
+                                    title: "Notifications",
+                                    systemImage: "app.badge",
+                                    // highlight / tint if paused, or when sheet is showing
+                                    isHighlighted: nts.notificationPaused || showNotificationManager,
+                                    foreground: nts.notificationPaused ? .orange : .secondary
+                                ) {
+                                    showNotificationManager.toggle()
+                                }
                             }
-                            
+
+                            // MARK: - NVR (dev)
                             if developerModeIsOn {
-                                Spacer()
-                                Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
-                                    .labelStyle(VerticalLabelStyle(show: false))
-                                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                    .fontWeight(.regular)
-                                    .foregroundColor(.gray)
-                                    .onTapGesture(perform: {
-                                        //showNVR.toggle()
-                                        notificationManager2.newPage = 2
-                                        self.selection = 2
-                                    })
+                                BottomBarItem(
+                                    title: "NVR",
+                                    systemImage: "arrow.triangle.2.circlepath.circle",
+                                    isHighlighted: selection == 2
+                                ) {
+                                    notificationManager2.newPage = 2
+                                    self.selection = 2
+                                }
                             }
-                            
+
+                            // MARK: - Log (dev)
                             if developerModeIsOn {
-                                Spacer()
-                                Label("Log", systemImage: "note.text")
-                                    .labelStyle(VerticalLabelStyle(show: false))
-                                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                    .fontWeight(.regular)
-                                    .foregroundColor(.gray)
-                                    .onTapGesture(perform: {
-                                        showLog.toggle()
-                                    })
+                                BottomBarItem(
+                                    title: "Log",
+                                    systemImage: "note.text",
+                                    isHighlighted: showLog
+                                ) {
+                                    showLog.toggle()
+                                }
                             }
-                            
-                            Spacer()
-                            
-                            Label("Settings", systemImage: "gearshape")
-                                .labelStyle(VerticalLabelStyle(show: false))
-                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
-                                .fontWeight(.regular)
-                                .foregroundColor(.gray)
-                                .onTapGesture(perform: {
-                                    showSettings.toggle()
-                                })
-                        }//hstack
+
+                            // MARK: - Settings
+                            BottomBarItem(
+                                title: "Settings",
+                                systemImage: "gearshape",
+                                isHighlighted: showSettings
+                            ) {
+                                showSettings.toggle()
+                            }
+                        }
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 10)
+//                        .background(
+//                            // glassy floating card
+//                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+//                                .fill(.ultraThinMaterial)
+//                        )
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+//                                .strokeBorder(Color.white.opacity(0.10))
+//                        )
+//                        .shadow(radius: 12, y: 4)
+                        .frame(maxWidth: 500)   // keeps it from stretching to the full width on iPad
+                        .frame(maxWidth: .infinity)
+
+                        Spacer(minLength: 0)
                     }
                 }
             }
+
+//            .toolbarBackground(.visible, for: .navigationBar)
+//            .toolbar {
+//                if !isOnboarding {
+//                    ToolbarItemGroup(placement: .bottomBar) {
+//                        
+//                        HStack{
+//                            Label("Filter", systemImage: "calendar.day.timeline.leading")
+//                                .labelStyle(VerticalLabelStyle(show: false))
+//                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+//                                .fontWeight(.regular)
+//                                .foregroundColor(.gray)
+//                                .onTapGesture(perform: {
+//                                    showFilter.toggle()
+//                                })
+//                            
+//                            Spacer()
+//                            
+//                            Label("Cameras", systemImage: "web.camera")
+//                                .labelStyle(VerticalLabelStyle(show: false))
+//                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+//                                .fontWeight(.regular)
+//                                .foregroundColor(.gray)
+//                                .onTapGesture(perform: {
+//                                    showCamera.toggle()
+//                                })
+//                            
+//                            if notificationModeIsOn {
+//                                Spacer()
+//                                Label("Notifications", systemImage: "app.badge")
+//                                    .labelStyle(VerticalLabelStyle(show: false))
+//                                    .foregroundStyle(nts.notificationPaused ? .orange : Color(red: 0.45, green: 0.45, blue: 0.45))
+//                                    .fontWeight(.regular)
+//                                    .foregroundColor(.gray)
+//                                    .onTapGesture(perform: {
+//                                        showNotificationManager.toggle()
+//                                    })
+//                            }
+//                            
+//                            if developerModeIsOn {
+//                                Spacer()
+//                                Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
+//                                    .labelStyle(VerticalLabelStyle(show: false))
+//                                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+//                                    .fontWeight(.regular)
+//                                    .foregroundColor(.gray)
+//                                    .onTapGesture(perform: {
+//                                        //showNVR.toggle()
+//                                        notificationManager2.newPage = 2
+//                                        self.selection = 2
+//                                    })
+//                            }
+//                            
+//                            if developerModeIsOn {
+//                                Spacer()
+//                                Label("Log", systemImage: "note.text")
+//                                    .labelStyle(VerticalLabelStyle(show: false))
+//                                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+//                                    .fontWeight(.regular)
+//                                    .foregroundColor(.gray)
+//                                    .onTapGesture(perform: {
+//                                        showLog.toggle()
+//                                    })
+//                            }
+//                            
+//                            Spacer()
+//                            
+//                            Label("Settings", systemImage: "gearshape")
+//                                .labelStyle(VerticalLabelStyle(show: false))
+//                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+//                                .fontWeight(.regular)
+//                                .foregroundColor(.gray)
+//                                .onTapGesture(perform: {
+//                                    showSettings.toggle()
+//                                })
+//                        }//hstack
+//                    }
+//                }
+//            }
         }
     }
     
@@ -406,4 +501,35 @@ func printData(_ data: Data) {
 func readData(_ data: Data) -> String{
     let string = String(data: data, encoding: .utf8) ?? "Unable to decode data"
     return string
+}
+
+struct BottomBarItem: View {
+    let title: String
+    let systemImage: String
+    var isHighlighted: Bool = false
+    var foreground: Color? = nil
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 17, weight: .semibold))
+                Text(title)
+                    .font(.system(size: 11, weight: .medium))
+                    .lineLimit(1)
+            }
+            .frame(minWidth: 44) // hit area
+            .padding(.vertical, 4)
+            .padding(.horizontal, 6)
+            .background(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(isHighlighted ? Color.accentColor.opacity(0.15) : .clear)
+            )
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(
+            foreground ?? (isHighlighted ? Color.accentColor : Color.secondary)
+        )
+    }
 }

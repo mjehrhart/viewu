@@ -28,10 +28,20 @@ extension UIImage
         return newImage ?? self
     }
 }
-extension UIScreen{
-   static let screenWidth = UIScreen.main.bounds.size.width
-   static let screenHeight = UIScreen.main.bounds.size.height
-   static let screenSize = UIScreen.main.bounds.size
+//extension UIScreen{
+//   static let screenWidth = UIScreen.main.bounds.size.width
+//   static let screenHeight = UIScreen.main.bounds.size.height
+//   static let screenSize = UIScreen.main.bounds.size
+//}
+
+extension UIScreen {
+    static var screenWidth: CGFloat {
+        UIScreen.main.bounds.width
+    }
+    
+    static var screenHeight: CGFloat {
+        UIScreen.main.bounds.height
+    }
 }
 
 struct SquareBackground: ViewModifier {

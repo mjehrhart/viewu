@@ -99,115 +99,162 @@ class PlayerUIView2: UIView, VLCMediaPlayerDelegate, ObservableObject{
     
 }
 
+import SwiftUI
+import MobileVLCKit
+
 struct StreamRTSP2: View {
-    
+
     let urlString: String
     let cameraName: String
-    
-    @State var mediaPlayer : VLCMediaPlayer = VLCMediaPlayer()
+
+    @State var mediaPlayer: VLCMediaPlayer = VLCMediaPlayer()
     @State var flagMute = true
     @State var flagFull = false
     @State var isLoading = true
-    
-    //Color.orange.opacity(0.6)
-    //Color.gray.opacity(0.125)
-    //Color(red: 0.45, green: 0.45, blue: 0.45)
-    let menuBGColor = Color.orange.opacity(0.6)
+
     let menuTextColor = Color.white
     let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
-    
+
     var body: some View {
-        return
-        
-        VStack{
-            
-            ZStack{
-                
-                if isLoading{
-                    
+
+        let pillShape = BottomRoundedRectangle(radius: 22)
+
+        VStack(spacing: 0) {
+
+            // MARK: Video + loading
+            ZStack {
+                // Loading gradient overlay
+                if isLoading {
                     LinearGradient(
-                        colors: [.clear, cBlue, .clear],
+                        colors: [
+                            cBlue.opacity(0.0),
+                            cBlue.opacity(0.35),
+                            cBlue.opacity(0.0)
+                        ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
-                    .ignoresSafeArea()
                 }
-                
-                Text("Loading: \(urlString)")
-                    .labelStyle(VerticalLabelStyle(show: false))
-                    .foregroundStyle(menuTextColor)
-                
-                VStack{
-                    VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
-                        .padding(0)
-                        .aspectRatio(16/9, contentMode: .fit)
-                    //.modifier( CardBackground2() )
-                    //.frame(width: UIScreen.screenWidth, height: (UIScreen.screenWidth * 9/16)-5)
-                        .onAppear(){
-                            //isLoading = false
-                            mediaPlayer.audio?.isMuted = flagMute
-                            mediaPlayer.play()
-                        }
-                        .onDisappear(){
-                            mediaPlayer.stop()
-                        }
-                    //.overlay(CameraOverlay(name: cameraName, urlString: urlString, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
-                    
-                }
-                .background(Color.gray.opacity(0.125))
-                
+
+                VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+                    .padding(0)
+                    .aspectRatio(16/9, contentMode: .fit)
+                    .background(Color.black.opacity(0.8))
+                    .onAppear {
+                        mediaPlayer.audio?.isMuted = flagMute
+                        mediaPlayer.play()
+                    }
+                    .onDisappear {
+                        mediaPlayer.stop()
+                    }
             }
-            .padding(0)
-            
-            HStack(alignment: .firstTextBaseline){
-                
-                HStack(alignment: .lastTextBaseline){
-                    
-                    //Text(cameraName)
-                    Label("\(cameraName)", systemImage: "")
-                        .foregroundStyle(menuTextColor)
-                        .font(.system(size: 22))
-                        .onTapGesture(perform: {
-                            
-                        })
-                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 00, trailing: 0))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Label("", systemImage: flagMute ? "speaker.slash" : "speaker")
-                    //.labelStyle(VerticalLabelStyle(show: false))
-                        .foregroundStyle(menuTextColor)
-                        .font(.system(size: 24))
-                        .onTapGesture(perform: {
-                            flagMute.toggle()
-                            mediaPlayer.audio?.isMuted = flagMute
-                        })
-                        .padding(.trailing,20)
-                    
-                    Label("", systemImage: "arrow.down.left.and.arrow.up.right.rectangle")
-                    //.labelStyle(VerticalLabelStyle(show: false))
-                        .foregroundStyle(menuTextColor)
-                        .font(.system(size: 24))
-                        .onTapGesture(perform: {
-                            flagFull.toggle()
-                        })
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 20))
+            .frame(maxWidth: .infinity)
+            .clipped()
+
+            // MARK: Bottom pill controls (Save-clip-style)
+            HStack(spacing: 12) {
+
+                // Left: icon + camera name
+                HStack(spacing: 10) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.white.opacity(0.20))
+
+                        Image(systemName: "video.fill")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                    .frame(width: 34, height: 34)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(cameraName)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white)
+
+                        Text("Live RTSP stream")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white.opacity(0.85))
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
                 }
-                .padding(EdgeInsets(top: 3, leading: 0, bottom: 3, trailing: 0))
-                //.background(.yellow)
-                
+
                 Spacer()
+
+                // Right: mute + fullscreen circular buttons
+                HStack(spacing: 10) {
+
+                    // Mute toggle
+                    Button {
+                        flagMute.toggle()
+                        mediaPlayer.audio?.isMuted = flagMute
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.60))
+
+                            Image(systemName: flagMute ? "speaker.slash.fill" : "speaker.wave.2.fill")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(cBlue)
+                        }
+                        .frame(width: 32, height: 32)
+                    }
+                    .buttonStyle(.plain)
+
+                    // Fullscreen toggle
+                    Button {
+                        flagFull.toggle()
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.60))
+
+                            Image(systemName: "arrow.down.left.and.arrow.up.right.rectangle")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(cBlue)
+                        }
+                        .frame(width: 32, height: 32)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity)
+            .background(
+                LinearGradient(
+                    colors: [
+                        .orange.opacity(0.6),
+                        .orange.opacity(0.95)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .clipShape(pillShape)   // flat top, rounded bottom
+            .overlay(
+                ZStack {
+                    // Outer border
+                    pillShape
+                        .stroke(Color.white.opacity(0.25), lineWidth: 0.8)
+
+                    // Inner border (slightly inset)
+                    pillShape
+                        .inset(by: 4)
+                        .stroke(Color.white.opacity(0.15), lineWidth: 0.8)
+                }
+            )
+            .shadow(color: cBlue.opacity(0.35), radius: 8, x: 0, y: 4)
         }
-        .background(menuBGColor)
-        .modifier( CardBackground2() )
-        .padding(.leading,10)
-        .padding(.trailing,10)
-        .padding(.bottom,10)
-        .navigationDestination(isPresented: $flagFull){
+        .background(Color.white)
+        .modifier(CardBackground2())
+        .padding(.horizontal, 10)
+        .padding(.bottom, 10)
+        .navigationDestination(isPresented: $flagFull) {
             ViewCameraFullScreen(urlString: urlString, cameraName: cameraName)
         }
     }
-    
+
     struct CardBackground2: ViewModifier {
         func body(content: Content) -> some View {
             content
@@ -215,34 +262,4 @@ struct StreamRTSP2: View {
                 .shadow(color: Color.black.opacity(0.2), radius: 4)
         }
     }
-    
-    struct CameraOverlay: View {
-        let name: String
-        let urlString: String
-        
-        @State var flagMute = true
-        @State var mediaPlayer : VLCMediaPlayer
-        
-        @State var flagFull = false
-        
-        var body: some View {
-            
-            Text(name)
-                .padding([.top, .trailing], 10)
-                .padding(.leading, 10)
-                .padding(.bottom, 5)
-                .foregroundColor(.white)
-                .fontWeight(.bold)
-                .onTapGesture {
-                    flagFull.toggle()
-                }
-            //Moved to here because was having issues otherwise
-                .navigationDestination(isPresented: $flagFull){
-                    ViewCameraFullScreen(urlString: urlString, cameraName: name)
-                }
-        }
-    }
-    
 }
-
-

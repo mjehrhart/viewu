@@ -69,7 +69,7 @@ struct ViewEventDetail: View {
         .padding(.top, 20)
         .padding(.bottom, 30)
         .frame(maxWidth: .infinity,maxHeight: 1.5 )
-          
+           
         GeometryReader { geometry in
             
             VStack {
@@ -78,88 +78,39 @@ struct ViewEventDetail: View {
                     
                     //Top Layout Display Info
                     HStack{
-                        VStack(spacing:2){
-                            //Label("\(container.cameraName!.capitalized)", systemImage: "web.camera")
-                            Rectangle()
-                                .fill(Color.orange.opacity(0.6))
-                                .padding(0)
-                                .frame(width:(geometry.size.width / 2), height: 50)
-                                .modifier(CardBackground2())
-                                .overlay(
-                                    Label("\(container.cameraName!.capitalized)", systemImage: "web.camera")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.regular)
-                                        .foregroundColor(.white)
+      
+                        VStack(spacing: 2) {
+                                InfoCard(
+                                    title: container.cameraName ?? "",
+                                    color: Color.orange.opacity(0.6),
+                                    systemImage: "web.camera",
+                                    width: geometry.size.width / 2
                                 )
-                            
-                            //Label("\(container.label!.capitalized)", systemImage: "figure.walk.motion")
-                            Rectangle()
-                                .fill(Color.red.opacity(0.6))
-                                .padding(0)
-                                .frame(width:(geometry.size.width / 2), height: 50)
-                                .modifier(CardBackground2())
-                                .overlay(
-                                    Label("\(container.label!.capitalized)", systemImage: "figure.walk.motion")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.regular)
-                                        .foregroundColor(.white)
+
+                                InfoCard(
+                                    title: container.label ?? "",
+                                    color: Color.red.opacity(0.6),
+                                    systemImage: "figure.walk.motion",
+                                    width: geometry.size.width / 2
                                 )
-                            
-                            
-                            if developerModeIsOn {
-                                
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.6))
-                                    .padding(0)
-                                    .frame(width:(geometry.size.width / 2), height: 50)
-                                    .modifier(CardBackground2())
-                                    .overlay(
-                                        Label("\(container.type!)", systemImage: "moonphase.new.moon.inverse")
-                                            .font(.system(size: 15))
-                                            .fontWeight(.regular)
-                                            .foregroundColor(.white)
+
+                                if developerModeIsOn {
+                                    InfoCard(
+                                        title: container.type ?? "",
+                                        color: Color.gray.opacity(0.6),
+                                        systemImage: "moonphase.new.moon.inverse",
+                                        width: geometry.size.width / 2
                                     )
-                            }
-                        }
-                        .frame(width: geometry.size.width/2, alignment: .trailing)
-                        
-                        
-                        if idiom == .pad {
-                           if orientation.isLandscape {
-                               VStack(spacing:2){
-                                   EnteredZones(zones: container.enteredZones!)
-                                       .frame( maxWidth: .infinity, alignment: .leading)
-                               }
-                               .frame( maxWidth: geometry.size.width * 2, alignment: .leading)
-                           }
-                           else {
-                               VStack(spacing:2){
-                                   EnteredZones(zones: container.enteredZones!)
-                                       .frame( maxWidth: .infinity, alignment: .leading)
-                               }
-                               .frame( maxWidth: .infinity, alignment: .leading)
-                           }
-                        } else {
-                            if orientation.isLandscape {
-                                VStack(spacing:2){
-                                    EnteredZones(zones: container.enteredZones!)
-                                        .frame( maxWidth: .infinity, alignment: .leading)
                                 }
-                                .frame( maxWidth: geometry.size.width * 2, alignment: .leading)
                             }
-                            else {
-                                VStack(spacing:2){
-                                    EnteredZones(zones: container.enteredZones!)
-                                        .frame( maxWidth: .infinity, alignment: .leading)
-                                }
-                                .frame( maxWidth: .infinity, alignment: .leading)
-                            }
-                        }
+                            .frame(width: geometry.size.width / 2, alignment: .trailing)
+                         
+                        EnteredZones(zones: container.enteredZones!)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                          
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 20)
-                    .padding(.trailing, 20)
+                    .padding(.horizontal, 20)
                     
                     //Video Segment
                     if showClip {
@@ -167,201 +118,120 @@ struct ViewEventDetail: View {
                             .frame(height: 10)
                          
                         if( container.m3u8 != nil ){
-                              
-                            //iPad
-                            if idiom == .pad {
-                                
-                                HStack{
-                                    Text("Video Segment")
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                                        .font(.system(size: 20))
-                                        .fontWeight(.regular)
-                                        .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                        .frame(width: geometry.size.width, alignment: .leading)
-                                }
-                                 
-                                if orientation.isLandscape {
-                                    ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!)
-                                    //.overlay(CameraOverlayVideoClip(toCopy: container.m3u8! ), alignment: .bottomTrailing)
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                        .aspectRatio(16/9, contentMode: .fill)
-                                        .frame(width: ((geometry.size.width) ), alignment: .leading)
-                                }
-                                else {
-                                    ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!)
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                        .aspectRatio(16/9, contentMode: .fill)
-                                        .frame(width: (geometry.size.width ),  alignment: .leading)
-                                }
-                            //iPhone
-                            } else {
-                                 
-                                if orientation.isLandscape {
-                                    HStack{
-                                        Text("Video Segment")
-                                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
-                                            .font(.system(size: 20))
-                                            .fontWeight(.regular)
-                                            .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                            .frame(width: geometry.size.width, alignment: .leading)
+ 
+                            HStack {
+                                HStack(spacing: 10) {
+
+                                    // Small gradient badge with icon
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                            .fill(
+                                                LinearGradient(
+                                                    colors: [
+                                                        cBlue,
+                                                        cBlue.opacity(0.7)
+                                                    ],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+
+                                        Image(systemName: "play.rectangle.fill")
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundStyle(.white)
                                     }
-                                    ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!)
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
-                                        .aspectRatio(16/9, contentMode: .fill)
-                                        .frame(width: (geometry.size.width + 20) ,  alignment: .leading)
-                                }
-                                else {
-                                    HStack{
+                                    .frame(width: 28, height: 28)
+
+                                    // Title + subtle subtitle
+                                    VStack(alignment: .leading, spacing: 2) {
                                         Text("Video Segment")
-                                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                            .font(.system(size: 20))
-                                            .fontWeight(.regular)
-                                            .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                            .frame(width: geometry.size.width, alignment: .leading)
+                                            .font(.system(size: 18, weight: .semibold))
+                                            .foregroundStyle(Color(red: 0.18, green: 0.18, blue: 0.18))
+
+                                        Text("Recorded clip preview")
+                                            .font(.system(size: 11, weight: .regular))
+                                            .foregroundStyle(Color.gray.opacity(0.7))
                                     }
-                                    ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!)
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 60))
-                                        .aspectRatio(16/9, contentMode: .fill)
-                                        .frame(width: geometry.size.width + 40, alignment: .leading)
                                 }
-                            } 
-                        }
-                    }
-  
-                    //Snapshot
-                    if idiom == .pad{
-                        if isLargeiPad() {
-                            Spacer()
-                                .frame(height: 40)
-                        } else { 
-                            Spacer()
-                                .frame(height: 145)
-                        }
-                        
-                        if developerModeIsOn {
-                            Spacer()
-                                .frame(height: 40)
-                        }
-                        
-                    } else { 
-                        if isLargeiPhone() {
-                            Spacer()
-                                .frame(height: 36)
-                        } else {
-                            Spacer()
-                                .frame(height: 65)
-                        }
-                        
-                        if developerModeIsOn {
-                            Spacer()
-                                .frame(height: 40)
-                        }
-                    }
-                    
-                     
-                    //iPad
-                    if idiom == .pad {
-                        HStack{
-                            Text("Snapshot")
-                                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                                .font(.system(size: 20))
-                                .fontWeight(.regular)
-                                .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                .frame(width: geometry.size.width, alignment: .leading)
-                        }
-                        
-                        if orientation.isLandscape {
-                            if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
-                                ViewUIImageFull(urlString: container.snapshot!)
-                                //.modifier(CardBackground())
-                                //.overlay(CameraOverlaySnapShot(eventId: container.id!, toCopy: container.snapshot!, frigatePlus: container.frigatePlus! ), alignment: .bottomTrailing)
-                                //.aspectRatio(16/9, contentMode: .fill)
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                    .frame(maxWidth: geometry.size.width, maxHeight: .infinity, alignment: .leading)
+
+                                Spacer()
+
+                                // Optional little “pill” status on the right
+//                                Text("Live • H.264")
+//                                    .font(.system(size: 11, weight: .semibold))
+//                                    .padding(.horizontal, 10)
+//                                    .padding(.vertical, 4)
+//                                    .background(
+//                                        Capsule()
+//                                            .fill(Color.black.opacity(0.06))
+//                                    )
+//                                    .foregroundStyle(Color.gray.opacity(0.8))
                             }
-                            //Obsolete since the app now does http fetch
-                            //ViewEventSlideShow(eventId: container.id!)
-                        }
-                        else {
-                            if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
-                                ViewUIImageFull(urlString: container.snapshot!)
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                    .frame(maxWidth: geometry.size.width, maxHeight: .infinity, alignment: .leading)
-                                //.background(.yellow)
-                            }
-                        }
-                    }
-                    //iPhone
-                    else {
-                        
-                        
-                        if orientation.isLandscape {
-                            HStack{
-                                Text("Snapshot")
-                                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
-                                    .font(.system(size: 20))
-                                    .fontWeight(.regular)
-                                    .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                    .frame(width: geometry.size.width, alignment: .leading)
-                            }
+                            .padding(.horizontal, 20)
+                            .padding(.top, 4)
+                            .padding(.bottom, 2)
                             
-                            if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
-                                ViewUIImageFull(urlString: container.snapshot!)
-                                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-                                    .frame(maxWidth: geometry.size.width, maxHeight: .infinity, alignment: .leading)
-                                //.background(Color.green)
-                            }
+                            ViewPlayVideo(urlString: container.m3u8!, urlMp4String: container.mp4 ?? "", frameTime: container.frameTime!) 
+                                .contentShape(Rectangle())
                         }
-                        else {
-                            HStack{
+                    }
+ 
+                    HStack {
+                        HStack(spacing: 10) {
+
+                            // Small gradient badge with icon
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                cBlue,
+                                                cBlue.opacity(0.7)
+                                            ],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+
+                                Image(systemName: "camera.viewfinder")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundStyle(.white)
+                            }
+                            .frame(width: 28, height: 28)
+
+                            // Title + subtle subtitle
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text("Snapshot")
-                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                    .font(.system(size: 20))
-                                    .fontWeight(.regular)
-                                    .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                    .frame(width: geometry.size.width, alignment: .leading)
-                            }
-                            
-                            if(container.id != nil && container.snapshot != nil && container.frigatePlus != nil) {
-                                
-                                ViewUIImageFull(urlString: container.snapshot!)
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 60))
-                                    .frame(maxWidth: (geometry.size.width + 40), maxHeight: .infinity,  alignment: .leading)
-                                //.background(Color.yellow)
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundStyle(Color(red: 0.18, green: 0.18, blue: 0.18))
+
+                                Text("Event focused Image")
+                                    .font(.system(size: 11, weight: .regular))
+                                    .foregroundStyle(Color.gray.opacity(0.7))
                             }
                         }
+
+                        Spacer()
+
+                        // Optional little “pill” status on the right
+//                        Text("Live • H.264")
+//                            .font(.system(size: 11, weight: .semibold))
+//                            .padding(.horizontal, 10)
+//                            .padding(.vertical, 4)
+//                            .background(
+//                                Capsule()
+//                                    .fill(Color.black.opacity(0.06))
+//                            )
+//                            .foregroundStyle(Color.gray.opacity(0.8))
                     }
-                      
-                    //Dumbest fix ever! =)
-                    if idiom == .pad {
-                        
-                        if orientation.isLandscape {
-                            ForEach(0..<52) { index in
-                                Text("")
-                            }
-                        }
-                        else {
-                            ForEach(0..<38) { index in
-                                Text("")
-                            }
-                        }
-                    } else {
-                        if orientation.isLandscape {
-                            ForEach(0..<35) { index in
-                                Text("")
-                            }
-                        }
-                        else {
-                            ForEach(0..<21) { index in
-                                Text("")
-                            }
-                        }
-                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 4)
+                    .padding(.bottom, 2)
                     
+                    ViewUIImageFull(urlString: container.snapshot!)
                     
                 } // End of ScrollView
-                
-                
+                 
             }
             .toolbar {
                 ToolbarItemGroup(placement: .navigation) {
@@ -391,7 +261,15 @@ struct ViewEventDetail: View {
         }
     }
     
-    struct EnteredZones: View {
+    struct CardBackground1: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+                .cornerRadius(10)
+                .shadow(color: Color.black.opacity(0.2), radius: 4)
+        }
+    }
+    
+    struct EnteredZones2: View {
         
         let zones:String
         var enteredZones: Array<Substring>;
@@ -622,436 +500,76 @@ struct ViewEventDetail: View {
         }
     }
     
-    struct CameraOverlayVideoClip: View {
-        
-        let toCopy: String
-        private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
-        @State var orientation = UIDevice.current.orientation
-        let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
-            .makeConnectable()
-            .autoconnect()
-        
+    private struct InfoCard: View {
+        let title: String
+        let color: Color
+        let systemImage: String
+        let width: CGFloat
+
         var body: some View {
-            
-            if idiom == .pad{
-                
-                if orientation.isLandscape {
-                    HStack{
-                        
-                        ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .frame(alignment: .trailing)
+            Rectangle()
+                .fill(color)
+                .frame(width: width, height: 50)
+                .modifier(CardBackground1())
+                .overlay(
+                    Label(title.capitalized, systemImage: systemImage)
+                        .font(.system(size: 15))
+                        .fontWeight(.regular)
                         .foregroundColor(.white)
-                        .fontWeight(.bold)
+                )
+        }
+    }
+    
+    struct EnteredZones: View {
+
+        private let zones: [String]
+
+        init(zones: String) {
+            // Split "zone1|zone2|zone3" into an array of clean strings
+            self.zones = zones
+                .split(separator: "|")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+        }
+
+        var body: some View {
+            if zones.isEmpty {
+                ZoneRow(title: "No Zones Detected")
+                    .frame(maxWidth: .infinity)
+                    .frame(maxHeight: .infinity)
+                    .padding(0)
+            } else {
+                VStack(spacing: 8) {
+                    ForEach(zones, id: \.self) { zone in
+                        ZoneRow(title: zone)
+                            .frame(maxHeight: .infinity)
                     }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 30))
-                }
-                else {
-                    
-                    HStack{
-                        
-                        ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .frame(alignment: .trailing)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 40, trailing: 80))
-                }
-            }
-            else {
-                
-                if orientation.isLandscape {
-                    HStack{
-                        
-                        ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .frame(alignment: .trailing)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 35))
-                }
-                else {
-                    
-                    HStack{
-                        
-                        ShareLink(item: toCopy, preview: SharePreview("Viewu Video", image: toCopy)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .foregroundStyle(.white)
-                        .font(.system(size: 24))
-                        
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 40))
-                        .frame(maxWidth: .infinity, maxHeight: 300, alignment: .trailing)
-                    }
-                    .padding(EdgeInsets(top: 00, leading: 0, bottom: 0, trailing: 40))
-                    .frame(maxWidth: .infinity, maxHeight: 300, alignment: .trailing)
-                    
                 }
             }
         }
     }
-    
-    struct CameraOverlaySnapShot: View {
-        
-        let nvr = NVRConfig.shared()
-        let api = APIRequester()
-        
-        let eventId: String
-        let toCopy: String
-        @State var frigatePlus: Bool
-        var frigatePlusOn: Bool = UserDefaults.standard.bool(forKey: "frigatePlusOn")
-        
-        private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
-        @State var orientation = UIDevice.current.orientation
-        let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
-            .makeConnectable()
-            .autoconnect()
-        
-        @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
-        @State private var showingAlert = false
-         
-        
+
+    private struct ZoneRow: View {
+        let title: String
+
         var body: some View {
-             
-            
-            if idiom == .pad{
-                
-                if orientation.isLandscape {
-                    HStack{
-                        
-                        Button{
-                            UIPasteboard.general.string = toCopy
-                        } label: {
-                            Image(systemName: "doc.on.doc")
-                        }
-                        .frame(width: 340, alignment: .trailing)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        
-                        ShareLink(item: toCopy, preview: SharePreview("Viewu SnapshotE", image: toCopy)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .frame(alignment: .trailing)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        
-                        if !frigatePlus{
-                            if frigatePlusOn {
-                                Button{
-                                    
-                                    frigatePlus = true
-                                    
-                                    Task {
-                                        let url = nvr.getUrl()
-                                        let urlString = url
-                                        let endpoint = "/api/events/\(eventId)/plus"
-                                        
-                                        await api.postImageToFrigatePlus(urlString: urlString,endpoint: endpoint, eventId: eventId, authType: nvr.getAuthType()){ (data, error) in
-                                            
-                                            guard let data = data else { return }
-                                            
-                                            do {
-                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                    
-                                                    if let res = json["success"] as? Int {
-                                                        //print(res)
-                                                        if res == 1 {
-                                                            
-                                                            EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
-                                                            
-                                                            EventStorage.shared.readAll3(completion: { res in
-                                                                //self.epsSup3 = res!
-                                                                epsSuper.list3 = res!
-                                                                return
-                                                            })
-                                                        } else {
-                                                            
-                                                            if let msg = json["message"] as? String {
-                                                                //print(msg)
-                                                                
-                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                    frigatePlus = false
-                                                                    EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
-                                                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } catch(let error) {
-                                                
-                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
-                                                print(error)
-                                            }
-                                        }
-                                    }
-                                } label: {
-                                    Image(systemName: "plus.rectangle")
-                                }
-                                .foregroundColor(.white)
-                                .fontWeight(.bold)
-                            }
-                        }
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 30, trailing: 70))
-                }
-                else {
-                    HStack{
-                        
-                        Button{
-                            UIPasteboard.general.string = toCopy
-                        } label: {
-                            Image(systemName: "doc.on.doc")
-                        }
-                        .frame(width: 340, alignment: .trailing)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        
-                        ShareLink(item: toCopy, preview: SharePreview("Viewu SnapshotE", image: toCopy)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .frame(alignment: .trailing)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        
-                        if !frigatePlus{
-                            if frigatePlusOn {
-                                Button{
-                                    
-                                    frigatePlus = true
-                                    
-                                    Task {
-                                        let url = nvr.getUrl()
-                                        let urlString = url
-                                        let endpoint = "/api/events/\(eventId)/plus"
-                                        
-                                        await api.postImageToFrigatePlus(urlString: urlString, endpoint: endpoint, eventId: eventId, authType: nvr.getAuthType() ){ (data, error) in
-                                            
-                                            guard let data = data else { return }
-                                            
-                                            do {
-                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                    
-                                                    if let res = json["success"] as? Int {
-                                                        //print(res)
-                                                        if res == 1 {
-                                                            
-                                                            EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
-                                                            
-                                                            EventStorage.shared.readAll3(completion: { res in
-                                                                //self.epsSup3 = res!
-                                                                epsSuper.list3 = res!
-                                                                return
-                                                            })
-                                                        } else {
-                                                            
-                                                            if let msg = json["message"] as? String {
-                                                                //msg)
-                                                                
-                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                    frigatePlus = false
-                                                                    EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
-                                                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } catch(let error) {
-                                                
-                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
-                                                print(error)
-                                            }
-                                        }
-                                    }
-                                    
-                                } label: {
-                                    Image(systemName: "plus.rectangle")
-                                }
-                                .foregroundColor(.white)
-                                .fontWeight(.bold)
-                            }
-                        }
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 35, trailing: 60))
-                }
-            }
-            else {
-                if orientation.isLandscape {
-                    HStack{
-                        
-                        Button{
-                            UIPasteboard.general.string = toCopy
-                        } label: {
-                            Image(systemName: "doc.on.doc")
-                        }
-                        .frame(width: 340, alignment: .trailing)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        
-                        ShareLink(item: toCopy, preview: SharePreview("Viewu SnapshotE", image: toCopy)){
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .frame(alignment: .trailing)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        
-                        if !frigatePlus{
-                            if frigatePlusOn {
-                                Button{
-                                    
-                                    frigatePlus = true
-                                    
-                                    Task {
-                                        let url = nvr.getUrl()
-                                        let urlString = url
-                                        let endpoint = "/api/events/\(eventId)/plus"
-                                        await api.postImageToFrigatePlus(urlString: urlString, endpoint: endpoint, eventId: eventId, authType: nvr.getAuthType() ){ (data, error) in
-                                            
-                                            guard let data = data else { return }
-                                            
-                                            do {
-                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                    
-                                                    if let res = json["success"] as? Int {
-                                                        //print(res)
-                                                        if res == 1 {
-                                                            
-                                                            EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
-                                                            
-                                                            EventStorage.shared.readAll3(completion: { res in
-                                                                //self.epsSup3 = res!
-                                                                epsSuper.list3 = res!
-                                                                return
-                                                            })
-                                                        } else {
-                                                            
-                                                            if let msg = json["message"] as? String {
-                                                                //print(msg)
-                                                                
-                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                    frigatePlus = false
-                                                                    EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
-                                                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } catch(let error) {
-                                                
-                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
-                                                print(error)
-                                            }
-                                        }
-                                    }
-                                    
-                                } label: {
-                                    Image(systemName: "plus.rectangle")
-                                }
-                                .foregroundColor(.white)
-                                .fontWeight(.bold)
-                            }
-                        }
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 20))
-                }
-                else {
-                    HStack{
-                        
-                        Label("", systemImage: "square.and.arrow.down")
-                            .onTapGesture {
-                                Task {
-                                    let urlString = toCopy
-                                    if let image = await downloadImage(from: urlString) {
-                                        ImageSaver().saveToPhotoLibrary(image)
-                                        
-                                        showingAlert = true
-                                    }
-                                    
-                                }
-                            }
-                            .alert(isPresented: $showingAlert) {
-                                Alert(title: Text("Image Saved"),
-                                      message: Text("This image has been saved to Photos"),
-                                      dismissButton: .default(Text("OK")))
-                            }
-                        
-                            .frame(alignment: .trailing)
+            Rectangle()
+                .fill(Color.blue.opacity(0.6))
+                //.frame(height: 36)
+                .modifier(CardBackground1())
+                .overlay(
+                    HStack {
+                        Text(title)
+                            .font(.system(size: 15))
+                            .fontWeight(.regular)
                             .foregroundColor(.white)
-                            .fontWeight(.bold)
-                        
-                        
-                        
-                        if !frigatePlus{
-                            if frigatePlusOn {
-                                Button{
-                                    
-                                    frigatePlus = true
-                                    
-                                    Task {
-                                        let url = nvr.getUrl()
-                                        let urlString = url
-                                        let endpoint = "/api/events/\(eventId)/plus"
-                                        await api.postImageToFrigatePlus(urlString: urlString, endpoint: endpoint,  eventId: eventId, authType: nvr.getAuthType() ){ (data, error) in
-                                            
-                                            guard let data = data else { return }
-                                            
-                                            do {
-                                                if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                    
-                                                    if let res = json["success"] as? Int {
-                                                        //print(res)
-                                                        if res == 1 {
-                                                            
-                                                            EventStorage.shared.updateFrigatePlus(id:eventId, value: true)
-                                                            
-                                                            EventStorage.shared.readAll3(completion: { res in
-                                                                //self.epsSup3 = res!
-                                                                epsSuper.list3 = res!
-                                                                return
-                                                            })
-                                                        } else {
-                                                            
-                                                            if let msg = json["message"] as? String {
-                                                                //print(msg)
-                                                                
-                                                                if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                    frigatePlus = false
-                                                                    EventStorage.shared.updateFrigatePlus(id: eventId, value: false)
-                                                                    Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "PLUS_API_KEY environment variable is not set")
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } catch(let error) {
-                                                
-                                                Log.shared().print(page: "ViewEventDetail", fn: "button", type: "ERROR", text: "\(error)")
-                                                print(error)
-                                            }
-                                        }
-                                    }
-                                    
-                                } label: {
-                                    Image(systemName: "plus.rectangle")
-                                }
-                                .foregroundColor(.white)
-                                .fontWeight(.bold)
-                            }
-                        }
+                            .lineLimit(1)
+                        Spacer()
                     }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 70))
-                }
-            }
-            
-            
-        } 
+                    .padding(.horizontal, 12)
+                )
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 }
 
@@ -1119,4 +637,6 @@ func isMP4InvalidURL(_ option: String?) -> Bool {
     
     return true
 }
+ 
+ 
  

@@ -9,16 +9,11 @@ import SwiftUI
 import TipKit
 import PopupView
 
-
 struct ViewAPN: View {
     
     let title: String
     var version = false
-    
-    var tipEventDomain = TipEventDomain()
-    var tipEventNotifcationTemplate = TipEventNotifcationTemplate()
-    var tipEventNotifcationManger = TipEventNotifcationManger()
-    
+     
     let cNVR = APIRequester()
     let nvr = NVRConfig.shared()
     
@@ -47,7 +42,6 @@ struct ViewAPN: View {
         self.title = title
         
         let x = viewuServerVersion.split(separator: ".")
-        //let d1 = Int(x[0])
         let d2 = Int(x[1])
         let d3 = Int(x[2])
         
@@ -91,18 +85,19 @@ struct ViewAPN: View {
         
         ZStack {
             
-            GeometryReader { geomtry in
-                Form {
-                    Section {
-                        
-                        TextField("Message Title", text: $apnTitle)
-                            .frame(alignment: .leading)
-                            //.overlay(IndicatorOverlay(offset: -60, flag: nts.flagTitle))
-                        //geomtry.size.width - 60
-                            .overlay(IndicatorOverlay(offset: -80, flag: nts.flagTitle))
-                            .onChange(of: apnTitle){
-                                nts.flagTitle = false
-                            }
+            Form {
+                // MARK: Notification title
+                Section {
+                    
+                    TextField("Message Title", text: $apnTitle)
+                        .frame(alignment: .leading)
+                        .overlay(IndicatorOverlay(offset: -80, flag: nts.flagTitle))
+                        .onChange(of: apnTitle){
+                            nts.flagTitle = false
+                        }
+                    
+                    HStack {
+                        Spacer()
                         Button("Save") {
                             for i in 0..<1 {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
@@ -113,35 +108,38 @@ struct ViewAPN: View {
                                 }
                             }
                         }
-                        //.buttonStyle(.bordered)
                         .buttonStyle(CustomPressEffectButtonStyle())
                         .scaleEffect(scale)
                         .animation(.linear(duration: 1), value: scale)
-                        //.frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                        .frame(width: geomtry.size.width - 50, alignment: .trailing)
-                        
-                    } header: {
-                        HStack{
-                            
-                            if !tipsNotificationDefault{
-                                Text("Notification Title")
-                                    .font(.caption)
-                                    .foregroundColor(.orange)
-                            }
-                            ViewTipsNotificationManager(title: "Notification Manager", message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device and resynce these values." )
-                        }
                     }
+                } header: {
+                    HStack{
+                        
+                        if !tipsNotificationDefault{
+                            Text("Notification Title")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                        ViewTipsNotificationManager(
+                            title: "Notification Manager",
+                            message: "Important. Anytime you update or restart the Viewu Server, you will need to repair your device and resynce these values."
+                        )
+                    }
+                }
+                
+                // MARK: Accessible domain
+                Section {
                     
-                    Section {
-                        
-                        TextField("https://domaintoviewnvr.com", text: $apnDomain)
-                            .frame(alignment: .leading)
-                            .autocorrectionDisabled()
-                            .overlay(IndicatorOverlay(offset: (geomtry.size.width - 340), flag: nts.flagDomain))
-                            .onChange(of: apnDomain){
-                                nts.flagDomain = false
-                            }
-                        
+                    TextField("https://domaintoviewnvr.com", text: $apnDomain)
+                        .frame(alignment: .leading)
+                        .autocorrectionDisabled()
+                        .overlay(IndicatorOverlay(offset: -80, flag: nts.flagDomain))
+                        .onChange(of: apnDomain){
+                            nts.flagDomain = false
+                        }
+                    
+                    HStack {
+                        Spacer()
                         Button("Save") {
                             for i in 0..<1 {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
@@ -152,48 +150,46 @@ struct ViewAPN: View {
                                 }
                             }
                         }
-                        //.buttonStyle(.bordered)
                         .buttonStyle(CustomPressEffectButtonStyle())
                         .scaleEffect(scale)
                         .animation(.linear(duration: 1), value: scale)
-                        //.frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                        .frame(width: geomtry.size.width - 50, alignment: .trailing)
-                        
-                    } header: {
-                        HStack{
-                            if !tipsNotificationDomain{
-                                Text("Accessible Domain")
-                                    .font(.caption)
-                                    .foregroundColor(.orange)
-                            }
-                            
-                            ViewTipsNotificationDomain(title: "Accessible Domain", message: "For secure access to clips and snapshots, Viewu should be configured with a public domain name using an https:// endpoint. To enhance security and ensure only authorized users can reach the service, it is best practice to place this domain behind a VPN solution such as Tailscale. If a secure public endpoint is not available, you may use http:// for local-network access only, including viewing notification images on your LAN." )
-                        }
                     }
                     
-                    Section {
-                        //TipView(tipEventNotifcationTemplate, arrowEdge: .bottom)
+                } header: {
+                    HStack{
+                        if !tipsNotificationDomain{
+                            Text("Accessible Domain")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
                         
-                        List{
-                            Text("")
-                                .frame(maxWidth: .infinity, maxHeight: 4, alignment: .leading)
-                                .overlay(IndicatorOverlay(offset: -65, flag: nts.flagTemplate))
-                            
-                            ForEach( 0..<nts.templates.count, id: \.self ){ index in
-                                Text("\(nts.templates[index].template)")
+                        ViewTipsNotificationDomain(
+                            title: "Accessible Domain",
+                            message: "For secure access to clips and snapshots, Viewu should be configured with a public domain name using an https:// endpoint. To enhance security and ensure only authorized users can reach the service, it is best practice to place this domain behind a VPN solution such as Tailscale. If a secure public endpoint is not available, you may use http:// for local-network access only, including viewing notification images on your LAN."
+                        )
+                    }
+                }
+                
+                // MARK: Templates list
+                Section {
+                    List{
+                        Text("")
+                            .frame(maxWidth: .infinity, maxHeight: 4, alignment: .leading)
+                            .overlay(IndicatorOverlay(offset: -65, flag: nts.flagTemplate))
+                        
+                        ForEach( 0..<nts.templates.count, id: \.self ){ index in
+                            Text("\(nts.templates[index].template)")
+                        }
+                        .onDelete{ indexes in
+                            for index in indexes{
+                                nts.templates.remove(at: index)
                             }
-                            .onDelete{ indexes in
-                                //print(indexes)
-                                for index in indexes{
-                                    //print(index)
-                                    nts.templates.remove(at: index)
-                                }
-                                
-                                nts.flagTemplate = false
-                            }
-                            
+                            nts.flagTemplate = false
+                        }
+                        
+                        HStack {
+                            Spacer()
                             Button("Save") {
-                                
                                 let templateString = nts.buildTemplateString()
                                 
                                 for i in 0..<1 {
@@ -205,58 +201,56 @@ struct ViewAPN: View {
                                     }
                                 }
                             }
-                            //.buttonStyle(.bordered)
                             .buttonStyle(CustomPressEffectButtonStyle())
                             .scaleEffect(scale)
                             .animation(.linear(duration: 1), value: scale)
-                            //.frame(width: UIScreen.screenWidth-50, alignment: .trailing)
-                            .frame(width: geomtry.size.width - 50, alignment: .trailing)
-                            
-                        }
-                    } header: {
-                        HStack{
-                            if !tipsNotificationTemplate {
-                                Text("Saved Templates")
-                                    .foregroundColor(.orange)
-                            }
-                            ViewTipsNotificationTemplate(title: "Notification Templates", message: "This helps reduce the number of notifications received and allows you to specify which events you get notifications for. Filtering notifications based on the type field can significantly reduce noise and ensure users receive only the most relevant updates" )
                         }
                     }
-                    
-                    ForEach( nts.templateList, id: \.self) { template in
-                        template
-                    }
-                    
-                    Section{
-                        Toggle("Pause", isOn: nts.$notificationPaused)
-                            .onChange(of: nts.notificationPaused){
-                                for i in 0..<1 {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
-                                        withAnimation(.easeInOut) {
-                                            //print("isPaused :: \(nts.notificationPaused)")
-                                            let msg = "viewu_device_event::::paused::::\(nts.notificationPaused)"
-                                            mqttManager.publish(topic: "viewu/pairing", with: msg)
-                                            //nts.notificationPaused.toggle()
-                                        }
-                                    }
-                                }
-                            }
-                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    } header: {
-                        
-                        Text("Notifications")
-                            .font(.caption)
-                            .foregroundColor(.orange)
+                } header: {
+                    HStack{
+                        if !tipsNotificationTemplate {
+                            Text("Saved Templates")
+                                .foregroundColor(.orange)
+                        }
+                        ViewTipsNotificationTemplate(
+                            title: "Notification Templates",
+                            message: "This helps reduce the number of notifications received and allows you to specify which events you get notifications for. Filtering notifications based on the type field can significantly reduce noise and ensure users receive only the most relevant updates"
+                        )
                     }
                 }
                 
-                if( nts.alert ){
-                    PopupMiddle( onClose: {})
+                ForEach( nts.templateList, id: \.self) { template in
+                    template
                 }
+                
+                // MARK: Pause toggle
+                Section{
+                    Toggle("Pause", isOn: nts.$notificationPaused)
+                        .onChange(of: nts.notificationPaused){
+                            for i in 0..<1 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.7) {
+                                    withAnimation(.easeInOut) {
+                                        let msg = "viewu_device_event::::paused::::\(nts.notificationPaused)"
+                                        mqttManager.publish(topic: "viewu/pairing", with: msg)
+                                    }
+                                }
+                            }
+                        }
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                } header: {
+                    
+                    Text("Notifications")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+            }
+            
+            if nts.alert {
+                PopupMiddle( onClose: {})
             }
         }
         .task {
-            if(nts.templateList.isEmpty){
+            if nts.templateList.isEmpty {
                 nts.templateList.append(ViewNotificationManager(vid: UUID()))
             }
         }
@@ -273,7 +267,6 @@ struct ViewAPN: View {
         var flag: Bool
         var body: some View {
             Image(systemName: "circle.fill")
-                //.frame(width: UIScreen.screenWidth + offset, alignment: .trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .foregroundStyle( flag ? .green : .red)
                 .font(.system(size: 8))
@@ -663,85 +656,4 @@ struct ViewNotificationManager: View, Hashable, Equatable {
                 .cornerRadius(10)
         }
     }
-}
-
-struct TipEventNotifcationManger: Tip {
-    
-    @Parameter
-    static var shownBefore: Bool = false
-    
-    var title: Text {
-        Text("Notification Manager")
-    }
-    
-    var message: Text? {
-        Text("Important. Anytime you update or restart the Viewu Server, you will need to resync these values.")
-    }
-    
-    var image: Image? {
-        Image(systemName: "info.bubble")
-    }
-    
-    var rules: [Rule] {
-        [
-            #Rule(Self.$shownBefore) { $0 == false }
-        ]
-    }
-    
-    var options: [TipOption] = [MaxDisplayCount(1)]
-    
-}
-
-struct TipEventNotifcationTemplate: Tip {
-    
-    @Parameter
-    static var shownBefore: Bool = false
-    
-    var title: Text {
-        Text("Notification Templates")
-    }
-    
-    var message: Text? {
-        Text("This helps reduce the number of notifications received and allows you to specify which events you get notifications for. Filtering notifications based on the type field can significantly reduce noise and ensure users receive only the most relevant updates.")
-    }
-    
-    var image: Image? {
-        Image(systemName: "info.bubble")
-    }
-    
-    var rules: [Rule] {
-        [
-            #Rule(Self.$shownBefore) { $0 == false }
-        ]
-    }
-    
-    var options: [TipOption] = [MaxDisplayCount(1)]
-    
-}
-
-struct TipEventDomain: Tip {
-    
-    @Parameter
-    static var shownBefore: Bool = false
-    
-    var title: Text {
-        Text("Accessible Domain")
-    }
-    
-    var message: Text? {
-        Text("For accessing the NVRs clips and snapshots, it's recommended to use a public domain name for Viewu. Your domain must start with http:// or https://. To enhance security, it's best practice to protect this domain with a VPN like Tailscale, ensuring that only authorized individuals can access it.")
-    }
-    
-    var image: Image? {
-        Image(systemName: "info.bubble")
-    }
-    
-    var rules: [Rule] {
-        [
-            #Rule(Self.$shownBefore) { $0 == false }
-        ]
-    }
-    
-    var options: [TipOption] = [MaxDisplayCount(1)]
-    
 }

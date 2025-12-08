@@ -1,10 +1,3 @@
-//
-//  ViewFrigateAuth.swift
-//  NVR Viewer
-//
-//  Created by Matthew Ehrhart on 12/3/25.
-//
-
 import SwiftUI
 
 struct ViewAuthFrigate: View {
@@ -27,191 +20,91 @@ struct ViewAuthFrigate: View {
     @AppStorage("frigatePortAddress") private var nvrPortAddress: String = "8971"
     @AppStorage("frigateIsHttps") private var nvrIsHttps: Bool = true
     @AppStorage("frigateBearerSecret") private var frigateBearerSecret: String = ""
-//    @AppStorage("frigateUserRole") private var frigateUserRole: String = "admin"
-//    @AppStorage("frigateUser") private var frigateUser: String = "admin"
-//    @AppStorage("frigatePassword") private var frigatePassword: String = ""
+    //    @AppStorage("frigateUserRole") private var frigateUserRole: String = "admin"
+    //    @AppStorage("frigateUser") private var frigateUser: String = "admin"
+    //    @AppStorage("frigatePassword") private var frigatePassword: String = ""
     
     var body: some View {
         
-        VStack{
-            GeometryReader{ geometry in
+        VStack(spacing: 14) {
+            
+            // MARK: Address
+            HStack {
+                Text("Address")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
-                List {
-                    
-                    HStack{
-                        Text("Address")
-                            .frame(width:(geometry.size.width/2) - 55, alignment: .leading)
-                            .padding(.leading, 25)
-                        //.border(.gray, width: 2)
-                        
-                        //ScrollView(.horizontal){
-                            TextField("0.0.0.0", text: $nvrIPAddress)
-                                .autocapitalization(.none)
-                                .autocorrectionDisabled()
-                                .frame(width:(geometry.size.width/2) - 30, alignment: .trailing)
-                        //}
-                    }
-                    .frame(width:geometry.size.width - 60, alignment: .leading)
-                    
-                    HStack{
-                        Text("Port")
-                            .frame(width:(geometry.size.width/2) - 55, alignment: .leading)
-                            .padding(.leading, 25)
-                        //.border(.gray, width: 2)
-                        TextField("8971", text: $nvrPortAddress)
-                            .frame(width:(geometry.size.width/2) - 30, alignment: .trailing)
-                    }
-                    .frame(width:geometry.size.width - 60, alignment: .leading)
-                    
-                    Toggle("Https", isOn: $nvrIsHttps)
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                        .padding(.leading, 25)
-                        .frame(width:geometry.size.width - 60, alignment: .leading)
-                     
-                    /*
-                    HStack{
-                        Text("Role")
-                            .frame(width:(geometry.size.width/2) - 55, alignment: .leading)
-                            .padding(.leading, 25)
-                        Menu {
-                            Button("Viewer") { selectedRole = "viewer" }
-                            Button("Admin") { selectedRole = "admin" }
-                        } label: {
-                            Text(selectedRole)
-                            Image(systemName: "chevron.down")
-                        }
-                        .onChange(of: selectedRole) { newValue in
-                            //print("changed = \(newValue)")
-                            frigateUserRole = newValue
-                        }
-                        .frame(width:(geometry.size.width/2) - 30, alignment: .trailing)
-                    }
-                    .frame(width:geometry.size.width - 60, alignment: .leading)
-                    */
-                    
-                    HStack{
-                        VStack{
-                            HStack{
-                                
-                                Text("Secret")
-                                    .frame(width:(geometry.size.width/2) - 55, alignment: .leading)
-                                    .padding(.leading, 25)
-                                
-                                ZStack {
-                                    
-                                    if !showBearer {
-                                        SecureField("", text: $frigateBearerSecret)
-                                            .frame(alignment: .leading)
-                                    }
-                                    
-                                    if showBearer {
-                                        ScrollView(.horizontal) {
-                                            TextField("secret goes here", text: $frigateBearerSecret)
-                                                .frame(width:(geometry.size.width/2) - 30, alignment: .leading)
-                                        }
-                                    }
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Button("", systemImage: showBearer ? "eye.slash" : "eye") {
-                                    showBearer = !showBearer
-                                }
-                                .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
-                                .frame(alignment: .trailing)
-                                .padding(.trailing, 40)
-                            }
-                            .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    }
-                    .frame(width:geometry.size.width - 60, alignment: .leading)
-                       
-                    /*
-                    VStack{
-                        HStack{
-                            Text("User")
-                                .frame(width:(geometry.size.width/2) - 55, alignment: .leading)
-                                .padding(.leading, 45)
-                            TextField("", text: $frigateUser)
-                                .frame(alignment: .leading)
-                                .autocapitalization(.none)
-                                .autocorrectionDisabled()
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                        
-                        HStack{
-                            
-                            Text("Password")
-                                .frame(width:(geometry.size.width/2) - 55, alignment: .leading)
-                                .padding(.leading, 45)
-                            
-                            ZStack {
-                                
-                                if !showPassword {
-                                    SecureField("", text: $frigatePassword)
-                                        .autocapitalization(.none)
-                                        .autocorrectionDisabled()
-                                        .frame(alignment: .leading)
-                                }
-                                
-                                if showPassword {
-                                    TextField("", text: $frigatePassword)
-                                        .autocapitalization(.none)
-                                        .autocorrectionDisabled()
-                                        .frame(alignment: .leading)
-                                }
-                            }
+                TextField("0.0.0.0", text: $nvrIPAddress)
+                    .autocapitalization(.none)
+                    .autocorrectionDisabled()
+                    .multilineTextAlignment(.trailing)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
+            Divider()
+            
+            // MARK: Port
+            HStack {
+                Text("Port")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                TextField("8971", text: $nvrPortAddress)
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
+            Divider()
+            
+            // MARK: HTTPS toggle
+            Toggle("Https", isOn: $nvrIsHttps)
+                .tint(Color(red: 0.153, green: 0.69, blue: 1))
+            
+            Divider()
+            
+            // MARK: Secret (JWT)
+            HStack(spacing: 8) {
+                Text("Secret")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                ZStack {
+                    if !showBearer {
+                        SecureField("", text: $frigateBearerSecret)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Button("", systemImage: showPassword ? "eye.slash" : "eye") {
-                                showPassword = !showPassword
-                            }
-                            .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
-                            .frame(alignment: .trailing)
-                            .padding(.trailing, 20)
-                        }
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
                     }
-                    .frame(width: UIScreen.screenWidth, alignment: .leading)
-                    */
                     
-                    Label(nvrManager.getConnectionState() ? "Connected" : "Disconnected", systemImage: "cable.connector")
-                        .frame(width: geometry.size.width - 60, alignment: .trailing)
-                        .foregroundStyle(nvrManager.getConnectionState() ? Color(red: 0.153, green: 0.69, blue: 1) : .red)
-                    
-                    
-                    Button("Save Connection") {
-                        //Sync data accross view and model
-                        nvrManager.setHttps(http: nvrIsHttps )
-                        nvrManager.setIP(ip: nvrIPAddress )
-                        nvrManager.setPort( ports: nvrPortAddress )
-                        
-                        Task {
-                            let url = nvr.getUrl()
-                            let urlString = url
-                            try await api.checkConnectionStatus(urlString: urlString, authType: nvr.getAuthType()) { (data, error) in
-                                
-                                if let error = error {
-                                    print("\(error.localizedDescription)")
-                                    Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(String(describing: error))")
-                                    nvrManager.connectionState = .disconnected
-                                    return
-                                }
-                                nvrManager.connectionState = .connected
-                            }
+                    if showBearer {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            TextField("secret goes here", text: $frigateBearerSecret)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                    //.buttonStyle(.bordered)
-                    .buttonStyle(CustomPressEffectButtonStyle())
-                    .tint(Color(white: 0.58))
-                    .scaleEffect(scale)
-                    .animation(.linear(duration: 1), value: scale)
-                    .frame(width: geometry.size.width - 50, alignment: .trailing)
                 }
-                .listStyle(.plain)
-                .frame(width: geometry.size.width, alignment: .leading)
-                .onAppear{
-                    //Sync data accross view and model
+                
+                Button("", systemImage: showBearer ? "eye.slash" : "eye") {
+                    showBearer.toggle()
+                }
+                .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
+            }
+            
+            Divider()
+            
+            // MARK: Connection status
+            Label(
+                nvrManager.getConnectionState() ? "Connected" : "Disconnected",
+                systemImage: "cable.connector"
+            )
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .foregroundStyle(
+                nvrManager.getConnectionState()
+                ? Color(red: 0.153, green: 0.69, blue: 1)
+                : .red
+            )
+            
+            // MARK: Save button
+            HStack {
+                Spacer()
+                Button("Save Connection") {
+                    // Sync data across view and model
                     nvrManager.setHttps(http: nvrIsHttps )
                     nvrManager.setIP(ip: nvrIPAddress )
                     nvrManager.setPort( ports: nvrPortAddress )
@@ -219,11 +112,19 @@ struct ViewAuthFrigate: View {
                     Task {
                         let url = nvr.getUrl()
                         let urlString = url
-                        try await api.checkConnectionStatus(urlString: urlString, authType: nvr.getAuthType()) { (data, error) in
+                        try await api.checkConnectionStatus(
+                            urlString: urlString,
+                            authType: nvr.getAuthType()
+                        ) { (data, error) in
                             
                             if let error = error {
                                 print("\(error.localizedDescription)")
-                                Log.shared().print(page: "ViewSetting", fn: "NVR Connection", type: "ERROR", text: "\(String(describing: error))")
+                                Log.shared().print(
+                                    page: "ViewSetting",
+                                    fn: "NVR Connection",
+                                    type: "ERROR",
+                                    text: "\(String(describing: error))"
+                                )
                                 nvrManager.connectionState = .disconnected
                                 return
                             }
@@ -231,10 +132,46 @@ struct ViewAuthFrigate: View {
                         }
                     }
                 }
+                .buttonStyle(CustomPressEffectButtonStyle())
+                .tint(Color(white: 0.58))
+                .scaleEffect(scale)
+                .animation(.linear(duration: 1), value: scale)
             }
         }
-        .frame(height: 275, alignment: .topLeading) //350 for everything
+        .padding(.horizontal, 4)
+        .padding(.vertical, 16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white)
         .cornerRadius(25)
+        .onAppear {
+            // Sync data across view and model
+            nvrManager.setHttps(http: nvrIsHttps )
+            nvrManager.setIP(ip: nvrIPAddress )
+            nvrManager.setPort( ports: nvrPortAddress )
+            
+            Task {
+                let url = nvr.getUrl()
+                let urlString = url
+                try await api.checkConnectionStatus(
+                    urlString: urlString,
+                    authType: nvr.getAuthType()
+                ) { (data, error) in
+                    
+                    if let error = error {
+                        print("\(error.localizedDescription)")
+                        Log.shared().print(
+                            page: "ViewSetting",
+                            fn: "NVR Connection",
+                            type: "ERROR",
+                            text: "\(String(describing: error))"
+                        )
+                        nvrManager.connectionState = .disconnected
+                        return
+                    }
+                    nvrManager.connectionState = .connected
+                }
+            }
+        }
     }
 }
 

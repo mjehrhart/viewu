@@ -58,132 +58,169 @@ struct ViewEventCard: View {
     }
     
     var body: some View {
+        let cardShape = RoundedRectangle(cornerRadius: 22, style: .continuous)
         
         ForEach( 0..<containers.count, id: \.self){ index in
             
             VStack{
                 
-                HStack{
-                    
-                   // GeometryReader { geometry in
-                        VStack(alignment: .leading, spacing: 2) {
-                            
-                            //Time
-                            NavigationLink(convertTime(time: containers[index].frameTime!), value: containers[index])
-                                .font(.system(size: fontSizeDate))
-                                .foregroundStyle(Color(red: 0.35, green: 0.35, blue: 0.35))
-                                //.foregroundStyle(Color.orange)
-                                .frame(width: setWidth(), alignment: .topLeading)
-                                .padding(.top,5)
-                            
-                            //Date
-                            Text(convertDate(time: containers[index].frameTime!))
-                                .foregroundColor(.gray)
-                                .font(.system(size: fontSizeLabel))
-                                .fontWeight(.light)
-                            
-                            //Label
-                            Text("\(containers[index].label!)")
-                                .font(.system(size: fontSizeLabel))
-                                .fontWeight(.light)
-                                .foregroundColor(.gray)
-                            
-                            if(containers[index].sublabel! != ""){
-                                Text("\(containers[index].sublabel!)")
-                                    .font(.system(size: fontSizeLabel))
-                                    .fontWeight(.thin)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            if developerModeIsOn {
-                                Text("\(containers[index].type!)")
-                                    .font(.system(size: fontSizeLabel))
-                                    .fontWeight(.thin)
-                                    .foregroundColor(.gray)
-                            }
-                            
-                            //Hide this view for now - i dont think users need to see this information
-                            //EnteredZones(zones: containers[index].enteredZones!)
-                            
-                            Spacer()
-                             
-                            if !containers[index].frigatePlus!{
-                                if frigatePlusOn {
-                                    Button( action: {
-                                        
-                                        Task {
-                                            containers[index].frigatePlus!.toggle()
-                                            
-                                            let url = nvr.getUrl()
-                                            let urlString = url
-                                            let endpoint = "/api/events/\(containers[index].id!)/plus"
-                                            
-                                            await api.postImageToFrigatePlus(urlString: urlString, endpoint: endpoint, eventId: containers[index].id!, authType: nvr.getAuthType() ){ (data, error) in
-                                                
-                                                guard let data = data else { return }
-                                                
-                                                do {
-                                                    if let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed ) as? [String: Any] {
-                                                        
-                                                        if let res = json["success"] as? Int {
-                                                            //print(res)
-                                                            if res == 1 {
-                                                                
-                                                                EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: true)
-                                                                EventStorage.shared.readAll3(completion: { res in
-                                                                    //self.epsSup3 = res!
-                                                                    epsSuper.list3 = res!
-                                                                    return
-                                                                })
-                                                            } else {
-                                                                if let msg = json["message"] as? String {
-                                                                    //print(msg)
-                                                                    
-                                                                    if (msg == "PLUS_API_KEY environment variable is not set" ){
-                                                                        containers[index].frigatePlus!.toggle()
-                                                                        EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: false)
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
+                // One event row
+                HStack(alignment: .top, spacing: 12) {
+
+                    // LEFT: time + meta
+                    VStack(alignment: .leading, spacing: 4) {
+
+                        // Time (NavigationLink)
+                        NavigationLink(convertTime(time: containers[index].frameTime!), value: containers[index])
+                            .font(.system(size: fontSizeDate, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Color(red: 0.18, green: 0.18, blue: 0.18))
+                            .padding(.top, 4)
+
+                        // Date
+                        Text(convertDate(time: containers[index].frameTime!))
+                            .foregroundColor(.gray)
+                            .font(.system(size: fontSizeLabel, weight: .regular))
+
+                        // Label
+                        Text("\(containers[index].label!)")
+                            .font(.system(size: fontSizeLabel, weight: .regular))
+                            .foregroundColor(.gray.opacity(0.9))
+
+                        Text("\(containers[index].score!)")
+                            .font(.system(size: fontSizeLabel, weight: .regular))
+                            .foregroundColor(.gray.opacity(0.9))
+                        
+                        if !(containers[index].sublabel ?? "").isEmpty {
+                            Text(containers[index].sublabel!)
+                                .font(.system(size: fontSizeLabel, weight: .thin))
+                                .foregroundColor(.gray.opacity(0.8))
+                        }
+
+                        if developerModeIsOn {
+                            Text(containers[index].type ?? "")
+                                .font(.system(size: fontSizeLabel, weight: .thin))
+                                .foregroundColor(.gray.opacity(0.8))
+                        }
+
+                        Spacer(minLength: 4)
+
+                        // Optional Frigate+ button
+                        if frigatePlusOn, !(containers[index].frigatePlus ?? false) {
+                            Button {
+                                Task {
+                                    containers[index].frigatePlus?.toggle()
+
+                                    let url = nvr.getUrl()
+                                    let endpoint = "/api/events/\(containers[index].id!)/plus"
+
+                                    await api.postImageToFrigatePlus(
+                                        urlString: url,
+                                        endpoint: endpoint,
+                                        eventId: containers[index].id!,
+                                        authType: nvr.getAuthType()
+                                    ) { data, error in
+                                        guard let data else { return }
+
+                                        do {
+                                            if let json = try JSONSerialization.jsonObject(
+                                                with: data,
+                                                options: .fragmentsAllowed
+                                            ) as? [String: Any],
+                                               let res = json["success"] as? Int {
+
+                                                if res == 1 {
+                                                    EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: true)
+                                                    EventStorage.shared.readAll3 { res in
+                                                        epsSuper.list3 = res ?? []
                                                     }
-                                                } catch(let error) {
-                                                    Log.shared().print(page: "ViewEventCard", fn: "button", type: "ERROR", text: "\(error)")
-                                                    print(error)
+                                                } else if let msg = json["message"] as? String,
+                                                          msg == "PLUS_API_KEY environment variable is not set" {
+                                                    containers[index].frigatePlus?.toggle()
+                                                    EventStorage.shared.updateFrigatePlus(id: containers[index].id!, value: false)
                                                 }
                                             }
-                                            return
+                                        } catch {
+                                            Log.shared().print(page: "ViewEventCard", fn: "button", type: "ERROR", text: "\(error)")
                                         }
-                                    } ){
-                                        Text("Frigate+")
-                                            .padding(1)
                                     }
-                                    //.buttonStyle(.bordered)
-                                    .buttonStyle(CustomPressEffectButtonStyle())
-                                    .tint(Color(white: 0.58))
-                                    .scaleEffect(scale)
-                                    .animation(.linear(duration: 1), value: scale)
-                                    .frame( height: 20, alignment: .topLeading)
-                                    //.padding(.bottom, 10)
-                                    .padding(EdgeInsets(top: 5, leading: 0, bottom: 20, trailing: 0))
                                 }
+                            } label: {
+                                Text("Frigate+")
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        Capsule().fill(Color.black.opacity(0.08))
+                                    )
                             }
-                            
-                            if developerModeIsOn {
-                                Text(containers[index].transportType!)
-                                    .font(.system(size: fontSizeLabel))
-                                    .fontWeight(.thin)
-                                    .foregroundColor(.gray)
-                                    .frame(width: setWidth(), alignment: .bottomLeading)
-                            }
-                            
+                            .buttonStyle(CustomPressEffectButtonStyle())
+                            .tint(Color(white: 0.58))
+                            .padding(.top, 4)
+                            .padding(.bottom, 8)
                         }
-                        .frame(width: setWidth() , height: setHeight(), alignment: .leading) //110
- 
-                        ViewEventImage(urlString: containers[index].snapshot!, frameTime: containers[index].frameTime!, frigatePlus: containers[index].frigatePlus!, widthG: 302, heightG: 180)
-                            .modifier(CardBackground())
+
+                        if developerModeIsOn {
+                            Text(containers[index].transportType ?? "")
+                                .font(.system(size: fontSizeLabel, weight: .thin))
+                                .foregroundColor(.gray.opacity(0.8))
+                        }
+                    }
+                    .frame(width: setWidth(), height: setHeight(), alignment: .leading)
+
+                    // RIGHT: snapshot image
+                    ZStack(alignment: .topTrailing) {
+                        ViewEventImage(
+                            urlString: containers[index].snapshot!,
+                            frameTime: containers[index].frameTime!,
+                            frigatePlus: containers[index].frigatePlus!,
+                            widthG: 302,
+                            heightG: 180
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+
+                        // Optional chevron overlay on top-right of image
+//                        Image(systemName: "chevron.right")
+//                            .font(.system(size: 14, weight: .semibold))
+//                            .foregroundStyle(Color.white.opacity(0.95))
+//                            .padding(8)
+//                            .background(
+//                                Circle().fill(Color.black.opacity(0.35))
+//                            )
+//                            .padding(10)
+                    }
                 }
-                
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    cardShape
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.white,
+                                    Color.white.opacity(0.96)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                )
+                .overlay(
+                    ZStack {
+                        // Outer border
+                        cardShape
+                            .stroke(Color.black.opacity(0.05), lineWidth: 0.7)
+
+                        // Inner “glass” border
+                        cardShape
+                            .inset(by: 4)
+                            .stroke(Color.white.opacity(0.45), lineWidth: 0.6)
+                    }
+                )
+                .shadow(color: Color.gray.opacity(0.10), radius: 10, x: 0, y: 6)
+                .contentShape(Rectangle())
+                .padding(.horizontal, 2)
+                .padding(.vertical, 4)
+
                 VStack{
                     if developerModeIsOn {
                         ScrollView(.horizontal){
@@ -198,6 +235,7 @@ struct ViewEventCard: View {
                 }
                 .frame(width: UIScreen.screenWidth-20, alignment: .bottomLeading)
             }
+            .listRowSeparator(.hidden)
         }
         .onDelete{ indexes in
             let flag = EventStorage.shared.delete(frameTime: containers[0].frameTime!)

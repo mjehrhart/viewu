@@ -39,8 +39,8 @@ func connectToFrigateAPIWithJWT( host: String, jwtToken: String, endpoint: Strin
     
     
     let urlString = "\(host)\(endpoint)"
-    print("AuthFrigate connectToFrigateAPIWithJWT()")
-    print(urlString)
+//    print("AuthFrigate connectToFrigateAPIWithJWT()")
+//    print(urlString)
           
     guard let url = URL(string: urlString) else {
         // call the completion handler instead of using 'throw'
@@ -110,4 +110,23 @@ func generateJWT() async throws -> String {
      
     return jwtToken
 }
- 
+
+func generateSyncJWT() throws -> String {
+    
+    var result: Result<String, Error>?
+    let semaphore = DispatchSemaphore(value: 0)
+
+    Task {
+        do {
+            let token = try await generateJWT() //generateJWTAsync()
+            result = .success(token)
+        } catch {
+            result = .failure(error)
+        }
+        semaphore.signal()
+    }
+
+    semaphore.wait()
+
+    return try result!.get()
+}

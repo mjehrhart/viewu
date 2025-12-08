@@ -7,580 +7,230 @@
 
 import SwiftUI
  
-struct ViewTipsNotificationManager: View {
-  
-    //@State var showTip: Bool = true
-    @AppStorage("tipsNotificationDefault") private var tipsNotificationDefault: Bool = true
-    
+struct TipsInfoBanner: View {
+    @Binding var isVisible: Bool
     let title: String
     let message: String
-    
-    let iconColor: Color = Color(red: 0.153, green: 0.69, blue: 1)
-    
-    init(title: String, message: String ) {
-        self.title = title
-        self.message = message
-    }
-    
-    var  body: some View {
-        
-        if tipsNotificationDefault {
-            HStack{
-                
-                ZStack(alignment: .topTrailing) {
-                    
-                    Image(systemName: "info.bubble")
-                        .resizable()
-                        .foregroundColor(iconColor)
-                        .frame(width: 40, height: 40)
-                        .frame(alignment: .top)
-                        .padding(.top, 10)
-                        .font(.system(size: 17, weight: .semibold))
-                    
-                    Color.clear
-                        .frame(maxWidth: 40, maxHeight: .infinity)
-                }
-                .padding(.leading, 10)
- 
-                VStack(alignment: .leading){
-                    Text(title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .font(.system(size: 17, weight: .semibold))
-                        .textCase(nil)
-                        .padding(.bottom, 1)
-                    
-                    Text(message)
-                        .foregroundStyle(.gray)
-                        //.font(.system(size: 15.2))
-                        .textCase(nil)
-                        .font(.system(size: 13.2))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                }
-                //.padding(.leading, 7)
-                .padding(.bottom, 7)
-                .frame(maxWidth: .infinity)
-                
-                VStack{
-                    Image(systemName: "xmark")
-                        .padding(.trailing, 10)
-                        .padding(.top, 10)
-                        .foregroundStyle(.gray)
-                        //.foregroundStyle(.blue)
+    let collapsedLabel: String
+    let iconColor: Color
+
+    var body: some View {
+        Group {
+            if isVisible {
+                HStack(alignment: .top, spacing: 8) {
+                    // Left icon
+                    Image(systemName: "info.circle.fill")
                         .font(.system(size: 16, weight: .semibold))
-                        .frame(alignment: .top)
-                        .onTapGesture {
-                            tipsNotificationDefault.toggle()
-                        }
-                    Spacer()
-                }
-            }
-            .padding(10)
-            //.background(Color(.systemGray6))
-            .background(Color(.white))
-            .cornerRadius(15)
-            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-            .frame(width: UIScreen.screenWidth - 30 )
-            //.background(Color.white)
-        }
-        else {
-            
-            ZStack(alignment: .topTrailing) {
-                Color.clear
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                Image(systemName: "info.circle")
-                    .resizable()
-                    .frame(width: 18, height: 18)
-                    .padding(.top, 10)
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 32, weight: .bold))
-                    .onTapGesture {
-                        tipsNotificationDefault.toggle()
+                        .foregroundColor(iconColor)
+
+                    // Text
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
+                            .font(.system(size: 13, weight: .semibold))
+                            .textCase(nil)
+
+                        Text(message)
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                            .textCase(nil)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
+
+                    Spacer()
+
+                    // Close button
+                    Button {
+                        isVisible = false
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(.secondary)
+                            .padding(.top, 2)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(10)
+                .background(iconColor.opacity(0.08))   // nice blue tint
+                .cornerRadius(12)
+            } else {
+                // Collapsed “show tips” row
+                HStack(spacing: 6) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+
+                    Text(collapsedLabel)
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                        .textCase(nil)
+                }
+                .padding(6)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isVisible = true
+                }
             }
         }
     }
 }
- 
-struct ViewTipsNotificationDomain: View {
-  
-    //@State var showTip: Bool = true
-    @AppStorage("tipsNotificationDomain") private var tipsNotificationDomain: Bool = true
-    
+
+struct ViewTipsNotificationManager: View {
+    @AppStorage("tipsNotificationDefault") private var tipsNotificationDefault: Bool = true
+
     let title: String
     let message: String
-    
     let iconColor: Color = Color(red: 0.153, green: 0.69, blue: 1)
-    
-    init(title: String, message: String ) {
-        self.title = title
-        self.message = message
+
+    var body: some View {
+        TipsInfoBanner(
+            isVisible: $tipsNotificationDefault,
+            title: title,
+            message: message,
+            collapsedLabel: "Show Notification Manager info",
+            iconColor: iconColor
+        )
     }
-    
-    var  body: some View {
-        
-        if tipsNotificationDomain {
-            HStack{
-                
-                ZStack(alignment: .topTrailing) {
-                    
-                    Image(systemName: "info.bubble")
-                        .resizable()
-                        .foregroundColor(iconColor)
-                        .frame(width: 40, height: 40)
-                        .frame(alignment: .top)
-                        .padding(.top, 10)
-                        .font(.system(size: 17, weight: .semibold))
-                    
-                    Color.clear
-                        .frame(maxWidth: 40, maxHeight: .infinity)
-                }
-                .padding(.leading, 10)
- 
-                VStack(alignment: .leading){
-                    Text(title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .font(.system(size: 17, weight: .semibold))
-                        .textCase(nil)
-                        .padding(.bottom, 1)
-                    
-                    Text(message)
-                        .foregroundStyle(.gray)
-                        //.font(.system(size: 15.2))
-                        .textCase(nil)
-                        .font(.system(size: 13.2))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                }
-                //.padding(.leading, 7)
-                .padding(.bottom, 7)
-                .frame(maxWidth: .infinity)
-                
-                VStack{
-                    Image(systemName: "xmark")
-                        .padding(.trailing, 10)
-                        .padding(.top, 10)
-                        .foregroundStyle(.gray)
-                        //.foregroundStyle(.blue)
-                        .font(.system(size: 16, weight: .semibold))
-                        .frame(alignment: .top)
-                        .onTapGesture {
-                            tipsNotificationDomain.toggle()
-                        }
-                    Spacer()
-                }
-            }
-            .padding(10)
-            //.background(Color(.systemGray6))
-            .background(Color(.white))
-            .cornerRadius(15)
-            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-            .frame(width: UIScreen.screenWidth - 30 )
-            //.background(Color.white)
-        }
-        else {
-            
-            ZStack(alignment: .topTrailing) {
-                Color.clear
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                Image(systemName: "info.circle")
-                    .resizable()
-                    .frame(width: 17, height: 17)
-                    .padding(.top, 10)
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 32, weight: .bold))
-                    .onTapGesture {
-                        tipsNotificationDomain.toggle()
-                    }
-            }
-        }
+}
+
+struct ViewTipsNotificationDomain: View {
+    @AppStorage("tipsNotificationDomain") private var tipsNotificationDomain: Bool = true
+
+    let title: String
+    let message: String
+    let iconColor: Color = Color(red: 0.153, green: 0.69, blue: 1)
+
+    var body: some View {
+        TipsInfoBanner(
+            isVisible: $tipsNotificationDomain,
+            title: title,
+            message: message,
+            collapsedLabel: "Show Accessible Domain info",
+            iconColor: iconColor
+        )
     }
 }
 
 struct ViewTipsNotificationTemplate: View {
-  
-    //@State var showTip: Bool = true
     @AppStorage("tipsNotificationTemplate") private var tipsNotificationTemplate: Bool = true
-    
+
     let title: String
     let message: String
-    
     let iconColor: Color = Color(red: 0.153, green: 0.69, blue: 1)
-    
-    init(title: String, message: String ) {
-        self.title = title
-        self.message = message
-    }
-    
-    var  body: some View {
-        
-        if tipsNotificationTemplate {
-            HStack{
-                
-                ZStack(alignment: .topTrailing) {
-                    
-                    Image(systemName: "info.bubble")
-                        .resizable()
-                        .foregroundColor(iconColor)
-                        .frame(width: 40, height: 40)
-                        .frame(alignment: .top)
-                        .padding(.top, 10)
-                        .font(.system(size: 17, weight: .semibold))
-                    
-                    Color.clear
-                        .frame(maxWidth: 40, maxHeight: .infinity)
-                }
-                .padding(.leading, 10)
- 
-                VStack(alignment: .leading){
-                    Text(title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .font(.system(size: 17, weight: .semibold))
-                        .textCase(nil)
-                        .padding(.bottom, 1)
-                    
-                    Text(message)
-                        .foregroundStyle(.gray)
-                        //.font(.system(size: 15.2))
-                        .textCase(nil)
-                        .font(.system(size: 13.2))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                }
-                //.padding(.leading, 7)
-                .padding(.bottom, 7)
-                .frame(maxWidth: .infinity)
-                
-                VStack{
-                    Image(systemName: "xmark")
-                        .padding(.trailing, 10)
-                        .padding(.top, 10)
-                        .foregroundStyle(.gray)
-                        //.foregroundStyle(.blue)
-                        .font(.system(size: 16, weight: .semibold))
-                        .frame(alignment: .top)
-                        .onTapGesture {
-                            tipsNotificationTemplate.toggle()
-                        }
-                    Spacer()
-                }
-            }
-            .padding(10)
-            //.background(Color(.systemGray6))
-            .background(Color(.white))
-            .cornerRadius(15)
-            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-            .frame(width: UIScreen.screenWidth - 30 )
-            //.background(Color.white)
-        }
-        else {
-            
-            ZStack(alignment: .topTrailing) {
-                Color.clear
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                Image(systemName: "info.circle")
-                    .resizable()
-                    .frame(width: 17, height: 17)
-                    .padding(.top, 10)
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 32, weight: .bold))
-                    .onTapGesture {
-                        tipsNotificationTemplate.toggle()
-                    }
-            }
-        }
+
+    var body: some View {
+        TipsInfoBanner(
+            isVisible: $tipsNotificationTemplate,
+            title: title,
+            message: message,
+            collapsedLabel: "Show Notification Templates info",
+            iconColor: iconColor
+        )
     }
 }
 
 struct ViewTipsSettingsNVR: View {
-  
-    //@State var showTip: Bool = true
     @AppStorage("tipsSettingsNVR") private var tipsSettingsNVR: Bool = true
-    
+
     let title: String
     let message: String
-    
     let iconColor: Color = Color(red: 0.153, green: 0.69, blue: 1)
-    
-    init(title: String, message: String ) {
-        self.title = title
-        self.message = message
-    }
-    
-    var  body: some View {
-        
-        if tipsSettingsNVR {
-            HStack{
-                
-                ZStack(alignment: .topTrailing) {
-                    
-                    Image(systemName: "info.bubble")
-                        .resizable()
-                        .foregroundColor(iconColor)
-                        .frame(width: 40, height: 40)
-                        .frame(alignment: .top)
-                        .padding(.top, 10)
-                        .font(.system(size: 17, weight: .semibold))
-                    
-                    Color.clear
-                        .frame(maxWidth: 40, maxHeight: .infinity)
-                }
-                .padding(.leading, 10)
- 
-                VStack(alignment: .leading){
-                    Text(title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .font(.system(size: 17, weight: .semibold))
-                        .textCase(nil)
-                        .padding(.bottom, 1)
-                    
-                    Text(message)
-                        .foregroundStyle(.gray)
-                        //.font(.system(size: 15.2))
-                        .textCase(nil)
-                        .font(.system(size: 13.2))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                }
-                //.padding(.leading, 7)
-                .padding(.bottom, 7)
-                .frame(maxWidth: .infinity)
-                
-                VStack{
-                    Image(systemName: "xmark")
-                        .padding(.trailing, 10)
-                        .padding(.top, 10)
-                        .foregroundStyle(.gray)
-                        //.foregroundStyle(.blue)
-                        .font(.system(size: 16, weight: .semibold))
-                        .frame(alignment: .top)
-                        .onTapGesture {
-                            tipsSettingsNVR.toggle()
-                        }
-                    Spacer()
-                }
-            }
-            .padding(10)
-            //.background(Color(.systemGray6))
-            .background(Color(.white))
-            .cornerRadius(15)
-            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-            .frame(width: UIScreen.screenWidth - 30 )
-            //.background(Color.white)
-        }
-        else {
-            
-            ZStack(alignment: .topTrailing) {
-                Color.clear
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                Image(systemName: "info.circle")
-                    .resizable()
-                    .frame(width: 17, height: 17)
-                    .padding(.top, 10)
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 32, weight: .bold))
-                    .onTapGesture {
-                        tipsSettingsNVR.toggle()
-                    }
-            }
-        }
+
+    var body: some View {
+        TipsInfoBanner(
+            isVisible: $tipsSettingsNVR,
+            title: title,
+            message: message,
+            collapsedLabel: "Show NVR settings info",
+            iconColor: iconColor
+        )
     }
 }
 
 struct ViewTipsSettingsPairDevie: View {
-  
-    //@State var showTip: Bool = true
     @AppStorage("tipsSettingsPairDevice") private var tipsSettingsPairDevice: Bool = true
-    
+
     let title: String
     let message: String
-    
     let iconColor: Color = Color(red: 0.153, green: 0.69, blue: 1)
-    
+
+    var body: some View {
+        TipsInfoBanner(
+            isVisible: $tipsSettingsPairDevice,
+            title: title,
+            message: message,
+            collapsedLabel: "Show device pairing info",
+            iconColor: iconColor
+        )
+    }
+}
+
+struct ViewTipsLiveCameras: View {
+    @AppStorage("tipsLiveCameras") private var tipsLiveCameras: Bool = true
+
+    let title: String
+    let message: String
+
+    let iconColor: Color = Color(red: 0.153, green: 0.69, blue: 1)
+
     init(title: String, message: String ) {
         self.title = title
         self.message = message
     }
-    
-    var  body: some View {
-        
-        if tipsSettingsPairDevice {
-            HStack{
-                
-                ZStack(alignment: .topTrailing) {
-                    
-                    Image(systemName: "info.bubble")
-                        .resizable()
-                        .foregroundColor(iconColor)
-                        .frame(width: 40, height: 40)
-                        .frame(alignment: .top)
-                        .padding(.top, 10)
-                        .font(.system(size: 17, weight: .semibold))
-                    
-                    Color.clear
-                        .frame(maxWidth: 40, maxHeight: .infinity)
-                }
-                .padding(.leading, 10)
- 
-                VStack(alignment: .leading){
-                    Text(title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .font(.system(size: 17, weight: .semibold))
-                        .textCase(nil)
-                        .padding(.bottom, 1)
-                    
-                    Text(message)
-                        .foregroundStyle(.gray)
-                        //.font(.system(size: 15.2))
-                        .textCase(nil)
-                        .font(.system(size: 13.2))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                }
-                //.padding(.leading, 7)
-                .padding(.bottom, 7)
-                .frame(maxWidth: .infinity)
-                
-                VStack{
-                    Image(systemName: "xmark")
-                        .padding(.trailing, 10)
-                        .padding(.top, 10)
-                        .foregroundStyle(.gray)
-                        //.foregroundStyle(.blue)
+
+    var body: some View {
+        Group {
+            if tipsLiveCameras {
+                HStack(alignment: .top, spacing: 8) {
+                    // Left icon
+                    Image(systemName: "info.circle.fill")
                         .font(.system(size: 16, weight: .semibold))
-                        .frame(alignment: .top)
-                        .onTapGesture {
-                            tipsSettingsPairDevice.toggle()
-                        }
-                    Spacer()
-                }
-            }
-            .padding(10)
-            //.background(Color(.systemGray6))
-            .background(Color(.white))
-            .cornerRadius(15)
-            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-            .frame(width: UIScreen.screenWidth - 30 )
-            //.background(Color.white)
-        }
-        else {
-            
-            ZStack(alignment: .topTrailing) {
-                Color.clear
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                Image(systemName: "info.circle")
-                    .resizable()
-                    .frame(width: 17, height: 17)
-                    .padding(.top, 10)
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 32, weight: .bold))
-                    .onTapGesture {
-                        tipsSettingsPairDevice.toggle()
+                        .foregroundColor(iconColor)
+
+                    // Text content
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
+                            .font(.system(size: 13, weight: .semibold))
+
+                        Text(message)
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
+
+                    Spacer()
+
+                    // Close button
+                    Button {
+                        tipsLiveCameras = false
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(.secondary)
+                            .padding(.top, 2)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(10)
+                .background(Color.blue.opacity(0.08))
+                .cornerRadius(12)
+            } else {
+                // Collapsed state with small “show tips” affordance
+                HStack(spacing: 6) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+
+                    Text("Show live camera tips")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                }
+                .padding(6)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    tipsLiveCameras = true
+                }
             }
         }
     }
 }
 
-struct ViewTipsLiveCameras: View {
-  
-    //@State var showTip: Bool = true
-    @AppStorage("tipsLiveCameras") private var tipsLiveCameras: Bool = true
-    
-    let title: String
-    let message: String
-    
-    let iconColor: Color = Color(red: 0.153, green: 0.69, blue: 1)
-    
-    init(title: String, message: String ) {
-        self.title = title
-        self.message = message
-    }
-    
-    var  body: some View {
-        
-        if tipsLiveCameras {
-            HStack{
-                
-                ZStack(alignment: .topTrailing) {
-                    
-                    Image(systemName: "info.bubble")
-                        .resizable()
-                        //.foregroundColor(iconColor)
-                        .foregroundColor(.blue)
-                        .frame(width: 40, height: 40)
-                        .frame(alignment: .top)
-                        .padding(.top, 10)
-                        .font(.system(size: 17, weight: .semibold))
-                    
-                    Color.clear
-                        .frame(maxWidth: 40, maxHeight: .infinity)
-                }
-                .padding(.leading, 10)
- 
-                VStack(alignment: .leading){
-                    Text(title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .font(.system(size: 17, weight: .semibold))
-                        .padding(.bottom, 1)
-                    
-                    Text(message)
-                        .foregroundStyle(.gray)
-                        .font(.system(size: 15.2))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                }
-                .padding(.leading, 7)
-                .padding(.bottom, 7)
-                .frame(maxWidth: .infinity)
-                
-                VStack{
-                    Image(systemName: "xmark")
-                        .padding(.trailing, 10)
-                        .padding(.top, 10)
-                        .foregroundStyle(.gray)
-                        .font(.system(size: 16, weight: .semibold))
-                        .frame(alignment: .top)
-                        .onTapGesture {
-                            tipsLiveCameras.toggle()
-                        }
-                    Spacer()
-                }
-            }
-            .padding(.top, 5)
-            .padding(.leading, 3)
-            .padding(.trailing, 3)
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .frame( maxHeight: .infinity)
-        }
-        else {
-            
-            ZStack(alignment: .topTrailing) {
-                Color.clear
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                Image(systemName: "info.circle")
-                    .resizable()
-                    .frame(width: 17, height: 17)
-                    //.padding(.top, 10)
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 32, weight: .bold))
-                    .onTapGesture {
-                        tipsLiveCameras.toggle()
-                    }
-            }
-        }
-    }
-}

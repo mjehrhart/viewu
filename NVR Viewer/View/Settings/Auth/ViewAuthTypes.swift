@@ -1,94 +1,74 @@
-//
-//  ViewAuthTypes.swift
-//  NVR Viewer
-//
-//  Created by Matthew Ehrhart on 12/2/25.
-//
-
 import SwiftUI
 
 struct ViewAuthTypes: View {
     
     let widthMultiplier:CGFloat = 4/5.8
     let api = APIRequester()
-    let bColor = Color(red: 0.153, green: 0.69, blue: 1);
+    let bColor = Color(red: 0.153, green: 0.69, blue: 1)
     
     @State private var scale = 1.0
+    @State private var isLandscape: Bool = UIDevice.current.orientation.isLandscape
     
     @StateObject var nvrManager = NVRConfig.shared()
     @StateObject var nvr = NVRConfig.shared()
     
     @AppStorage("authType") private var authType: AuthType = .none
     @AppStorage("tipsSettingsNVR") private var tipsSettingsNVR: Bool = true
- 
+    
     var body : some View {
- 
-        VStack {
-            ControlGroup() {
-                HStack(spacing: 2) {
-                    Button(action: {
-                        nvr.setAuthType(authType: .none)
-                        authType = .none
-                    }) {
-                        Text("None")
-                    }
-                    .buttonStyle(.bordered)
-                    .foregroundStyle(nvr.getAuthType() == .none ? .orange : bColor)
-                    //.frame(maxWidth: .infinity)
-                    
-                    Button(action: {
-                        nvr.setAuthType(authType: .bearer)
-                        authType = .bearer
-                    }) {
-                        Text("JWT Bearer")
-                    }
-                    .buttonStyle(.bordered)
-                    .foregroundStyle(nvr.getAuthType() == .bearer ? .orange : bColor)
-                    //.frame(maxWidth: .infinity)
- 
-                    Button(action: {
-                        nvr.setAuthType(authType: .cloudflare)
-                        authType = .cloudflare
-                    }) {
-                        Text("CloudFlare")
-                    }
-                    .buttonStyle(.bordered)
-                    .foregroundStyle(nvr.getAuthType() == .cloudflare ? .orange : bColor)
-                    //.frame(maxWidth: .infinity)
-                    
-                    Button("Frigate") {
-                        nvr.setAuthType(authType: .frigate)
-                        authType = .frigate
-                    }
-                    .buttonStyle(.bordered)
-                    .foregroundStyle(nvr.getAuthType() == .frigate ? .orange : bColor)
-                    //.frame(maxWidth: .infinity)
-                }
-                 
-            }
-            .padding(.leading, 23)
-            .padding(.trailing, 23)
-            .frame(maxWidth: .infinity)
-            .controlGroupStyle(.automatic)
+        
+        VStack(spacing: 10) {
             
+            // Auth type selector – four equal-width buttons, no scroll bar
+            HStack(spacing: 2) {
+                
+                authButton(title: "None", type: .none)
+                authButton(title: "Bearer", type: .bearer)
+                authButton(title: isLandscape ? "CloudFlare" : "CF", type: .cloudflare) 
+                    .onRotate { orientation in
+                        if orientation.isValidInterfaceOrientation {
+                            isLandscape = orientation.isLandscape
+                        }
+                    }
+                authButton(title: "Frigate", type: .frigate)
+            }
+            // Let the form/section handle most of the padding
+            .padding(.top, 4)
+            
+            // Keep exactly the same logic for which settings view to show
             if nvr.getAuthType() == .none  {
                 ViewAuthNone()
             }
             if nvr.getAuthType() == .bearer  {
-                ViewAuthJWTBearer() 
+                ViewAuthJWTBearer()
             }
             if nvr.getAuthType() == .cloudflare  {
                 VStack {
                     Text("CloudFlare")
                     Text("This is in development")
                 }
-            } 
+            }
             if nvr.getAuthType() == .frigate {
                 ViewAuthFrigate()
             }
-            
         }
-    } 
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    // MARK: - Helper
+    
+    @ViewBuilder
+    private func authButton(title: String, type: AuthType) -> some View {
+        Button(action: {
+            nvr.setAuthType(authType: type)
+            authType = type
+        }) {
+            Text(title)
+                .frame(maxWidth: .infinity)    // share row width evenly
+        }
+        .buttonStyle(.bordered)
+        .foregroundStyle(nvr.getAuthType() == type ? .orange : bColor)
+    }
 }
 
 struct CustomPressEffectButtonStyle: ButtonStyle {
@@ -105,10 +85,10 @@ struct CoolControlGroupStyle: ControlGroupStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.content
             .padding(5)
-            .background(Color.indigo.opacity(0.2)) // A subtle, cool background
+            .background(Color.indigo.opacity(0.2))
             .cornerRadius(8)
-            .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 2) // A cool shadow
-            .foregroundColor(.indigo) // Cool text color
+            .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 2)
+            .foregroundColor(.indigo)
             .padding()
     }
 }

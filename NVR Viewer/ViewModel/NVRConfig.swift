@@ -209,7 +209,7 @@ final class NVRConfig: ObservableObject  {
         }
         
         let url: String = http + self.url + ":" + self.port
-        print("getUrl = \(url)")
+        //print("getUrl = \(url)")
         return url
     }
     
