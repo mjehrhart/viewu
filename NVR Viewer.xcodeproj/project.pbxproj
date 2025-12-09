@@ -18,7 +18,6 @@
 		340AAFF12BA0A5CC00EB69F4 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340AAFF02BA0A5CC00EB69F4 /* NotificationService.swift */; };
 		340AAFF52BA0A5CC00EB69F4 /* NotificationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 340AAFEE2BA0A5CB00EB69F4 /* NotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		340AAFFB2BA2406D00EB69F4 /* APIRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340AAFFA2BA2406C00EB69F4 /* APIRequestor.swift */; };
-		340AAFFD2BA37E8C00EB69F4 /* RTSPPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340AAFFC2BA37E8C00EB69F4 /* RTSPPlayer.swift */; };
 		340AAFFF2BA38A4D00EB69F4 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AAFFE2BA38A4D00EB69F4 /* AudioToolbox.framework */; };
 		340AB0012BA38A5800EB69F4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0002BA38A5800EB69F4 /* AVFoundation.framework */; };
 		340AB0032BA38A6300EB69F4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340AB0022BA38A6300EB69F4 /* CFNetwork.framework */; };
@@ -51,7 +50,6 @@
 		342103652C1B5CFE00CBBF83 /* ViewInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103642C1B5CFE00CBBF83 /* ViewInstructions.swift */; };
 		342103672C1B614000CBBF83 /* ViewOnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342103662C1B614000CBBF83 /* ViewOnBoarding.swift */; };
 		342554BE2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */; };
-		343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343676B82BA3C48400BD765F /* HLSPlayer.swift */; };
 		3444DF492EDE6E9000D67D5A /* JWTKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3444DF482EDE6E9000D67D5A /* JWTKit */; };
 		346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542DF2B9783860037BA1D /* ViewEventsHistory.swift */; };
 		346542E22B982EAD0037BA1D /* ViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542E12B982EAD0037BA1D /* ViewTest.swift */; };
@@ -153,7 +151,6 @@
 		340AAFF02BA0A5CC00EB69F4 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		340AAFF22BA0A5CC00EB69F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		340AAFFA2BA2406C00EB69F4 /* APIRequestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequestor.swift; sourceTree = "<group>"; };
-		340AAFFC2BA37E8C00EB69F4 /* RTSPPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTSPPlayer.swift; sourceTree = "<group>"; };
 		340AAFFE2BA38A4D00EB69F4 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		340AB0002BA38A5800EB69F4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		340AB0022BA38A6300EB69F4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -181,7 +178,6 @@
 		342103642C1B5CFE00CBBF83 /* ViewInstructions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewInstructions.swift; sourceTree = "<group>"; };
 		342103662C1B614000CBBF83 /* ViewOnBoarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOnBoarding.swift; sourceTree = "<group>"; };
 		342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUIImageFull2.swift; sourceTree = "<group>"; };
-		343676B82BA3C48400BD765F /* HLSPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlayer.swift; sourceTree = "<group>"; };
 		346542DF2B9783860037BA1D /* ViewEventsHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventsHistory.swift; sourceTree = "<group>"; };
 		346542E12B982EAD0037BA1D /* ViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTest.swift; sourceTree = "<group>"; };
 		346542E52B9982D70037BA1D /* NVR-Viewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "NVR-Viewer-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -389,15 +385,6 @@
 			path = Subs;
 			sourceTree = "<group>";
 		};
-		34D3D0042C0AA10300E263B5 /* Trash */ = {
-			isa = PBXGroup;
-			children = (
-				340AAFFC2BA37E8C00EB69F4 /* RTSPPlayer.swift */,
-				343676B82BA3C48400BD765F /* HLSPlayer.swift */,
-			);
-			path = Trash;
-			sourceTree = "<group>";
-		};
 		34D5EFC92B92AB1F002A84B0 = {
 			isa = PBXGroup;
 			children = (
@@ -434,7 +421,6 @@
 				34D5EFD52B92AB1F002A84B0 /* NVR_ViewerApp.swift */,
 				34D5EFD72B92AB1F002A84B0 /* ContentView.swift */,
 				34D5EFD92B92AB22002A84B0 /* Assets.xcassets */,
-				34D3D0042C0AA10300E263B5 /* Trash */,
 				34D5EFDB2B92AB22002A84B0 /* Preview Content */,
 			);
 			path = "NVR Viewer";
@@ -800,7 +786,6 @@
 				34BBA4782BAB45C300A6004E /* EventFilter.swift in Sources */,
 				348333C02BB8DFC600ED1DF2 /* ViewLive.swift in Sources */,
 				348AB7BA2BA55E58001ADE6C /* ViewEventUpdateDetails.swift in Sources */,
-				343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */,
 				342103672C1B614000CBBF83 /* ViewOnBoarding.swift in Sources */,
 				34045AE52EC046FE00D90B7F /* ViewCameraDetails2.swift in Sources */,
 				342103632C1B5C6000CBBF83 /* OnBoarding.swift in Sources */,
@@ -845,7 +830,6 @@
 				34D5F0192B968EEF002A84B0 /* ViewUIImageByData.swift in Sources */,
 				34045AE72EC2CDA200D90B7F /* ViewQuickDayFilter.swift in Sources */,
 				34BBA47F2BAE164400A6004E /* DataController.swift in Sources */,
-				340AAFFD2BA37E8C00EB69F4 /* RTSPPlayer.swift in Sources */,
 				34D5EFE92B92ABA4002A84B0 /* ViewCamera.swift in Sources */,
 				346542E22B982EAD0037BA1D /* ViewTest.swift in Sources */,
 				34D5EFF12B92B1CB002A84B0 /* MQTTManager.swift in Sources */,

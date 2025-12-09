@@ -76,7 +76,7 @@ struct ViewEventDetail: View {
                 Spacer()
             }
             .padding(.top, 10)
-            .padding(.bottom, 10)
+            .padding(.bottom, 20)
 
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 16) {
