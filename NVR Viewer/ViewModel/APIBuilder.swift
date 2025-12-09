@@ -65,7 +65,7 @@ struct APIBuilder {
         endpointOptions.cameraName = dataSet.after.camera
         endpointOptions.type = dataSet.type
         endpointOptions.frameTime = dataSet.after.frame_time
-        endpointOptions.score = dataSet.after.score
+        endpointOptions.score = dataSet.after.top_score //12/7/25 was .score
         endpointOptions.label = dataSet.after.label
         endpointOptions.sublabel = dataSet.after.sub_label
          

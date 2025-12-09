@@ -16,6 +16,7 @@ struct ViewCameraFullScreen: View {
     @State var mediaPlayer : VLCMediaPlayer = VLCMediaPlayer()
     let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
     let menuTextColor = Color.white
+    @State private var isLandscape: Bool = UIDevice.current.orientation.isLandscape
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
@@ -28,7 +29,7 @@ struct ViewCameraFullScreen: View {
             ZStack{
                 
                 LinearGradient(
-                    colors: [.orange, cBlue, .orange],
+                    colors: [cBlue.opacity(0.6), .orange.opacity(0.6), cBlue.opacity(0.6)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -36,41 +37,65 @@ struct ViewCameraFullScreen: View {
                 //.edgesIgnoringSafeArea(.bottom)
                 
                 Text("Loading: \(urlString)")
-                    .rotationEffect(.degrees(90))
+                    .rotationEffect( isLandscape ? .degrees(0) : .degrees(90))
                     .labelStyle(VerticalLabelStyle(show: false))
                     .foregroundStyle(menuTextColor)
+                    .onRotate { orientation in
+                        if orientation.isValidInterfaceOrientation {
+                            isLandscape = orientation.isLandscape
+                        }
+                    }
                 
-                if horizontalSizeClass == .regular && verticalSizeClass == .regular {
-                    // UI optimized for a regular-sized screen (typical of iPad in most orientations)
-                    VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
-                        .rotationEffect(.degrees(90))
-                        .aspectRatio(16/9, contentMode: .fill)
-                        .frame(width: UIScreen.screenHeight , height: UIScreen.screenWidth )
-                        .edgesIgnoringSafeArea(.all)
-                        .onAppear(){
-                            mediaPlayer.audio?.isMuted = false
-                            mediaPlayer.play()
+                
+                VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+                    .rotationEffect( isLandscape ? .degrees(0) : .degrees(90))
+                    .aspectRatio(16/9, contentMode: .fill)
+                    .edgesIgnoringSafeArea(.all)
+                    .onAppear(){
+                        mediaPlayer.audio?.isMuted = false
+                        mediaPlayer.play()
+                    }
+                    .onDisappear(){
+                        mediaPlayer.stop()
+                    }
+                    .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+                    .onRotate { orientation in
+                        if orientation.isValidInterfaceOrientation {
+                            isLandscape = orientation.isLandscape
                         }
-                        .onDisappear(){
-                            mediaPlayer.stop()
-                        }
-                        .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
-                } else {
-                    // UI optimized for compact-sized screens (iPhone, or iPad in certain multitasking modes)
-                    VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
-                        .rotationEffect(.degrees(90))
-                        .aspectRatio(16/9, contentMode: .fit)
-                        .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth + 22)
-                        .edgesIgnoringSafeArea(.all)
-                        .onAppear(){
-                            mediaPlayer.audio?.isMuted = false
-                            mediaPlayer.play()
-                        }
-                        .onDisappear(){
-                            mediaPlayer.stop()
-                        }
-                        .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
-                }
+                    }
+                
+//                if horizontalSizeClass == .regular && verticalSizeClass == .regular {
+//                    // UI optimized for a regular-sized screen (typical of iPad in most orientations)
+//                    VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+//                        .rotationEffect(.degrees(90))
+//                        .aspectRatio(16/9, contentMode: .fill)
+//                        .frame(width: UIScreen.screenHeight , height: UIScreen.screenWidth )
+//                        .edgesIgnoringSafeArea(.all)
+//                        .onAppear(){
+//                            mediaPlayer.audio?.isMuted = false
+//                            mediaPlayer.play()
+//                        }
+//                        .onDisappear(){
+//                            mediaPlayer.stop()
+//                        }
+//                        .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+//                } else {
+//                    // UI optimized for compact-sized screens (iPhone, or iPad in certain multitasking modes)
+//                    VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+//                        //.rotationEffect(.degrees(90))
+//                        .aspectRatio(16/9, contentMode: .fit)
+//                        .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth + 22)
+//                        .edgesIgnoringSafeArea(.all)
+//                        .onAppear(){
+//                            mediaPlayer.audio?.isMuted = false
+//                            mediaPlayer.play()
+//                        }
+//                        .onDisappear(){
+//                            mediaPlayer.stop()
+//                        }
+//                        .overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
+//                }
     
                  
             }
@@ -91,16 +116,6 @@ struct ViewCameraFullScreen: View {
             HStack{
                 
                 VStack{
-//                    HStack{
-//                        Button("", systemImage: "arrow.down.forward.topleading.rectangle"){
-//                            showCameras.toggle()
-//                        }
-//                        .padding([.leading], 85)
-//                        .frame(maxHeight: .infinity, alignment: .bottomTrailing)
-//                        .foregroundColor(.white)
-//                        .font(.title)
-//                    }
-//                    .frame(maxWidth: .infinity, maxHeight: 40, alignment: .topLeading)
                     
                     Spacer()
                     
@@ -112,15 +127,15 @@ struct ViewCameraFullScreen: View {
                         .foregroundColor(.white)
                         .font(.title)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 30)
                         .fontWeight(.bold)
                         
                         Button("", systemImage: flagMute ? "speaker.slash" : "speaker"){
                             flagMute.toggle()
                             mediaPlayer.audio?.isMuted = flagMute
                         }
-                        .padding([.trailing], 80) //40 was good
-                        .padding(.bottom, 10)
+                        .padding([.trailing], 30) //40 was good
+                        .padding(.bottom, 30)
                         .frame(maxHeight: .infinity, alignment: .bottomTrailing)
                         .foregroundColor(.white)
                         .font(.title)
@@ -136,7 +151,7 @@ struct ViewCameraFullScreen: View {
                 mediaPlayer.audio?.isMuted = flagMute //11/12/25 Check this
             }
             .background(Color(.init(white: 10, alpha: 0))) 
-            .rotationEffect(.degrees(90))
+            //.rotationEffect(.degrees(90))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
             .navigationDestination(isPresented: $showCameras){
                 ViewCamera(title: "Live Cameras")

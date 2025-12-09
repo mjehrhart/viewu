@@ -1,46 +1,8 @@
-
-struct BottomRoundedShape: Shape {
-    var radius: CGFloat = 16
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: [.bottomLeft, .bottomRight],
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
-    }
-}
  
-struct BottomRoundedRectangle: InsettableShape {
-    var radius: CGFloat = 22
-    var insetAmount: CGFloat = 0
-
-    func path(in rect: CGRect) -> Path {
-        let insetRect = rect.insetBy(dx: insetAmount, dy: insetAmount)
-
-        let bezier = UIBezierPath(
-            roundedRect: insetRect,
-            byRoundingCorners: [.bottomLeft, .bottomRight],
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(bezier.cgPath)
-    }
-
-    func inset(by amount: CGFloat) -> some InsettableShape {
-        var copy = self
-        copy.insetAmount += amount
-        return copy
-    }
-}
-
-
 import Foundation
 import SwiftUI
 import AVFoundation
-
-// MARK: - View
-
+/*
 struct DownloadView: View {
     let urlString: String
     let fileName: Double   // Unix timestamp used in filename
@@ -104,13 +66,19 @@ struct DownloadView: View {
             // Right side: progress or hint
             if vm.isDownloading {
                 VStack(alignment: .trailing, spacing: 6) {
-                    Text("\(Int(vm.progress * 100))%")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.9))
+                    if vm.progress > 0 {
+                        Text("\(Int(vm.progress * 100))%")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.9))
 
-                    ProgressView(value: Double(vm.progress))
-                        .progressViewStyle(.linear)
-                        .frame(width: 80)
+                        ProgressView(value: Double(vm.progress))
+                            .progressViewStyle(.linear)
+                            .frame(width: 80)
+                    } else {
+                        // unknown size → spinner
+                        ProgressView()
+                            .frame(width: 24, height: 24)
+                    }
                 }
             } else {
                 Image(systemName: "chevron.right")
@@ -184,14 +152,175 @@ struct DownloadView: View {
         return localDate
     }
 }
+*/
+ 
+
+struct DownloadView: View {
+    let urlString: String
+    let fileName: Double   // Unix timestamp used in filename
+    
+    /// NEW: toggle to show/hide percentage + progress bar
+    let showProgress: Bool
+
+    @StateObject private var vm = DownloadViewModel()
+    @State private var statusMessage: String = "Download Video"
+
+    let cardShape = RoundedCornerShape(
+        radius: 22,
+        corners: [.bottomLeft, .bottomRight]   // <- only bottom corners rounded
+    )
+
+    var body: some View {
+        let isComplete = vm.progress == 1.0 && !vm.isDownloading
+        let pillShape = BottomRoundedShape(radius: 10)
+
+        HStack(spacing: 12) {
+
+            // Leading icon badge
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.15),
+                                Color.white.opacity(0.05)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+
+                Image(systemName: vm.isDownloading ? "arrow.down.circle.fill" :
+                      (isComplete ? "checkmark.circle.fill" : "square.and.arrow.down"))
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(
+                        vm.isDownloading ? Color.white.opacity(0.9) :
+                        (isComplete ? Color.green.opacity(0.9) : Color.white.opacity(0.9))
+                    )
+            }
+            .frame(width: 34, height: 34)
+
+            // Texts
+            VStack(alignment: .leading, spacing: 2) {
+                Text(
+                    vm.isDownloading ? "Downloading clip…" :
+                    (isComplete ? "Download complete" : "Save clip")
+                )
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(.white)
+
+                Text(statusMessage)
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundStyle(.white.opacity(0.7))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+
+            Spacer()
+
+            // Right side: progress / spinner / chevron
+            if vm.isDownloading {
+                if showProgress {
+                    // Show percent + bar when enabled and we know progress
+                    if vm.progress > 0 {
+                        VStack(alignment: .trailing, spacing: 6) {
+                            Text("\(Int(vm.progress * 100))%")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.9))
+
+                            ProgressView(value: Double(vm.progress))
+                                .progressViewStyle(.linear)
+                                .frame(width: 80)
+                        }
+                    } else {
+                        // We don't know total size yet → indeterminate spinner
+                        ProgressView()
+                            .frame(width: 24, height: 24)
+                    }
+                } else {
+                    // Progress UI disabled: always show a small spinner while downloading
+                    ProgressView()
+                        .frame(width: 24, height: 24)
+                }
+            } else {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.6))
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .frame(height: 35)
+        .background(
+            pillShape
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.10),
+                            Color.white.opacity(0.03)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    pillShape
+                        .stroke(Color.white.opacity(0.15), lineWidth: 0.8)
+                )
+        )
+        .shadow(color: Color.black.opacity(0.35), radius: 8, x: 0, y: 4)
+        .contentShape(Rectangle())
+        .opacity(vm.isDownloading ? 0.95 : 1.0)
+        .onTapGesture {
+            guard !vm.isDownloading else { return }
+
+            print("clicked to download video")
+
+            if let url = URL(string: urlString) {
+                statusMessage = "Downloading…"
+                vm.downloadAndSaveVideo(
+                    from: url,
+                    fileName: "\(convertDateTime(time: fileName)).mp4"
+                )
+            } else {
+                statusMessage = "Invalid URL."
+            }
+        }
+        .onChange(of: vm.isDownloading) { newValue in
+            if !newValue {
+                if vm.progress == 1.0 {
+                    statusMessage = "Saved to Files"
+                } else if statusMessage == "Downloading…" {
+                    statusMessage = "Download failed"
+                }
+            }
+        }
+        .animation(.spring(response: 0.25, dampingFraction: 0.85), value: vm.isDownloading)
+        .animation(.spring(response: 0.25, dampingFraction: 0.85), value: vm.progress)
+    }
+
+    // MARK: - Helpers
+
+    private func convertDateTime(time: Double) -> String {
+        let date = Date(timeIntervalSince1970: time)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeZone = .current
+        var localDate = dateFormatter.string(from: date)
+        localDate.replace("at", with: "")
+        return localDate
+    }
+}
 
 #Preview {
     DownloadView(
         urlString: "https://middle.viewu.app/api/events/1764807972.940936-4ym9k8/clip.mp4",
-        fileName: 631148400
+        fileName: 631148400,
+        showProgress: true   // toggle here to test
     )
 }
-
+ 
 
 // MARK: - ViewModel
 
@@ -340,16 +469,25 @@ class DownloadViewModel: NSObject, ObservableObject, URLSessionDownloadDelegate 
                     downloadTask: URLSessionDownloadTask,
                     didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64,
-                    totalBytesExpectedToWrite: Int64)
-    {
-        guard totalBytesExpectedToWrite > 0 else { return }
-        let currentProgress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+                    totalBytesExpectedToWrite: Int64) {
 
-        // Ensure UI updates on main actor
+        //print("didWriteData: \(totalBytesWritten) / \(totalBytesExpectedToWrite)")
+
+        // Only do determinate progress if we know the total size.
+        guard totalBytesExpectedToWrite > 0 else {
+            // Unknown total size – you can keep showing “Downloading…” with
+            // an indeterminate ProgressView if you want.
+            return
+        }
+
+        let current = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+
         Task { @MainActor in
-            self.progress = currentProgress     // 0.0 ... 1.0
+            // clamp to [0, 1] just to be safe
+            self.progress = min(max(current, 0), 1)
         }
     }
+
 
     func urlSession(_ session: URLSession,
                     task: URLSessionTask,
@@ -384,3 +522,39 @@ struct RoundedCornerShape: Shape {
     }
 }
  
+
+struct BottomRoundedShape: Shape {
+    var radius: CGFloat = 16
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: [.bottomLeft, .bottomRight],
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
+    }
+}
+ 
+struct BottomRoundedRectangle: InsettableShape {
+    var radius: CGFloat = 22
+    var insetAmount: CGFloat = 0
+
+    func path(in rect: CGRect) -> Path {
+        let insetRect = rect.insetBy(dx: insetAmount, dy: insetAmount)
+
+        let bezier = UIBezierPath(
+            roundedRect: insetRect,
+            byRoundingCorners: [.bottomLeft, .bottomRight],
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(bezier.cgPath)
+    }
+
+    func inset(by amount: CGFloat) -> some InsettableShape {
+        var copy = self
+        copy.insetAmount += amount
+        return copy
+    }
+}
+

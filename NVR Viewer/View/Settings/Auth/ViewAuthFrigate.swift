@@ -20,9 +20,8 @@ struct ViewAuthFrigate: View {
     @AppStorage("frigatePortAddress") private var nvrPortAddress: String = "8971"
     @AppStorage("frigateIsHttps") private var nvrIsHttps: Bool = true
     @AppStorage("frigateBearerSecret") private var frigateBearerSecret: String = ""
-    //    @AppStorage("frigateUserRole") private var frigateUserRole: String = "admin"
-    //    @AppStorage("frigateUser") private var frigateUser: String = "admin"
-    //    @AppStorage("frigatePassword") private var frigatePassword: String = ""
+    
+    @Environment(\.colorScheme) var colorScheme   // .light or .dark
     
     var body: some View {
         
@@ -141,7 +140,7 @@ struct ViewAuthFrigate: View {
         .padding(.horizontal, 4)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
         .cornerRadius(25)
         .onAppear {
             // Sync data across view and model

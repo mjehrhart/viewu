@@ -195,8 +195,10 @@ func isHttpsLanURL(_ urlString: String) -> Bool {
     else {
         // Not a numeric IPv4 address -> we can’t be sure it’s LAN,
         // so treat as not-LAN.
+        
         return false
     }
+ 
     
     // Check common private/LAN ranges
     switch (o1, o2) {

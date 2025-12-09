@@ -61,7 +61,6 @@
 		348333D72BBB241E00ED1DF2 /* ViewNVRDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333D62BBB241E00ED1DF2 /* ViewNVRDetails.swift */; };
 		348333D92BBCAF9300ED1DF2 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333D82BBCAF9300ED1DF2 /* Helpers.swift */; };
 		348333DB2BC04CCD00ED1DF2 /* ViewCameraDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333DA2BC04CCD00ED1DF2 /* ViewCameraDetails.swift */; };
-		3484EA3C2EE254BE00B8C44D /* VideoDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3484EA3B2EE254B600B8C44D /* VideoDownloader.swift */; };
 		3484EA3E2EE3E2EC00B8C44D /* ViewEventHLS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3484EA3D2EE3E2EC00B8C44D /* ViewEventHLS.swift */; };
 		348AB7B82BA54B33001ADE6C /* ViewEventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */; };
 		348AB7BA2BA55E58001ADE6C /* ViewEventUpdateDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348AB7B92BA55E58001ADE6C /* ViewEventUpdateDetails.swift */; };
@@ -73,7 +72,6 @@
 		34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4792BABC40C00A6004E /* AppDelegate.swift */; };
 		34BBA47F2BAE164400A6004E /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA47E2BAE164400A6004E /* DataController.swift */; };
 		34BBA4812BAE3A9000A6004E /* EventStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4802BAE3A9000A6004E /* EventStorage.swift */; };
-		34BBA48E2BAEA14F00A6004E /* ViewEventSlideShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA48D2BAEA14F00A6004E /* ViewEventSlideShow.swift */; };
 		34CF05102ED7DCE100B8B494 /* ViewEventImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CF050F2ED7DCE100B8B494 /* ViewEventImage.swift */; };
 		34D3D0062C0AA17300E263B5 /* HLSPlayer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D3D0052C0AA17300E263B5 /* HLSPlayer2.swift */; };
 		34D3D0082C0AA32900E263B5 /* ViewCameraHLSFullScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D3D0072C0AA32900E263B5 /* ViewCameraHLSFullScreen.swift */; };
@@ -90,8 +88,6 @@
 		34D5EFF92B92B374002A84B0 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFF82B92B374002A84B0 /* Extension.swift */; };
 		34D5EFFB2B92B3DB002A84B0 /* ViewEventDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFFA2B92B3DB002A84B0 /* ViewEventDetail.swift */; };
 		34D5EFFD2B92B3FD002A84B0 /* ViewLiveEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFFC2B92B3FD002A84B0 /* ViewLiveEvent.swift */; };
-		34D5EFFF2B92B419002A84B0 /* ViewPlayVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5EFFE2B92B419002A84B0 /* ViewPlayVideo.swift */; };
-		34D5F0012B92B442002A84B0 /* ViewUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0002B92B442002A84B0 /* ViewUIImage.swift */; };
 		34D5F0032B92B453002A84B0 /* ViewUIImageFull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0022B92B453002A84B0 /* ViewUIImageFull.swift */; };
 		34D5F0052B92B490002A84B0 /* APIBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0042B92B490002A84B0 /* APIBuilder.swift */; };
 		34D5F0072B92B4C3002A84B0 /* TopicFrigateEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */; };
@@ -195,7 +191,6 @@
 		348333D62BBB241E00ED1DF2 /* ViewNVRDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewNVRDetails.swift; sourceTree = "<group>"; };
 		348333D82BBCAF9300ED1DF2 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		348333DA2BC04CCD00ED1DF2 /* ViewCameraDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCameraDetails.swift; sourceTree = "<group>"; };
-		3484EA3B2EE254B600B8C44D /* VideoDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDownloader.swift; sourceTree = "<group>"; };
 		3484EA3D2EE3E2EC00B8C44D /* ViewEventHLS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventHLS.swift; sourceTree = "<group>"; };
 		348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventCard.swift; sourceTree = "<group>"; };
 		348AB7B92BA55E58001ADE6C /* ViewEventUpdateDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventUpdateDetails.swift; sourceTree = "<group>"; };
@@ -207,7 +202,6 @@
 		34BBA4792BABC40C00A6004E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		34BBA47E2BAE164400A6004E /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		34BBA4802BAE3A9000A6004E /* EventStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStorage.swift; sourceTree = "<group>"; };
-		34BBA48D2BAEA14F00A6004E /* ViewEventSlideShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventSlideShow.swift; sourceTree = "<group>"; };
 		34CF050F2ED7DCE100B8B494 /* ViewEventImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventImage.swift; sourceTree = "<group>"; };
 		34D3D0052C0AA17300E263B5 /* HLSPlayer2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLSPlayer2.swift; sourceTree = "<group>"; };
 		34D3D0072C0AA32900E263B5 /* ViewCameraHLSFullScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCameraHLSFullScreen.swift; sourceTree = "<group>"; };
@@ -225,8 +219,6 @@
 		34D5EFF82B92B374002A84B0 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		34D5EFFA2B92B3DB002A84B0 /* ViewEventDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventDetail.swift; sourceTree = "<group>"; };
 		34D5EFFC2B92B3FD002A84B0 /* ViewLiveEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLiveEvent.swift; sourceTree = "<group>"; };
-		34D5EFFE2B92B419002A84B0 /* ViewPlayVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPlayVideo.swift; sourceTree = "<group>"; };
-		34D5F0002B92B442002A84B0 /* ViewUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUIImage.swift; sourceTree = "<group>"; };
 		34D5F0022B92B453002A84B0 /* ViewUIImageFull.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUIImageFull.swift; sourceTree = "<group>"; };
 		34D5F0042B92B490002A84B0 /* APIBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIBuilder.swift; sourceTree = "<group>"; };
 		34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicFrigateEvent.swift; sourceTree = "<group>"; };
@@ -247,6 +239,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		343C6E732ECA6A8C00D0A5D3 /* Tips */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tips; sourceTree = "<group>"; };
+		343ED0672EE7C63D00ED01CB /* StreamType */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = StreamType; sourceTree = "<group>"; };
 		3444DF4A2EDF4DAA00D67D5A /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
 		3484EA2D2EDFC1D800B8C44D /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -390,7 +383,6 @@
 			isa = PBXGroup;
 			children = (
 				34D5F0022B92B453002A84B0 /* ViewUIImageFull.swift */,
-				34D5F0002B92B442002A84B0 /* ViewUIImage.swift */,
 				34CF050F2ED7DCE100B8B494 /* ViewEventImage.swift */,
 				342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */,
 			);
@@ -507,7 +499,6 @@
 				34E544F22B9ABD8C00137F34 /* NotificationManager.swift */,
 				348333A12BB8AB9700ED1DF2 /* RTSPPlayer2.swift */,
 				34D3D0052C0AA17300E263B5 /* HLSPlayer2.swift */,
-				3484EA3B2EE254B600B8C44D /* VideoDownloader.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -532,7 +523,7 @@
 		34D5F00E2B940DFF002A84B0 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
-				34D5EFFE2B92B419002A84B0 /* ViewPlayVideo.swift */,
+				343ED0672EE7C63D00ED01CB /* StreamType */,
 				34D5EFE82B92ABA4002A84B0 /* ViewCamera.swift */,
 				34FEA8072BEAC2D80015E8A6 /* ViewCameraFullScreen.swift */,
 				34D3D0072C0AA32900E263B5 /* ViewCameraHLSFullScreen.swift */,
@@ -569,7 +560,6 @@
 				348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */,
 				34D5EFFA2B92B3DB002A84B0 /* ViewEventDetail.swift */,
 				34BBA4752BAB449C00A6004E /* ViewFilter.swift */,
-				34BBA48D2BAEA14F00A6004E /* ViewEventSlideShow.swift */,
 				34045AE62EC2CD9200D90B7F /* ViewQuickDayFilter.swift */,
 			);
 			path = Events;
@@ -648,6 +638,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				343C6E732ECA6A8C00D0A5D3 /* Tips */,
+				343ED0672EE7C63D00ED01CB /* StreamType */,
 				3444DF4A2EDF4DAA00D67D5A /* Auth */,
 				3484EA2D2EDFC1D800B8C44D /* Auth */,
 			);
@@ -812,20 +803,16 @@
 				343676B92BA3C48400BD765F /* HLSPlayer.swift in Sources */,
 				342103672C1B614000CBBF83 /* ViewOnBoarding.swift in Sources */,
 				34045AE52EC046FE00D90B7F /* ViewCameraDetails2.swift in Sources */,
-				34D5F0012B92B442002A84B0 /* ViewUIImage.swift in Sources */,
 				342103632C1B5C6000CBBF83 /* OnBoarding.swift in Sources */,
 				340AAFFB2BA2406D00EB69F4 /* APIRequestor.swift in Sources */,
-				34D5EFFF2B92B419002A84B0 /* ViewPlayVideo.swift in Sources */,
 				342103462C0EA08F00CBBF83 /* Log.swift in Sources */,
 				34D5F00C2B92B57A002A84B0 /* Enums.swift in Sources */,
 				34045AE32EBFD25F00D90B7F /* NVRConfigurationCall2.swift in Sources */,
 				34D5EFFD2B92B3FD002A84B0 /* ViewLiveEvent.swift in Sources */,
-				34BBA48E2BAEA14F00A6004E /* ViewEventSlideShow.swift in Sources */,
 				342103522C11382D00CBBF83 /* ViewNotificationManager.swift in Sources */,
 				342554BE2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift in Sources */,
 				34D5EFE72B92AB76002A84B0 /* ViewEventListHome.swift in Sources */,
 				34D5EFFB2B92B3DB002A84B0 /* ViewEventDetail.swift in Sources */,
-				3484EA3C2EE254BE00B8C44D /* VideoDownloader.swift in Sources */,
 				348333A22BB8AB9700ED1DF2 /* RTSPPlayer2.swift in Sources */,
 				348333D92BBCAF9300ED1DF2 /* Helpers.swift in Sources */,
 				34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */,
@@ -887,7 +874,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 59;
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -915,7 +902,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 59;
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1072,7 +1059,7 @@
 				ASSETCATALOG_WARNINGS = NO;
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 59;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1116,7 +1103,7 @@
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 57;
+				CURRENT_PROJECT_VERSION = 59;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;

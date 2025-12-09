@@ -321,18 +321,37 @@ class APIRequester: NSObject {
                 
                 var request = URLRequest(url: url)
                 request.httpMethod = "GET"
-                //request.httpBody = postString.data(using: String.Encoding.utf8)
                 
                 let session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: OperationQueue.main)
                 let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
                       
-                    // Get the first byte as a Data object to check if its a number for validation
+                    if let error = error {
+                            print("Error: \(error.localizedDescription)")
+                        let errorTemp = NSError(domain:"connection.info:\(error.localizedDescription)", code:500, userInfo:nil)
+                        return completion(nil, errorTemp )
+                        }
+                    
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        Log.shared().print(page: "APIRequestor", fn: "connection.info:invalid response", type: "ERROR", text: "")
+                        let errorTemp = NSError(domain:"connection.info:invalid response", code:500, userInfo:nil)
+                        return completion(nil, errorTemp )
+                    }
+
+                    let statusCode = httpResponse.statusCode
+                    if statusCode != 200 {
+                        Log.shared().print(page: "APIRequestor", fn: "connection.info:statusCode", type: "ERROR", text: "\(statusCode)")
+                        let errorTemp = NSError(domain:"connection.info:statusCode", code:500, userInfo:nil)
+                        return completion(nil, errorTemp )
+                    }
+                    
+                    // Get the first byte as a Data object to check if its a number for validation. first character must be 0-9
                     if let firstByteData = data?.first.map({ Data([$0]) }) {
                         if let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
                            
                             let character: Character = Character(firstCharacterString)
                             if !character.isWholeNumber {
-                                let errorTemp = NSError(domain:"", code:501, userInfo:nil)
+                                Log.shared().print(page: "APIRequestor", fn: "connection.info:statusCode", type: "ERROR", text: "NOT_WHOLE_NUMBER")
+                                let errorTemp = NSError(domain:"connection.info", code:501, userInfo:nil)
                                 return completion(nil, errorTemp )
                             }
                             
@@ -340,7 +359,8 @@ class APIRequester: NSObject {
                     }
                     
                     if ((data?.isEmpty) == nil) {
-                        let errorTemp = NSError(domain:"", code:502, userInfo:nil)
+                        Log.shared().print(page: "APIRequestor", fn: "connection.info:statusCode", type: "ERROR", text: "DATA_EMPTY")
+                        let errorTemp = NSError(domain:"connection.info", code:502, userInfo:nil)
                         return completion(nil, errorTemp )
                     }
                       

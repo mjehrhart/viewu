@@ -10,7 +10,9 @@ struct ViewEventCard: View {
     
     @State private var scale = 1.0
     @State var containers: [EndpointOptions]
+      
     @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
+    
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     
     let nvr = NVRConfig.shared()
@@ -86,9 +88,11 @@ struct ViewEventCard: View {
                             .font(.system(size: fontSizeLabel, weight: .regular))
                             .foregroundColor(.gray.opacity(0.9))
 
-                        Text("\(containers[index].score!)")
-                            .font(.system(size: fontSizeLabel, weight: .regular))
-                            .foregroundColor(.gray.opacity(0.9))
+                        if developerModeIsOn {
+                            Text("\(containers[index].score!)")
+                                .font(.system(size: fontSizeLabel, weight: .regular))
+                                .foregroundColor(.gray.opacity(0.9))
+                        }
                         
                         if !(containers[index].sublabel ?? "").isEmpty {
                             Text(containers[index].sublabel!)
@@ -165,7 +169,8 @@ struct ViewEventCard: View {
                                 .foregroundColor(.gray.opacity(0.8))
                         }
                     }
-                    .frame(width: setWidth(), height: setHeight(), alignment: .leading)
+                    //.frame(width: setWidth(), height: setHeight(), alignment: .leading)
+                    .frame(maxWidth: setWidth(), maxHeight: .infinity, alignment: .leading)
 
                     // RIGHT: snapshot image
                     ZStack(alignment: .topTrailing) {
@@ -190,14 +195,14 @@ struct ViewEventCard: View {
                     }
                 }
                 .padding(12)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading) 
                 .background(
                     cardShape
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Color.white,
-                                    Color.white.opacity(0.96)
+                                    Color(.secondarySystemBackground).opacity(0.46),  // 12/7/25 was .white
+                                    Color(.secondarySystemBackground).opacity(0.96)  // 12/7/25 was .white
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -208,18 +213,18 @@ struct ViewEventCard: View {
                     ZStack {
                         // Outer border
                         cardShape
-                            .stroke(Color.black.opacity(0.05), lineWidth: 0.7)
-
-                        // Inner “glass” border
+                            .stroke(Color.black.opacity(0.05), lineWidth: 0.7) 
+                        // Inner “glass” border  .background(Color(.secondarySystemBackground))
                         cardShape
                             .inset(by: 4)
-                            .stroke(Color.white.opacity(0.45), lineWidth: 0.6)
+                            //.stroke(Color.white.opacity(0.45), lineWidth: 0.6)
+                            .stroke(Color(.secondarySystemBackground).opacity(0.45), lineWidth: 0.6)
                     }
                 )
                 .shadow(color: Color.gray.opacity(0.10), radius: 10, x: 0, y: 6)
                 .contentShape(Rectangle())
                 .padding(.horizontal, 2)
-                .padding(.vertical, 4)
+                .padding(.vertical, 3)
 
                 VStack{
                     if developerModeIsOn {
@@ -232,10 +237,10 @@ struct ViewEventCard: View {
                         }
                         .scrollIndicators(.hidden)
                     }
-                }
-                .frame(width: UIScreen.screenWidth-20, alignment: .bottomLeading)
+                } 
+                .frame(maxWidth: .infinity, alignment: .bottomLeading)
             }
-            .listRowSeparator(.hidden)
+            .frame(maxHeight: .infinity)
         }
         .onDelete{ indexes in
             let flag = EventStorage.shared.delete(frameTime: containers[0].frameTime!)

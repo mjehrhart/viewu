@@ -40,8 +40,7 @@ struct ContentView: View {
     @State private var showNVR = false
     @State private var showLog = false
     @State private var showNotificationManager = false
-    
-    //@AppStorage("resetTips") var resetTips = false
+     
     @AppStorage("developerModeIsOn") var developerModeIsOn = false
     @AppStorage("notificationModeIsOn") var notificationModeIsOn = UserDefaults.standard.bool(forKey: "notificationModeIsOn")
     @AppStorage("frigateAlertsRetain")  var frigateAlertsRetain: Int = 10
@@ -237,25 +236,13 @@ struct ContentView: View {
                 
                 ViewEventDetail(text: convertDateTime(time: eps.frameTime!), container: eps, showButton: false, showClip: true)
             }
-            .navigationDestination(for: String.self){ jsonObject in
-                //check if this is obsolete
-//                if let dataJson = jsonObject.data(using: .utf8) {
-//                    let epsArray = try! JSONDecoder().decode([EndpointOptions].self, from: dataJson)
-//                    ViewEventInformation( endPointOptionsArray: epsArray)
-//                }
-            }
             .navigationDestination(for: Int.self){ page in
                 ViewTest(title: "cow")
             }
             .sheet(isPresented: $showFilter) {
                 ViewFilter()
                     .presentationDetents([.large])
-            }
-//            .safeAreaInset(edge: .bottom) {
-//                // invisible spacer to account for the taller toolbar
-//                Color.clear
-//                    .frame(height: 10)   // tweak until the strip is fully visible
-//            }
+            } 
             .toolbarBackground(.clear, for: .bottomBar)        // let our own card be the background
             .toolbarBackground(.visible, for: .navigationBar)  // keep whatever you had for the top
             .toolbar {

@@ -16,6 +16,8 @@ struct ViewAuthNone: View {
     @AppStorage("nvrPortAddress") private var nvrPortAddress: String = "5000"
     @AppStorage("nvrIsHttps") private var nvrIsHttps: Bool = true
     
+    @Environment(\.colorScheme) var colorScheme   // .light or .dark
+    
     var body: some View {
         
         VStack(spacing: 14) {
@@ -28,8 +30,7 @@ struct ViewAuthNone: View {
                 TextField("0.0.0.0", text: $nvrIPAddress)
                     .autocapitalization(.none)
                     .autocorrectionDisabled()
-                    .multilineTextAlignment(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             
             Divider()
@@ -41,8 +42,7 @@ struct ViewAuthNone: View {
                 
                 TextField("5000", text: $nvrPortAddress)
                     .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             
             Divider()
@@ -106,7 +106,8 @@ struct ViewAuthNone: View {
         .padding(.horizontal, 4)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
+        .background(.background)
         .cornerRadius(25)
         .onAppear {
             // Sync data across view and model

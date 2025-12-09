@@ -28,7 +28,7 @@ struct TipsInfoBanner: View {
                         Text(title)
                             .font(.system(size: 13, weight: .semibold))
                             .textCase(nil)
-
+                              
                         Text(message)
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
@@ -49,7 +49,8 @@ struct TipsInfoBanner: View {
                     }
                     .buttonStyle(.plain)
                 }
-                .padding(10)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 10)
                 .background(iconColor.opacity(0.08))   // nice blue tint
                 .cornerRadius(12)
             } else {
@@ -58,12 +59,13 @@ struct TipsInfoBanner: View {
                     Image(systemName: "info.circle")
                         .font(.system(size: 14))
                         .foregroundColor(.secondary)
-
+                    
                     Text(collapsedLabel)
                         .font(.system(size: 11))
                         .foregroundColor(.secondary)
-                        .textCase(nil)
+                        .textCase(nil) 
                 }
+                .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(6)
                 .contentShape(Rectangle())
                 .onTapGesture {
@@ -86,7 +88,7 @@ struct ViewTipsNotificationManager: View {
             isVisible: $tipsNotificationDefault,
             title: title,
             message: message,
-            collapsedLabel: "Show Notification Manager info",
+            collapsedLabel: "Show Notification Manager Info",
             iconColor: iconColor
         )
     }
@@ -104,7 +106,7 @@ struct ViewTipsNotificationDomain: View {
             isVisible: $tipsNotificationDomain,
             title: title,
             message: message,
-            collapsedLabel: "Show Accessible Domain info",
+            collapsedLabel: "Show Accessible Domain Info",
             iconColor: iconColor
         )
     }
@@ -122,7 +124,7 @@ struct ViewTipsNotificationTemplate: View {
             isVisible: $tipsNotificationTemplate,
             title: title,
             message: message,
-            collapsedLabel: "Show Notification Templates info",
+            collapsedLabel: "Show Notification Templates Info",
             iconColor: iconColor
         )
     }
@@ -140,7 +142,7 @@ struct ViewTipsSettingsNVR: View {
             isVisible: $tipsSettingsNVR,
             title: title,
             message: message,
-            collapsedLabel: "Show NVR settings info",
+            collapsedLabel: "Show NVR Settings Info",
             iconColor: iconColor
         )
     }
@@ -158,7 +160,7 @@ struct ViewTipsSettingsPairDevie: View {
             isVisible: $tipsSettingsPairDevice,
             title: title,
             message: message,
-            collapsedLabel: "Show device pairing info",
+            collapsedLabel: "Show Device Pairing Info",
             iconColor: iconColor
         )
     }

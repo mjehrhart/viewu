@@ -25,37 +25,7 @@ struct ViewEventImage: View{
     @State var data: Data?
     @State private var zoomIn: Bool = false
     @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
-    
-    private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
-    @State var orientation = UIDevice.current.orientation
-    let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
-        .makeConnectable()
-        .autoconnect()
-    
-    func setWidth() -> CGFloat{
-        
-        if idiom == .pad {
-            var width = UIScreen.screenWidth
-            width = width - 200
-            
-            return width
-        } else {
-            let width = UIScreen.screenWidth
-            return width - 110
-            //return 260
-        }
-    }
-    
-    func setHeight() -> CGFloat {
-        
-        //var height = UIScreen.screenHeight
-        
-        if idiom == .pad {
-            return (setWidth() * 9/16)
-        } else {
-            return 166
-        }
-    }
+ 
     
     var body: some View {
  
@@ -78,35 +48,33 @@ struct ViewEventImage: View{
         @State var data: Data?
         @State private var zoomIn: Bool = false
         @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
+        @State private var isLandscape: Bool = UIDevice.current.orientation.isLandscape
         
         private var idiom : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
-        @State var orientation = UIDevice.current.orientation
-        let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
-            .makeConnectable()
-            .autoconnect()
-        
+//        @State var orientation = UIDevice.current.orientation
+//        let orientationChanged = NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
+//            .makeConnectable()
+//            .autoconnect()
+//        
         @State private var currentScale: CGFloat = 1.0
         @State private var finalScale: CGFloat = 1.0
         
         var body: some View {
             
             if let data = data, let uiimage = UIImage(data: data){
-                
-                GeometryReader { geometry in
-//                    Image(uiImage: uiimage)
-//                        .resizable()
-//                        .scaledToFill()
-//                        .aspectRatio( contentMode: .fill)
-//                        .frame(width: max(geometry.size.width, widthGap), height: max(geometry.size.height, heightGap))
-//                        .modifier(CardBackground2())
-                    
+                 
+                if idiom == .pad {
                     Image(uiImage: uiimage)
                         .resizable()
-                        .frame(width: max(geometry.size.width, widthGap), height: max(geometry.size.height, heightGap))
-                        .modifier(CardBackground2())
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        .aspectRatio( contentMode: .fill)
                         .scaledToFill()
+                        .frame(height: isLandscape ? 485 : 350)
+                        .aspectRatio( contentMode: .fill)
+                        .clipped()
+                        .onRotate { orientation in
+                            if orientation.isValidInterfaceOrientation {
+                                isLandscape = orientation.isLandscape
+                            }
+                        }
                         .scaleEffect(currentScale * finalScale)
                         .gesture(
                             MagnifyGesture()
@@ -120,9 +88,33 @@ struct ViewEventImage: View{
                                     currentScale = 1.0 // Reset current scale for the next gesture
                                 }
                         )
-                         
                 }
-  
+                else {
+                    Image(uiImage: uiimage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: isLandscape ? 250 : 180)
+                        .aspectRatio( contentMode: .fill)
+                        .clipped()
+                        .onRotate { orientation in
+                            if orientation.isValidInterfaceOrientation {
+                                isLandscape = orientation.isLandscape
+                            }
+                        }
+                        .scaleEffect(currentScale * finalScale)
+                        .gesture(
+                            MagnifyGesture()
+                                .onChanged { value in
+                                    // Access the magnification property of the value
+                                    currentScale = value.magnification
+                                }
+                                .onEnded { value in
+                                    // Combine the final and current scales
+                                    finalScale *= value.magnification
+                                    currentScale = 1.0 // Reset current scale for the next gesture
+                                }
+                            )
+                }
             } else  {
                 //Dummy Space
                 Text("")
@@ -179,13 +171,5 @@ struct ViewEventImage: View{
                 }
             }
         }
-    }
-}
-
-struct CardBackground2: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .cornerRadius(25)
-            .shadow(color: Color.black.opacity(0.2), radius: 4)
     }
 }

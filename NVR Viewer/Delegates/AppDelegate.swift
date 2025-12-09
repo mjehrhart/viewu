@@ -29,15 +29,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         }
     }
      
-    private func loadRocketSimConnect() {
-        #if DEBUG
-        guard (Bundle(path: "/Applications/RocketSim.app/Contents/Frameworks/RocketSimConnectLinker.nocache.framework")?.load() == true) else {
-            print("Failed to load linker framework")
-            return
-        }
-        print("RocketSim Connect successfully linked")
-        #endif
-    }
+//    private func loadRocketSimConnect() {
+//        #if DEBUG
+//        guard (Bundle(path: "/Applications/RocketSim.app/Contents/Frameworks/RocketSimConnectLinker.nocache.framework")?.load() == true) else {
+//            print("Failed to load linker framework")
+//            return
+//        }
+//        print("RocketSim Connect successfully linked")
+//        #endif
+//    }
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -47,7 +47,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         
-        loadRocketSimConnect()
+//        loadRocketSimConnect()
         return true
     }
     
@@ -146,7 +146,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                     eps2.frameTime = Double(msg)
                     eps3.frameTime = Double(msg)
                 }
-                if let msg = userInfo["top_score"] as? String {
+                if let msg = userInfo["score"] as? String {
                     eps.score = Double(msg)
                     eps2.score = Double(msg)
                     eps3.score = Double(msg)

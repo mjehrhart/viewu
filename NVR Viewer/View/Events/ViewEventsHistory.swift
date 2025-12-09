@@ -18,27 +18,33 @@ struct ViewEventsHistory: View {
     let cNVR = APIRequester()
     
     @State var showViewEventDetail = false
+    @State private var isLandscape: Bool = UIDevice.current.orientation.isLandscape
     @ObservedObject var filter2 = EventFilter.shared()
     @ObservedObject var epsSuper = EndpointOptionsSuper.shared()
     @ObservedObject var epsSup3 = EndpointOptionsSuper.shared()
     @ObservedObject var nvrManager = NVRConfig.shared() //was stateobject
     
     @Environment(\.scenePhase) var scenePhase
-     
-    init() {
-        
-    }
-    
+      
     var body: some View {
-        VStack{
+        VStack(spacing:0){
             List {
-                ForEach(epsSup3.list3, id: \.sid) { container in 
+                ForEach(epsSup3.list3, id: \.sid) { container in
                     
                     if container.id! != "" {
-                        ViewEventCard(frameTime: container.frameTime!) 
+                        ViewEventCard(frameTime: container.frameTime!)
+                            //.frame(height: isLandscape ? 350 : 180)
+                            .listRowInsets(.init(top: 6, leading: 10, bottom: 0, trailing: 10))
+                            .listRowSeparator(.hidden)
+                            //.animation(.easeInOut, value: isLandscape)
+//                            .onRotate { orientation in
+//                                if orientation.isValidInterfaceOrientation {
+//                                    isLandscape = orientation.isLandscape
+//                                }
+//                            }
                     }
                 }
-            }
+            }  
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
                     HStack{

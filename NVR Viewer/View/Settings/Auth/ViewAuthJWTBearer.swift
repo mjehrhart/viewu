@@ -21,6 +21,8 @@ struct ViewAuthJWTBearer: View {
     @AppStorage("bearerIsHttps") private var nvrIsHttps: Bool = true
     @AppStorage("bearerSecret") private var bearerSecret: String = ""
     
+    @Environment(\.colorScheme) var colorScheme   // .light or .dark
+    
     var body: some View {
         
         VStack(spacing: 14) {
@@ -139,7 +141,7 @@ struct ViewAuthJWTBearer: View {
         .padding(.horizontal, 4)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
         .cornerRadius(25)
         .onAppear {
             // Sync data across view and model
