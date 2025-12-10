@@ -62,10 +62,13 @@ class EventStorage: ObservableObject {
                 db = try Connection(dbPath)
                 
                 createEventsTable()
-                //print("SQLiteDataStore init successfully at: \(dbPath) ")
             } catch {
                 db = nil
-                print("SQLiteDataStore init error: \(error)")
+                Log.shared().print(page: "EventStorage",
+                                   fn: "init",
+                                   type: "ERROR",
+                                   text: "SQLiteDataStore init error: \(error)")
+                
             }
         } else {
             db = nil
@@ -95,7 +98,6 @@ class EventStorage: ObservableObject {
             return false
         } catch(let error) {
             Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
-            //print(error)
             return false
         }
     }
@@ -112,7 +114,6 @@ class EventStorage: ObservableObject {
              
             return true
         } catch (let error){
-            //print(error)
             Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
             return false
         }
@@ -129,7 +130,6 @@ class EventStorage: ObservableObject {
             return true
         } catch (let error){
             Log.shared().print(page: "EventStorage", fn: "delete", type: "ERROR", text: "\(error)")
-            //print(error)
             return false
         }
     }
@@ -166,7 +166,6 @@ class EventStorage: ObservableObject {
             }
         } catch(let error) {
             Log.shared().print(page: "EventStorage", fn: "getEventByFrameTime", type: "ERROR", text: "\(error)")
-            //print(error)
         }
         return [eps]
     }
@@ -203,7 +202,6 @@ class EventStorage: ObservableObject {
             }
         } catch(let error) {
             Log.shared().print(page: "EventStorage", fn: "getEventById", type: "ERROR", text: "\(error)")
-            //print(error)
         }
        
         return eps
@@ -434,24 +432,18 @@ class EventStorage: ObservableObject {
         do {
             var filter = Table("events")
             var startDate = filter2.startDate.timeIntervalSince1970
-            //print(startDate)
             startDate = floor(startDate)
-            //print(startDate)
             
             var endDate = filter2.endDate.timeIntervalSince1970
-            //print(endDate)
             endDate = ceil(endDate)
-            //print(endDate)
             
             if filter2.selectedCamera == "all" && filter2.selectedObject == "all"{
-                 
-                //type == "new" //&&
+                  
                 filter = self.events.filter( type != "-1"
                                             //frameTime >= startDate &&
                                             //frameTime <= endDate
                                             ).order(frameTime.desc)
-                 
-                //print(filter)
+                  
             } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all"{
                 
                 filter = self.events.filter(
@@ -502,16 +494,8 @@ class EventStorage: ObservableObject {
             }
         } catch (let error){
             Log.shared().print(page: "EventStorage", fn: "readAll2", type: "ERROR", text: "\(error)")
-            //print(error)
         }
         
-        //DispatchQueue.main.async { [self] in
-            //epsSuper.list2 = eps
-            //print("done reading eps from readall2")
-        //}
-        
-        //TODO
-        //"------////////----------count::\(eps.count)")
         epsSup = eps
         return eps
     }
@@ -550,7 +534,6 @@ class EventStorage: ObservableObject {
             }
         } catch(let error) {
             Log.shared().print(page: "EventStorage", fn: "readAll", type: "ERROR", text: "\(error)")
-            print(error)
         }
         return eps
     }
@@ -560,8 +543,7 @@ class EventStorage: ObservableObject {
         DispatchQueue.main.async { [self] in
             
             guard let database = db else { return }
-             
-            //print("Updating into events table")
+              
             let filter = events.filter(self.id == id)
             
             let update = filter.update(
@@ -577,8 +559,7 @@ class EventStorage: ObservableObject {
                         return
                     })
                 }
-                 
-                //print("Updated rowID::", rowID)
+                  
             } catch (let error){
                 Log.shared().print(page: "EventStorage", fn: "updateFrigatePlus", type: "ERROR", text: "\(error)")
                 return
@@ -596,8 +577,7 @@ class EventStorage: ObservableObject {
            
             if dataset.isEmpty {
                 guard let database = db else { return }
-                
-                //print("Inserting into events table")
+                 
                 let insert = events.insert(
                    self.id <- id,
                    self.frameTime <- frameTime,
@@ -626,8 +606,7 @@ class EventStorage: ObservableObject {
                             return
                         })
                     }
-                     
-                    //print("Insert rowID::", rowID)
+                      
                 } catch (let error){
                     Log.shared().print(page: "EventStorage", fn: "insertOrUpdate", type: "ERROR", text: "\(error)")
                     return
@@ -635,8 +614,7 @@ class EventStorage: ObservableObject {
             } else {
                
                 guard let database = db else { return }
-                 
-                //print("Updating into events table")
+                  
                 let filter = events.filter(self.id == id)
                 
                 let update = filter.update(
@@ -668,8 +646,7 @@ class EventStorage: ObservableObject {
                             return
                         })
                     }
-                     
-                    //print("Updated rowID::", rowID)
+                      
                 } catch (let error){
                     Log.shared().print(page: "EventStorage", fn: "insertOrUpdate", type: "ERROR", text: "\(error)")
                     return
@@ -688,8 +665,7 @@ class EventStorage: ObservableObject {
               
             if dataset.isEmpty {
                 guard let database = db else { return }
-                
-                //print("Inserting into events table")
+                 
                 let insert = events.insert(
                    self.id <- id,
                    self.frameTime <- frameTime,
@@ -718,14 +694,13 @@ class EventStorage: ObservableObject {
                             return
                         })
                     }
-                     
-                    //print("Insert rowID::", rowID)
+                    
                 } catch (let error){
                     Log.shared().print(page: "EventStorage", fn: "insertIfNone", type: "ERROR", text: "\(error)")
                     return
                 }
             } else {
-                //print("No records inserted")
+                Log.shared().print(page: "EventStorage", fn: "insertIfNone", type: "INFO", text: "No Rows Returned")
                 return
             }
         }
@@ -766,7 +741,6 @@ class EventStorage: ObservableObject {
             return rowID
         } catch (let error){
             Log.shared().print(page: "EventStorage", fn: "insert", type: "ERROR", text: "\(error)")
-            //print(error)
             return nil
         }
     }
@@ -801,8 +775,7 @@ class EventStorage: ObservableObject {
             Log.shared().print(page: "EventStorage", fn: "createEventsTable", type: "WARNING", text: "\(error)")
         }
          
-        do {
-            //print(database.userVersion)
+        do { 
             try database.run(
                 events.addColumn(sub_label, defaultValue: "")
             )

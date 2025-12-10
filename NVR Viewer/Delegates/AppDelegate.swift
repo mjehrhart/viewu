@@ -28,16 +28,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             objectWillChange.send()
         }
     }
-     
-//    private func loadRocketSimConnect() {
-//        #if DEBUG
-//        guard (Bundle(path: "/Applications/RocketSim.app/Contents/Frameworks/RocketSimConnectLinker.nocache.framework")?.load() == true) else {
-//            print("Failed to load linker framework")
-//            return
-//        }
-//        print("RocketSim Connect successfully linked")
-//        #endif
-//    }
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -46,8 +36,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
-        
-//        loadRocketSimConnect()
+         
         return true
     }
     
@@ -58,7 +47,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         if let fcm = Messaging.messaging().fcmToken {
-            //print("fcm", fcm)
+            
             fcmID = fcm
         } else {
             Log.shared().print(page: "AppDelegate", fn: "messaging", type: "ERROR", text: "Oh No!::UIApplicationDelegateAdaptor::messaging()")
@@ -82,23 +71,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         didReceiveRemoteNotification userInfo: [AnyHashable : Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
-        print("AppDelegate::application::----------------------------------------------------------->didReceiveRemoteNotification")
         
-        //        print(userInfo)
- 
         DispatchQueue.main.async { [self] in
             switch application.applicationState {
             case .active:
-                //print("1. do stuff in case App is active")
                 parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "active")
             case .inactive:
-                //print("2. do stuff in case App is .inactive")
                 parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "inactive")
             case .background:
-                //print("3. do stuff in case App is .background")
                 parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "background")
             @unknown default:
-                //print("4. default")
                 parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 0, applicationState: "default")
             }
             
@@ -110,10 +92,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         
         DispatchQueue.main.async { [self] in
             if let _ = userInfo["aps"] as? Dictionary<String, AnyObject> {
- 
-                print("[DEBUG] does this show anything")
-                print(userInfo)
-                
+  
                 var eps = EndpointOptions()
                 var eps2 = EndpointOptionsSuper.EventMeta()
                 let eps3 = EndpointOptionsSuper.EventMeta3()
@@ -133,15 +112,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                     eps3.cameraName = msg
                 }
                 if let msg = userInfo["types"] as? String {
-                    //print(200, msg)
                     eps.type = msg
                     eps2.type = msg
                     eps3.type = msg
                 }
                 
-                if let msg = userInfo["frameTime"] as? String {
-                    //print("frameTime")
-                    //print(msg)
+                if let msg = userInfo["frameTime"] as? String { 
                     eps.frameTime = Double(msg)
                     eps2.frameTime = Double(msg)
                     eps3.frameTime = Double(msg)

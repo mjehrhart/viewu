@@ -83,7 +83,6 @@ struct ViewAuthNone: View {
                         ) { (data, error) in
                             
                             if let error = error {
-                                print("\(error.localizedDescription)")
                                 Log.shared().print(
                                     page: "ViewAuthNone",
                                     fn: "NVR Connection",
@@ -123,8 +122,7 @@ struct ViewAuthNone: View {
                     authType: nvr.getAuthType()
                 ) { (data, error) in
                     
-                    if let error = error {
-                        print("\(error.localizedDescription)")
+                    if let error = error { 
                         Log.shared().print(
                             page: "ViewAuthNone",
                             fn: "NVR Connection",

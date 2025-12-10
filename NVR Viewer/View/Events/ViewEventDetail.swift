@@ -299,7 +299,10 @@ private struct ZoneRow: View {
 /// Simple async image downloader.
 func downloadImage(from urlString: String) async -> UIImage? {
     guard let url = URL(string: urlString) else {
-        print("Invalid URL")
+        Log.shared().print(page: "ViewEventDetail",
+                           fn: "downloadImage",
+                           type: "WARNING",
+                           text: "Invalid URL - \(urlString)")
         return nil
     }
 
@@ -307,7 +310,10 @@ func downloadImage(from urlString: String) async -> UIImage? {
         let (data, _) = try await URLSession.shared.data(from: url)
         return UIImage(data: data)
     } catch {
-        print("Error downloading image: \(error.localizedDescription)")
+        Log.shared().print(page: "ViewEventDetail",
+                           fn: "downloadImage",
+                           type: "ERROR",
+                           text: "Error downloading image: \(error.localizedDescription)")
         return nil
     }
 }
@@ -320,10 +326,11 @@ class ImageSaver: NSObject {
     @objc private func saveCompleted(_ image: UIImage,
                                      didFinishSavingWithError error: Error?,
                                      contextInfo: UnsafeMutableRawPointer) {
-        if let error = error {
-            print("Save error: \(error.localizedDescription)")
-        } else {
-            print("Image saved successfully!")
+        if let error = error { 
+            Log.shared().print(page: "ViewEventDetail",
+                               fn: "ImageSaver",
+                               type: "ERROR",
+                               text: "Save Error \(error.localizedDescription)")
         }
     }
 }
@@ -343,11 +350,14 @@ func isLargeiPhone() -> Bool {
 
 /// Returns `true` if the mp4 URL is valid, `false` otherwise.
 func isValidMp4URL(_ option: String?) -> Bool {
-    print("[DEBUG] 🔎 isValidMp4URL()")
+ 
     guard let value = option?.trimmingCharacters(in: .whitespacesAndNewlines),
           !value.isEmpty,
           URL(string: value) != nil else {
-        print("Invalid mp4 URL: \(option ?? "nil")")
+          Log.shared().print(page: "ViewEventDetail",
+                           fn: "isValidMp4URL",
+                           type: "ERROR",
+                           text: "Invalid mp4 URL: \(option ?? "")")
         return false
     }
     return true

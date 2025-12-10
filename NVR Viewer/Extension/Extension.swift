@@ -89,7 +89,11 @@ extension MQTTManager {
             prettyName = "didDisconnect"
         }
 
-        print("[TRACE] [\(prettyName)]: \(message)")
+        Log.shared().print(page: "exrtension MQTTManager",
+                           fn: "trace",
+                           type: "INFO",
+                           text: "[TRACE] [\(prettyName)]: \(message)")
+        //print("[TRACE] [\(prettyName)]: \(message)")
     }
 }
 

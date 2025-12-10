@@ -118,7 +118,6 @@ struct ViewAuthJWTBearer: View {
                         ) { (data, error) in
                             
                             if let error = error {
-                                print("\(error.localizedDescription)")
                                 Log.shared().print(
                                     page: "ViewAuthJWTBearer",
                                     fn: "NVR Connection",
@@ -157,8 +156,7 @@ struct ViewAuthJWTBearer: View {
                     authType: nvr.getAuthType()
                 ) { (data, error) in
                     
-                    if let error = error {
-                        print("\(error.localizedDescription)")
+                    if let error = error { 
                         Log.shared().print(
                             page: "ViewAuthJWTBearer",
                             fn: "NVR Connection",

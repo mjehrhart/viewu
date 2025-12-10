@@ -96,3 +96,23 @@ func generateJWTBearer() async throws -> String {
      
     return jwtToken
 }
+
+func generateSyncJWTBearer() throws -> String {
+    
+    var result: Result<String, Error>?
+    let semaphore = DispatchSemaphore(value: 0)
+
+    Task {
+        do {
+            let token = try await generateJWTBearer()
+            result = .success(token)
+        } catch {
+            result = .failure(error)
+        }
+        semaphore.signal()
+    }
+
+    semaphore.wait()
+
+    return try result!.get()
+}

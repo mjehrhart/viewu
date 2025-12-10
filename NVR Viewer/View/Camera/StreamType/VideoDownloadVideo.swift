@@ -273,9 +273,7 @@ struct DownloadView: View {
         .opacity(vm.isDownloading ? 0.95 : 1.0)
         .onTapGesture {
             guard !vm.isDownloading else { return }
-
-            print("clicked to download video")
-
+ 
             if let url = URL(string: urlString) {
                 statusMessage = "Downloading…"
                 vm.downloadAndSaveVideo(
@@ -388,21 +386,21 @@ class DownloadViewModel: NSObject, ObservableObject, URLSessionDownloadDelegate 
         do {
             // Pass the fileName to the delegate bridge
             let fileURL = try await downloadVideoDelegate(url: url, fileName: fileName)
-            print("Downloaded file at: \(fileURL.lastPathComponent)")
+            //print("Downloaded file at: \(fileURL.lastPathComponent)")
 
             let asset = AVAsset(url: fileURL)
             guard !asset.tracks(withMediaType: .video).isEmpty else {
                 throw DownloadError.fileIsNotVideo
             }
 
-            print("Video saved successfully to Documents Directory.")
+            //print("Video saved successfully to Documents Directory.")
             progress = 1.0     // 100%
 
         } catch is CancellationError {
-            print("Download cancelled by user.")
+            //print("Download cancelled by user.")
             progress = 0
         } catch {
-            print("Download or save error:", error.localizedDescription)
+            //print("Download or save error:", error.localizedDescription)
             progress = 0
         }
 
@@ -435,7 +433,7 @@ class DownloadViewModel: NSObject, ObservableObject, URLSessionDownloadDelegate 
                     didFinishDownloadingTo location: URL)
     {
         guard let completion = downloadCompletionHandlers.removeValue(forKey: downloadTask) else {
-            print("ERROR: Download task completed but no completion handler was found.")
+            Log.shared().print(page: "DownloadViewModel", fn: "urlSession", type: "ERROR", text: "ERROR: Download task completed but no completion handler was found.")
             return
         }
 
@@ -470,9 +468,7 @@ class DownloadViewModel: NSObject, ObservableObject, URLSessionDownloadDelegate 
                     didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
-
-        //print("didWriteData: \(totalBytesWritten) / \(totalBytesExpectedToWrite)")
-
+ 
         // Only do determinate progress if we know the total size.
         guard totalBytesExpectedToWrite > 0 else {
             // Unknown total size – you can keep showing “Downloading…” with

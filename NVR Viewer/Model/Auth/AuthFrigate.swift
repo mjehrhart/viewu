@@ -38,9 +38,7 @@ let frigateDelegate = FrigateURLSessionDelegate()
 func connectToFrigateAPIWithJWT( host: String, jwtToken: String, endpoint: String, completion: @escaping (Data?, Error?) -> Void) async {
     
     
-    let urlString = "\(host)\(endpoint)"
-//    print("AuthFrigate connectToFrigateAPIWithJWT()")
-//    print(urlString)
+    let urlString = "\(host)\(endpoint)" 
           
     guard let url = URL(string: urlString) else {
         // call the completion handler instead of using 'throw'

@@ -38,7 +38,7 @@ struct ViewConnection: View {
             }
             .padding()
             .onAppear {
-                print("MQTT connection state:", mqttManager.currentAppState.appConnectionState)
+                //print("[DEBUG] MQTT connection state:", mqttManager.currentAppState.appConnectionState)
             }
         }
         .containerRelativeFrame([.horizontal, .vertical])

@@ -116,8 +116,7 @@ struct ViewAuthFrigate: View {
                             authType: nvr.getAuthType()
                         ) { (data, error) in
                             
-                            if let error = error {
-                                print("\(error.localizedDescription)")
+                            if let error = error { 
                                 Log.shared().print(
                                     page: "ViewAuthFrigate",
                                     fn: "NVR Connection",
@@ -156,8 +155,7 @@ struct ViewAuthFrigate: View {
                     authType: nvr.getAuthType()
                 ) { (data, error) in
                     
-                    if let error = error {
-                        print("\(error.localizedDescription)")
+                    if let error = error { 
                         Log.shared().print(
                             page: "ViewAuthFrigate",
                             fn: "NVR Connection",

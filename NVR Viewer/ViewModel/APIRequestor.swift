@@ -57,7 +57,12 @@ class APIRequester: NSObject {
             }
             
         default:
-            print("postImageToFrigatePlus: unsupported authType \(authType)")
+            Log.shared().print(
+                page: "APIRequestor",
+                fn: "postImageToFrigatePlus",
+                type: "ERROR",
+                text: "unsupported authType \(authType)"
+            )
         }
     }
     
@@ -200,7 +205,12 @@ class APIRequester: NSObject {
             }
             
         default:
-            print("fetchNVREvents: unsupported authType \(authType)")
+            Log.shared().print(
+                page: "APIRequestor",
+                fn: "fetchNVREvents",
+                type: "ERROR",
+                text: "unsupported authType \(authType)"
+            )
         }
     }
     
@@ -239,7 +249,12 @@ class APIRequester: NSObject {
                             return
                         }
                     } catch {
-                        print("Error decoding FrigateResponse - 1001.a: \(error)")
+                        Log.shared().print(
+                            page: "APIRequestor",
+                            fn: "fetchImage",
+                            type: "ERROR",
+                            text: "\(error)"
+                        )
                     }
                 }
                 
@@ -268,7 +283,12 @@ class APIRequester: NSObject {
             }
             
         default:
-            print("fetchImage: unsupported authType \(authType)")
+            Log.shared().print(
+                page: "APIRequestor",
+                fn: "fetchImage",
+                type: "ERROR",
+                text: "unsupported authType \(authType)"
+            )
         }
     }
     
@@ -319,7 +339,10 @@ class APIRequester: NSObject {
             }
             
         default:
-            print("fetchNVRConfig: unsupported authType \(authType)")
+            Log.shared().print(page: "APIRequestor",
+                               fn: "fetchNVRConfig",
+                               type: "ERROR",
+                               text: "unsupported authType \(authType)")
         }
     }
     
@@ -352,7 +375,11 @@ class APIRequester: NSObject {
             let task = session.dataTask(with: request) { data, response, error in
                 
                 if let error = error {
-                    print("Error: \(error.localizedDescription)")
+                    Log.shared().print(page: "APIRequestor",
+                                       fn: "checkConnectionStatus",
+                                       type: "ERROR",
+                                       text: "\(error.localizedDescription)")
+                    
                     let errorTemp = NSError(
                         domain: "connection.info:\(error.localizedDescription) - \(fullUrlString)",
                         code: 500,
@@ -467,14 +494,13 @@ class APIRequester: NSObject {
                 return completion(data, error)
             }
             
-        default:
-            print("APIRequestor: checkConnectionStatus: AuthType is unsupported")
+        default: 
             let fullURLString = urlString + "/api/version"
             guard let url = URL(string: fullURLString) else {
                 Log.shared().print(page: "APIRequestor",
                                    fn: "checkConnectionStatus",
                                    type: "ERROR",
-                                   text: "")
+                                   text: "AuthType is unsupported - \(fullURLString)")
                 return
             }
             
@@ -524,8 +550,7 @@ extension APIRequester: URLSessionDelegate {
     }
     
     func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
-        if let err = error {
-            print("Error APIRequestor urlSession: \(err.localizedDescription)")
+        if let err = error { 
             Log.shared().print(page: "APIRequestor",
                                fn: "urlSession",
                                type: "ERROR",

@@ -32,8 +32,10 @@ final class NotificationManager: ObservableObject {
             _ = try await center.requestAuthorization(options: [.alert, .badge, .sound])
             await getAuthStatus()
         } catch {
-            // In practice you'd probably want to use your Log.shared() here
-            print("NotificationManager.request authorization error: \(error.localizedDescription)")
+            Log.shared().print(page: "NotificationManager",
+                               fn: "request",
+                               type: "ERROR",
+                               text: "authorization error: \(error.localizedDescription)")
         }
     }
 

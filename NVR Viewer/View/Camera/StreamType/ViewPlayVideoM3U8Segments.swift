@@ -23,10 +23,11 @@ struct ViewPlayVideoM3U8Segments: View {
     @State private var tempFolderURL: URL? = nil
     @State private var localVideoURL: URL? = nil
      
+    @AppStorage("authType") var authType: AuthType = .none
+    
     var body: some View {
         VStack(spacing: 0) {
-             
-            
+              
             if let player = player {
                  
                 if isReadyToPlay {
@@ -50,7 +51,8 @@ struct ViewPlayVideoM3U8Segments: View {
                                     }
                                 }
                             
-                            if isMP4InvalidURL(urlMp4String) {
+                            //if isMP4InvalidURL(urlMp4String) {
+                            if isValidMp4URL(urlMp4String) {
                                 
                                 DownloadView(urlString: urlMp4String, fileName: frameTime, showProgress: false)
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -70,9 +72,6 @@ struct ViewPlayVideoM3U8Segments: View {
                                             )
                                     )
                                     .shadow(color: cBlue.opacity(0.35), radius: 8, x: 0, y: 4)
-                                    .onTapGesture {
-                                        print("[DEBUG] ViewPlayVideo calls DownloadView1")
-                                    }
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -116,9 +115,6 @@ struct ViewPlayVideoM3U8Segments: View {
                                             )
                                     )
                                     .shadow(color: cBlue.opacity(0.35), radius: 8, x: 0, y: 4)
-                                    .onTapGesture {
-                                        print("[DEBUG] ViewPlayVideo calls DownloadView1")
-                                    }
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -269,17 +265,16 @@ struct ViewPlayVideoM3U8Segments: View {
     // MARK: - Orchestrator: Download MP4 then Play
     // ===================================================
     private func startMP4DownloadAndPlayback() async {
+         
         guard !isLoading, player == nil else { return }
-
-        print("ContentView: onAppear() Task() - \(urlString)")
-
+ 
         guard !urlMp4String.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               
                   
             let remoteURL = URL(string: urlMp4String) else {
             
             errorMessage = "Invalid MP4 URL"
-            //print("[DEBUG] ❌ Invalid MP4 URL: \(urlMp4String)")
+            Log.shared().print(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", type: "ERROR", text: "Invalid MP4 URL")
             return
         }
 
@@ -287,9 +282,20 @@ struct ViewPlayVideoM3U8Segments: View {
         errorMessage = nil
 
         do {
-            let jwt = try generateSyncJWT()
-            //print("[DEBUG] 🔑 Generated JWT (prefix): \(jwt.prefix(16))…")
-
+            var jwt = "" 
+            switch authType {
+            case .none:
+                break
+            case .bearer:
+                jwt = try generateSyncJWT()
+            case .frigate:
+                jwt = try generateSyncJWTBearer()
+            case .cloudflare:
+                break
+            case .custom:
+                break
+            }
+             
             let downloader = MP4Downloader()
             let result = try await downloader.downloadMP4(
                 remoteURL: remoteURL,
@@ -311,7 +317,7 @@ struct ViewPlayVideoM3U8Segments: View {
             DispatchQueue.main.async {
                 self.errorMessage = "MP4 download failed: \(error.localizedDescription)"
                 self.isLoading = false
-                //print("[DEBUG] ❌ MP4 download error: \(error)")
+                Log.shared().print(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", type: "ERROR", text: "MP4 download failed: \(error.localizedDescription)")
             }
         }
     }
@@ -325,7 +331,7 @@ struct ViewPlayVideoM3U8Segments: View {
             try FileManager.default.removeItem(at: folder)
             //print("[DEBUG] 🧹 Temp folder deleted: \(folder.path)")
         } catch {
-            print("[DEBUG] ⚠️ Failed to delete temp folder: \(error)")
+            Log.shared().print(page: "ViewPlayVideoM3U8Segments", fn: "cleanupTempFolder", type: "ERROR", text: "Failed to delete temp folder: \(error)")
         }
         tempFolderURL = nil
         localVideoURL = nil
@@ -352,6 +358,8 @@ struct PlayerViewController: UIViewControllerRepresentable {
 
 final class MP4Downloader {
 
+    @AppStorage("authType") var authType: AuthType = .none
+    
     struct Result {
         let localFile: URL
         let tempFolder: URL
@@ -386,7 +394,16 @@ final class MP4Downloader {
 
         var req = URLRequest(url: remoteURL)
         req.httpMethod = "GET"
-        req.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
+        
+        switch authType {
+        case .none:
+            break
+        case .bearer, .frigate:
+            req.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
+        case .cloudflare, .custom:
+            break
+        }
+         
         req.setValue("AVPlayer/1.0", forHTTPHeaderField: "User-Agent")
 
         //print("[DEBUG] 🌐 GET (MP4) \(remoteURL.absoluteString)")
@@ -396,13 +413,14 @@ final class MP4Downloader {
         guard let http = response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)
         }
-
-        //print("[DEBUG]   Status: \(http.statusCode)")
-
+ 
         if http.statusCode != 200 {
             let data = try? Data(contentsOf: tempFile)
             let snippet = data.flatMap { String(data: $0, encoding: .utf8) } ?? "<non-text body>"
             //print("[DEBUG]   ❌ Non-200 MP4 response body snippet:\n\(snippet.prefix(200))")
+            
+            Log.shared().print(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", type: "ERROR", text: "Non-200 MP4 response body snippet: \(snippet.prefix(200))")
+            
             throw NSError(
                 domain: "MP4Downloader",
                 code: http.statusCode,
@@ -432,7 +450,7 @@ final class SSLBypassDelegate: NSObject, URLSessionDelegate {
             //print("[DEBUG] ✅ Accepting self-signed certificate for host: \(challenge.protectionSpace.host)")
             completionHandler(.useCredential, URLCredential(trust: trust))
         } else {
-            print("[DEBUG] ⚠️ No serverTrust, default handling")
+            Log.shared().print(page: "SSLBypassDelegate", fn: "urlSession", type: "ERROR", text: "No serverTrust, default handling")
             completionHandler(.performDefaultHandling, nil)
         }
     }

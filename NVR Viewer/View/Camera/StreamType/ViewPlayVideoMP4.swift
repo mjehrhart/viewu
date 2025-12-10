@@ -19,7 +19,7 @@ struct ViewPlayVideoMP4: View {
     var developerModeIsOn: Bool = UserDefaults.standard.bool(forKey: "developerModeIsOn")
     private var idiom: UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     @State private var isLandscape: Bool = UIDevice.current.orientation.isLandscape
-
+ 
     @State private var showingAlert = false
     @State private var isFullScreen = false
     @State private var player: AVPlayer? = nil
@@ -30,6 +30,8 @@ struct ViewPlayVideoMP4: View {
     @State private var tempFolderURL: URL? = nil
     @State private var localVideoURL: URL? = nil
 
+    @AppStorage("authType") var authType: AuthType = .none
+    
     var body: some View {
         VStack(spacing: 0) {
 
@@ -60,7 +62,8 @@ struct ViewPlayVideoMP4: View {
                                 }
 
                             // MARK: Download row (same layout as before)
-                            if isMP4InvalidURL(urlMp4String) {
+                            //if isMP4InvalidURL(urlMp4String) {
+                            if isValidMp4URL(urlMp4String) {
                                 DownloadView(urlString: urlMp4String, fileName: frameTime, showProgress: true)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.horizontal, 10)
@@ -79,9 +82,6 @@ struct ViewPlayVideoMP4: View {
                                             )
                                     )
                                     .shadow(color: cBlue.opacity(0.35), radius: 8, x: 0, y: 4)
-                                    .onTapGesture {
-                                        print("[DEBUG] ViewPlayVideo calls DownloadView1 (iPad)")
-                                    }
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -125,9 +125,6 @@ struct ViewPlayVideoMP4: View {
                                             )
                                     )
                                     .shadow(color: cBlue.opacity(0.35), radius: 8, x: 0, y: 4)
-                                    .onTapGesture {
-                                        print("[DEBUG] ViewPlayVideo calls DownloadView1 (iPhone)")
-                                    }
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -282,11 +279,10 @@ struct ViewPlayVideoMP4: View {
     // MARK: - Orchestrator: Download MP4 then Play
     // ===================================================
     private func startMP4DownloadAndPlayback() async {
+         
         // Avoid duplicate work
         guard !isLoading, player == nil else { return }
-
-        print("ViewPlayVideo: startMP4DownloadAndPlayback() - \(urlMp4String)")
-
+ 
         // Basic URL validation
         guard !urlMp4String.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               let remoteURL = URL(string: urlMp4String) else {
@@ -298,7 +294,20 @@ struct ViewPlayVideoMP4: View {
         errorMessage = nil
 
         do {
-            let jwt = try generateSyncJWT()
+            
+            var jwt = ""
+            switch authType {
+            case .none:
+                break
+            case .bearer:
+                jwt = try generateSyncJWT()
+            case .frigate:
+                jwt = try generateSyncJWTBearer()
+            case .cloudflare:
+                break
+            case .custom:
+                break
+            }
 
             let downloader = MP4Downloader2()
             let result = try await downloader.downloadMP4(
@@ -315,14 +324,13 @@ struct ViewPlayVideoMP4: View {
 
                 self.isLoading = false
                 self.isReadyToPlay = true
-
-                print("[DEBUG] ✅ Local MP4 ready at \(result.localFile.path)")
+ 
             }
         } catch {
             DispatchQueue.main.async {
                 self.errorMessage = "MP4 download failed: \(error.localizedDescription)"
                 self.isLoading = false
-                print("[DEBUG] ❌ MP4 download error: \(error)")
+                Log.shared().print(page: "ViewPlayVideoMP4", fn: "startMP4DownloadAndPlayback", type: "ERROR", text: "MP4 download error: \(error)")
             }
         }
     }
@@ -334,9 +342,9 @@ struct ViewPlayVideoMP4: View {
         guard let folder = tempFolderURL else { return }
         do {
             try FileManager.default.removeItem(at: folder)
-            print("[DEBUG] 🧹 Temp folder deleted: \(folder.path)")
+            //print("[DEBUG] 🧹 Temp folder deleted: \(folder.path)")
         } catch {
-            print("[DEBUG] ⚠️ Failed to delete temp folder: \(error)")
+            Log.shared().print(page: "ViewPlayVideoMP4", fn: "cleanupTempFolder", type: "ERROR", text: "Failed to delete temp folder: \(error)")
         }
         tempFolderURL = nil
         localVideoURL = nil
@@ -367,6 +375,8 @@ struct PlayerViewControllerMP4: UIViewControllerRepresentable {
 
 final class MP4Downloader2 {
 
+    @AppStorage("authType") var authType: AuthType = .none
+    
     struct Result {
         let localFile: URL
         let tempFolder: URL
@@ -401,7 +411,16 @@ final class MP4Downloader2 {
 
         var req = URLRequest(url: remoteURL)
         req.httpMethod = "GET"
-        req.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
+          
+        switch authType {
+        case .none:
+            break
+        case .bearer, .frigate:
+            req.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
+        case .cloudflare, .custom:
+            break
+        }
+        
         req.setValue("AVPlayer/1.0", forHTTPHeaderField: "User-Agent")
 
         let (tempFile, response) = try await session.download(for: req)

@@ -335,7 +335,6 @@ struct ContentView: View {
     
     private func checkConnection() async {
         let urlString = nvr.getUrl()
-        print("ContentView: checkConnection() - \(urlString)")
         
         do {
             try await api.checkConnectionStatus(
@@ -343,14 +342,16 @@ struct ContentView: View {
                 authType: authType
             ) { _, error in
                 if let error = error {
-                    print(error.localizedDescription)
                     nvr.connectionState = .disconnected
                 } else {
                     nvr.connectionState = .connected
                 }
             }
         } catch {
-            print("checkConnection error: \(error)")
+            Log.shared().print(page: "ContentView",
+                               fn: "checkConnection",
+                               type: "ERROR",
+                               text: "checkConnection error: \(error)")
             nvr.connectionState = .disconnected
         }
     }
@@ -381,14 +382,7 @@ struct ContentView: View {
     }
     
     private func logConfigDecodeError(data: Data, error: Error) {
-     
-//        Log.shared().print(
-//            page: "ContentView",
-//            fn: "task::cnvr.fetchNVRConfig 1001.1",
-//            type: "ERROR",
-//            text: "\(error)"
-//        )
-        
+ 
         do {
             if let json = try JSONSerialization.jsonObject(
                 with: data,
@@ -422,9 +416,15 @@ struct ContentView: View {
         )
         do {
             try BGTaskScheduler.shared.submit(request)
-            print("DEBUG: Background Task Scheduled!")
+            Log.shared().print(page: "ContentView",
+                               fn: "sheduleBackgroundTask",
+                               type: "INFO",
+                               text: "Background Task Scheduled!")
         } catch {
-            print("DEBUG: Scheduling Error \(error.localizedDescription)")
+            Log.shared().print(page: "ContentView",
+                               fn: "sheduleBackgroundTask",
+                               type: "ERROR",
+                               text: "Scheduling Error \(error.localizedDescription)") 
         }
     }
     
