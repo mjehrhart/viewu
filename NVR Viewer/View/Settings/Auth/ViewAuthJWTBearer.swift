@@ -120,10 +120,10 @@ struct ViewAuthJWTBearer: View {
                             if let error = error {
                                 print("\(error.localizedDescription)")
                                 Log.shared().print(
-                                    page: "ViewSetting",
+                                    page: "ViewAuthJWTBearer",
                                     fn: "NVR Connection",
                                     type: "ERROR",
-                                    text: "\(String(describing: error))"
+                                    text: "\(String(describing: error)) - \(urlString)"
                                 )
                                 nvrManager.connectionState = .disconnected
                                 return
@@ -160,10 +160,10 @@ struct ViewAuthJWTBearer: View {
                     if let error = error {
                         print("\(error.localizedDescription)")
                         Log.shared().print(
-                            page: "ViewSetting",
+                            page: "ViewAuthJWTBearer",
                             fn: "NVR Connection",
                             type: "ERROR",
-                            text: "\(String(describing: error))"
+                            text: "\(String(describing: error)) - \(urlString)"
                         )
                         nvrManager.connectionState = .disconnected
                         return

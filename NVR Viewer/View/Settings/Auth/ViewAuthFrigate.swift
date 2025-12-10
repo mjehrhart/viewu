@@ -119,10 +119,10 @@ struct ViewAuthFrigate: View {
                             if let error = error {
                                 print("\(error.localizedDescription)")
                                 Log.shared().print(
-                                    page: "ViewSetting",
+                                    page: "ViewAuthFrigate",
                                     fn: "NVR Connection",
                                     type: "ERROR",
-                                    text: "\(String(describing: error))"
+                                    text: "\(String(describing: error)) - \(urlString)"
                                 )
                                 nvrManager.connectionState = .disconnected
                                 return
@@ -159,10 +159,10 @@ struct ViewAuthFrigate: View {
                     if let error = error {
                         print("\(error.localizedDescription)")
                         Log.shared().print(
-                            page: "ViewSetting",
+                            page: "ViewAuthFrigate",
                             fn: "NVR Connection",
                             type: "ERROR",
-                            text: "\(String(describing: error))"
+                            text: "\(String(describing: error)) - \(urlString)"
                         )
                         nvrManager.connectionState = .disconnected
                         return

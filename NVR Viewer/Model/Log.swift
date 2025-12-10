@@ -1,47 +1,101 @@
-//
-//  Log.swift
-//  NVR Viewer
-//
-//  Created by Matthew Ehrhart on 6/3/24.
-//
 
 import Foundation
 import SwiftUI
 
-class Log: ObservableObject {
+//TODO
+//@MainActor - should be @MainActor but its causing bug issues in APIRequestor
+final class Log: ObservableObject {
     
+    // Same singleton API as before
     static let _shared = Log()
     
     static func shared() -> Log {
         return _shared
     }
     
-    @Published var list: [LogItem] = [] {
-        willSet {
-            objectWillChange.send()
-        }
-    }
+    // Let @Published manage objectWillChange; no manual willSet needed
+    @Published var list: [LogItem] = []
     
+    /// Add a log entry
     func print(page: String, fn: String, type: String, text: String) {
-        
-        let item = LogItem(id: UUID(), page: page, fn: fn, text: text, type: type)
+        let item = LogItem(
+            id: UUID(),
+            page: page,
+            fn: fn,
+            text: text,
+            type: type
+        )
         list.append(item)
     }
     
-    func clear() {
-        list = []
+    /// Optional convenience alias that avoids the name `print`
+    /// (Does NOT break any existing callers)
+    func log(page: String, fn: String, type: String, text: String) {
+        print(page: page, fn: fn, type: type, text: text)
     }
     
-    func getList() -> [LogItem]{
-        
-        return self.list
+    func clear() {
+        list.removeAll()
+    }
+    
+    func getList() -> [LogItem] {
+        list
     }
 }
 
-struct LogItem: Hashable {
+struct LogItem: Identifiable, Hashable {
     let id: UUID
     let page: String
     let fn: String
     let text: String
     let type: String
 }
+
+// MARK: - Remove
+////
+////  Log.swift
+////  NVR Viewer
+////
+////  Created by Matthew Ehrhart on 6/3/24.
+////
+//
+//import Foundation
+//import SwiftUI
+//
+//class Log: ObservableObject {
+//    
+//    static let _shared = Log()
+//    
+//    static func shared() -> Log {
+//        return _shared
+//    }
+//    
+//    @Published var list: [LogItem] = [] {
+//        willSet {
+//            objectWillChange.send()
+//        }
+//    }
+//    
+//    func print(page: String, fn: String, type: String, text: String) {
+//        
+//        let item = LogItem(id: UUID(), page: page, fn: fn, text: text, type: type)
+//        list.append(item)
+//    }
+//    
+//    func clear() {
+//        list = []
+//    }
+//    
+//    func getList() -> [LogItem]{
+//        
+//        return self.list
+//    }
+//}
+//
+//struct LogItem: Hashable {
+//    let id: UUID
+//    let page: String
+//    let fn: String
+//    let text: String
+//    let type: String
+//}

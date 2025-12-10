@@ -126,6 +126,27 @@ struct ViewSettings: View {
                         .foregroundColor(.orange)
                 }
                 
+                // MARK: NVR Settings (Auth Types)
+                Section {
+                    ViewAuthTypes()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                } header: {
+                    HStack {
+                        if !tipsSettingsNVR {
+                            Text("NVR Settings")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                        }
+                        
+                        ViewTipsSettingsNVR(
+                            title: "Connection Requirements",
+                            message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN."
+                        )
+                        .frame(maxHeight: .infinity)
+                    }
+                }
+                
                 // MARK: MQTT Settings
                 Section {
                     
@@ -216,7 +237,6 @@ struct ViewSettings: View {
                         }
                     }
                     
-                    
                     Label(mqttManager.isConnected() ? "Connected" : "Disconnected",
                           systemImage: "cable.connector")
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -245,27 +265,6 @@ struct ViewSettings: View {
                     Text("MQTT Settings")
                         .font(.caption)
                         .foregroundColor(.orange)
-                }
-                
-                // MARK: NVR Settings (Auth Types)
-                Section {
-                    ViewAuthTypes()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                } header: {
-                    HStack {
-                        if !tipsSettingsNVR {
-                            Text("NVR Settings")
-                                .font(.caption)
-                                .foregroundColor(.orange)
-                        }
-                        
-                        ViewTipsSettingsNVR(
-                            title: "Connection Requirements",
-                            message: "For optimal security, Viewu requires a secured HTTPS connection. HTTP is supported only for devices on your local network. To ensure encrypted communication and protect your video data, configure your server to use HTTPS whenever accessible outside your LAN."
-                        )
-                        .frame(maxHeight: .infinity)
-                    }
                 }
                 
                 // MARK: Notifications permission
@@ -481,16 +480,6 @@ struct ViewSettings: View {
                     }
                 }
             }
-        }
-    }
-    
-    struct CustomPressEffectButtonStyle: ButtonStyle {
-        func makeBody(configuration: Configuration) -> some View {
-            configuration.label
-                .padding(8)
-                .background(configuration.isPressed ? Color.gray : Color.orange.opacity(0.6))
-                .foregroundColor(.white)
-                .cornerRadius(10)
         }
     }
 }

@@ -12,6 +12,447 @@ import TipKit
 import BackgroundTasks
 import JWTKit
 
+@MainActor
+struct ContentView: View {
+    // MARK: - Singletons / shared state
+    
+    @ObservedObject private var filter2 = EventFilter.shared()
+    @ObservedObject private var config = NVRConfigurationSuper2.shared()
+    
+    private let nvr = NVRConfig.shared()
+    private let api = APIRequester()
+    
+    @EnvironmentObject private var notificationManager2: NotificationManager
+    
+    // MARK: - View state
+    
+    @State private var selection: Int = 0
+    
+    @StateObject private var nts = NotificationTemplateString.shared()
+    @StateObject private var mqttManager = MQTTManager.shared()
+    
+    @State private var showFilter = false
+    @State private var showEventList = false
+    @State private var showCamera = false
+    @State private var showSettings = false
+    @State private var showConnection = false
+    @State private var showNVR = false
+    @State private var showLog = false
+    @State private var showNotificationManager = false
+    
+    @AppStorage("developerModeIsOn") private var developerModeIsOn = false
+    @AppStorage("notificationModeIsOn") private var notificationModeIsOn = UserDefaults.standard.bool(forKey: "notificationModeIsOn")
+    @AppStorage("frigateAlertsRetain") private var frigateAlertsRetain: Int = 10
+    @AppStorage("frigateDetectionsRetain") private var frigateDetectionsRetain: Int = 10
+    @AppStorage("frigateVersion") private var frigateVersion: String = "0.0-0"
+    @AppStorage("background_fetch_events_epochtime") private var backgroundFetchEventsEpochtime: String = "0"
+    @AppStorage("isOnboarding") private var isOnboarding: Bool = true
+    @AppStorage("showTips") private var showTips: Bool = true
+    
+    @AppStorage("authType") private var authType: AuthType = .none
+    
+    // Prevent double-fetching events on startup / quick app switches
+    @AppStorage("lastEventsFetchTime") private var lastEventsFetchTime: TimeInterval = 0
+    private let minFetchInterval: TimeInterval = 60
+    
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var path = NavigationPath()
+    
+    // MARK: - Init
+    
+    init() {
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            .font : UIFont(name: "Georgia-Bold", size: 20)!
+        ]
+    }
+    
+    // MARK: - Body
+    
+    var body: some View {
+        NavigationStack(path: $path) {
+            VStack {
+                ZStack {
+                    // fake status bar background
+                    GeometryReader { reader in
+                        Color.secondary
+                            .frame(height: reader.safeAreaInsets.top, alignment: .top)
+                            .ignoresSafeArea()
+                    }
+                    
+                    switch selection {
+                    case 0:
+                        if isOnboarding {
+                            ViewOnBoarding()
+                        } else {
+                            ViewEventListHome()
+                        }
+                        
+                    case 1:
+                        ViewEventDetail(
+                            text: convertDateTime(time: notificationManager2.frameTime!),
+                            container: notificationManager2.eps!,
+                            showButton: true,
+                            showClip: false
+                        )
+                        
+                    case 2:
+                        ViewNVRDetails()
+                        
+                    default:
+                        ViewEventListHome()
+                    }
+                }
+            }
+            .task {
+                // Initial config + events load (off main where possible)
+                await loadInitialData()
+            }
+            .onReceive(notificationManager2.$newPage) {
+                guard let notificationSelection = $0 else { return }
+                selection = notificationSelection
+            }
+            .onChange(of: scenePhase) { _, newScenePhase in
+                handleScenePhaseChange(newScenePhase)
+            }
+            .onAppear {
+                Task {
+                    // Give the first frame a moment so launch feels snappier
+                    try? await Task.sleep(nanoseconds: 200_000_000) // 0.2s
+                    
+                    await sheduleBackgroundTask()
+                    await checkConnection()
+                    
+                    // Connect to MQTT broker
+                    mqttManager.initializeMQTT()
+                    mqttManager.connect()
+                }
+            }
+            .environmentObject(mqttManager)
+            .environmentObject(nvr)   // classic singleton used as environment object
+            .scrollContentBackground(.hidden)
+            .navigationBarBackButtonHidden()
+            .navigationDestination(isPresented: $showEventList) {
+                ViewEventListHome()
+            }
+            .navigationDestination(isPresented: $showNVR) {
+                ViewNVRDetails()
+            }
+            .navigationDestination(isPresented: $showSettings) {
+                ViewSettings(title: "Settings")
+                    .environmentObject(nvr)
+                    .environmentObject(mqttManager)
+            }
+            .navigationDestination(isPresented: $showConnection) {
+                ViewConnection(title: "Connection")
+                    .environmentObject(nvr)
+                    .environmentObject(mqttManager)
+            }
+            .navigationDestination(isPresented: $showLog) {
+                ViewLog()
+            }
+            .navigationDestination(isPresented: $showCamera) {
+                ViewCamerasList(title: "Live Cameras")
+            }
+            .navigationDestination(isPresented: $showNotificationManager) {
+                ViewAPN(title: "Notification Manager")
+            } 
+            .navigationDestination(for: Cameras2.self) { config in
+                ViewCameraDetails2(
+                    text: "\(config.name.uppercased()) Camera Details",
+                    cameras: config
+                )
+            }
+            .navigationDestination(for: EndpointOptions.self) { eps in
+                ViewEventDetail(
+                    text: convertDateTime(time: eps.frameTime!),
+                    container: eps,
+                    showButton: false,
+                    showClip: true
+                )
+            } 
+            .sheet(isPresented: $showFilter) {
+                ViewFilter()
+                    .presentationDetents([.large])
+            }
+            .toolbarBackground(.clear, for: .bottomBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar {
+                if !isOnboarding {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Spacer(minLength: 0)
+                        
+                        HStack(spacing: 20) {
+                            // MARK: - Filter
+                            BottomBarItem(
+                                title: "Filter",
+                                systemImage: "calendar.day.timeline.leading",
+                                isHighlighted: showFilter
+                            ) {
+                                showFilter.toggle()
+                            }
+                            
+                            // MARK: - Cameras
+                            BottomBarItem(
+                                title: "Cameras",
+                                systemImage: "web.camera",
+                                isHighlighted: showCamera
+                            ) {
+                                showCamera.toggle()
+                            }
+                            
+                            // MARK: - Notifications
+                            if notificationModeIsOn {
+                                BottomBarItem(
+                                    title: "Notifications",
+                                    systemImage: "app.badge",
+                                    isHighlighted: nts.notificationPaused || showNotificationManager,
+                                    foreground: nts.notificationPaused ? .orange : .secondary
+                                ) {
+                                    showNotificationManager.toggle()
+                                }
+                            }
+                            
+                            // MARK: - NVR (dev)
+                            if developerModeIsOn {
+                                BottomBarItem(
+                                    title: "NVR",
+                                    systemImage: "arrow.triangle.2.circlepath.circle",
+                                    isHighlighted: selection == 2
+                                ) {
+                                    notificationManager2.newPage = 2
+                                    selection = 2
+                                }
+                            }
+                            
+                            // MARK: - Log (dev)
+                            if developerModeIsOn {
+                                BottomBarItem(
+                                    title: "Log",
+                                    systemImage: "note.text",
+                                    isHighlighted: showLog
+                                ) {
+                                    showLog.toggle()
+                                }
+                            }
+                            
+                            // MARK: - Settings
+                            BottomBarItem(
+                                title: "Settings",
+                                systemImage: "gearshape",
+                                isHighlighted: showSettings
+                            ) {
+                                showSettings.toggle()
+                            }
+                        }
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 10)
+                        .frame(maxWidth: 500)
+                        .frame(maxWidth: .infinity)
+                        
+                        Spacer(minLength: 0)
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Async loading / lifecycle
+    
+    private func loadInitialData() async {
+        await loadConfig()
+        await fetchEventsIfNeeded(source: "ctask")
+    }
+    
+    private func handleScenePhaseChange(_ newScenePhase: ScenePhase) {
+        Task {
+            if newScenePhase == .active {
+                await fetchEventsIfNeeded(source: "scenePhase")
+            }
+        }
+    }
+    
+    private func loadConfig() async {
+        let url = nvr.getUrl()
+        
+        await api.fetchNVRConfig(
+            urlString: url,
+            authType: nvr.getAuthType()
+        ) { data, error in
+            
+            guard let data = data else { return }
+            
+            if developerModeIsOn {
+                Log.shared().print(
+                    page: "ContentView",
+                    fn: "loadConfig",
+                    type: "INFO",
+                    text: readData(data)
+                )
+            }
+            
+            // Decode off the main actor so UI stays snappy
+            Task.detached(priority: .userInitiated) {
+                do {
+                    let configuration = try JSONDecoder().decode(
+                        NVRConfigurationCall2.self,
+                        from: data
+                    )
+                    
+                    await MainActor.run {
+                        applyConfig(configuration)
+                        cleanupSnapshots(using: configuration)
+                    }
+                } catch {
+                    await MainActor.run {
+                        logConfigDecodeError(data: data, error: error)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func fetchEventsIfNeeded(source: String) async {
+        guard shouldFetchEvents() else { return }
+        
+        await api.fetchEventsInBackground(
+            urlString: nvr.getUrl(),
+            backgroundFetchEventsEpochtime: backgroundFetchEventsEpochtime,
+            epsType: source,
+            authType: nvr.getAuthType()
+        )
+        
+        markEventsFetched()
+    }
+    
+    private func shouldFetchEvents() -> Bool {
+        let now = Date().timeIntervalSince1970
+        return (now - lastEventsFetchTime) > minFetchInterval
+    }
+    
+    private func markEventsFetched() {
+        lastEventsFetchTime = Date().timeIntervalSince1970
+    }
+    
+    private func checkConnection() async {
+        let urlString = nvr.getUrl()
+        print("ContentView: checkConnection() - \(urlString)")
+        
+        do {
+            try await api.checkConnectionStatus(
+                urlString: urlString,
+                authType: authType
+            ) { _, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    nvr.connectionState = .disconnected
+                } else {
+                    nvr.connectionState = .connected
+                }
+            }
+        } catch {
+            print("checkConnection error: \(error)")
+            nvr.connectionState = .disconnected
+        }
+    }
+    
+    // MARK: - Config helpers
+    
+    private func applyConfig(_ configuration: NVRConfigurationCall2) {
+        config.item = configuration
+        
+        filter2.setCameras(items: configuration.cameras)
+        filter2.setObject(items: configuration.cameras)
+        filter2.setZones(items: configuration.cameras)
+        
+        frigateVersion = configuration.version
+        frigateAlertsRetain = configuration.record.alerts.retain.days
+        frigateDetectionsRetain = configuration.record.detections.retain.days
+    }
+    
+    private func cleanupSnapshots(using configuration: NVRConfigurationCall2) {
+        // NOTE: This still runs on the main actor (like before).
+        // If EventStorage is thread-safe you can move this to a background
+        // actor in the future for even better perf.
+        for (_, value) in configuration.cameras {
+            let daysBack = value.snapshots.retain.default
+            let db = Int(daysBack)   // or just `let db = daysBack` if it's already Int
+            _ = EventStorage.shared.delete(daysBack: db, cameraName: value.name)
+        }
+    }
+    
+    private func logConfigDecodeError(data: Data, error: Error) {
+     
+//        Log.shared().print(
+//            page: "ContentView",
+//            fn: "task::cnvr.fetchNVRConfig 1001.1",
+//            type: "ERROR",
+//            text: "\(error)"
+//        )
+        
+        do {
+            if let json = try JSONSerialization.jsonObject(
+                with: data,
+                options: .fragmentsAllowed
+            ) as? [String: Any] {
+                Log.shared().print(
+                    page: "ContentView",
+                    fn: "logConfigDecodeError",
+                    type: "INFO",
+                    text: "\(json)"
+                )
+            }
+        } catch {
+            Log.shared().print(
+                page: "ContentView",
+                fn: "logConfigDecodeError",
+                type: "ERROR",
+                text: "\(error)"
+            )
+        }
+    }
+    
+    // MARK: - Background task
+    
+    func sheduleBackgroundTask() async {
+        let request = BGAppRefreshTaskRequest(identifier: "viewu_refresh")
+        request.earliestBeginDate = Calendar.current.date(
+            byAdding: .second,
+            value: 30 * 60,
+            to: Date()
+        )
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            print("DEBUG: Background Task Scheduled!")
+        } catch {
+            print("DEBUG: Scheduling Error \(error.localizedDescription)")
+        }
+    }
+    
+    // MARK: - Date helpers
+    
+    private func convertTime(time: Double) -> String {
+        let date = Date(timeIntervalSince1970: time)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: date)
+    }
+    
+    private func convertDateTime(time: Double) -> String {
+        let date = Date(timeIntervalSince1970: time)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeZone = .current
+        var localDate = dateFormatter.string(from: date)
+        localDate.replace("at", with: "")
+        return localDate
+    }
+}
+
+// MARK: - Remove
+/*
 struct ContentView: View {
     //Load Config
     @ObservedObject var filter2 = EventFilter.shared()
@@ -185,7 +626,7 @@ struct ContentView: View {
                         }
                         
                         nvrManager.connectionState = .connected
-                    } 
+                    }
                 }
                 
                 //TODO check if connection is disconnected first
@@ -217,7 +658,7 @@ struct ContentView: View {
                 ViewLog()
             }
             .navigationDestination(isPresented: $showCamera){
-                ViewCamera(title: "Live Cameras")
+ ViewCamerasList(title: "Live Cameras")
             }
             .navigationDestination(isPresented: $showNotificationManager){
                 //ViewNotificationManager(title: "Notification Manager")
@@ -242,7 +683,7 @@ struct ContentView: View {
             .sheet(isPresented: $showFilter) {
                 ViewFilter()
                     .presentationDetents([.large])
-            } 
+            }
             .toolbarBackground(.clear, for: .bottomBar)        // let our own card be the background
             .toolbarBackground(.visible, for: .navigationBar)  // keep whatever you had for the top
             .toolbar {
@@ -338,7 +779,7 @@ struct ContentView: View {
 //            .toolbar {
 //                if !isOnboarding {
 //                    ToolbarItemGroup(placement: .bottomBar) {
-//                        
+//
 //                        HStack{
 //                            Label("Filter", systemImage: "calendar.day.timeline.leading")
 //                                .labelStyle(VerticalLabelStyle(show: false))
@@ -348,9 +789,9 @@ struct ContentView: View {
 //                                .onTapGesture(perform: {
 //                                    showFilter.toggle()
 //                                })
-//                            
+//
 //                            Spacer()
-//                            
+//
 //                            Label("Cameras", systemImage: "web.camera")
 //                                .labelStyle(VerticalLabelStyle(show: false))
 //                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
@@ -359,7 +800,7 @@ struct ContentView: View {
 //                                .onTapGesture(perform: {
 //                                    showCamera.toggle()
 //                                })
-//                            
+//
 //                            if notificationModeIsOn {
 //                                Spacer()
 //                                Label("Notifications", systemImage: "app.badge")
@@ -371,7 +812,7 @@ struct ContentView: View {
 //                                        showNotificationManager.toggle()
 //                                    })
 //                            }
-//                            
+//
 //                            if developerModeIsOn {
 //                                Spacer()
 //                                Label("NVR", systemImage: "arrow.triangle.2.circlepath.circle")
@@ -385,7 +826,7 @@ struct ContentView: View {
 //                                        self.selection = 2
 //                                    })
 //                            }
-//                            
+//
 //                            if developerModeIsOn {
 //                                Spacer()
 //                                Label("Log", systemImage: "note.text")
@@ -397,9 +838,9 @@ struct ContentView: View {
 //                                        showLog.toggle()
 //                                    })
 //                            }
-//                            
+//
 //                            Spacer()
-//                            
+//
 //                            Label("Settings", systemImage: "gearshape")
 //                                .labelStyle(VerticalLabelStyle(show: false))
 //                                .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
@@ -448,17 +889,18 @@ struct ContentView: View {
         return localDate
     }
 }
+*/
+ 
+// MARK: - Label style
 
 struct VerticalLabelStyle: LabelStyle {
-    
     var show: Bool
     
-    init(show: Bool){
+    init(show: Bool) {
         self.show = show
     }
     
     func makeBody(configuration: Configuration) -> some View {
-        
         VStack {
             configuration.icon.font(.system(size: 18))
             configuration.title.font(.system(size: 10))
@@ -466,13 +908,17 @@ struct VerticalLabelStyle: LabelStyle {
     }
 }
 
+// MARK: - Preview
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(MQTTManager.shared())
+            .environmentObject(NotificationManager())
             .environmentObject(NVRConfig.shared())
     }
 }
+
+// MARK: - Transitions
 
 extension AnyTransition {
     static var moveAndFade: AnyTransition {
@@ -480,15 +926,19 @@ extension AnyTransition {
     }
 }
 
+// MARK: - Debug helpers
+
 func printData(_ data: Data) {
     let string = String(data: data, encoding: .utf8) ?? "Unable to decode data"
     print("\(string)")
 }
 
-func readData(_ data: Data) -> String{
+func readData(_ data: Data) -> String {
     let string = String(data: data, encoding: .utf8) ?? "Unable to decode data"
     return string
 }
+
+// MARK: - Bottom bar item
 
 struct BottomBarItem: View {
     let title: String
@@ -496,7 +946,7 @@ struct BottomBarItem: View {
     var isHighlighted: Bool = false
     var foreground: Color? = nil
     let action: () -> Void
-
+    
     var body: some View {
         Button(action: action) {
             VStack(spacing: 4) {
@@ -506,7 +956,7 @@ struct BottomBarItem: View {
                     .font(.system(size: 11, weight: .medium))
                     .lineLimit(1)
             }
-            .frame(minWidth: 44) // hit area
+            .frame(minWidth: 44)
             .padding(.vertical, 4)
             .padding(.horizontal, 6)
             .background(
@@ -520,3 +970,4 @@ struct BottomBarItem: View {
         )
     }
 }
+

@@ -1,3 +1,4 @@
+
 //
 //  MQTTManager.swift
 //  NVR Viewer
@@ -6,75 +7,106 @@
 //
 
 import Foundation
-
 import CocoaMQTT
 import Combine
 import UserNotifications
 
-@MainActor final class MQTTManager: ObservableObject {
-    
-    private var mqttClient: CocoaMQTT?
-    private var identifier: String!
-    private var topic: String!
-  
-    @Published var isAnonymous: Bool = UserDefaults.standard.bool(forKey: "mqttIsAnonUser")
-    @Published var ip: String = UserDefaults.standard.string(forKey: "mqttIPAddress") ?? "127.0.0.1"
-    @Published var port: String = UserDefaults.standard.string(forKey: "mqttPortAddress") ?? "1883"
-    @Published var user: String = UserDefaults.standard.string(forKey: "mqttUser") ?? ""
-    @Published var password: String = UserDefaults.standard.string(forKey: "mqttPassword") ?? ""
+@MainActor
+final class MQTTManager: ObservableObject {
 
-    var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
-    
+    // MARK: - Singleton
+
+    private static let _shared = MQTTManager()
+    class func shared() -> MQTTManager { _shared }
+
+    // MARK: - MQTT
+
+    private var mqttClient: CocoaMQTT?
+    private var identifier: String = UUID().uuidString
+    private var topic: String?
+
+    // MARK: - Connection settings (backed by UserDefaults)
+
+    @Published var isAnonymous: Bool =
+        UserDefaults.standard.bool(forKey: "mqttIsAnonUser")
+
+    @Published var ip: String =
+        UserDefaults.standard.string(forKey: "mqttIPAddress") ?? "127.0.0.1"
+
+    @Published var port: String =
+        UserDefaults.standard.string(forKey: "mqttPortAddress") ?? "1883"
+
+    @Published var user: String =
+        UserDefaults.standard.string(forKey: "mqttUser") ?? ""
+
+    @Published var password: String =
+        UserDefaults.standard.string(forKey: "mqttPassword") ?? ""
+
+    var fcm: String =
+        UserDefaults.standard.string(forKey: "fcm") ?? "0"
+
+    // MARK: - State
+
     @Published var currentAppState = MQTTAppState()
+
     private var anyCancellable: AnyCancellable?
-     
+
+    // MARK: - Init
+
     private init() {
-        // Workaround to support nested Observables, without this code changes to state is not propagated
+        // Propagate changes from nested ObservableObject
         anyCancellable = currentAppState.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }
     }
- 
-    private static let _shared = MQTTManager()
- 
-    class func shared() -> MQTTManager {
-        return _shared
-    }
+
+    // MARK: - Setup
 
     func initializeMQTT() {
-          
-        if mqttClient != nil {
-            mqttClient = nil
+
+        // Tear down previous client if any
+        mqttClient?.disconnect()
+        mqttClient = nil
+
+        let pid = ProcessInfo.processInfo.processIdentifier
+        let clientID = "viewu_\(identifier)_\(pid)"
+
+        guard let portNumber = UInt16(port) else {
+            // Invalid port, mark disconnected and bail
+            currentAppState.setAppConnectionState(state: .disconnected)
+            return
         }
-        
-        self.identifier = UUID().uuidString
-        let id = "viewu_\(self.identifier ?? "RandomIDGoesHere")_" + String(ProcessInfo().processIdentifier)
- 
-        if let number = UInt16(port) {
-            mqttClient = CocoaMQTT(clientID: id, host: ip, port: number)
-        }
-         
+
+        let client = CocoaMQTT(clientID: clientID, host: ip, port: portNumber)
+
         if !isAnonymous {
-            mqttClient?.username = self.user
-            mqttClient?.password = self.password
+            client.username = user
+            client.password = password
         }
-        
-        mqttClient?.willMessage = CocoaMQTTMessage(topic: "/will", string: "dieout")
-        mqttClient?.keepAlive = 60
-        mqttClient?.delegate = self
-        //
-        mqttClient?.autoReconnect = true
-        mqttClient?.autoReconnectTimeInterval = 1
-        mqttClient?.cleanSession = false
-        //mqttClient?.enableSSL = true
-        //mqttClient?.allowUntrustCACertificate = true
-        //mqttClient?.logLevel = .debug
-        //mqttClient?.ping() //test this out
+
+        client.willMessage = CocoaMQTTMessage(topic: "/will", string: "dieout")
+        client.keepAlive = 60
+        client.delegate = self
+        client.autoReconnect = true
+        client.autoReconnectTimeInterval = 1
+        client.cleanSession = false
+        // client.enableSSL = true
+        // client.allowUntrustCACertificate = true
+        // client.logLevel = .debug
+
+        mqttClient = client
     }
- 
+
+    // MARK: - Public API
+
     func connect() {
-        if let success = mqttClient?.connect(), success {
-            currentAppState.setAppConnectionState(state: .connecting) //connecting
+        guard let client = mqttClient else {
+            currentAppState.setAppConnectionState(state: .disconnected)
+            return
+        }
+
+        if client.connect() {
+            currentAppState.setAppConnectionState(state: .connecting)
         } else {
             currentAppState.setAppConnectionState(state: .disconnected)
         }
@@ -82,11 +114,10 @@ import UserNotifications
 
     func subscribe(topic: String) {
         self.topic = topic
-        //"subscribe", topic)
         mqttClient?.subscribe(topic, qos: .qos1)
     }
 
-    func publish(topic: String, with message: String) { 
+    func publish(topic: String, with message: String) {
         mqttClient?.publish(topic, withString: message, qos: .qos1)
     }
 
@@ -94,110 +125,350 @@ import UserNotifications
         mqttClient?.disconnect()
     }
 
-    /// Unsubscribe from a topic
+    /// Unsubscribe from a specific topic
     func unSubscribe(topic: String) {
         mqttClient?.unsubscribe(topic)
     }
 
-    /// Unsubscribe from a topic
+    /// Unsubscribe from the last subscribed topic
     func unSubscribeFromCurrentTopic() {
+        guard let topic = topic else { return }
         mqttClient?.unsubscribe(topic)
     }
-     
+
     func isSubscribed() -> Bool {
-       return currentAppState.appConnectionState.isSubscribed
+        currentAppState.appConnectionState.isSubscribed
     }
-    
+
     func isConnected() -> Bool {
-        return currentAppState.appConnectionState.isConnected
+        currentAppState.appConnectionState.isConnected
     }
-     
+
     func connectionStateMessage() -> String {
-        return currentAppState.appConnectionState.description
+        currentAppState.appConnectionState.description
     }
-    
-    func setAnonymous(anonymous: Bool ){
-        self.isAnonymous = anonymous
+
+    // MARK: - Mutators (also good spots to persist to UserDefaults if desired later)
+
+    func setAnonymous(anonymous: Bool) {
+        isAnonymous = anonymous
     }
-    
-    func setIP(ip: String ){
+
+    func setIP(ip: String) {
         self.ip = ip
     }
-    
-    func setPort( port: String ){
+
+    func setPort(port: String) {
         self.port = port
     }
-    
-    func setCredentials(user: String, password: String){
+
+    func setCredentials(user: String, password: String) {
         self.user = user
         self.password = password
     }
 }
 
+// MARK: - CocoaMQTTDelegate
+
 extension MQTTManager: CocoaMQTTDelegate {
-      
-    nonisolated func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
+
+    nonisolated func mqtt(
+        _ mqtt: CocoaMQTT,
+        didSubscribeTopics success: NSDictionary,
+        failed: [String]
+    ) {
         Task { @MainActor in
             currentAppState.setAppConnectionState(state: .connectedSubscribed)
         }
     }
-    
-    nonisolated func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
+
+    nonisolated func mqtt(
+        _ mqtt: CocoaMQTT,
+        didUnsubscribeTopics topics: [String]
+    ) {
         Task { @MainActor in
             currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
-            //-currentAppState.clearData()
+            // currentAppState.clearData()
         }
     }
 
-    nonisolated func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        Task { @MainActor in 
-            
+    nonisolated func mqtt(
+        _ mqtt: CocoaMQTT,
+        didConnectAck ack: CocoaMQTTConnAck
+    ) {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+
             if ack == .accept {
                 currentAppState.setAppConnectionState(state: .connected)
                 mqttClient?.subscribe("frigate/events")
                 mqttClient?.subscribe("viewu/pairing")
+            } else {
+                currentAppState.setAppConnectionState(state: .disconnected)
             }
         }
     }
-     
-    //1 [4,
-    nonisolated func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
+
+    nonisolated func mqtt(
+        _ mqtt: CocoaMQTT,
+        didPublishMessage message: CocoaMQTTMessage,
+        id: UInt16
+    ) {
+        // No-op for now; kept in case you want debug logging later.
+        // If you want to log:
+        // Task { @MainActor in self.trace("Published: \(message.string ?? "<nil>")") }
+    }
+
+    nonisolated func mqtt(
+        _ mqtt: CocoaMQTT,
+        didPublishAck id: UInt16
+    ) {
+        // No-op; placeholder for future state updates if needed
+    }
+
+    nonisolated func mqtt(
+        _ mqtt: CocoaMQTT,
+        didReceiveMessage message: CocoaMQTTMessage,
+        id: UInt16
+    ) {
         Task { @MainActor in
-            let _ = message.string.description
+            // FIX: message.string is String?, so we coalesce to ""
+            currentAppState.setReceivedMessage(text: message.string ?? "")
         }
     }
 
-    nonisolated func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+    // Older delegate API variant – keep, but make it consistent with concurrency.
+    nonisolated func mqtt(
+        _ mqtt: CocoaMQTT,
+        didUnsubscribeTopic topic: String
+    ) {
         Task { @MainActor in
-        }
-    }
-    //2
-    nonisolated func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
-        Task { @MainActor in
-            currentAppState.setReceivedMessage(text: message.string.description)
+            currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
+            // currentAppState.clearData()
         }
     }
 
-    func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
-        currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
-        //-currentAppState.clearData()
-    }
-    
     nonisolated func mqttDidPing(_ mqtt: CocoaMQTT) {
-        Task { @MainActor in
-        }
+        // No-op hook; keep if you want ping logging later.
     }
 
     nonisolated func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
-        Task { @MainActor in
-        }
+        // No-op hook; keep if you want pong timing later.
     }
 
-    nonisolated func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
+    nonisolated func mqttDidDisconnect(
+        _ mqtt: CocoaMQTT,
+        withError err: Error?
+    ) {
         Task { @MainActor in
             currentAppState.setAppConnectionState(state: .disconnected)
         }
     }
 }
 
- 
+
+
+// MARK: - Remove
+////
+////  MQTTManager.swift
+////  NVR Viewer
+////
+////  Created by Matthew Ehrhart on 3/1/24.
+////
+//
+//import Foundation
+//
+//import CocoaMQTT
+//import Combine
+//import UserNotifications
+//
+//@MainActor final class MQTTManager: ObservableObject {
+//    
+//    private var mqttClient: CocoaMQTT?
+//    private var identifier: String!
+//    private var topic: String!
+//  
+//    @Published var isAnonymous: Bool = UserDefaults.standard.bool(forKey: "mqttIsAnonUser")
+//    @Published var ip: String = UserDefaults.standard.string(forKey: "mqttIPAddress") ?? "127.0.0.1"
+//    @Published var port: String = UserDefaults.standard.string(forKey: "mqttPortAddress") ?? "1883"
+//    @Published var user: String = UserDefaults.standard.string(forKey: "mqttUser") ?? ""
+//    @Published var password: String = UserDefaults.standard.string(forKey: "mqttPassword") ?? ""
+//
+//    var fcm: String = UserDefaults.standard.string(forKey: "fcm") ?? "0"
+//    
+//    @Published var currentAppState = MQTTAppState()
+//    private var anyCancellable: AnyCancellable?
+//     
+//    private init() {
+//        // Workaround to support nested Observables, without this code changes to state is not propagated
+//        anyCancellable = currentAppState.objectWillChange.sink { [weak self] _ in
+//            self?.objectWillChange.send()
+//        }
+//    }
+// 
+//    private static let _shared = MQTTManager()
+// 
+//    class func shared() -> MQTTManager {
+//        return _shared
+//    }
+//
+//    func initializeMQTT() {
+//          
+//        if mqttClient != nil {
+//            mqttClient = nil
+//        }
+//        
+//        self.identifier = UUID().uuidString
+//        let id = "viewu_\(self.identifier ?? "RandomIDGoesHere")_" + String(ProcessInfo().processIdentifier)
+// 
+//        if let number = UInt16(port) {
+//            mqttClient = CocoaMQTT(clientID: id, host: ip, port: number)
+//        }
+//         
+//        if !isAnonymous {
+//            mqttClient?.username = self.user
+//            mqttClient?.password = self.password
+//        }
+//        
+//        mqttClient?.willMessage = CocoaMQTTMessage(topic: "/will", string: "dieout")
+//        mqttClient?.keepAlive = 60
+//        mqttClient?.delegate = self
+//        //
+//        mqttClient?.autoReconnect = true
+//        mqttClient?.autoReconnectTimeInterval = 1
+//        mqttClient?.cleanSession = false
+//        //mqttClient?.enableSSL = true
+//        //mqttClient?.allowUntrustCACertificate = true
+//        //mqttClient?.logLevel = .debug
+//        //mqttClient?.ping() //test this out
+//    }
+// 
+//    func connect() {
+//        if let success = mqttClient?.connect(), success {
+//            currentAppState.setAppConnectionState(state: .connecting) //connecting
+//        } else {
+//            currentAppState.setAppConnectionState(state: .disconnected)
+//        }
+//    }
+//
+//    func subscribe(topic: String) {
+//        self.topic = topic
+//        //"subscribe", topic)
+//        mqttClient?.subscribe(topic, qos: .qos1)
+//    }
+//
+//    func publish(topic: String, with message: String) { 
+//        mqttClient?.publish(topic, withString: message, qos: .qos1)
+//    }
+//
+//    func disconnect() {
+//        mqttClient?.disconnect()
+//    }
+//
+//    /// Unsubscribe from a topic
+//    func unSubscribe(topic: String) {
+//        mqttClient?.unsubscribe(topic)
+//    }
+//
+//    /// Unsubscribe from a topic
+//    func unSubscribeFromCurrentTopic() {
+//        mqttClient?.unsubscribe(topic)
+//    }
+//     
+//    func isSubscribed() -> Bool {
+//       return currentAppState.appConnectionState.isSubscribed
+//    }
+//    
+//    func isConnected() -> Bool {
+//        return currentAppState.appConnectionState.isConnected
+//    }
+//     
+//    func connectionStateMessage() -> String {
+//        return currentAppState.appConnectionState.description
+//    }
+//    
+//    func setAnonymous(anonymous: Bool ){
+//        self.isAnonymous = anonymous
+//    }
+//    
+//    func setIP(ip: String ){
+//        self.ip = ip
+//    }
+//    
+//    func setPort( port: String ){
+//        self.port = port
+//    }
+//    
+//    func setCredentials(user: String, password: String){
+//        self.user = user
+//        self.password = password
+//    }
+//}
+//
+//extension MQTTManager: CocoaMQTTDelegate {
+//      
+//    nonisolated func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
+//        Task { @MainActor in
+//            currentAppState.setAppConnectionState(state: .connectedSubscribed)
+//        }
+//    }
+//    
+//    nonisolated func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
+//        Task { @MainActor in
+//            currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
+//            //-currentAppState.clearData()
+//        }
+//    }
+//
+//    nonisolated func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+//        Task { @MainActor in 
+//            
+//            if ack == .accept {
+//                currentAppState.setAppConnectionState(state: .connected)
+//                mqttClient?.subscribe("frigate/events")
+//                mqttClient?.subscribe("viewu/pairing")
+//            }
+//        }
+//    }
+//     
+//    //1 [4,
+//    nonisolated func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
+//        Task { @MainActor in
+//            let _ = message.string.description
+//        }
+//    }
+//
+//    nonisolated func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+//        Task { @MainActor in
+//        }
+//    }
+//    //2
+//    nonisolated func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16) {
+//        Task { @MainActor in
+//            currentAppState.setReceivedMessage(text: message.string.description)
+//        }
+//    }
+//
+//    func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
+//        currentAppState.setAppConnectionState(state: .connectedUnSubscribed)
+//        //-currentAppState.clearData()
+//    }
+//    
+//    nonisolated func mqttDidPing(_ mqtt: CocoaMQTT) {
+//        Task { @MainActor in
+//        }
+//    }
+//
+//    nonisolated func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
+//        Task { @MainActor in
+//        }
+//    }
+//
+//    nonisolated func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
+//        Task { @MainActor in
+//            currentAppState.setAppConnectionState(state: .disconnected)
+//        }
+//    }
+//}
+//
+// 
