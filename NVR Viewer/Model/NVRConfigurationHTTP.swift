@@ -1,3 +1,10 @@
+//
+//  NVRConfigurationHTTP.swift
+//  NVR Viewer
+//
+//  Created by Matthew Ehrhart on 5/28/24.
+//
+
 import Foundation
 
 /// Top-level HTTP response containing a list of NVR events.
@@ -28,27 +35,3 @@ struct NVRConfigurationHTTP: Codable, Hashable, Identifiable {
     /// Optional list of Frigate zones this event belongs to
     let zones: [String]?
 }
-
-// MARK: - Remove
-////
-////  NVRConfigurationHTTP.swift
-////  NVR Viewer
-////
-////  Created by Matthew Ehrhart on 5/28/24.
-////
-//
-//import Foundation
-//
-//struct EventsHTTP: Codable {
-//    let events : [NVRConfigurationHTTP]
-//}
-//
-//struct NVRConfigurationHTTP: Codable, Hashable  {
-//    let camera: String
-//    let end_time : Double?
-//    let id: String
-//    let label: String
-//    let start_time: Double
-//    let sub_label: String?
-//    let zones: [String]?
-//}

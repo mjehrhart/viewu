@@ -287,9 +287,9 @@ struct ViewPlayVideoM3U8Segments: View {
             case .none:
                 break
             case .bearer:
-                jwt = try generateSyncJWT()
-            case .frigate:
                 jwt = try generateSyncJWTBearer()
+            case .frigate:
+                jwt = try generateSyncJWTFrigate()
             case .cloudflare:
                 break
             case .custom:
@@ -450,6 +450,7 @@ final class SSLBypassDelegate: NSObject, URLSessionDelegate {
             //print("[DEBUG] ✅ Accepting self-signed certificate for host: \(challenge.protectionSpace.host)")
             completionHandler(.useCredential, URLCredential(trust: trust))
         } else {
+            //print("[DEBUG] BAD No serverTrust, default handling")
             Log.shared().print(page: "SSLBypassDelegate", fn: "urlSession", type: "ERROR", text: "No serverTrust, default handling")
             completionHandler(.performDefaultHandling, nil)
         }

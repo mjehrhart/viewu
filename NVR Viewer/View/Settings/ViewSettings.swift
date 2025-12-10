@@ -27,6 +27,8 @@ struct ViewSettings: View {
     let api = APIRequester()
     
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
+    @AppStorage("showLogView") private var showLogView: Bool = false
+    @AppStorage("showNVRView") private var showNVRView: Bool = false
     @AppStorage("notificationModeIsOn") private var notificationModeIsOn: Bool = false
     @AppStorage("frigatePlusOn") private var frigatePlusOn: Bool = false
     
@@ -360,7 +362,11 @@ struct ViewSettings: View {
                 
                 // MARK: Developer Mode
                 Section {
-                    Toggle("Enabled", isOn: $developerModeIsOn)
+                    Toggle("Log View", isOn: $showLogView)
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    Toggle("NVR View", isOn: $showNVRView)
+                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    Toggle("Debug", isOn: $developerModeIsOn)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
                 } header: {
                     Text("Developer Mode")

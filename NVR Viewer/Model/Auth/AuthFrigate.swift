@@ -86,7 +86,7 @@ func connectToFrigateAPIWithJWT( host: String, jwtToken: String, endpoint: Strin
     task.resume()
 }
  
-func generateJWT() async throws -> String {
+func generateJWTFrigate() async throws -> String {
     
     @AppStorage("frigateUserRole") var frigateUserRole: String = "admin"
     @AppStorage("frigateUser") var frigateUser: String = "admin"
@@ -105,18 +105,18 @@ func generateJWT() async throws -> String {
     let secret: HMACKey = HMACKey(from: secretData)
     await keys.add(hmac: secret, digestAlgorithm: .sha256)
     let jwtToken = try await keys.sign(payload)
-     
+      
     return jwtToken
 }
 
-func generateSyncJWT() throws -> String {
+func generateSyncJWTFrigate() throws -> String {
     
     var result: Result<String, Error>?
     let semaphore = DispatchSemaphore(value: 0)
 
     Task {
         do {
-            let token = try await generateJWT() //generateJWTAsync()
+            let token = try await generateJWTFrigate() 
             result = .success(token)
         } catch {
             result = .failure(error)

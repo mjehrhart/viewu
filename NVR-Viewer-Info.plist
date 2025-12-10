@@ -18,17 +18,6 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
-        <key>NSExceptionDomains</key>
-            <dict>
-                <!-- The specific IP address or hostname that is causing the SSL error -->
-                <key>192.168.1.152</key>
-                <dict>
-                    <!-- Allows loading HTTP content AND allows self-signed/invalid HTTPS certificates -->
-                    <key>NSAllowsInsecureHTTPLoads</key>
-                    <true/>
-                    <!-- If using a specific port (like 8971), ensure it's handled. NSAllowsInsecureHTTPLoads generally covers this. -->
-                </dict>
-            </dict>
 	</dict>
 	<key>UIBackgroundModes</key>
 	<array>

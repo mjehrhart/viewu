@@ -10,18 +10,17 @@ import SwiftUI
 @MainActor
 struct ViewLog: View {
 
-    // Snapshot of the log at the time this screen is opened
-    private let entries: [LogItem]
+    // Now mutable so Clear can update it
+    @State private var entries: [LogItem]
     private let typeOptions: [String]   // ["All", "ERROR", "INFO", ...]
 
     @State private var selectedType: String = "All"
 
-    // Use the dismiss action
     @Environment(\.dismiss) private var dismiss
 
     init() {
         let allEntries = Log.shared().getList()
-        self.entries = allEntries
+        _entries = State(initialValue: allEntries)
 
         let distinctTypes = Set(allEntries.map { $0.type })
         self.typeOptions = ["All"] + distinctTypes.sorted()
@@ -37,48 +36,85 @@ struct ViewLog: View {
     }
 
     var body: some View {
-        VStack(spacing: 8) {
+        ScrollViewReader { proxy in
+            VStack(spacing: 8) {
 
-            // MARK: - Type filter (segmented control)
-            if typeOptions.count > 1 {
-                Picker("Type", selection: $selectedType) {
-                    ForEach(typeOptions, id: \.self) { type in
-                        Text(type)
-                            .tag(type)
+                // MARK: - Type filter (segmented control)
+                if typeOptions.count > 1 {
+                    Picker("Type", selection: $selectedType) {
+                        ForEach(typeOptions, id: \.self) { type in
+                            Text(type)
+                                .tag(type)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal, 8)
+                }
+
+                // MARK: - Actions row (Clear / Scroll to Top)
+                HStack {
+                    Button {
+                        // Clear global log and on-screen snapshot
+                        Log.shared().clear()        // Make sure you have this method on your Log class
+                        entries.removeAll()
+                    } label: {
+                        Label("Clear", systemImage: "trash")
+                    }
+
+                    Spacer()
+
+                    Button {
+                        withAnimation {
+                            proxy.scrollTo("LOG_TOP", anchor: .top)
+                        }
+                    } label: {
+                        Label("Top", systemImage: "arrow.up.to.line")
                     }
                 }
-                .pickerStyle(.segmented)
+                .font(.caption)
                 .padding(.horizontal, 8)
-            }
 
-            // MARK: - Log list
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 12) {
-                    ForEach(filteredEntries, id: \.self) { row in
-                        LogRowView(entry: row)
+                // MARK: - Log list
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 12) {
+
+                        // Invisible anchor at the top for scrollTo
+                        Color.clear
+                            .frame(height: 0)
+                            .id("LOG_TOP")
+
+                        ForEach(filteredEntries, id: \.self) { row in
+                            LogRowView(entry: row)
+                        }
                     }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 10)
                 }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 10)
             }
         }
         .navigationTitle("Log")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss() // Manually dismiss the view
-                } label: {
-                    HStack {
-                        Image(systemName: "chevron.backward")
-                        Text("Back")
-                    }
+        .toolbar(content: toolbarContent)
+    }
+
+    // MARK: - Toolbar
+
+    @ToolbarContentBuilder
+    private func toolbarContent() -> some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button {
+                dismiss()
+            } label: {
+                HStack {
+                    Image(systemName: "chevron.backward")
+                    Text("Back")
                 }
             }
         }
     }
 }
+
 
 // MARK: - Row View
 

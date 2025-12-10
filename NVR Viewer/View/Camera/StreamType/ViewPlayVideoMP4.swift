@@ -248,7 +248,7 @@ struct ViewPlayVideoMP4: View {
                             .padding(.vertical, 14)
                         }
                         .frame(maxWidth: .infinity)
-                        .frame(height: isLandscape ? 420 : 280)
+                        .frame(height: isLandscape ? 420 : 260)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -257,15 +257,104 @@ struct ViewPlayVideoMP4: View {
                 // ===========================
                 // MARK: - Initial / error
                 // ===========================
-                VStack {
-                    Text("Preparing Video")
-                        .padding()
-                    if let errorMessage {
-                        Text(errorMessage)
-                            .foregroundStyle(.red)
-                            .padding(.top, 4)
+                if idiom == .pad {
+                    ZStack {
+                        // Glass card background
+                        RoundedRectangle(cornerRadius: 22, style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color.gray.opacity(0.35),
+                                        Color.gray.opacity(0.20)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                    .stroke(Color.white.opacity(0.18), lineWidth: 0.8)
+                            )
+                            .shadow(color: Color.black.opacity(0.35), radius: 10, x: 0, y: 6)
+                        
+                        // Content: spinner + text
+                        HStack(spacing: 12) {
+                            Spacer()
+                            
+                            ProgressView()
+                                .tint(cBlue)
+                                .scaleEffect(1.1)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Preparing Video")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundStyle(.white)
+                                
+                                if let errorMessage {
+                                    Text(errorMessage)
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.red.opacity(0.95))
+                                        .lineLimit(2)
+                                        .multilineTextAlignment(.leading)
+                                }
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 14)
                     }
+                    .frame(height: isLandscape ? 570 : 420)
+                } else {
+                    ZStack {
+                        // Glass card background
+                        RoundedRectangle(cornerRadius: 22, style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color.gray.opacity(0.35),
+                                        Color.gray.opacity(0.20)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                    .stroke(Color.white.opacity(0.18), lineWidth: 0.8)
+                            )
+                            .shadow(color: Color.black.opacity(0.35), radius: 10, x: 0, y: 6)
+                        
+                        // Content: spinner + text
+                        HStack(spacing: 12) {
+                            Spacer()
+                            
+                            ProgressView()
+                                .tint(cBlue)
+                                .scaleEffect(1.1)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Preparing Video")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundStyle(.white)
+                                
+                                if let errorMessage {
+                                    Text(errorMessage)
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.red.opacity(0.95))
+                                        .lineLimit(2)
+                                        .multilineTextAlignment(.leading)
+                                }
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 14)
+                    }
+                    .frame(height: isLandscape ? 420 : 260)
                 }
+
             }
         }
         .modifier(CardBackground2())
@@ -279,10 +368,11 @@ struct ViewPlayVideoMP4: View {
     // MARK: - Orchestrator: Download MP4 then Play
     // ===================================================
     private func startMP4DownloadAndPlayback() async {
-         
         // Avoid duplicate work
-        guard !isLoading, player == nil else { return }
- 
+        guard !isLoading, player == nil else {
+            return
+        }
+  
         // Basic URL validation
         guard !urlMp4String.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               let remoteURL = URL(string: urlMp4String) else {
@@ -294,21 +384,20 @@ struct ViewPlayVideoMP4: View {
         errorMessage = nil
 
         do {
-            
             var jwt = ""
             switch authType {
             case .none:
                 break
             case .bearer:
-                jwt = try generateSyncJWT()
-            case .frigate:
                 jwt = try generateSyncJWTBearer()
+            case .frigate:
+                jwt = try generateSyncJWTFrigate()
             case .cloudflare:
                 break
             case .custom:
                 break
             }
-
+             
             let downloader = MP4Downloader2()
             let result = try await downloader.downloadMP4(
                 remoteURL: remoteURL,
@@ -318,22 +407,22 @@ struct ViewPlayVideoMP4: View {
             DispatchQueue.main.async {
                 self.tempFolderURL = result.tempFolder
                 self.localVideoURL = result.localFile
-
+ 
                 let item = AVPlayerItem(url: result.localFile)
                 self.player = AVPlayer(playerItem: item)
 
                 self.isLoading = false
                 self.isReadyToPlay = true
- 
             }
+
         } catch {
             DispatchQueue.main.async {
                 self.errorMessage = "MP4 download failed: \(error.localizedDescription)"
                 self.isLoading = false
-                Log.shared().print(page: "ViewPlayVideoMP4", fn: "startMP4DownloadAndPlayback", type: "ERROR", text: "MP4 download error: \(error)")
             }
         }
     }
+
 
     // ===================================================
     // MARK: - Cleanup
@@ -375,8 +464,6 @@ struct PlayerViewControllerMP4: UIViewControllerRepresentable {
 
 final class MP4Downloader2 {
 
-    @AppStorage("authType") var authType: AuthType = .none
-    
     struct Result {
         let localFile: URL
         let tempFolder: URL
@@ -401,7 +488,7 @@ final class MP4Downloader2 {
         remoteURL: URL,
         jwtToken: String
     ) async throws -> Result {
-
+ 
         // Create temp folder for this download
         let tempFolder = FileManager.default.temporaryDirectory
             .appendingPathComponent("mp4_download_\(UUID().uuidString)", isDirectory: true)
@@ -411,31 +498,43 @@ final class MP4Downloader2 {
 
         var req = URLRequest(url: remoteURL)
         req.httpMethod = "GET"
-          
-        switch authType {
-        case .none:
-            break
-        case .bearer, .frigate:
-            req.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
-        case .cloudflare, .custom:
-            break
-        }
-        
-        req.setValue("AVPlayer/1.0", forHTTPHeaderField: "User-Agent")
 
+        if !jwtToken.isEmpty {
+            let preview = String(jwtToken.prefix(12))
+            req.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
+        }
+
+        req.setValue("AVPlayer/1.0", forHTTPHeaderField: "User-Agent")
+ 
         let (tempFile, response) = try await session.download(for: req)
         guard let http = response as? HTTPURLResponse else {
             throw URLError(.badServerResponse)
         }
-
+ 
         if http.statusCode != 200 {
+            // Try to capture a snippet of the body for diagnostics
+            var bodySnippet = "<no body>"
+            do {
+                let data = try Data(contentsOf: tempFile)
+                if let s = String(data: data, encoding: .utf8) {
+                    bodySnippet = String(s.prefix(400))
+                } else {
+                    bodySnippet = "<non-UTF8 body, size=\(data.count) bytes>"
+                }
+            } catch {
+                bodySnippet = "<failed to read body: \(error)>"
+            }
+
+            let msg = "HTTP \(http.statusCode) while downloading MP4. Body snippet: \(bodySnippet)"
+            //print("[DEBUG] [MP4Downloader2] ERROR: \(msg)")
+
             throw NSError(
                 domain: "MP4Downloader2",
                 code: http.statusCode,
-                userInfo: [NSLocalizedDescriptionKey: "HTTP \(http.statusCode) while downloading MP4"]
+                userInfo: [NSLocalizedDescriptionKey: msg]
             )
         }
-
+ 
         // Move from temp URL into our folder as video.mp4
         try? FileManager.default.removeItem(at: localFileURL)
         try FileManager.default.moveItem(at: tempFile, to: localFileURL)
@@ -443,6 +542,7 @@ final class MP4Downloader2 {
         return Result(localFile: localFileURL, tempFolder: tempFolder)
     }
 }
+
 
 // =======================================================
 // MARK: - Self-Signed / IP HTTPS Bypass (DOWNLOAD ONLY)

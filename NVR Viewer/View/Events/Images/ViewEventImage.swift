@@ -128,7 +128,7 @@ struct ViewEventImage: View{
                                 
                                 if let _ = error {
                                     
-                                    Log.shared().print(page: "ViewEventImGE",
+                                    Log.shared().print(page: "ViewEventImage",
                                                        fn: "SubView:body",
                                                        type: "WARNING",
                                                        text: "\(error)")

@@ -150,7 +150,7 @@ struct ViewEventDetail: View {
                                 urlString: m3u8,
                                 urlMp4String: urlMp4String,
                                 frameTime: container.frameTime ?? 1
-                            )
+                            ) 
                         } else {
                             ViewVideoPlayStreamM3U8(
                                 urlString: m3u8,
@@ -357,7 +357,7 @@ func isValidMp4URL(_ option: String?) -> Bool {
           Log.shared().print(page: "ViewEventDetail",
                            fn: "isValidMp4URL",
                            type: "ERROR",
-                           text: "Invalid mp4 URL: \(option ?? "")")
+                           text: "Invalid MPR URL: \(option ?? "")")
         return false
     }
     return true
