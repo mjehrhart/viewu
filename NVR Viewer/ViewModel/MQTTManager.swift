@@ -1,4 +1,3 @@
-
 //
 //  MQTTManager.swift
 //  NVR Viewer
@@ -62,22 +61,37 @@ final class MQTTManager: ObservableObject {
 
     // MARK: - Setup
 
+    /// Explicit helper to reset the connection state from the UI
+    /// so we don't show stale "Connected" while reconfiguring.
+    func resetConnectionState() {                               // CHANGED
+        currentAppState.setAppConnectionState(state: .disconnected)
+    }
+
     func initializeMQTT() {
+
+        // Always start from a clean state for a new config         // CHANGED
+        currentAppState.setAppConnectionState(state: .disconnected)
 
         // Tear down previous client if any
         mqttClient?.disconnect()
         mqttClient = nil
 
-        let pid = ProcessInfo.processInfo.processIdentifier
-        let clientID = "viewu_\(identifier)_\(pid)"
-
-        guard let portNumber = UInt16(port) else {
-            // Invalid port, mark disconnected and bail
-            currentAppState.setAppConnectionState(state: .disconnected)
+        // Basic validation of broker address and port              // CHANGED
+        let trimmedIP = ip.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedIP.isEmpty else {
+            // Invalid / empty host; stay disconnected
             return
         }
 
-        let client = CocoaMQTT(clientID: clientID, host: ip, port: portNumber)
+        guard let portNumber = UInt16(port) else {
+            // Invalid port, mark disconnected and bail
+            return
+        }
+
+        let pid = ProcessInfo.processInfo.processIdentifier
+        let clientID = "viewu_\(identifier)_\(pid)"
+
+        let client = CocoaMQTT(clientID: clientID, host: trimmedIP, port: portNumber)
 
         if !isAnonymous {
             client.username = user
@@ -148,7 +162,7 @@ final class MQTTManager: ObservableObject {
         currentAppState.appConnectionState.description
     }
 
-    // MARK: - Mutators (also good spots to persist to UserDefaults if desired later)
+    // MARK: - Mutators
 
     func setAnonymous(anonymous: Bool) {
         isAnonymous = anonymous
@@ -214,16 +228,14 @@ extension MQTTManager: CocoaMQTTDelegate {
         didPublishMessage message: CocoaMQTTMessage,
         id: UInt16
     ) {
-        // No-op for now; kept in case you want debug logging later.
-        // If you want to log:
-        // Task { @MainActor in self.trace("Published: \(message.string ?? "<nil>")") }
+        // No-op for now
     }
 
     nonisolated func mqtt(
         _ mqtt: CocoaMQTT,
         didPublishAck id: UInt16
     ) {
-        // No-op; placeholder for future state updates if needed
+        // No-op for now
     }
 
     nonisolated func mqtt(
@@ -232,12 +244,10 @@ extension MQTTManager: CocoaMQTTDelegate {
         id: UInt16
     ) {
         Task { @MainActor in
-            // FIX: message.string is String?, so we coalesce to ""
             currentAppState.setReceivedMessage(text: message.string ?? "")
         }
     }
 
-    // Older delegate API variant – keep, but make it consistent with concurrency.
     nonisolated func mqtt(
         _ mqtt: CocoaMQTT,
         didUnsubscribeTopic topic: String
@@ -249,11 +259,11 @@ extension MQTTManager: CocoaMQTTDelegate {
     }
 
     nonisolated func mqttDidPing(_ mqtt: CocoaMQTT) {
-        // No-op hook; keep if you want ping logging later.
+        // No-op
     }
 
     nonisolated func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
-        // No-op hook; keep if you want pong timing later.
+        // No-op
     }
 
     nonisolated func mqttDidDisconnect(
@@ -265,3 +275,4 @@ extension MQTTManager: CocoaMQTTDelegate {
         }
     }
 }
+

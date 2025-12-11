@@ -228,6 +228,7 @@ struct ViewSettings: View {
                                    Button("", systemImage: showPassword ? "eye.slash" : "eye") {
                                        showPassword.toggle()
                                    }
+                                   .buttonStyle(.borderless)   // or .plain
                                    .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
                                }
                                .frame(maxWidth: .infinity, alignment: .trailing)
@@ -249,6 +250,8 @@ struct ViewSettings: View {
                         )
                     
                     Button("Save Connection") {
+                        mqttManager.currentAppState.setAppConnectionState(state: .disconnected)
+                        
                         mqttManager.setAnonymous(anonymous: mqttIsAnonUser )
                         mqttManager.setIP(ip: mqttIPAddress )
                         mqttManager.setPort( port: mqttPortAddress )

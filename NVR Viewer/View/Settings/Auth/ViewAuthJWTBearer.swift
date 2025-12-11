@@ -35,7 +35,7 @@ struct ViewAuthJWTBearer: View {
                 TextField("0.0.0.0", text: $nvrIPAddress)
                     .autocapitalization(.none)
                     .autocorrectionDisabled()
-                    .multilineTextAlignment(.trailing)
+                    .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             
@@ -47,8 +47,7 @@ struct ViewAuthJWTBearer: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 TextField("8971", text: $nvrPortAddress)
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing)
+                    .keyboardType(.numberPad) 
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             
@@ -83,6 +82,7 @@ struct ViewAuthJWTBearer: View {
                 Button("", systemImage: showBearer ? "eye.slash" : "eye") {
                     showBearer.toggle()
                 }
+                .buttonStyle(.borderless)   // or .plain
                 .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
             }
             

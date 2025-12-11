@@ -40,7 +40,7 @@ struct ViewAuthCloudFlare: View {
                 TextField("cloudflare domain only", text: $cloudFlareURLAddress)
                     .autocapitalization(.none)
                     .autocorrectionDisabled()
-                    .multilineTextAlignment(.trailing)
+                    .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
              
@@ -79,6 +79,7 @@ struct ViewAuthCloudFlare: View {
                 Button("", systemImage: showSecret ? "eye.slash" : "eye") {
                     showSecret.toggle()
                 }
+                .buttonStyle(.borderless)   // or .plain
                 .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
             }
             

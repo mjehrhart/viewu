@@ -35,7 +35,7 @@ struct ViewAuthFrigate: View {
                 TextField("0.0.0.0", text: $nvrIPAddress)
                     .autocapitalization(.none)
                     .autocorrectionDisabled()
-                    .multilineTextAlignment(.trailing)
+                    .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             
@@ -48,8 +48,7 @@ struct ViewAuthFrigate: View {
                 
                 TextField("8971", text: $nvrPortAddress)
                     .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             
             Divider()
@@ -81,7 +80,8 @@ struct ViewAuthFrigate: View {
                 
                 Button("", systemImage: showBearer ? "eye.slash" : "eye") {
                     showBearer.toggle()
-                }
+                } 
+                .buttonStyle(.borderless)   // or .plain
                 .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
             }
             
