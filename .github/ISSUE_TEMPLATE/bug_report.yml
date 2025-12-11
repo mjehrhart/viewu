@@ -1,0 +1,186 @@
+name: "Bug report"
+description: "Report a bug in the Viewu app"
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug in Viewu.  
+        Please fill out as much of the form as you can – it really helps track things down.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear and concise description of the issue.
+      placeholder: e.g. "Live view freezes after 10 seconds on camera FrontDoor."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: >
+        List the exact steps so we can reproduce the bug.  
+        If it doesn’t happen every time, mention how often it occurs.
+      placeholder: |
+        1. Open Viewu
+        2. Go to ...
+        3. Tap ...
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: e.g. "The live video should continue playing without freezing."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened instead? Include any error messages.
+      placeholder: e.g. "Video freezes, UI still responds, no error shown."
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Screen Recording
+      description: >
+        If applicable, add screenshots or a short screen recording to help explain the issue.
+      placeholder: "Drag and drop images or videos into this field."
+
+  - type: textarea
+    id: app_logs
+    attributes:
+      label: Viewu App Logs
+      description: |
+        If possible, attach logs from the app:
+        - Open **Settings** in Viewu
+        - Enable logging (if not already enabled)
+        - Reproduce the issue
+        - Export logs and paste them here or attach as a file
+      placeholder: "Paste logs here or describe where they are attached."
+
+  - type: markdown
+    attributes:
+      value: "## Environment (important)"
+
+  - type: input
+    id: device_model
+    attributes:
+      label: Device model
+      description: The iOS device you’re using.
+      placeholder: e.g. "iPhone 16 Pro"
+    validations:
+      required: true
+
+  - type: input
+    id: ios_version
+    attributes:
+      label: iOS version
+      description: The iOS version on your device.
+      placeholder: e.g. "iOS 18.1"
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Viewu app version
+      description: The version shown in the Viewu settings or TestFlight.
+      placeholder: e.g. "2.2"
+    validations:
+      required: true
+
+  - type: input
+    id: build_number
+    attributes:
+      label: Build number
+      description: The build number (from TestFlight or app settings).
+      placeholder: e.g. "67"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: "## Connection Details"
+
+  - type: dropdown
+    id: ssl_type
+    attributes:
+      label: SSL type
+      description: Are you using a self-signed certificate or a valid SSL certificate?
+      options:
+        - Unknown / Not sure
+        - Self-signed certificate
+        - Valid SSL certificate
+    validations:
+      required: false
+
+  - type: dropdown
+    id: connection_type
+    attributes:
+      label: Connection type
+      description: How are you connecting Viewu to your NVR?
+      options:
+        - Default(None)
+        - Frigate
+        - Cloudflare
+        - Bearer
+    validations:
+      required: false
+
+  - type: dropdown
+    id: endpoint_type
+    attributes:
+      label: Endpoint type
+      description: What type of address are you using?
+      options:
+        - Public FQDN (e.g. nvr.mydomain.com)
+        - Private FQDN
+        - IP address on LAN
+        - Other / Not sure
+    validations:
+      required: false
+
+  - type: dropdown
+    id: location_type
+    attributes:
+      label: Connection location
+      description: Are you on the same network as the NVR or remote?
+      options:
+        - Same LAN as NVR
+        - Remote (over Internet / cellular)
+        - Mixed / varies
+        - Not sure
+    validations:
+      required: false
+
+  - type: input
+    id: frigate_version
+    attributes:
+      label: Frigate version (if applicable)
+      description: If you use Frigate, include its version here.
+      placeholder: e.g. "Frigate 0.15.0"
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: >
+        Add any other details that might help:
+        - Specific cameras affected
+        - Whether it worked in a previous Viewu version
+        - Any workarounds you’ve found
+      placeholder: "Any extra details that might help debug this issue."
