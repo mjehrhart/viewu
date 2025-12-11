@@ -35,57 +35,148 @@ class FrigateURLSessionDelegate: NSObject, URLSessionDelegate {
  
 let frigateDelegate = FrigateURLSessionDelegate()
  
-func connectToFrigateAPIWithJWT( host: String, jwtToken: String, endpoint: String, completion: @escaping (Data?, Error?) -> Void) async {
-    
-    
-    let urlString = "\(host)\(endpoint)" 
-          
+//func connectToFrigateAPIWithJWT( host: String, jwtToken: String, endpoint: String, completion: @escaping (Data?, Error?) -> Void) async {
+//    
+//    
+//    let urlString = "\(host)\(endpoint)" 
+//          
+//    guard let url = URL(string: urlString) else {
+//        // call the completion handler instead of using 'throw'
+//        let error = NSError(domain: "InvalidURL", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+//        return completion(nil, error)
+//    }
+//    
+//    var request = URLRequest(url: url)
+//    request.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
+//    request.httpMethod = "GET"
+//    
+//    let configuration = URLSessionConfiguration.default
+//    let session = URLSession(configuration: configuration, delegate: frigateDelegate, delegateQueue: nil)
+//    
+//    // The closure handles all potential errors that the task produces
+//    let task = session.dataTask(with: request) { data, response, error in
+//        
+//        DispatchQueue.main.async {
+//            
+//            // 1. If error is present, we handle it internally and return via completion
+//            if let error = error {
+//                return completion(nil, error)
+//                //return // Stop execution here
+//            }
+//            
+//            // 2. Ensure data exists
+//            guard let data = data else {
+//                let noDataError = NSError(domain: "NoData", code: 1, userInfo: [NSLocalizedDescriptionKey: "No data returned from API"])
+//                return completion(nil, error)
+//                //return
+//            }
+//            
+//            // 3. Handle HTTP status code errors
+//            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+//                let apiError = NSError(domain: "APIError", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "API request failed"])
+//                return completion(nil, error)
+//                //return
+//            }
+//            
+//            // 4. Success: Call the completion handler with the Data
+//            completion(data, nil)
+//        }
+//    }
+//    
+//    task.resume()
+//}
+func connectToFrigateAPIWithJWT(
+    host: String,
+    jwtToken: String,
+    endpoint: String,
+    completion: @escaping (Data?, Error?) -> Void
+) async {
+
+    let urlString = "\(host)\(endpoint)"
+
     guard let url = URL(string: urlString) else {
-        // call the completion handler instead of using 'throw'
-        let error = NSError(domain: "InvalidURL", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+        let error = NSError(
+            domain: "InvalidURL",
+            code: 0,
+            userInfo: [NSLocalizedDescriptionKey: "Invalid URL: \(urlString)"]
+        )
+        Log.shared().print(page: "Auth", fn: "connectToFrigateAPIWithJWT", type: "ERROR", text: error.localizedDescription)
         return completion(nil, error)
     }
-    
+
     var request = URLRequest(url: url)
     request.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
     request.httpMethod = "GET"
-    
+
     let configuration = URLSessionConfiguration.default
     let session = URLSession(configuration: configuration, delegate: frigateDelegate, delegateQueue: nil)
-    
-    // The closure handles all potential errors that the task produces
+
     let task = session.dataTask(with: request) { data, response, error in
-        
         DispatchQueue.main.async {
-            
-            // 1. If error is present, we handle it internally and return via completion
+
             if let error = error {
+                Log.shared().print(
+                    page: "Auth",
+                    fn: "connectToFrigateAPIWithJWT",
+                    type: "ERROR",
+                    text: "Network error: \(error.localizedDescription)"
+                )
                 return completion(nil, error)
-                //return // Stop execution here
             }
-            
-            // 2. Ensure data exists
+
             guard let data = data else {
-                let noDataError = NSError(domain: "NoData", code: 1, userInfo: [NSLocalizedDescriptionKey: "No data returned from API"])
-                return completion(nil, error)
-                //return
+                let noDataError = NSError(
+                    domain: "NoData",
+                    code: 1,
+                    userInfo: [NSLocalizedDescriptionKey: "No data returned from API: \(urlString)"]
+                )
+                Log.shared().print(
+                    page: "Auth",
+                    fn: "connectToFrigateAPIWithJWT",
+                    type: "ERROR",
+                    text: noDataError.localizedDescription
+                )
+                return completion(nil, noDataError)
             }
-            
-            // 3. Handle HTTP status code errors
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                let apiError = NSError(domain: "APIError", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "API request failed"])
-                return completion(nil, error)
-                //return
+
+            if let httpResponse = response as? HTTPURLResponse,
+               httpResponse.statusCode != 200 {
+                let apiError = NSError(
+                    domain: "APIError",
+                    code: httpResponse.statusCode,
+                    userInfo: [NSLocalizedDescriptionKey: "API request failed with status \(httpResponse.statusCode) for \(urlString)"]
+                )
+                Log.shared().print(
+                    page: "Auth",
+                    fn: "connectToFrigateAPIWithJWT",
+                    type: "ERROR",
+                    text: apiError.localizedDescription
+                )
+                return completion(nil, apiError)
             }
-            
-            // 4. Success: Call the completion handler with the Data
+
+            Log.shared().print(
+                page: "Auth",
+                fn: "connectToFrigateAPIWithJWT",
+                type: "INFO",
+                text: "Request succeeded. url=\(urlString), bytes=\(data.count)"
+            )
+
             completion(data, nil)
         }
     }
-    
+
+    Log.shared().print(
+        page: "Auth",
+        fn: "connectToFrigateAPIWithJWT",
+        type: "INFO",
+        text: "Starting request. url=\(urlString)"
+    )
+
     task.resume()
 }
- 
+
+
 func generateJWTFrigate() async throws -> String {
     
     @AppStorage("frigateUserRole") var frigateUserRole: String = "admin"

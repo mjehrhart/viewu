@@ -25,7 +25,8 @@ struct ViewEventDetail: View {
     private let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
 
     @AppStorage("developerModeIsOn") private var developerModeIsOn: Bool = false
-
+    @AppStorage("authType") var authType: AuthType = .none
+    
     let showButton: Bool
     let showClip: Bool
 
@@ -145,7 +146,7 @@ struct ViewEventDetail: View {
 
                         // ViewPlayVideoMP4 is greatly preferred over ViewPlayVideoM3U8Segments
                         // But ViewVideoPlayStreamM3U8 is the main priority when possible
-                        if isHttpsLanURL(nvr.getUrl()) {
+                        if isHttpsLanURL(nvr.getUrl()) || authType == .cloudflare {
                             ViewPlayVideoMP4(
                                 urlString: m3u8,
                                 urlMp4String: urlMp4String,

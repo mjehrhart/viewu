@@ -20,7 +20,7 @@ final class MQTTAppState: ObservableObject {
     let epsSup = EndpointOptionsSuper.shared()
 
     /// Optional notification handler (currently unused)
-    let notify = NotificationHandler()
+    //let notify = NotificationHandler()
 
     // MARK: - Connection state
 

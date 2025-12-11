@@ -21,6 +21,7 @@ final class NVRConfig: ObservableObject {
 
     // MARK: - Storage keys
 
+    //@AppStorage("cloudFlareURLAddress") private var cloudFlareURLAddress: String = ""
     private enum Keys {
         static let nvrIsHttps        = "nvrIsHttps"
         static let nvrIPAddress      = "nvrIPAddress"
@@ -33,6 +34,8 @@ final class NVRConfig: ObservableObject {
         static let bearerIsHttps     = "bearerIsHttps"
         static let bearerIPAddress   = "bearerIPAddress"
         static let bearerPortAddress = "bearerPortAddress"
+        
+        static let cloudFlareURLAddress = "cloudFlareURLAddress"
 
         static let authType          = "authType"
     }
@@ -102,7 +105,13 @@ final class NVRConfig: ObservableObject {
             let port  = defaults.string(forKey: Keys.bearerPortAddress) ?? "5000"
             return (https, url, port)
 
-        case .cloudflare, .custom:
+        case .cloudflare:
+            let https = true
+            let url   = defaults.string(forKey: Keys.cloudFlareURLAddress) ?? "0.0.0.0"
+            let port  = "443"
+            return (https, url, port)
+            
+        case .custom:
             // Not yet implemented; keep these blank until you add specific behavior.
             return (true, "", "")
         }
@@ -125,7 +134,9 @@ final class NVRConfig: ObservableObject {
             defaults.set(url,   forKey: Keys.bearerIPAddress)
             defaults.set(port,  forKey: Keys.bearerPortAddress)
 
-        case .cloudflare, .custom:
+        case .cloudflare:
+            defaults.set(url,   forKey: Keys.cloudFlareURLAddress) 
+        case .custom:
             // No-op for now
             break
         }

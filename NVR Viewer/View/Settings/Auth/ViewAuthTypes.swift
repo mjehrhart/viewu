@@ -43,10 +43,7 @@ struct ViewAuthTypes: View {
                 ViewAuthJWTBearer()
             }
             if nvr.getAuthType() == .cloudflare  {
-                VStack {
-                    Text("CloudFlare")
-                    Text("This is in development")
-                }
+                ViewAuthCloudFlare()
             }
             if nvr.getAuthType() == .frigate {
                 ViewAuthFrigate()
