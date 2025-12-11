@@ -144,9 +144,8 @@ struct ViewEventDetail: View {
                         .padding(.top, 4)
                         .padding(.bottom, 2)
 
-                        // ViewPlayVideoMP4 is greatly preferred over ViewPlayVideoM3U8Segments
-                        // But ViewVideoPlayStreamM3U8 is the main priority when possible
-                        if isHttpsLanURL(nvr.getUrl()) || authType == .cloudflare {
+                        // ViewPlayVideoMP4 is greatly preferred over ViewPlayVideoM3U8Segments But ViewVideoPlayStreamM3U8 is the main priority when possible 
+                        if isHttpsLanURL(nvr.getUrl()) {
                             ViewPlayVideoMP4(
                                 urlString: m3u8,
                                 urlMp4String: urlMp4String,
