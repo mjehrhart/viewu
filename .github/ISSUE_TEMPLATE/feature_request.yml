@@ -1,0 +1,114 @@
+name: "Feature request"
+description: "Suggest a new feature or improvement for the Viewu app"
+title: "[Feature]: "
+labels:
+  - enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature for Viewu.
+        Please fill out the details below so we can understand the problem and the solution you have in mind.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A short summary of the feature or improvement you’re requesting.
+      placeholder: e.g. "Add a way to pin my favorite cameras to the top of the Event Timeline."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem this would solve
+      description: What problem or pain point are you experiencing that this feature would address?
+      placeholder: e.g. "I have many cameras and it takes a lot of scrolling to get to the ones I care about most."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution / idea
+      description: Describe how you would like this to work in the app.
+      placeholder: e.g. "Allow me to star certain cameras and show them in a dedicated 'Favorites' area on the home screen."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you have considered
+      description: Have you tried any workarounds or alternative approaches?
+      placeholder: e.g. "Right now I rename cameras so they sort to the top, but it’s not ideal."
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area of the app
+      description: Which part of Viewu does this request relate to most?
+      options:
+        - Live View / HLS
+        - Event Timeline
+        - Notifications
+        - Integrations (Frigate / Cloudflare / Bearer)
+        - Logs / Diagnostics
+        - UI / UX and theming
+        - Performance / responsiveness
+        - General / not sure
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Importance to you
+      description: How important is this feature for your workflow?
+      options:
+        - Nice to have
+        - Important
+        - Critical for my setup
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Mockups
+      description: If helpful, add screenshots or simple sketches of how you’d like this to look or behave.
+      placeholder: "Drag and drop images into this field."
+
+  - type: markdown
+    attributes:
+      value: "## Environment (optional)"
+
+  - type: input
+    id: device_model
+    attributes:
+      label: Device model
+      description: The iOS device you usually use Viewu on.
+      placeholder: e.g. "iPhone 16 Pro"
+
+  - type: input
+    id: ios_version
+    attributes:
+      label: iOS version
+      description: The iOS version on your device.
+      placeholder: e.g. "iOS 18.1"
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Viewu app version
+      description: The version shown in the Viewu settings or TestFlight.
+      placeholder: e.g. "2.2 (build 67)"
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Any other details that might help us understand or design this feature.
+      placeholder: "Any extra notes, edge cases, or usage scenarios that would help."
