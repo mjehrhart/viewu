@@ -109,6 +109,8 @@ struct ViewAuthJWTBearer: View {
                     nvrManager.setIP(ip: nvrIPAddress )
                     nvrManager.setPort( ports: nvrPortAddress )
                     
+                    nvrManager.connectionState = .disconnected
+                    
                     Task {
                         let url = nvr.getUrl()
                         let urlString = url
@@ -147,6 +149,8 @@ struct ViewAuthJWTBearer: View {
             nvrManager.setHttps(http: nvrIsHttps )
             nvrManager.setIP(ip: nvrIPAddress )
             nvrManager.setPort( ports: nvrPortAddress )
+            
+            nvrManager.connectionState = .disconnected
             
             Task {
                 let url = nvr.getUrl()

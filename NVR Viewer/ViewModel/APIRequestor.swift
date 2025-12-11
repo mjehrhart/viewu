@@ -517,7 +517,16 @@ final class APIRequester: NSObject {
         authType: AuthType,
         completion: @escaping (Data?, Error?) -> Void
     ) async throws {
-        
+
+        // Helper to build a simple NSError
+        func makeError(_ message: String, code: Int = 500) -> NSError {
+            NSError(
+                domain: "connection.info",
+                code: code,
+                userInfo: [NSLocalizedDescriptionKey: message]
+            )
+        }
+
         switch authType {
         case .none:
             let fullUrlString = urlString + "/api/version"
@@ -528,20 +537,20 @@ final class APIRequester: NSObject {
                     type: "ERROR",
                     text: "Invalid URL - \(fullUrlString)"
                 )
-                return
+                return completion(nil, makeError("Invalid URL \(fullUrlString)", code: 400))
             }
-            
+
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            
+
             let session = URLSession(
                 configuration: .default,
                 delegate: self,
                 delegateQueue: .main
             )
-            
+
             let task = session.dataTask(with: request) { data, response, error in
-                
+
                 if let error = error {
                     Log.shared().print(
                         page: "APIRequestor",
@@ -549,15 +558,12 @@ final class APIRequester: NSObject {
                         type: "ERROR",
                         text: "\(error.localizedDescription)"
                     )
-                    
-                    let errorTemp = NSError(
-                        domain: "connection.info:\(error.localizedDescription) - \(fullUrlString)",
-                        code: 500,
-                        userInfo: nil
+                    let errorTemp = makeError(
+                        "Network error: \(error.localizedDescription) - \(fullUrlString)"
                     )
                     return completion(nil, errorTemp)
                 }
-                
+
                 guard let httpResponse = response as? HTTPURLResponse else {
                     Log.shared().print(
                         page: "APIRequestor",
@@ -565,14 +571,9 @@ final class APIRequester: NSObject {
                         type: "ERROR",
                         text: "Invalid Response - \(fullUrlString)"
                     )
-                    let errorTemp = NSError(
-                        domain: "connection.info:invalid response",
-                        code: 500,
-                        userInfo: nil
-                    )
-                    return completion(nil, errorTemp)
+                    return completion(nil, makeError("Invalid HTTP response"))
                 }
-                
+
                 let statusCode = httpResponse.statusCode
                 if statusCode != 200 {
                     Log.shared().print(
@@ -581,163 +582,173 @@ final class APIRequester: NSObject {
                         type: "ERROR",
                         text: "\(statusCode) - \(fullUrlString)"
                     )
-                    let errorTemp = NSError(
-                        domain: "connection.info:statusCode",
-                        code: 500,
-                        userInfo: nil
-                    )
-                    return completion(nil, errorTemp)
+                    return completion(nil, makeError("HTTP \(statusCode)", code: statusCode))
                 }
-                
-                // Validate first byte is a digit (version should start with 0–9)
-                if let firstByteData = data?.first.map({ Data([$0]) }),
-                   let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
-                    
-                    let character = Character(firstCharacterString)
-                    if !character.isWholeNumber {
-                        Log.shared().print(
-                            page: "APIRequestor",
-                            fn: "connection.info:statusCode",
-                            type: "ERROR",
-                            text: "NOT_WHOLE_NUMBER - \(fullUrlString)"
-                        )
-                        let errorTemp = NSError(domain: "connection.info", code: 501, userInfo: nil)
-                        return completion(nil, errorTemp)
-                    }
-                }
-                
-                if data?.isEmpty ?? true {
+
+                // Validate first byte is a digit
+                guard let data = data, !data.isEmpty else {
                     Log.shared().print(
                         page: "APIRequestor",
-                        fn: "connection.info:statusCode",
+                        fn: "connection.info:dataEmpty",
                         type: "ERROR",
                         text: "DATA_EMPTY - \(fullUrlString)"
                     )
-                    let errorTemp = NSError(domain: "connection.info", code: 502, userInfo: nil)
-                    return completion(nil, errorTemp)
+                    return completion(nil, makeError("Empty response", code: 502))
                 }
-                
-                completion(data, error)
+
+                if let firstByte = data.first {
+                    let firstByteData = Data([firstByte])
+                    if let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+                        let character = Character(firstCharacterString)
+                        if !character.isWholeNumber {
+                            Log.shared().print(
+                                page: "APIRequestor",
+                                fn: "connection.info:notDigit",
+                                type: "ERROR",
+                                text: "NOT_WHOLE_NUMBER - \(fullUrlString)"
+                            )
+                            return completion(nil, makeError("Unexpected response format", code: 501))
+                        }
+                    }
+                }
+
+                completion(data, nil)
             }
-            
+
             task.resume()
-            
+
         case .frigate:
-            guard let jwt = try? await generateJWTFrigate() else { return }
-            
+            guard let jwt = try? await generateJWTFrigate() else {
+                return completion(nil, makeError("Failed to generate Frigate JWT", code: 503))
+            }
+
             await connectToFrigateAPIWithJWT(
                 host: urlString,
                 jwtToken: jwt,
                 endpoint: "/api/version"
             ) { data, error in
-                
-                if let firstByteData = data?.first.map({ Data([$0]) }),
-                   let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
-                    
-                    let character = Character(firstCharacterString)
-                    if !character.isWholeNumber {
-                        let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
-                        return completion(nil, errorTemp)
+
+                if let error = error {
+                    return completion(nil, error)
+                }
+
+                guard let data = data, !data.isEmpty else {
+                    return completion(nil, makeError("Empty response", code: 500))
+                }
+
+                if let firstByte = data.first {
+                    let firstByteData = Data([firstByte])
+                    if let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+                        let character = Character(firstCharacterString)
+                        if !character.isWholeNumber {
+                            return completion(nil, makeError("Unexpected response format", code: 500))
+                        }
                     }
                 }
-                
-                if data?.isEmpty ?? true {
-                    let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
-                    return completion(nil, errorTemp)
-                }
-                
-                return completion(data, error)
+
+                return completion(data, nil)
             }
-            
+
         case .bearer:
-            guard let jwt = try? await generateJWTBearer() else { return }
-            
+            guard let jwt = try? await generateJWTBearer() else {
+                return completion(nil, makeError("Failed to generate bearer JWT", code: 503))
+            }
+
             await connectWithJWT(
                 host: urlString,
                 jwtToken: jwt,
                 endpoint: "/api/version"
             ) { data, error in
-                
-                if let firstByteData = data?.first.map({ Data([$0]) }),
-                   let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
-                    
-                    let character = Character(firstCharacterString)
-                    if !character.isWholeNumber {
-                        let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
-                        return completion(nil, errorTemp)
+
+                if let error = error {
+                    return completion(nil, error)
+                }
+
+                guard let data = data, !data.isEmpty else {
+                    return completion(nil, makeError("Empty response", code: 500))
+                }
+
+                if let firstByte = data.first {
+                    let firstByteData = Data([firstByte])
+                    if let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+                        let character = Character(firstCharacterString)
+                        if !character.isWholeNumber {
+                            return completion(nil, makeError("Unexpected response format", code: 500))
+                        }
                     }
                 }
-                
-                if data?.isEmpty ?? true {
-                    let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
-                    return completion(nil, errorTemp)
-                }
-                
-                return completion(data, error)
+
+                return completion(data, nil)
             }
-            
+
         case .cloudflare:
             await connectWithCloudflareAccess(
                 host: urlString,
                 endpoint: "/api/version"
             ) { data, error in
-                
-                if let firstByteData = data?.first.map({ Data([$0]) }),
-                   let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
-                    
-                    let character = Character(firstCharacterString)
-                    if !character.isWholeNumber {
-                        let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
-                        return completion(nil, errorTemp)
+
+                if let error = error {
+                    return completion(nil, error)
+                }
+
+                guard let data = data, !data.isEmpty else {
+                    return completion(nil, makeError("Empty response", code: 500))
+                }
+
+                if let firstByte = data.first {
+                    let firstByteData = Data([firstByte])
+                    if let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+                        let character = Character(firstCharacterString)
+                        if !character.isWholeNumber {
+                            return completion(nil, makeError("Unexpected response format", code: 500))
+                        }
                     }
                 }
-                
-                if data?.isEmpty ?? true {
-                    let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
-                    return completion(nil, errorTemp)
-                }
-                
-                return completion(data, error)
+
+                return completion(data, nil)
             }
-            
+
         default:
-            let fullURLString = urlString + "/api/version"
-            guard let url = URL(string: fullURLString) else {
+            let fullUrlString = urlString + "/api/version"
+            guard let url = URL(string: fullUrlString) else {
                 Log.shared().print(
                     page: "APIRequestor",
                     fn: "checkConnectionStatus",
                     type: "ERROR",
-                    text: "AuthType is unsupported - \(fullURLString)"
+                    text: "AuthType is unsupported - \(fullUrlString)"
                 )
-                return
+                return completion(nil, makeError("Unsupported authType / invalid URL", code: 400))
             }
-            
+
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            
+
             let session = URLSession(
                 configuration: .default,
                 delegate: self,
                 delegateQueue: .main
             )
-            
+
             let task = session.dataTask(with: request) { data, response, error in
-                if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode != 200 {
-                        let errorTemp = NSError(
-                            domain: "",
-                            code: httpResponse.statusCode,
-                            userInfo: nil
-                        )
-                        return completion(nil, errorTemp)
-                    }
-                } else {
-                    let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
-                    return completion(nil, errorTemp)
+
+                if let error = error {
+                    return completion(nil, error)
                 }
-                
-                printData(data ?? "NO DATA FOUND".data(using: .utf8)!)
-                completion(data, error)
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    return completion(nil, makeError("Invalid HTTP response"))
+                }
+
+                guard httpResponse.statusCode == 200 else {
+                    return completion(nil, makeError("HTTP \(httpResponse.statusCode)", code: httpResponse.statusCode))
+                }
+
+                guard let data = data, !data.isEmpty else {
+                    return completion(nil, makeError("Empty response", code: 500))
+                }
+
+                printData(data)
+                completion(data, nil)
             }
             task.resume()
         }
@@ -780,3 +791,234 @@ struct FrigateResponse: Codable {
     let success: Bool?
 }
 
+
+//    func checkConnectionStatus(
+//        urlString: String,
+//        authType: AuthType,
+//        completion: @escaping (Data?, Error?) -> Void
+//    ) async throws {
+//
+//        switch authType {
+//        case .none:
+//            let fullUrlString = urlString + "/api/version"
+//            guard let url = URL(string: fullUrlString) else {
+//                Log.shared().print(
+//                    page: "APIRequestor",
+//                    fn: "checkConnectionStatus",
+//                    type: "ERROR",
+//                    text: "Invalid URL - \(fullUrlString)"
+//                )
+//                return
+//            }
+//
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "GET"
+//
+//            let session = URLSession(
+//                configuration: .default,
+//                delegate: self,
+//                delegateQueue: .main
+//            )
+//
+//            let task = session.dataTask(with: request) { data, response, error in
+//
+//                if let error = error {
+//                    Log.shared().print(
+//                        page: "APIRequestor",
+//                        fn: "checkConnectionStatus",
+//                        type: "ERROR",
+//                        text: "\(error.localizedDescription)"
+//                    )
+//
+//                    let errorTemp = NSError(
+//                        domain: "connection.info:\(error.localizedDescription) - \(fullUrlString)",
+//                        code: 500,
+//                        userInfo: nil
+//                    )
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                guard let httpResponse = response as? HTTPURLResponse else {
+//                    Log.shared().print(
+//                        page: "APIRequestor",
+//                        fn: "connection.info:invalid response",
+//                        type: "ERROR",
+//                        text: "Invalid Response - \(fullUrlString)"
+//                    )
+//                    let errorTemp = NSError(
+//                        domain: "connection.info:invalid response",
+//                        code: 500,
+//                        userInfo: nil
+//                    )
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                let statusCode = httpResponse.statusCode
+//                if statusCode != 200 {
+//                    Log.shared().print(
+//                        page: "APIRequestor",
+//                        fn: "connection.info:statusCode",
+//                        type: "ERROR",
+//                        text: "\(statusCode) - \(fullUrlString)"
+//                    )
+//                    let errorTemp = NSError(
+//                        domain: "connection.info:statusCode",
+//                        code: 500,
+//                        userInfo: nil
+//                    )
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                // Validate first byte is a digit (version should start with 0–9)
+//                if let firstByteData = data?.first.map({ Data([$0]) }),
+//                   let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+//
+//                    let character = Character(firstCharacterString)
+//                    if !character.isWholeNumber {
+//                        Log.shared().print(
+//                            page: "APIRequestor",
+//                            fn: "connection.info:statusCode",
+//                            type: "ERROR",
+//                            text: "NOT_WHOLE_NUMBER - \(fullUrlString)"
+//                        )
+//                        let errorTemp = NSError(domain: "connection.info", code: 501, userInfo: nil)
+//                        return completion(nil, errorTemp)
+//                    }
+//                }
+//
+//                if data?.isEmpty ?? true {
+//                    Log.shared().print(
+//                        page: "APIRequestor",
+//                        fn: "connection.info:statusCode",
+//                        type: "ERROR",
+//                        text: "DATA_EMPTY - \(fullUrlString)"
+//                    )
+//                    let errorTemp = NSError(domain: "connection.info", code: 502, userInfo: nil)
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                completion(data, error)
+//            }
+//
+//            task.resume()
+//
+//        case .frigate:
+//            guard let jwt = try? await generateJWTFrigate() else { return }
+//
+//            await connectToFrigateAPIWithJWT(
+//                host: urlString,
+//                jwtToken: jwt,
+//                endpoint: "/api/version"
+//            ) { data, error in
+//
+//                if let firstByteData = data?.first.map({ Data([$0]) }),
+//                   let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+//
+//                    let character = Character(firstCharacterString)
+//                    if !character.isWholeNumber {
+//                        let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
+//                        return completion(nil, errorTemp)
+//                    }
+//                }
+//
+//                if data?.isEmpty ?? true {
+//                    let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                return completion(data, error)
+//            }
+//
+//        case .bearer:
+//            guard let jwt = try? await generateJWTBearer() else { return }
+//
+//            await connectWithJWT(
+//                host: urlString,
+//                jwtToken: jwt,
+//                endpoint: "/api/version"
+//            ) { data, error in
+//
+//                if let firstByteData = data?.first.map({ Data([$0]) }),
+//                   let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+//
+//                    let character = Character(firstCharacterString)
+//                    if !character.isWholeNumber {
+//                        let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
+//                        return completion(nil, errorTemp)
+//                    }
+//                }
+//
+//                if data?.isEmpty ?? true {
+//                    let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                return completion(data, error)
+//            }
+//
+//        case .cloudflare:
+//            await connectWithCloudflareAccess(
+//                host: urlString,
+//                endpoint: "/api/version"
+//            ) { data, error in
+//
+//                if let firstByteData = data?.first.map({ Data([$0]) }),
+//                   let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+//
+//                    let character = Character(firstCharacterString)
+//                    if !character.isWholeNumber {
+//                        let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
+//                        return completion(nil, errorTemp)
+//                    }
+//                }
+//
+//                if data?.isEmpty ?? true {
+//                    let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                return completion(data, error)
+//            }
+//
+//        default:
+//            let fullURLString = urlString + "/api/version"
+//            guard let url = URL(string: fullURLString) else {
+//                Log.shared().print(
+//                    page: "APIRequestor",
+//                    fn: "checkConnectionStatus",
+//                    type: "ERROR",
+//                    text: "AuthType is unsupported - \(fullURLString)"
+//                )
+//                return
+//            }
+//
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "GET"
+//
+//            let session = URLSession(
+//                configuration: .default,
+//                delegate: self,
+//                delegateQueue: .main
+//            )
+//
+//            let task = session.dataTask(with: request) { data, response, error in
+//                if let httpResponse = response as? HTTPURLResponse {
+//                    if httpResponse.statusCode != 200 {
+//                        let errorTemp = NSError(
+//                            domain: "",
+//                            code: httpResponse.statusCode,
+//                            userInfo: nil
+//                        )
+//                        return completion(nil, errorTemp)
+//                    }
+//                } else {
+//                    let errorTemp = NSError(domain: "", code: 500, userInfo: nil)
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                printData(data ?? "NO DATA FOUND".data(using: .utf8)!)
+//                completion(data, error)
+//            }
+//            task.resume()
+//        }
+//    }

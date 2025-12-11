@@ -104,7 +104,10 @@ struct ViewAuthCloudFlare: View {
                     nvrManager.setHttps(http: true )
                     nvrManager.setIP(ip: cloudFlareURLAddress )
                     nvrManager.setPort( ports: "443" )
-                    
+
+                    // NEW: clear previous status so you don't see a stale "Connected"
+                    nvrManager.connectionState = .disconnected
+
                     Task {
                         let url = nvr.getUrl()
                         let urlString = url
@@ -112,7 +115,7 @@ struct ViewAuthCloudFlare: View {
                             urlString: urlString,
                             authType: nvr.getAuthType()
                         ) { (data, error) in
-                            
+
                             if let error = error {
                                 Log.shared().print(
                                     page: "ViewAuthCloudFlare",
@@ -127,6 +130,7 @@ struct ViewAuthCloudFlare: View {
                         }
                     }
                 }
+
                 .buttonStyle(CustomPressEffectButtonStyle())
                 .tint(Color(white: 0.58))
                 .scaleEffect(scale)
@@ -143,6 +147,8 @@ struct ViewAuthCloudFlare: View {
             nvrManager.setHttps(http: true )
             nvrManager.setIP(ip: cloudFlareURLAddress )
             nvrManager.setPort( ports: "443" )
+            
+            nvrManager.connectionState = .disconnected
             
             Task {
                 let url = nvr.getUrl()
