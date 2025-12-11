@@ -134,7 +134,7 @@ body:
       label: Connection type
       description: How are you connecting Viewu to your NVR?
       options:
-        - None
+        - Default(None)
         - Frigate
         - Cloudflare
         - Bearer
