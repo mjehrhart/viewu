@@ -366,6 +366,60 @@ struct ViewSettings: View {
                 }
                 
                 // MARK: Developer Mode
+//                Section {
+//
+//                    Toggle("Show Log", isOn: $showLogView)
+//                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+//
+//                    Toggle("Show View", isOn: $showNVRView)
+//                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+//
+//                    Toggle("Display URLs", isOn: $developerModeIsOn)
+//                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+//
+//                    // MARK: Log Level (three mutually exclusive toggles)
+//
+//                    Toggle("Debug – all logs", isOn: Binding(
+//                        get: {
+//                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .debug
+//                        },
+//                        set: { isOn in
+//                            if isOn {
+//                                logLevelRaw = LogLevel.debug.rawValue
+//                            }
+//                        }
+//                    ))
+//                    .tint(Color(red: 0.153, green: 0.69, blue: 1))
+//
+//                    Toggle("Warning – warnings & errors", isOn: Binding(
+//                        get: {
+//                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .warning
+//                        },
+//                        set: { isOn in
+//                            if isOn {
+//                                logLevelRaw = LogLevel.warning.rawValue
+//                            }
+//                        }
+//                    ))
+//                    .tint(Color(red: 1.0, green: 0.6, blue: 0.0))   // orange-ish
+//
+//                    Toggle("Error – errors only", isOn: Binding(
+//                        get: {
+//                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .error
+//                        },
+//                        set: { isOn in
+//                            if isOn {
+//                                logLevelRaw = LogLevel.error.rawValue
+//                            }
+//                        }
+//                    ))
+//                    .tint(.red)
+//
+//                } header: {
+//                    Text("Developer Mode")
+//                        .font(.caption)
+//                        .foregroundColor(.orange)
+//                }
                 Section {
 
                     Toggle("Show Log", isOn: $showLogView)
@@ -374,52 +428,43 @@ struct ViewSettings: View {
                     Toggle("Show View", isOn: $showNVRView)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
 
-                    Toggle("Display URLs", isOn: $developerModeIsOn)
+                    Toggle("Debug", isOn: $developerModeIsOn)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
-
-                    // MARK: Log Level (three mutually exclusive toggles)
-
-                    Toggle("Debug – all logs", isOn: Binding(
-                        get: {
-                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .debug
-                        },
-                        set: { isOn in
-                            if isOn {
-                                logLevelRaw = LogLevel.debug.rawValue
-                            }
-                        }
-                    ))
-                    .tint(Color(red: 0.153, green: 0.69, blue: 1))
-
-                    Toggle("Warning – warnings & errors", isOn: Binding(
-                        get: {
-                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .warning
-                        },
-                        set: { isOn in
-                            if isOn {
-                                logLevelRaw = LogLevel.warning.rawValue
-                            }
-                        }
-                    ))
-                    .tint(Color(red: 1.0, green: 0.6, blue: 0.0))   // orange-ish
-
-                    Toggle("Error – errors only", isOn: Binding(
-                        get: {
-                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .error
-                        },
-                        set: { isOn in
-                            if isOn {
-                                logLevelRaw = LogLevel.error.rawValue
-                            }
-                        }
-                    ))
-                    .tint(.red)
 
                 } header: {
                     Text("Developer Mode")
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
+                
+                // MARK: Logging
+                
+                Section {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Log Level")
+                            //.font(.subheadline.weight(.semibold))
+
+                        Picker(
+                            "",
+                            selection: Binding<LogLevel>(
+                                get: { LogLevel(rawValue: logLevelRaw) ?? .debug },
+                                set: { newValue in
+                                    logLevelRaw = newValue.rawValue
+                                }
+                            )
+                        ) {
+                            Text("Debug").tag(LogLevel.debug)
+                            Text("Warning").tag(LogLevel.warning)
+                            Text("Error").tag(LogLevel.error)
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                } header: {
+                    Text("Logging")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+
 
 
                 
