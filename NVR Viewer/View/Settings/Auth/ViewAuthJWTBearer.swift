@@ -144,11 +144,9 @@ struct ViewAuthJWTBearer: View {
                             ) { data, error in
 
                                 if let error = error {
-                                    Log.shared().print(
+                                    Log.error(
                                         page: "ViewAuthJWTBearer",
-                                        fn: "Bearer Connection",
-                                        type: "ERROR",
-                                        text: "\(String(describing: error)) - \(urlString)"
+                                        fn: "Bearer Connection", "\(String(describing: error)) - \(urlString)"
                                     )
                                     nvrManager.connectionState = .disconnected
                                     return
@@ -163,11 +161,9 @@ struct ViewAuthJWTBearer: View {
                                 }
                             }
                         } catch {
-                            Log.shared().print(
+                            Log.error(
                                 page: "ViewAuthJWTBearer",
-                                fn: "Bearer Connection",
-                                type: "ERROR",
-                                text: "checkConnectionStatus threw: \(error) - \(urlString)"
+                                fn: "Bearer Connection", "checkConnectionStatus threw: \(error) - \(urlString)"
                             )
                             nvrManager.connectionState = .disconnected
                         }
@@ -201,11 +197,9 @@ struct ViewAuthJWTBearer: View {
                 ) { (data, error) in
                     
                     if let error = error { 
-                        Log.shared().print(
+                        Log.error(
                             page: "ViewAuthJWTBearer",
-                            fn: "NVR Connection",
-                            type: "ERROR",
-                            text: "\(String(describing: error)) - \(urlString)"
+                            fn: "NVR Connection", "\(String(describing: error)) - \(urlString)"
                         )
                         nvrManager.connectionState = .disconnected
                         return

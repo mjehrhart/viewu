@@ -239,11 +239,9 @@ final class MQTTAppState: ObservableObject {
             )
 
         } catch {
-            Log.shared().print(
+            Log.error(
                 page: "MQTTState",
-                fn: "setReceivedMessage",
-                type: "ERROR",
-                text: "\(error)"
+                fn: "setReceivedMessage", "\(error)"
             )
         }
     }

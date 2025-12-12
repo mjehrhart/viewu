@@ -233,11 +233,9 @@ struct ViewEventCard: View {
                         }
                     }
                 } catch {
-                    Log.shared().print(
+                    Log.error(
                         page: "ViewEventCard",
-                        fn: "FrigatePlusButton",
-                        type: "ERROR",
-                        text: "\(error)"
+                        fn: "FrigatePlusButton", "\(error)"
                     )
                 }
             }

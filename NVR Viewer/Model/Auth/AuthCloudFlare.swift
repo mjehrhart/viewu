@@ -22,11 +22,9 @@ class CloudflareAccessURLSessionDelegate: NSObject, URLSessionDelegate {
         let host = challenge.protectionSpace.host
         let method = challenge.protectionSpace.authenticationMethod
 
-        Log.shared().print(
+        Log.debug(
             page: "AuthCloudFlare",
-            fn: "urlSession(didReceive:challenge:)",
-            type: "INFO",
-            text: "Received auth challenge for host=\(host), method=\(method). Using default TLS handling."
+            fn: "urlSession(didReceive:challenge:)", "Received auth challenge for host=\(host), method=\(method). Using default TLS handling."
         )
 
         // Use the system’s normal certificate validation
@@ -52,11 +50,9 @@ func connectWithCloudflareAccess(
     endpoint: String,
     completion: @escaping (Data?, Error?) -> Void
 ) async {
-    Log.shared().print(
+    Log.debug(
         page: "AuthCloudFlare",
-        fn: "connectWithCloudflareAccess",
-        type: "INFO",
-        text: "Starting Cloudflare request. host=\(host), endpoint=\(endpoint)"
+        fn: "connectWithCloudflareAccess", "Starting Cloudflare request. host=\(host), endpoint=\(endpoint)"
     )
 
     // Normalize host + endpoint to avoid double slashes or missing slash.
@@ -73,20 +69,16 @@ func connectWithCloudflareAccess(
 
     let urlString = trimmedHost + normalizedEndpoint
 
-    Log.shared().print(
+    Log.debug(
         page: "AuthCloudFlare",
-        fn: "connectWithCloudflareAccess",
-        type: "INFO",
-        text: "Normalized URL components. trimmedHost=\(trimmedHost), normalizedEndpoint=\(normalizedEndpoint), urlString=\(urlString)"
+        fn: "connectWithCloudflareAccess", "Normalized URL components. trimmedHost=\(trimmedHost), normalizedEndpoint=\(normalizedEndpoint), urlString=\(urlString)"
     )
 
     guard let url = URL(string: urlString) else {
         let errorMessage = "Invalid URL: \(urlString)"
-        Log.shared().print(
+        Log.error(
             page: "AuthCloudFlare",
-            fn: "connectWithCloudflareAccess",
-            type: "ERROR",
-            text: errorMessage
+            fn: "connectWithCloudflareAccess", errorMessage
         )
 
         let error = NSError(
@@ -105,11 +97,9 @@ func connectWithCloudflareAccess(
     request.setValue(clientId, forHTTPHeaderField: "CF-Access-Client-Id")
     request.setValue(clientSecret, forHTTPHeaderField: "CF-Access-Client-Secret")
 
-    Log.shared().print(
+    Log.debug(
         page: "AuthCloudFlare",
-        fn: "connectWithCloudflareAccess",
-        type: "INFO",
-        text: """
+        fn: "connectWithCloudflareAccess", """
         Prepared request:
           URL=\(url.absoluteString)
           Method=GET
@@ -125,11 +115,9 @@ func connectWithCloudflareAccess(
         delegateQueue: nil
     )
 
-    Log.shared().print(
+    Log.debug(
         page: "AuthCloudFlare",
-        fn: "connectWithCloudflareAccess",
-        type: "INFO",
-        text: "Created URLSession with CloudflareAccessURLSessionDelegate. Starting dataTask."
+        fn: "connectWithCloudflareAccess", "Created URLSession with CloudflareAccessURLSessionDelegate. Starting dataTask."
     )
 
     let task = session.dataTask(with: request) { data, response, error in
@@ -137,11 +125,9 @@ func connectWithCloudflareAccess(
         DispatchQueue.main.async {
             // 1. Network / transport error
             if let error = error {
-                Log.shared().print(
+                Log.error(
                     page: "AuthCloudFlare",
-                    fn: "connectWithCloudflareAccess.dataTask",
-                    type: "ERROR",
-                    text: "Network/transport error: \(error.localizedDescription)"
+                    fn: "connectWithCloudflareAccess.dataTask", "Network/transport error: \(error.localizedDescription)"
                 )
                 completion(nil, error)
                 return
@@ -150,11 +136,9 @@ func connectWithCloudflareAccess(
             // 2. Ensure we actually got data
             guard let data = data else {
                 let message = "No data returned from API"
-                Log.shared().print(
+                Log.error(
                     page: "AuthCloudFlare",
-                    fn: "connectWithCloudflareAccess.dataTask",
-                    type: "ERROR",
-                    text: message
+                    fn: "connectWithCloudflareAccess.dataTask", message
                 )
                 let noDataError = NSError(
                     domain: "NoData",
@@ -167,20 +151,16 @@ func connectWithCloudflareAccess(
 
             // 3. HTTP status validation
             if let httpResponse = response as? HTTPURLResponse {
-                Log.shared().print(
+                Log.debug(
                     page: "AuthCloudFlare",
-                    fn: "connectWithCloudflareAccess.dataTask",
-                    type: "INFO",
-                    text: "Received HTTP response. statusCode=\(httpResponse.statusCode), url=\(httpResponse.url?.absoluteString ?? "nil")"
+                    fn: "connectWithCloudflareAccess.dataTask",  "Received HTTP response. statusCode=\(httpResponse.statusCode), url=\(httpResponse.url?.absoluteString ?? "nil")"
                 )
 
                 if httpResponse.statusCode != 200 {
                     let message = "API request failed with status \(httpResponse.statusCode)"
-                    Log.shared().print(
+                    Log.error(
                         page: "AuthCloudFlare",
-                        fn: "connectWithCloudflareAccess.dataTask",
-                        type: "ERROR",
-                        text: message
+                        fn: "connectWithCloudflareAccess.dataTask", message
                     )
                     let apiError = NSError(
                         domain: "APIError",
@@ -191,30 +171,24 @@ func connectWithCloudflareAccess(
                     return
                 }
             } else {
-                Log.shared().print(
+                Log.debug(
                     page: "AuthCloudFlare",
-                    fn: "connectWithCloudflareAccess.dataTask",
-                    type: "INFO",
-                    text: "Response was not an HTTPURLResponse."
+                    fn: "connectWithCloudflareAccess.dataTask", "Response was not an HTTPURLResponse."
                 )
             }
 
             // 4. Success
-            Log.shared().print(
+            Log.debug(
                 page: "AuthCloudFlare",
-                fn: "connectWithCloudflareAccess.dataTask",
-                type: "INFO",
-                text: "Cloudflare Access request succeeded. Data length=\(data.count) bytes."
+                fn: "connectWithCloudflareAccess.dataTask", "Cloudflare Access request succeeded. Data length=\(data.count) bytes."
             )
             completion(data, nil)
         }
     }
 
     task.resume()
-    Log.shared().print(
+    Log.debug(
         page: "AuthCloudFlare",
-        fn: "connectWithCloudflareAccess",
-        type: "INFO",
-        text: "dataTask.resume() called for URL=\(url.absoluteString)"
+        fn: "connectWithCloudflareAccess", "dataTask.resume() called for URL=\(url.absoluteString)"
     )
 }

@@ -48,17 +48,13 @@ struct NVR_ViewerApp: App {
         do {
             try BGTaskScheduler.shared.submit(request)
             #if DEBUG
-            Log.shared().print(page: "ViewEventDetail",
-                               fn: "scheduleAppRefresh",
-                               type: "INFO",
-                               text: "BGAppRefreshTask 'viewu_refresh' scheduled.")
+            Log.debug(page: "ViewEventDetail",
+                               fn: "scheduleAppRefresh", "BGAppRefreshTask 'viewu_refresh' scheduled.")
             #endif
         } catch {
             #if DEBUG
-            Log.shared().print(page: "ViewEventDetail",
-                               fn: "scheduleAppRefresh",
-                               type: "ERROR",
-                               text: "Failed to schedule BGAppRefreshTask: \(error.localizedDescription)") 
+            Log.error(page: "ViewEventDetail",
+                               fn: "scheduleAppRefresh", "Failed to schedule BGAppRefreshTask: \(error.localizedDescription)")
             #endif
         }
     }

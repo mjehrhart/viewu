@@ -100,7 +100,8 @@ func connectToFrigateAPIWithJWT(
             code: 0,
             userInfo: [NSLocalizedDescriptionKey: "Invalid URL: \(urlString)"]
         )
-        Log.shared().print(page: "Auth", fn: "connectToFrigateAPIWithJWT", type: "ERROR", text: error.localizedDescription)
+        Log.error(page: "Auth",
+                           fn: "connectToFrigateAPIWithJWT", error.localizedDescription)
         return completion(nil, error)
     }
 
@@ -115,11 +116,9 @@ func connectToFrigateAPIWithJWT(
         DispatchQueue.main.async {
 
             if let error = error {
-                Log.shared().print(
+                Log.error(
                     page: "Auth",
-                    fn: "connectToFrigateAPIWithJWT",
-                    type: "ERROR",
-                    text: "Network error: \(error.localizedDescription)"
+                    fn: "connectToFrigateAPIWithJWT", "Network error: \(error.localizedDescription)"
                 )
                 return completion(nil, error)
             }
@@ -130,11 +129,9 @@ func connectToFrigateAPIWithJWT(
                     code: 1,
                     userInfo: [NSLocalizedDescriptionKey: "No data returned from API: \(urlString)"]
                 )
-                Log.shared().print(
+                Log.error(
                     page: "Auth",
-                    fn: "connectToFrigateAPIWithJWT",
-                    type: "ERROR",
-                    text: noDataError.localizedDescription
+                    fn: "connectToFrigateAPIWithJWT", noDataError.localizedDescription
                 )
                 return completion(nil, noDataError)
             }
@@ -146,31 +143,25 @@ func connectToFrigateAPIWithJWT(
                     code: httpResponse.statusCode,
                     userInfo: [NSLocalizedDescriptionKey: "API request failed with status \(httpResponse.statusCode) for \(urlString)"]
                 )
-                Log.shared().print(
+                Log.error(
                     page: "Auth",
-                    fn: "connectToFrigateAPIWithJWT",
-                    type: "ERROR",
-                    text: apiError.localizedDescription
+                    fn: "connectToFrigateAPIWithJWT", apiError.localizedDescription
                 )
                 return completion(nil, apiError)
             }
 
-            Log.shared().print(
+            Log.debug(
                 page: "Auth",
-                fn: "connectToFrigateAPIWithJWT",
-                type: "INFO",
-                text: "Request succeeded. url=\(urlString), bytes=\(data.count)"
+                fn: "connectToFrigateAPIWithJWT", "Request succeeded. url=\(urlString), bytes=\(data.count)"
             )
 
             completion(data, nil)
         }
     }
 
-    Log.shared().print(
+    Log.debug(
         page: "Auth",
-        fn: "connectToFrigateAPIWithJWT",
-        type: "INFO",
-        text: "Starting request. url=\(urlString)"
+        fn: "connectToFrigateAPIWithJWT", "Starting request. url=\(urlString)"
     )
 
     task.resume()

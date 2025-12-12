@@ -142,11 +142,9 @@ struct ViewAuthCloudFlare: View {
                             ) { data, error in
 
                                 if let error = error {
-                                    Log.shared().print(
+                                    Log.error(
                                         page: "ViewAuthCloudFlare",
-                                        fn: "CloudFlare Connection",
-                                        type: "ERROR",
-                                        text: "\(String(describing: error)) - \(urlString)"
+                                        fn: "CloudFlare Connection", "\(String(describing: error)) - \(urlString)"
                                     )
                                     nvrManager.connectionState = .disconnected
                                     return
@@ -161,11 +159,9 @@ struct ViewAuthCloudFlare: View {
                                 }
                             }
                         } catch {
-                            Log.shared().print(
+                            Log.error(
                                 page: "ViewAuthCloudFlare",
-                                fn: "CloudFlare Connection",
-                                type: "ERROR",
-                                text: "checkConnectionStatus threw: \(error) - \(urlString)"
+                                fn: "CloudFlare Connection", "checkConnectionStatus threw: \(error) - \(urlString)"
                             )
                             nvrManager.connectionState = .disconnected
                         }
@@ -200,11 +196,9 @@ struct ViewAuthCloudFlare: View {
                 ) { (data, error) in
                     
                     if let error = error {
-                        Log.shared().print(
+                        Log.error(
                             page: "ViewAuthCloudFlare",
-                            fn: "CloudFlare Connection",
-                            type: "ERROR",
-                            text: "\(String(describing: error)) - \(urlString)"
+                            fn: "CloudFlare Connection",  "\(String(describing: error)) - \(urlString)"
                         )
                         nvrManager.connectionState = .disconnected
                         return

@@ -128,10 +128,8 @@ struct ViewEventImage: View{
                                 
                                 if let _ = error {
                                     
-                                    Log.shared().print(page: "ViewEventImage",
-                                                       fn: "SubView:body",
-                                                       type: "WARNING",
-                                                       text: "\(error)")
+                                    Log.warning(page: "ViewEventImage",
+                                                       fn: "SubView:body", "\(error)")
                                     
                                     //TODO
                                     //Not sure i like this approach as it forces the list to reload when an image is removed

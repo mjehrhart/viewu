@@ -433,7 +433,7 @@ struct ViewPlayVideoMP4: View {
             try FileManager.default.removeItem(at: folder)
             //print("[DEBUG] 🧹 Temp folder deleted: \(folder.path)")
         } catch {
-            Log.shared().print(page: "ViewPlayVideoMP4", fn: "cleanupTempFolder", type: "ERROR", text: "Failed to delete temp folder: \(error)")
+            Log.error(page: "ViewPlayVideoMP4", fn: "cleanupTempFolder", "Failed to delete temp folder: \(error)")
         }
         tempFolderURL = nil
         localVideoURL = nil

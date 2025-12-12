@@ -17,10 +17,8 @@ class DataController: ObservableObject {
         
         container.loadPersistentStores { _, error in
             if let error = error {
-                Log.shared().print(page: "DataController",
-                                   fn: "init",
-                                   type: "ERROR",
-                                   text: "CoreData failed to load! \(error.localizedDescription)")
+                Log.error(page: "DataController",
+                                   fn: "init", "CoreData failed to load! \(error.localizedDescription)")
             }
         }
     }

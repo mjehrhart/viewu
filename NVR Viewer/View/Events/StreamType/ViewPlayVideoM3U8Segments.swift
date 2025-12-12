@@ -274,7 +274,7 @@ struct ViewPlayVideoM3U8Segments: View {
             let remoteURL = URL(string: urlMp4String) else {
             
             errorMessage = "Invalid MP4 URL"
-            Log.shared().print(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", type: "ERROR", text: "Invalid MP4 URL")
+            Log.error(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", "Invalid MP4 URL")
             return
         }
 
@@ -317,7 +317,7 @@ struct ViewPlayVideoM3U8Segments: View {
             DispatchQueue.main.async {
                 self.errorMessage = "MP4 download failed: \(error.localizedDescription)"
                 self.isLoading = false
-                Log.shared().print(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", type: "ERROR", text: "MP4 download failed: \(error.localizedDescription)")
+                Log.error(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", "MP4 download failed: \(error.localizedDescription)")
             }
         }
     }
@@ -331,7 +331,7 @@ struct ViewPlayVideoM3U8Segments: View {
             try FileManager.default.removeItem(at: folder)
             //print("[DEBUG] 🧹 Temp folder deleted: \(folder.path)")
         } catch {
-            Log.shared().print(page: "ViewPlayVideoM3U8Segments", fn: "cleanupTempFolder", type: "ERROR", text: "Failed to delete temp folder: \(error)")
+            Log.error(page: "ViewPlayVideoM3U8Segments", fn: "cleanupTempFolder", "Failed to delete temp folder: \(error)")
         }
         tempFolderURL = nil
         localVideoURL = nil
@@ -424,7 +424,7 @@ final class MP4Downloader {
             let snippet = data.flatMap { String(data: $0, encoding: .utf8) } ?? "<non-text body>"
             //print("[DEBUG]   ❌ Non-200 MP4 response body snippet:\n\(snippet.prefix(200))")
             
-            Log.shared().print(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", type: "ERROR", text: "Non-200 MP4 response body snippet: \(snippet.prefix(200))")
+            Log.error(page: "ViewPlayVideoM3U8Segments", fn: "startMP4DownloadAndPlayback", "Non-200 MP4 response body snippet: \(snippet.prefix(200))")
             
             throw NSError(
                 domain: "MP4Downloader",
@@ -456,7 +456,7 @@ final class SSLBypassDelegate: NSObject, URLSessionDelegate {
             completionHandler(.useCredential, URLCredential(trust: trust))
         } else {
             //print("[DEBUG] BAD No serverTrust, default handling")
-            Log.shared().print(page: "SSLBypassDelegate", fn: "urlSession", type: "ERROR", text: "No serverTrust, default handling")
+            Log.error(page: "SSLBypassDelegate", fn: "urlSession", "No serverTrust, default handling")
             completionHandler(.performDefaultHandling, nil)
         }
     }

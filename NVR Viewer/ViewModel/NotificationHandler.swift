@@ -19,11 +19,9 @@ final class NotificationHandler {
                 // Permission granted – nothing else to do here for now.
             } else {
                 let message = error?.localizedDescription ?? "User denied notifications"
-                Log.shared().print(
+                Log.warning(
                     page: "NotificationHandler",
-                    fn: "askPermission",
-                    type: "WARNING",
-                    text: message
+                    fn: "askPermission", message
                 )
             }
         }
@@ -58,11 +56,9 @@ final class NotificationHandler {
             )
             center.add(request) { error in
                 if let error = error {
-                    Log.shared().print(
+                    Log.error(
                         page: "NotificationHandler",
-                        fn: "sendNotificationMessage",
-                        type: "ERROR",
-                        text: "Failed to schedule notification: \(error.localizedDescription)"
+                        fn: "sendNotificationMessage", "Failed to schedule notification: \(error.localizedDescription)"
                     )
                 }
             }
@@ -70,11 +66,9 @@ final class NotificationHandler {
 
         // If URL is invalid, just send text-only notification
         guard let url = URL(string: urlString) else {
-            Log.shared().print(
+            Log.warning(
                 page: "NotificationHandler",
-                fn: "sendNotificationMessage",
-                type: "WARNING",
-                text: "Invalid image URL, sending text-only notification"
+                fn: "sendNotificationMessage", "Invalid image URL, sending text-only notification"
             )
             scheduleNotification(with: content)
             return
@@ -86,11 +80,9 @@ final class NotificationHandler {
         let task = URLSession.shared.downloadTask(with: url) { (tempURL, _, error) in
 
             if let error = error {
-                Log.shared().print(
+                Log.error(
                     page: "NotificationHandler",
-                    fn: "sendNotificationMessage",
-                    type: "ERROR",
-                    text: "Image download failed: \(error.localizedDescription)"
+                    fn: "sendNotificationMessage", "Image download failed: \(error.localizedDescription)"
                 )
                 // Fallback to text-only notification
                 scheduleNotification(with: content)
@@ -98,11 +90,9 @@ final class NotificationHandler {
             }
 
             guard let tempURL = tempURL else {
-                Log.shared().print(
+                Log.warning(
                     page: "NotificationHandler",
-                    fn: "sendNotificationMessage",
-                    type: "WARNING",
-                    text: "Image download returned no file URL"
+                    fn: "sendNotificationMessage", "Image download returned no file URL"
                 )
                 scheduleNotification(with: content)
                 return
@@ -125,11 +115,9 @@ final class NotificationHandler {
 
                 scheduleNotification(with: content)
             } catch {
-                Log.shared().print(
+                Log.error(
                     page: "NotificationHandler",
-                    fn: "sendNotificationMessage",
-                    type: "ERROR",
-                    text: "Failed to create notification attachment: \(error.localizedDescription)"
+                    fn: "sendNotificationMessage", "Failed to create notification attachment: \(error.localizedDescription)"
                 )
                 // Still send a text-only notification
                 scheduleNotification(with: content)

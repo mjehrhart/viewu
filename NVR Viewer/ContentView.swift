@@ -295,11 +295,9 @@ struct ContentView: View {
             guard let data = data else { return }
             
             if developerModeIsOn {
-                Log.shared().print(
+                Log.debug(
                     page: "ContentView",
-                    fn: "loadConfig",
-                    type: "INFO",
-                    text: readData(data)
+                    fn: "loadConfig", readData(data)
                 )
             }
             
@@ -361,10 +359,8 @@ struct ContentView: View {
                 }
             }
         } catch {
-            Log.shared().print(page: "ContentView",
-                               fn: "checkConnection",
-                               type: "ERROR",
-                               text: "checkConnection error: \(error)")
+            Log.error(page: "ContentView",
+                               fn: "checkConnection", "checkConnection error: \(error)")
             nvr.connectionState = .disconnected
         }
     }
@@ -401,19 +397,15 @@ struct ContentView: View {
                 with: data,
                 options: .fragmentsAllowed
             ) as? [String: Any] {
-                Log.shared().print(
+                Log.debug(
                     page: "ContentView",
-                    fn: "logConfigDecodeError",
-                    type: "INFO",
-                    text: "\(json)"
+                    fn: "logConfigDecodeError", "\(json)"
                 )
             }
         } catch {
-            Log.shared().print(
+            Log.error(
                 page: "ContentView",
-                fn: "logConfigDecodeError",
-                type: "ERROR",
-                text: "\(error)"
+                fn: "logConfigDecodeError", "\(error)"
             )
         }
     }
@@ -429,15 +421,11 @@ struct ContentView: View {
         )
         do {
             try BGTaskScheduler.shared.submit(request)
-            Log.shared().print(page: "ContentView",
-                               fn: "sheduleBackgroundTask",
-                               type: "INFO",
-                               text: "Background Task Scheduled!")
+            Log.debug(page: "ContentView",
+                               fn: "sheduleBackgroundTask", "Background Task Scheduled!")
         } catch {
-            Log.shared().print(page: "ContentView",
-                               fn: "sheduleBackgroundTask",
-                               type: "ERROR",
-                               text: "Scheduling Error \(error.localizedDescription)") 
+            Log.error(page: "ContentView",
+                               fn: "sheduleBackgroundTask", "Scheduling Error \(error.localizedDescription)")
         }
     }
     

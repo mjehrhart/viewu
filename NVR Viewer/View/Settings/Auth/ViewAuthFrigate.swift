@@ -142,11 +142,9 @@ struct ViewAuthFrigate: View {
                             ) { data, error in
 
                                 if let error = error {
-                                    Log.shared().print(
+                                    Log.error(
                                         page: "ViewAuthFrigate",
-                                        fn: "Frigate Connection",
-                                        type: "ERROR",
-                                        text: "\(String(describing: error)) - \(urlString)"
+                                        fn: "Frigate Connection", "\(String(describing: error)) - \(urlString)"
                                     )
                                     nvrManager.connectionState = .disconnected
                                     return
@@ -161,11 +159,9 @@ struct ViewAuthFrigate: View {
                                 }
                             }
                         } catch {
-                            Log.shared().print(
+                            Log.error(
                                 page: "ViewAuthFrigate",
-                                fn: "CloudFFrigatelare Connection",
-                                type: "ERROR",
-                                text: "checkConnectionStatus threw: \(error) - \(urlString)"
+                                fn: "CloudFFrigatelare Connection", "checkConnectionStatus threw: \(error) - \(urlString)"
                             )
                             nvrManager.connectionState = .disconnected
                         }
@@ -199,11 +195,9 @@ struct ViewAuthFrigate: View {
                 ) { (data, error) in
                     
                     if let error = error { 
-                        Log.shared().print(
+                        Log.error(
                             page: "ViewAuthFrigate",
-                            fn: "NVR Connection",
-                            type: "ERROR",
-                            text: "\(String(describing: error)) - \(urlString)"
+                            fn: "NVR Connection", "\(String(describing: error)) - \(urlString)"
                         )
                         nvrManager.connectionState = .disconnected
                         return

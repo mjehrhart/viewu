@@ -95,7 +95,7 @@ struct ViewUIImageFull2: View {
                                 
                                 if let error = error {
                                     
-                                    Log.shared().print(page: "ViewUIImageFull", fn: "body", type: "WARNING", text: "\(error)")
+                                    Log.warning(page: "ViewUIImageFull", fn: "body", "\(error)")
                                     //if Event Snapshot is empty, show this instead
                                     //                                api.fetchImage(urlString: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoBAeYwmKevvqaidagwfKDT6UXrei3kiWYlw&usqp=CAU"){ (data, error) in
                                     //                                    self.data = data

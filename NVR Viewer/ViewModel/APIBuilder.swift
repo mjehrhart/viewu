@@ -109,11 +109,9 @@ struct APIBuilder {
     
     private func getDataFrom(url urlString: String) async -> Data? {
         guard let url = URL(string: urlString) else {
-            Log.shared().print(
+            Log.error(
                 page: "APIBuilder",
-                fn: "getDataFrom",
-                type: "ERROR",
-                text: "Invalid URL: \(urlString)"
+                fn: "getDataFrom", "Invalid URL: \(urlString)"
             )
             return nil
         }
@@ -123,22 +121,18 @@ struct APIBuilder {
             
             if let http = response as? HTTPURLResponse,
                !(200..<300).contains(http.statusCode) {
-                Log.shared().print(
+                Log.error(
                     page: "APIBuilder",
-                    fn: "getDataFrom",
-                    type: "ERROR",
-                    text: "HTTP \(http.statusCode) for \(url.absoluteString)"
+                    fn: "getDataFrom", "HTTP \(http.statusCode) for \(url.absoluteString)"
                 )
                 return nil
             }
             
             return data
         } catch {
-            Log.shared().print(
+            Log.error(
                 page: "APIBuilder",
-                fn: "getDataFrom",
-                type: "ERROR",
-                text: error.localizedDescription
+                fn: "getDataFrom", error.localizedDescription
             )
             return nil
         }

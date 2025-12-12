@@ -50,7 +50,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             
             fcmID = fcm
         } else {
-            Log.shared().print(page: "AppDelegate", fn: "messaging", type: "ERROR", text: "Oh No!::UIApplicationDelegateAdaptor::messaging()")
+            Log.error(page: "AppDelegate", fn: "messaging", "Oh No!::UIApplicationDelegateAdaptor::messaging()")
         }
     }
  
