@@ -57,6 +57,8 @@ struct ViewSettings: View {
     @AppStorage("viewu_server_version") private var viewuServerVersion: String = "0.0.0"
     @AppStorage("frigateVersion") private var frigateVersion: String = "0.0-0"
     
+    @AppStorage("log_level") private var logLevelRaw: String = LogLevel.debug.rawValue
+
     @StateObject var nts = NotificationTemplateString.shared()
     
     let widthMultiplier:CGFloat = 2/5.8   // kept; no longer used for fixed widths
@@ -65,7 +67,7 @@ struct ViewSettings: View {
     let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
     
     @Environment(\.dismiss) var dismiss
-    
+     
     var body: some View {
         
         ZStack {
@@ -365,17 +367,61 @@ struct ViewSettings: View {
                 
                 // MARK: Developer Mode
                 Section {
-                    Toggle("Log View", isOn: $showLogView)
+
+                    Toggle("Show Log", isOn: $showLogView)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    Toggle("NVR View", isOn: $showNVRView)
+
+                    Toggle("Show View", isOn: $showNVRView)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
-                    Toggle("Debug", isOn: $developerModeIsOn)
+
+                    Toggle("Display URLs", isOn: $developerModeIsOn)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
+
+                    // MARK: Log Level (three mutually exclusive toggles)
+
+                    Toggle("Debug – all logs", isOn: Binding(
+                        get: {
+                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .debug
+                        },
+                        set: { isOn in
+                            if isOn {
+                                logLevelRaw = LogLevel.debug.rawValue
+                            }
+                        }
+                    ))
+                    .tint(Color(red: 0.153, green: 0.69, blue: 1))
+
+                    Toggle("Warning – warnings & errors", isOn: Binding(
+                        get: {
+                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .warning
+                        },
+                        set: { isOn in
+                            if isOn {
+                                logLevelRaw = LogLevel.warning.rawValue
+                            }
+                        }
+                    ))
+                    .tint(Color(red: 1.0, green: 0.6, blue: 0.0))   // orange-ish
+
+                    Toggle("Error – errors only", isOn: Binding(
+                        get: {
+                            (LogLevel(rawValue: logLevelRaw) ?? .debug) == .error
+                        },
+                        set: { isOn in
+                            if isOn {
+                                logLevelRaw = LogLevel.error.rawValue
+                            }
+                        }
+                    ))
+                    .tint(.red)
+
                 } header: {
                     Text("Developer Mode")
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
+
+
                 
                 // MARK: Instructions and Tips
                 Section {
