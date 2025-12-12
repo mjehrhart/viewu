@@ -182,10 +182,19 @@ final class APIRequester: NSObject {
             do {
                 let arrayEvents = try JSONDecoder().decode([NVRConfigurationHTTP].self, from: data)
                 
-                Log.error(
-                    page: "APIRequestor",
-                    fn: "fetchEventsInBackground", "Decoded \(arrayEvents.count) events from \(endpoint)"
-                )
+                if arrayEvents.isEmpty {
+                    Log.debug(
+                        page: "APIRequestor",
+                        fn: "fetchEventsInBackground",
+                        "No new events returned from \(endpoint)"
+                    )
+                } else {
+                    Log.debug(
+                        page: "APIRequestor",
+                        fn: "fetchEventsInBackground",
+                        "Decoded \(arrayEvents.count) events from \(endpoint)"
+                    )
+                }
                 
                 for event in arrayEvents {
                     let url = urlString

@@ -10,30 +10,24 @@ import WebKit
 
 @MainActor
 struct ViewCameraHLSFullScreen: View {
-
     let urlString: String
     let cameraName: String
+    let headers: [String: String]
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
-    // Final HLS URL
     private var hlsURL: String {
-        urlString + "/api/\(cameraName)?h=480"
+        let base = urlString.hasSuffix("/") ? String(urlString.dropLast()) : urlString
+        return base + "/api/\(cameraName)?h=480"
     }
 
-    // Use a slightly different contentMode depending on size class
     private var contentMode: ContentMode {
-        if horizontalSizeClass == .regular && verticalSizeClass == .regular {
-            return .fill
-        } else {
-            return .fit
-        }
+        (horizontalSizeClass == .regular && verticalSizeClass == .regular) ? .fill : .fit
     }
 
     var body: some View {
         ZStack {
-            // Background gradient
             LinearGradient(
                 colors: [.clear, Color(red: 0.80, green: 0.80, blue: 0.80)],
                 startPoint: .topLeading,
@@ -41,20 +35,15 @@ struct ViewCameraHLSFullScreen: View {
             )
             .ignoresSafeArea()
 
-            // Rotated HLS WebView
-            Webview(url: hlsURL)
+            Webview(url: hlsURL, headers: headers)
                 .rotationEffect(.degrees(90))
                 .aspectRatio(16 / 9, contentMode: contentMode)
                 .frame(width: UIScreen.screenHeight, height: UIScreen.screenWidth)
                 .ignoresSafeArea()
-                .overlay(
-                    CameraOverlay(name: cameraName),
-                    alignment: .bottomTrailing
-                )
+                .overlay(CameraOverlay(name: cameraName), alignment: .bottomTrailing)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-
     // MARK: - Overlay
 
     struct CameraOverlay: View {

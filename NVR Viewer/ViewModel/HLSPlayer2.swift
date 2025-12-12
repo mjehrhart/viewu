@@ -180,7 +180,9 @@ struct HLSPlayer2: View {
         .padding(.horizontal, 10)
         .padding(.bottom, 15)
         .navigationDestination(isPresented: $flagFull) {
-            ViewCameraHLSFullScreen(urlString: urlString, cameraName: cameraName)
+            ViewCameraHLSFullScreen(urlString: urlString, cameraName: cameraName, headers: headers)
+        }.onAppear(){
+            print("[MJE] \(urlString)")
         }
     }
 
