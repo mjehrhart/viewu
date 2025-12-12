@@ -514,8 +514,10 @@ final class MP4Downloader2 {
         case .bearer, .frigate:
             break
         case .cloudflare:
-            req.setValue(clientId, forHTTPHeaderField: "CF-Access-Client-Id")
-            req.setValue(clientSecret, forHTTPHeaderField: "CF-Access-Client-Secret")
+//            req.setValue(clientId, forHTTPHeaderField: "CF-Access-Client-Id")
+//            req.setValue(clientSecret, forHTTPHeaderField: "CF-Access-Client-Secret")
+            req.setValue(cloudFlareClientId, forHTTPHeaderField: "CF-Access-Client-Id")
+            req.setValue(cloudFlareSecret,   forHTTPHeaderField: "CF-Access-Client-Secret")
         case .custom:
             break
         }

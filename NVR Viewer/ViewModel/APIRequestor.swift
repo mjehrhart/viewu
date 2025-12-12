@@ -10,6 +10,26 @@ import JWTKit
 
 final class APIRequester: NSObject {
     
+    // MARK: - Helpers
+
+    /// Normalizes `base` + `endpoint` into a single URL:
+    /// - trims a trailing "/" from base
+    /// - ensures endpoint either starts with "/" or is empty
+    private func makeURL(base: String, endpoint: String) -> URL? {
+        let trimmedBase = base.hasSuffix("/") ? String(base.dropLast()) : base
+
+        let normalizedEndpoint: String
+        if endpoint.isEmpty {
+            normalizedEndpoint = ""
+        } else if endpoint.hasPrefix("/") {
+            normalizedEndpoint = endpoint
+        } else {
+            normalizedEndpoint = "/" + endpoint
+        }
+
+        return URL(string: trimmedBase + normalizedEndpoint)
+    }
+    
     // MARK: - Frigate Plus
     
     /// Posts an image to FrigatePlus. `eventId` is currently unused but kept to avoid breaking callers.
@@ -22,28 +42,56 @@ final class APIRequester: NSObject {
     ) async {
         switch authType {
         case .none:
-            let fullURLString = urlString + endpoint
-            guard let url = URL(string: fullURLString) else {
+            guard let url = makeURL(base: urlString, endpoint: endpoint) else {
+                let error = NSError(
+                    domain: "InvalidURL",
+                    code: 0,
+                    userInfo: [NSLocalizedDescriptionKey: "Invalid URL in postImageToFrigatePlus: base=\(urlString), endpoint=\(endpoint)"]
+                )
                 Log.error(
                     page: "APIRequestor",
-                    fn: "postImageToFrigatePlus", "Invalid URL: \(fullURLString)"
+                    fn: "postImageToFrigatePlus", error.localizedDescription
                 )
+                completion(nil, error)
                 return
             }
-            
+
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
-            
+
             let session = URLSession(
                 configuration: .default,
                 delegate: self,
                 delegateQueue: .main
             )
-            
+
             let task = session.dataTask(with: request) { data, _, error in
                 completion(data, error)
             }
             task.resume()
+
+//            let fullURLString = urlString + endpoint
+//            guard let url = URL(string: fullURLString) else {
+//                Log.error(
+//                    page: "APIRequestor",
+//                    fn: "postImageToFrigatePlus", "Invalid URL: \(fullURLString)"
+//                )
+//                return
+//            }
+//            
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "POST"
+//            
+//            let session = URLSession(
+//                configuration: .default,
+//                delegate: self,
+//                delegateQueue: .main
+//            )
+//            
+//            let task = session.dataTask(with: request) { data, _, error in
+//                completion(data, error)
+//            }
+//            task.resume()
             
         case .frigate:
             guard let jwt = try? await generateJWTFrigate() else {
@@ -211,28 +259,56 @@ final class APIRequester: NSObject {
     ) async {
         switch authType {
         case .none:
-            let urlStringEvents = urlString + endpoint
-            guard let url = URL(string: urlStringEvents) else {
+            guard let url = makeURL(base: urlString, endpoint: endpoint) else {
+                let error = NSError(
+                    domain: "InvalidURL",
+                    code: 0,
+                    userInfo: [NSLocalizedDescriptionKey: "Invalid URL in fetchNVREvents: base=\(urlString), endpoint=\(endpoint)"]
+                )
                 Log.error(
                     page: "APIRequestor",
-                    fn: "fetchNVREvents", "Invalid URL: \(urlStringEvents)"
+                    fn: "fetchNVREvents", error.localizedDescription
                 )
+                completion(nil, error)
                 return
             }
-            
+
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            
+
             let session = URLSession(
                 configuration: .default,
                 delegate: self,
                 delegateQueue: .main
             )
-            
+
             let task = session.dataTask(with: request) { data, _, error in
                 completion(data, error)
             }
             task.resume()
+
+//            let urlStringEvents = urlString + endpoint
+//            guard let url = URL(string: urlStringEvents) else {
+//                Log.error(
+//                    page: "APIRequestor",
+//                    fn: "fetchNVREvents", "Invalid URL: \(urlStringEvents)"
+//                )
+//                return
+//            }
+//            
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "GET"
+//            
+//            let session = URLSession(
+//                configuration: .default,
+//                delegate: self,
+//                delegateQueue: .main
+//            )
+//            
+//            let task = session.dataTask(with: request) { data, _, error in
+//                completion(data, error)
+//            }
+//            task.resume()
             
         case .frigate:
             guard let jwt = try? await generateJWTFrigate() else {
@@ -294,28 +370,34 @@ final class APIRequester: NSObject {
         switch authType {
         case .none:
             guard let url = URL(string: urlString) else {
+                let error = NSError(
+                    domain: "InvalidURL",
+                    code: 0,
+                    userInfo: [NSLocalizedDescriptionKey: "Invalid image URL: \(urlString)"]
+                )
                 Log.error(
                     page: "APIRequestor",
-                    fn: "fetchImage", "Invalid URL: \(urlString)"
+                    fn: "fetchImage", error.localizedDescription
                 )
+                completion(nil, error)
                 return
             }
-            
+
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            
+
             let session = URLSession(
                 configuration: .default,
                 delegate: self,
                 delegateQueue: .main
             )
-            
+
             let task = session.dataTask(with: request) { data, _, error in
                 guard let data = data else {
                     completion(nil, error)
                     return
                 }
-                
+
                 if data.count < 50 {
                     do {
                         let decoded = try JSONDecoder().decode(FrigateResponse.self, from: data)
@@ -335,10 +417,57 @@ final class APIRequester: NSObject {
                         )
                     }
                 }
-                
+
                 completion(data, error)
             }
             task.resume()
+
+//            guard let url = URL(string: urlString) else {
+//                Log.error(
+//                    page: "APIRequestor",
+//                    fn: "fetchImage", "Invalid URL: \(urlString)"
+//                )
+//                return
+//            }
+//            
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "GET"
+//            
+//            let session = URLSession(
+//                configuration: .default,
+//                delegate: self,
+//                delegateQueue: .main
+//            )
+//            
+//            let task = session.dataTask(with: request) { data, _, error in
+//                guard let data = data else {
+//                    completion(nil, error)
+//                    return
+//                }
+//                
+//                if data.count < 50 {
+//                    do {
+//                        let decoded = try JSONDecoder().decode(FrigateResponse.self, from: data)
+//                        if decoded.success == false {
+//                            let errorTemp = NSError(
+//                                domain: "com.john.matthew",
+//                                code: 101,
+//                                userInfo: nil
+//                            )
+//                            completion(nil, errorTemp)
+//                            return
+//                        }
+//                    } catch {
+//                        Log.error(
+//                            page: "APIRequestor",
+//                            fn: "fetchImage", "\(error)"
+//                        )
+//                    }
+//                }
+//                
+//                completion(data, error)
+//            }
+//            task.resume()
             
         case .frigate:
             guard let jwt = try? await generateJWTFrigate() else {
@@ -397,28 +526,56 @@ final class APIRequester: NSObject {
     ) async {
         switch authType {
         case .none:
-            let fullURLString = "\(urlString)/api/config"
-            guard let url = URL(string: fullURLString) else {
+            guard let url = makeURL(base: urlString, endpoint: "/api/config") else {
+                let error = NSError(
+                    domain: "InvalidURL",
+                    code: 0,
+                    userInfo: [NSLocalizedDescriptionKey: "Invalid URL in fetchNVRConfig: base=\(urlString)"]
+                )
                 Log.error(
                     page: "APIRequestor",
-                    fn: "fetchNVRConfig", "Invalid URL: \(fullURLString)"
+                    fn: "fetchNVRConfig", error.localizedDescription
                 )
+                completion(nil, error)
                 return
             }
-            
+
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            
+
             let session = URLSession(
                 configuration: .default,
                 delegate: self,
                 delegateQueue: .main
             )
-            
+
             let task = session.dataTask(with: request) { data, _, error in
                 completion(data, error)
             }
             task.resume()
+
+//            let fullURLString = "\(urlString)/api/config"
+//            guard let url = URL(string: fullURLString) else {
+//                Log.error(
+//                    page: "APIRequestor",
+//                    fn: "fetchNVRConfig", "Invalid URL: \(fullURLString)"
+//                )
+//                return
+//            }
+//            
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "GET"
+//            
+//            let session = URLSession(
+//                configuration: .default,
+//                delegate: self,
+//                delegateQueue: .main
+//            )
+//            
+//            let task = session.dataTask(with: request) { data, _, error in
+//                completion(data, error)
+//            }
+//            task.resume()
             
         case .frigate:
             guard let jwt = try? await generateJWTFrigate() else {
@@ -487,13 +644,12 @@ final class APIRequester: NSObject {
 
         switch authType {
         case .none:
-            let fullUrlString = urlString + "/api/version"
-            guard let url = URL(string: fullUrlString) else {
+            guard let url = makeURL(base: urlString, endpoint: "/api/version") else {
                 Log.error(
                     page: "APIRequestor",
-                    fn: "checkConnectionStatus", "Invalid URL - \(fullUrlString)"
+                    fn: "checkConnectionStatus", "Invalid URL - base=\(urlString)"
                 )
-                return completion(nil, makeError("Invalid URL \(fullUrlString)", code: 400))
+                return completion(nil, makeError("Invalid URL \(urlString)/api/version", code: 400))
             }
 
             var request = URLRequest(url: url)
@@ -513,7 +669,7 @@ final class APIRequester: NSObject {
                         fn: "checkConnectionStatus", "\(error.localizedDescription)"
                     )
                     let errorTemp = makeError(
-                        "Network error: \(error.localizedDescription) - \(fullUrlString)"
+                        "Network error: \(error.localizedDescription) - \(url.absoluteString)"
                     )
                     return completion(nil, errorTemp)
                 }
@@ -521,7 +677,7 @@ final class APIRequester: NSObject {
                 guard let httpResponse = response as? HTTPURLResponse else {
                     Log.error(
                         page: "APIRequestor",
-                        fn: "connection.info:invalid response", "Invalid Response - \(fullUrlString)"
+                        fn: "connection.info:invalid response", "Invalid Response - \(url.absoluteString)"
                     )
                     return completion(nil, makeError("Invalid HTTP response"))
                 }
@@ -530,16 +686,15 @@ final class APIRequester: NSObject {
                 if statusCode != 200 {
                     Log.error(
                         page: "APIRequestor",
-                        fn: "connection.info:statusCode",  "\(statusCode) - \(fullUrlString)"
+                        fn: "connection.info:statusCode",  "\(statusCode) - \(url.absoluteString)"
                     )
                     return completion(nil, makeError("HTTP \(statusCode)", code: statusCode))
                 }
 
-                // Validate first byte is a digit
                 guard let data = data, !data.isEmpty else {
                     Log.error(
                         page: "APIRequestor",
-                        fn: "connection.info:dataEmpty", "DATA_EMPTY - \(fullUrlString)"
+                        fn: "connection.info:dataEmpty", "DATA_EMPTY - \(url.absoluteString)"
                     )
                     return completion(nil, makeError("Empty response", code: 502))
                 }
@@ -551,7 +706,7 @@ final class APIRequester: NSObject {
                         if !character.isWholeNumber {
                             Log.error(
                                 page: "APIRequestor",
-                                fn: "connection.info:notDigit", "NOT_WHOLE_NUMBER - \(fullUrlString)"
+                                fn: "connection.info:notDigit", "NOT_WHOLE_NUMBER - \(url.absoluteString)"
                             )
                             return completion(nil, makeError("Unexpected response format", code: 501))
                         }
@@ -562,6 +717,82 @@ final class APIRequester: NSObject {
             }
 
             task.resume()
+
+//            let fullUrlString = urlString + "/api/version"
+//            guard let url = URL(string: fullUrlString) else {
+//                Log.error(
+//                    page: "APIRequestor",
+//                    fn: "checkConnectionStatus", "Invalid URL - \(fullUrlString)"
+//                )
+//                return completion(nil, makeError("Invalid URL \(fullUrlString)", code: 400))
+//            }
+//
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "GET"
+//
+//            let session = URLSession(
+//                configuration: .default,
+//                delegate: self,
+//                delegateQueue: .main
+//            )
+//
+//            let task = session.dataTask(with: request) { data, response, error in
+//
+//                if let error = error {
+//                    Log.error(
+//                        page: "APIRequestor",
+//                        fn: "checkConnectionStatus", "\(error.localizedDescription)"
+//                    )
+//                    let errorTemp = makeError(
+//                        "Network error: \(error.localizedDescription) - \(fullUrlString)"
+//                    )
+//                    return completion(nil, errorTemp)
+//                }
+//
+//                guard let httpResponse = response as? HTTPURLResponse else {
+//                    Log.error(
+//                        page: "APIRequestor",
+//                        fn: "connection.info:invalid response", "Invalid Response - \(fullUrlString)"
+//                    )
+//                    return completion(nil, makeError("Invalid HTTP response"))
+//                }
+//
+//                let statusCode = httpResponse.statusCode
+//                if statusCode != 200 {
+//                    Log.error(
+//                        page: "APIRequestor",
+//                        fn: "connection.info:statusCode",  "\(statusCode) - \(fullUrlString)"
+//                    )
+//                    return completion(nil, makeError("HTTP \(statusCode)", code: statusCode))
+//                }
+//
+//                // Validate first byte is a digit
+//                guard let data = data, !data.isEmpty else {
+//                    Log.error(
+//                        page: "APIRequestor",
+//                        fn: "connection.info:dataEmpty", "DATA_EMPTY - \(fullUrlString)"
+//                    )
+//                    return completion(nil, makeError("Empty response", code: 502))
+//                }
+//
+//                if let firstByte = data.first {
+//                    let firstByteData = Data([firstByte])
+//                    if let firstCharacterString = String(data: firstByteData, encoding: .utf8) {
+//                        let character = Character(firstCharacterString)
+//                        if !character.isWholeNumber {
+//                            Log.error(
+//                                page: "APIRequestor",
+//                                fn: "connection.info:notDigit", "NOT_WHOLE_NUMBER - \(fullUrlString)"
+//                            )
+//                            return completion(nil, makeError("Unexpected response format", code: 501))
+//                        }
+//                    }
+//                }
+//
+//                completion(data, nil)
+//            }
+//
+//            task.resume()
 
         case .frigate:
             guard let jwt = try? await generateJWTFrigate() else {

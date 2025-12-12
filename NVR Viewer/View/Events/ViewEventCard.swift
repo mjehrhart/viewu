@@ -34,6 +34,34 @@ struct ViewEventCard: View {
         )
     }
 
+    // NEW, cheap initializer
+        init(meta: EndpointOptionsSuper.EventMeta3) {
+            let ep = EndpointOptions(
+                thumbnail:     meta.thumbnail,
+                snapshot:      meta.snapshot,
+                m3u8:          meta.m3u8,
+                mp4:           meta.mp4,
+                camera:        meta.camera,
+                debug:         meta.debug,
+                image:         meta.image,
+                id:            meta.id,
+                type:          meta.type,
+                cameraName:    meta.cameraName,
+                score:         meta.score,
+                frameTime:     meta.frameTime,
+                label:         meta.label,
+                sublabel:      meta.sublabel,
+                currentZones:  meta.currentZones,
+                enteredZones:  meta.enteredZones,
+                transportType: meta.transportType,
+                sid:           meta.sid,
+                frigatePlus:   meta.frigatePlus
+            )
+
+            _containers = State(initialValue: [ep])
+        }
+
+    
     // MARK: - Layout helpers
 
     private func setWidth() -> CGFloat {

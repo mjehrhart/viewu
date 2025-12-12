@@ -10,32 +10,32 @@ import SwiftUI
 @MainActor
 struct ViewLog: View {
 
-    // Snapshot of log entries when the view is created
-    @State private var entries: [LogItem]
-    // ["All", "DEBUG", "WARNING", "ERROR", ...] derived from LogLevel.label
-    private let typeOptions: [String]
+    // Observe global log so the view updates as new entries are added / cleared
+    @ObservedObject private var log = Log.shared()
 
     @State private var selectedType: String = "All"
 
     @Environment(\.dismiss) private var dismiss
 
-    init() {
-        // Using the new Log API: read the published list directly
-        let allEntries = Log.shared().list
-        _entries = State(initialValue: allEntries)
-
-        // Distinct types based on LogLevel labels
-        let distinctTypes = Set(allEntries.map { $0.level.label })
-        self.typeOptions = ["All"] + distinctTypes.sorted()
+    // Distinct type labels from current entries
+    private var typeOptions: [String] {
+        let labels = Set(log.list.map { $0.level.label })
+        return ["All"] + labels.sorted()
     }
 
-    // Filtered list based on selected type
+    // Filtered list, with NEWEST entries first
     private var filteredEntries: [LogItem] {
+        let all = log.list
+
+        let filtered: [LogItem]
         if selectedType == "All" {
-            return entries
+            filtered = all
         } else {
-            return entries.filter { $0.level.label == selectedType }
+            filtered = all.filter { $0.level.label == selectedType }
         }
+
+        // Newest at top (assuming log.list appends at the end)
+        return Array(filtered.reversed())
     }
 
     var body: some View {
@@ -57,9 +57,8 @@ struct ViewLog: View {
                 // MARK: - Actions row (Clear / Scroll to Top)
                 HStack {
                     Button {
-                        // Clear global log and on-screen snapshot
+                        // Clear global log
                         Log.shared().clear()
-                        entries.removeAll()
                     } label: {
                         Label("Clear", systemImage: "trash")
                     }
@@ -86,8 +85,8 @@ struct ViewLog: View {
                             .frame(height: 0)
                             .id("LOG_TOP")
 
-                        ForEach(filteredEntries) { row in
-                            LogRowView(entry: row)
+                        ForEach(filteredEntries) { entry in
+                            LogRowView(entry: entry)
                         }
                     }
                     .padding(.horizontal, 8)
@@ -98,26 +97,20 @@ struct ViewLog: View {
         .navigationTitle("Log")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbar(content: toolbarContent)
-    }
-
-    // MARK: - Toolbar
-
-    @ToolbarContentBuilder
-    private func toolbarContent() -> some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
-            Button {
-                dismiss()
-            } label: {
-                HStack {
-                    Image(systemName: "chevron.backward")
-                    Text("Back")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                        Text("Back")
+                    }
                 }
             }
         }
     }
 }
-
 
 // MARK: - Row View
 
@@ -136,12 +129,11 @@ private struct LogRowView: View {
         VStack(alignment: .leading, spacing: 6) {
             // Header line: level badge, page, function
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                // Level badge (DEBUG / WARNING / ERROR)
+                // Level badge (DEBUG / WARNING / ERROR / etc.)
                 Text(entry.level.label)
                     .font(.caption2.weight(.semibold))
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    //.background(typeColor.opacity(0.15))
                     .foregroundColor(typeColor)
                     .clipShape(Capsule())
 
@@ -230,9 +222,12 @@ private struct LogRowView: View {
             return .orange
         case .debug:
             return Color(red: 0.153, green: 0.69, blue: 1)
+        default:
+            return .secondary
         }
     }
 }
+
 
 
 ////
@@ -247,19 +242,22 @@ private struct LogRowView: View {
 //@MainActor
 //struct ViewLog: View {
 //
-//    // Now mutable so Clear can update it
+//    // Snapshot of log entries when the view is created
 //    @State private var entries: [LogItem]
-//    private let typeOptions: [String]   // ["All", "ERROR", "INFO", ...]
+//    // ["All", "DEBUG", "WARNING", "ERROR", ...] derived from LogLevel.label
+//    private let typeOptions: [String]
 //
 //    @State private var selectedType: String = "All"
 //
 //    @Environment(\.dismiss) private var dismiss
 //
 //    init() {
-//        let allEntries = Log.shared().getList()
+//        // Using the new Log API: read the published list directly
+//        let allEntries = Log.shared().list
 //        _entries = State(initialValue: allEntries)
 //
-//        let distinctTypes = Set(allEntries.map { $0.type })
+//        // Distinct types based on LogLevel labels
+//        let distinctTypes = Set(allEntries.map { $0.level.label })
 //        self.typeOptions = ["All"] + distinctTypes.sorted()
 //    }
 //
@@ -268,7 +266,7 @@ private struct LogRowView: View {
 //        if selectedType == "All" {
 //            return entries
 //        } else {
-//            return entries.filter { $0.type == selectedType }
+//            return entries.filter { $0.level.label == selectedType }
 //        }
 //    }
 //
@@ -292,7 +290,7 @@ private struct LogRowView: View {
 //                HStack {
 //                    Button {
 //                        // Clear global log and on-screen snapshot
-//                        Log.shared().clear()        // Make sure you have this method on your Log class
+//                        Log.shared().clear()
 //                        entries.removeAll()
 //                    } label: {
 //                        Label("Clear", systemImage: "trash")
@@ -320,7 +318,7 @@ private struct LogRowView: View {
 //                            .frame(height: 0)
 //                            .id("LOG_TOP")
 //
-//                        ForEach(filteredEntries, id: \.self) { row in
+//                        ForEach(filteredEntries) { row in
 //                            LogRowView(entry: row)
 //                        }
 //                    }
@@ -360,22 +358,22 @@ private struct LogRowView: View {
 //
 //    @Environment(\.colorScheme) private var colorScheme
 //
-//    // NEW: per-row expansion state
+//    // Per-row expansion state
 //    @State private var isExpanded: Bool = false
 //
-//    // NEW: tune this to taste
+//    // Tune this to taste
 //    private let previewCharacterLimit: Int = 280
 //
 //    var body: some View {
 //        VStack(alignment: .leading, spacing: 6) {
-//            // Header line: type badge, page, function
+//            // Header line: level badge, page, function
 //            HStack(alignment: .firstTextBaseline, spacing: 8) {
-//                // Type badge
-//                Text(entry.type.uppercased())
+//                // Level badge (DEBUG / WARNING / ERROR)
+//                Text(entry.level.label)
 //                    .font(.caption2.weight(.semibold))
 //                    .padding(.horizontal, 8)
 //                    .padding(.vertical, 4)
-//                    .background(typeColor.opacity(0.15))
+//                    //.background(typeColor.opacity(0.15))
 //                    .foregroundColor(typeColor)
 //                    .clipShape(Capsule())
 //
@@ -436,35 +434,35 @@ private struct LogRowView: View {
 //    // MARK: - Truncation helpers
 //
 //    private var needsTruncation: Bool {
-//        entry.text.count > previewCharacterLimit
+//        entry.message.count > previewCharacterLimit
 //    }
 //
 //    private var displayedText: String {
 //        guard !isExpanded, needsTruncation else {
-//            return entry.text
+//            return entry.message
 //        }
 //
-//        let prefixEnd = entry.text.index(
-//            entry.text.startIndex,
+//        let text = entry.message
+//        let prefixEnd = text.index(
+//            text.startIndex,
 //            offsetBy: previewCharacterLimit,
-//            limitedBy: entry.text.endIndex
-//        ) ?? entry.text.endIndex
+//            limitedBy: text.endIndex
+//        ) ?? text.endIndex
 //
-//        return String(entry.text[..<prefixEnd]) + "…"
+//        return String(text[..<prefixEnd]) + "…"
 //    }
 //
+//    // MARK: - Color based on level
+//
 //    private var typeColor: Color {
-//        switch entry.type.lowercased() {
-//        case "error":
+//        switch entry.level {
+//        case .error:
 //            return .red
-//        case "warning", "warn":
+//        case .warning:
 //            return .orange
-//        case "info":
-//            return .blue
-//        case "debug":
-//            return .gray
-//        default:
-//            return .secondary
+//        case .debug:
+//            return Color(red: 0.153, green: 0.69, blue: 1)
 //        }
 //    }
 //}
+//

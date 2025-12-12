@@ -535,213 +535,687 @@ class EventStorage: ObservableObject {
         }
         return eps
     }
-     
-    func updateFrigatePlus(id: String, value: Bool){
-        //TODO is this needed DispatchQueue.main.async
-        DispatchQueue.main.async { [self] in
-            
-            guard let database = db else { return }
-              
-            let filter = events.filter(self.id == id)
-            
-            let update = filter.update(
-                self.frigtePlus <- value
+ 
+    //TODO check this logic, something is off here
+    func updateFrigatePlus(id: String, value: Bool) {
+        guard let database = db else {
+            Log.error(
+                page: "EventStorage",
+                fn: "updateFrigatePlus",
+                "Database not initialized"
             )
-             
-            do {
-                let rowID = try database.run(update)
-                if rowID > -1 {
-                    EventStorage.shared.readAll3(completion: { res in
-                        self.epsSup3 = res!
-                        self.epsSuper.list3 = res!
-                        return
-                    })
-                }
-                  
-            } catch (let error){
-                Log.error(page: "EventStorage", fn: "updateFrigatePlus", "\(error)")
-                return
-            }
-            
+            return
         }
-    }
-    func insertOrUpdate(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
-           
-        //TODO is this needed DispatchQueue.main.async
-        DispatchQueue.main.async { [self] in
-             
-            //let dataset = self.getEventByFrameTime(frameTime3: frameTime)
-            let dataset = self.getEventById(id3: id)
-           
-            if dataset.isEmpty {
-                guard let database = db else { return }
-                 
-                let insert = events.insert(
-                   self.id <- id,
-                   self.frameTime <- frameTime,
-                   self.score <- score,
-                   self.type <- type,
-                   self.cameraName <- cameraName,
-                   self.label <- label,
-                   self.thumbnail <- thumbnail,
-                   self.snapshot <- snapshot,
-                   self.m3u8 <- m3u8,
-                   self.mp4 <- mp4,
-                   self.camera <- camera,
-                   self.debug <- debug,
-                   self.image <- image,
-                   self.transportType <- transportType,
-                   self.sub_label <- subLabel,                  //5/26
-                   self.current_zones <- currentZones,
-                   self.entered_zones <- enteredZones
-                )
-                do {
-                    let rowID = try database.run(insert)
-                    if rowID > -1 {
-                        EventStorage.shared.readAll3(completion: { res in
-                            self.epsSup3 = res!
-                            self.epsSuper.list3 = res!
-                            return
-                        })
-                    }
-                      
-                } catch (let error){
-                    Log.error(page: "EventStorage", fn: "insertOrUpdate", "\(error)")
-                    return
-                }
-            } else {
-               
-                guard let database = db else { return }
-                  
-                let filter = events.filter(self.id == id)
-                
-                let update = filter.update(
-                   self.id <- id,
-                   self.frameTime <- frameTime,
-                   self.score <- score,
-                   self.type <- type,
-                   self.cameraName <- cameraName,
-                   self.label <- label,
-                   self.thumbnail <- thumbnail,
-                   self.snapshot <- snapshot,
-                   self.m3u8 <- m3u8,
-                   self.mp4 <- mp4,
-                   self.camera <- camera,
-                   self.debug <- debug,
-                   self.image <- image,
-                   self.transportType <- transportType,
-                   self.sub_label <- subLabel,                  //5/26
-                   self.current_zones <- currentZones,
-                   self.entered_zones <- enteredZones
-                )
-                do {
-                     
-                    let rowID = try database.run(update)
-                    if rowID > -1 {
-                        EventStorage.shared.readAll3(completion: { res in
-                            self.epsSup3 = res!
-                            self.epsSuper.list3 = res!
-                            return
-                        })
-                    }
-                      
-                } catch (let error){
-                    Log.error(page: "EventStorage", fn: "insertOrUpdate", "\(error)")
-                    return
-                }
-            }
-        }
-    }
-    
-    func insertIfNone(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
-           
-        //TODO is this needed DispatchQueue.main.async
-        DispatchQueue.main.async { [self] in
-             
-            //let dataset = self.getEventByFrameTime(frameTime3: frameTime)
-            let dataset = self.getEventById(id3: id)
-              
-            if dataset.isEmpty {
-                guard let database = db else { return }
-                 
-                let insert = events.insert(
-                   self.id <- id,
-                   self.frameTime <- frameTime,
-                   self.score <- score,
-                   self.type <- type,
-                   self.cameraName <- cameraName,
-                   self.label <- label,
-                   self.thumbnail <- thumbnail,
-                   self.snapshot <- snapshot,
-                   self.m3u8 <- m3u8,
-                   self.mp4 <- mp4,
-                   self.camera <- camera,
-                   self.debug <- debug,
-                   self.image <- image,
-                   self.transportType <- transportType,
-                   self.sub_label <- subLabel,                  //5/26
-                   self.current_zones <- currentZones,
-                   self.entered_zones <- enteredZones
-                )
-                do {
-                    let rowID = try database.run(insert)
-                    if rowID > -1 {
-                        EventStorage.shared.readAll3(completion: { res in
-                            self.epsSup3 = res!
-                            self.epsSuper.list3 = res!
-                            return
-                        })
-                    }
-                    
-                } catch (let error){
-                    Log.error(page: "EventStorage", fn: "insertIfNone", "\(error)")
-                    return
-                }
-            } else {
-                Log.debug(page: "EventStorage", fn: "insertIfNone", "No Rows Returned")
-                return
-            }
-        }
-    }
-     
-    
-    func insert(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) -> Int64? {
-        
-        guard let database = db else { return nil }
 
-        let insert = events.insert(self.id <- id,
-                                  self.frameTime <- frameTime,
-                                  self.score <- score,
-                                  self.type <- type,
-                                  self.cameraName <- cameraName,
-                                  self.label <- label,
-                                  self.thumbnail <- thumbnail,
-                                  self.snapshot <- snapshot,
-                                  self.m3u8 <- m3u8,
-                                  self.mp4 <- mp4,
-                                  self.camera <- camera,
-                                  self.debug <- debug,
-                                  self.image <- image,
-                                  self.transportType <- transportType,
-                                  self.sub_label <- subLabel,      //5/26
-                                  self.current_zones <- currentZones,
-                                  self.entered_zones <- enteredZones
+        do {
+            // NOTE: your column is spelled "frigtePlus"
+            let filter = events.filter(self.id == id)
+            let update = filter.update(self.frigtePlus <- value)
+
+            let updatedCount = try database.run(update)
+
+            if updatedCount > 0 {
+                // ✅ Patch in-memory list3 instead of reloading everything
+                DispatchQueue.main.async {
+                    let epsSuper = EndpointOptionsSuper.shared()
+
+                    if let index = epsSuper.list3.firstIndex(where: { $0.id == id }) {
+                        epsSuper.list3[index].frigatePlus = value
+                    } else {
+                        Log.warning(
+                            page: "EventStorage",
+                            fn: "updateFrigatePlus",
+                            "DB updated but list3 does not contain id \(id)"
+                        )
+                    }
+                }
+
+                Log.debug(
+                    page: "EventStorage",
+                    fn: "updateFrigatePlus",
+                    "Updated frigtePlus=\(value) for id \(id)"
+                )
+            } else {
+                Log.warning(
+                    page: "EventStorage",
+                    fn: "updateFrigatePlus",
+                    "No rows updated for id \(id)"
+                )
+            }
+
+        } catch {
+            Log.error(
+                page: "EventStorage",
+                fn: "updateFrigatePlus",
+                "Failed to update frigtePlus for id \(id): \(error.localizedDescription)"
+            )
+        }
+    }
+
+//    func updateFrigatePlus(id: String, value: Bool){
+//        //TODO is this needed DispatchQueue.main.async
+//        DispatchQueue.main.async { [self] in
+//            
+//            guard let database = db else { return }
+//              
+//            let filter = events.filter(self.id == id)
+//            
+//            let update = filter.update(
+//                self.frigtePlus <- value
+//            )
+//             
+//            do {
+//                let rowID = try database.run(update)
+//                if rowID > -1 {
+//                    EventStorage.shared.readAll3(completion: { res in
+//                        self.epsSup3 = res!
+//                        self.epsSuper.list3 = res!
+//                        return
+//                    })
+//                }
+//                  
+//            } catch (let error){
+//                Log.error(page: "EventStorage", fn: "updateFrigatePlus", "\(error)")
+//                return
+//            }
+//            
+//        }
+//    }
+    
+    // EventStorage.swift
+    func insertOrUpdate(
+        id: String,
+        frameTime: Double,
+        score: Double,
+        type: String,
+        cameraName: String,
+        label: String,
+        thumbnail: String,
+        snapshot: String,
+        m3u8: String,
+        mp4: String,
+        camera: String,
+        debug: String,
+        image: String,
+        transportType: String,
+        subLabel: String,
+        currentZones: String,
+        enteredZones: String
+    ) {
+        guard let database = db else {
+            Log.error(
+                page: "EventStorage",
+                fn: "insertOrUpdate",
+                "Database not initialized"
+            )
+            return
+        }
+
+        do {
+            // 1) Try UPDATE first
+            let filter = events.filter(self.id == id)
+
+            let update = filter.update(
+                self.frameTime      <- frameTime,
+                self.score          <- score,
+                self.type           <- type,
+                self.cameraName     <- cameraName,
+                self.label          <- label,
+                self.thumbnail      <- thumbnail,
+                self.snapshot       <- snapshot,
+                self.m3u8           <- m3u8,
+                self.mp4            <- mp4,
+                self.camera         <- camera,
+                self.debug          <- debug,
+                self.image          <- image,
+                self.transportType  <- transportType,
+                self.sub_label      <- subLabel,
+                self.current_zones  <- currentZones,
+                self.entered_zones  <- enteredZones
+            )
+
+            let updatedCount = try database.run(update)
+
+            if updatedCount == 0 {
+                // 2) No existing row → INSERT
+                let insert = events.insert(
+                    self.id            <- id,
+                    self.frameTime     <- frameTime,
+                    self.score         <- score,
+                    self.type          <- type,
+                    self.cameraName    <- cameraName,
+                    self.label         <- label,
+                    self.thumbnail     <- thumbnail,
+                    self.snapshot      <- snapshot,
+                    self.m3u8          <- m3u8,
+                    self.mp4           <- mp4,
+                    self.camera        <- camera,
+                    self.debug         <- debug,
+                    self.image         <- image,
+                    self.transportType <- transportType,
+                    self.sub_label     <- subLabel,
+                    self.current_zones <- currentZones,
+                    self.entered_zones <- enteredZones
+                )
+
+                _ = try database.run(insert)
+
+                Log.debug(
+                    page: "EventStorage",
+                    fn: "insertOrUpdate",
+                    "Inserted event id=\(id)"
+                )
+            } else {
+                Log.debug(
+                    page: "EventStorage",
+                    fn: "insertOrUpdate",
+                    "Updated event id=\(id)"
+                )
+            }
+
+            // 3) Incremental in-memory sync (no readAll3)
+            upsertInMemoryEvent3(
+                id: id,
+                frameTime: frameTime,
+                score: score,
+                type: type,
+                cameraName: cameraName,
+                label: label,
+                thumbnail: thumbnail,
+                snapshot: snapshot,
+                m3u8: m3u8,
+                mp4: mp4,
+                camera: camera,
+                debug: debug,
+                image: image,
+                transportType: transportType,
+                subLabel: subLabel,
+                currentZones: currentZones,
+                enteredZones: enteredZones
+            )
+
+        } catch {
+            Log.error(
+                page: "EventStorage",
+                fn: "insertOrUpdate",
+                "SQLite error in insertOrUpdate for id \(id): \(error.localizedDescription)"
+            )
+        }
+    }
+
+
+    // MARK: - In-memory upsert for EndpointOptionsSuper.list3
+    // MARK: - In-memory upsert for EndpointOptionsSuper.list3
+
+    private func upsertInMemoryEvent3(
+        id: String,
+        frameTime: Double,
+        score: Double,
+        type: String,
+        cameraName: String,
+        label: String,
+        thumbnail: String,
+        snapshot: String,
+        m3u8: String,
+        mp4: String,
+        camera: String,
+        debug: String,
+        image: String,
+        transportType: String,
+        subLabel: String,
+        currentZones: String,
+        enteredZones: String
+    ) {
+        // Stay on main thread because UI observes EndpointOptionsSuper / epsSup3
+        if !Thread.isMainThread {
+            DispatchQueue.main.async {
+                self.upsertInMemoryEvent3(
+                    id: id,
+                    frameTime: frameTime,
+                    score: score,
+                    type: type,
+                    cameraName: cameraName,
+                    label: label,
+                    thumbnail: thumbnail,
+                    snapshot: snapshot,
+                    m3u8: m3u8,
+                    mp4: mp4,
+                    camera: camera,
+                    debug: debug,
+                    image: image,
+                    transportType: transportType,
+                    subLabel: subLabel,
+                    currentZones: currentZones,
+                    enteredZones: enteredZones
+                )
+            }
+            return
+        }
+
+        let store = EndpointOptionsSuper.shared()
+
+        if let index = store.list3.firstIndex(where: { $0.id == id }) {
+            // ✅ Update existing meta in place
+            let meta = store.list3[index]
+            meta.frameTime     = frameTime
+            meta.score         = score
+            meta.type          = type
+            meta.cameraName    = cameraName
+            meta.label         = label
+            meta.thumbnail     = thumbnail
+            meta.snapshot      = snapshot
+            meta.m3u8          = m3u8
+            meta.mp4           = mp4
+            meta.camera        = camera
+            meta.debug         = debug
+            meta.image         = image
+            meta.transportType = transportType
+            meta.sublabel      = subLabel
+            meta.currentZones  = currentZones
+            meta.enteredZones  = enteredZones
+        } else {
+            // ✅ New meta object
+            let meta = EndpointOptionsSuper.EventMeta3()
+            meta.id            = id
+            meta.frameTime     = frameTime
+            meta.score         = score
+            meta.type          = type
+            meta.cameraName    = cameraName
+            meta.label         = label
+            meta.thumbnail     = thumbnail
+            meta.snapshot      = snapshot
+            meta.m3u8          = m3u8
+            meta.mp4           = mp4
+            meta.camera        = camera
+            meta.debug         = debug
+            meta.image         = image
+            meta.transportType = transportType
+            meta.sublabel      = subLabel
+            meta.currentZones  = currentZones
+            meta.enteredZones  = enteredZones
+            // frigatePlus defaults to false from DB; ok to leave as default
+
+            // Insert in descending frameTime order (same as readAll3)
+            let insertIndex = store.list3.firstIndex {
+                ($0.frameTime ?? 0) < frameTime
+            } ?? store.list3.endIndex
+
+            store.list3.insert(meta, at: insertIndex)
+        }
+
+        // Keep EventStorage's own published copy in sync (if anything is observing it)
+        epsSup3 = store.list3
+    }
+
+
+
+    
+//    func insertOrUpdate(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
+//           
+//        //TODO is this needed DispatchQueue.main.async
+//        DispatchQueue.main.async { [self] in
+//             
+//            //let dataset = self.getEventByFrameTime(frameTime3: frameTime)
+//            let dataset = self.getEventById(id3: id)
+//           
+//            if dataset.isEmpty {
+//                guard let database = db else { return }
+//                 
+//                let insert = events.insert(
+//                   self.id <- id,
+//                   self.frameTime <- frameTime,
+//                   self.score <- score,
+//                   self.type <- type,
+//                   self.cameraName <- cameraName,
+//                   self.label <- label,
+//                   self.thumbnail <- thumbnail,
+//                   self.snapshot <- snapshot,
+//                   self.m3u8 <- m3u8,
+//                   self.mp4 <- mp4,
+//                   self.camera <- camera,
+//                   self.debug <- debug,
+//                   self.image <- image,
+//                   self.transportType <- transportType,
+//                   self.sub_label <- subLabel,                  //5/26
+//                   self.current_zones <- currentZones,
+//                   self.entered_zones <- enteredZones
+//                )
+//                do {
+//                    let rowID = try database.run(insert)
+//                    if rowID > -1 {
+//                        EventStorage.shared.readAll3(completion: { res in
+//                            self.epsSup3 = res!
+//                            self.epsSuper.list3 = res!
+//                            return
+//                        })
+//                    }
+//                      
+//                } catch (let error){
+//                    Log.error(page: "EventStorage", fn: "insertOrUpdate", "\(error)")
+//                    return
+//                }
+//            } else {
+//               
+//                guard let database = db else { return }
+//                  
+//                let filter = events.filter(self.id == id)
+//                
+//                let update = filter.update(
+//                   self.id <- id,
+//                   self.frameTime <- frameTime,
+//                   self.score <- score,
+//                   self.type <- type,
+//                   self.cameraName <- cameraName,
+//                   self.label <- label,
+//                   self.thumbnail <- thumbnail,
+//                   self.snapshot <- snapshot,
+//                   self.m3u8 <- m3u8,
+//                   self.mp4 <- mp4,
+//                   self.camera <- camera,
+//                   self.debug <- debug,
+//                   self.image <- image,
+//                   self.transportType <- transportType,
+//                   self.sub_label <- subLabel,                  //5/26
+//                   self.current_zones <- currentZones,
+//                   self.entered_zones <- enteredZones
+//                )
+//                do {
+//                     
+//                    let rowID = try database.run(update)
+//                    if rowID > -1 {
+//                        EventStorage.shared.readAll3(completion: { res in
+//                            self.epsSup3 = res!
+//                            self.epsSuper.list3 = res!
+//                            return
+//                        })
+//                    }
+//                      
+//                } catch (let error){
+//                    Log.error(page: "EventStorage", fn: "insertOrUpdate", "\(error)")
+//                    return
+//                }
+//            }
+//        }
+//    }
+    
+    func insertIfNone(
+        id: String,
+        frameTime: Double,
+        score: Double,
+        type: String,
+        cameraName: String,
+        label: String,
+        thumbnail: String,
+        snapshot: String,
+        m3u8: String,
+        mp4: String,
+        camera: String,
+        debug: String,
+        image: String,
+        transportType: String,
+        subLabel: String,
+        currentZones: String,
+        enteredZones: String
+    ) {
+        guard let database = db else {
+            Log.error(
+                page: "EventStorage",
+                fn: "insertIfNone",
+                "Database not initialized"
+            )
+            return
+        }
+
+        do {
+            // Fast existence check on id
+            let filter = events.filter(self.id == id)
+            if try database.pluck(filter) != nil {
+                Log.debug(
+                    page: "EventStorage",
+                    fn: "insertIfNone",
+                    "Event id=\(id) already exists; skipping insert"
+                )
+                return
+            }
+
+            let insert = events.insert(
+                self.id            <- id,
+                self.frameTime     <- frameTime,
+                self.score         <- score,
+                self.type          <- type,
+                self.cameraName    <- cameraName,
+                self.label         <- label,
+                self.thumbnail     <- thumbnail,
+                self.snapshot      <- snapshot,
+                self.m3u8          <- m3u8,
+                self.mp4           <- mp4,
+                self.camera        <- camera,
+                self.debug         <- debug,
+                self.image         <- image,
+                self.transportType <- transportType,
+                self.sub_label     <- subLabel,
+                self.current_zones <- currentZones,
+                self.entered_zones <- enteredZones
+            )
+
+            let rowID = try database.run(insert)
+            if rowID > -1 {
+                Log.debug(
+                    page: "EventStorage",
+                    fn: "insertIfNone",
+                    "Inserted event id=\(id)"
+                )
+
+                // Incremental in-memory sync (no readAll3)
+                upsertInMemoryEvent3(
+                    id: id,
+                    frameTime: frameTime,
+                    score: score,
+                    type: type,
+                    cameraName: cameraName,
+                    label: label,
+                    thumbnail: thumbnail,
+                    snapshot: snapshot,
+                    m3u8: m3u8,
+                    mp4: mp4,
+                    camera: camera,
+                    debug: debug,
+                    image: image,
+                    transportType: transportType,
+                    subLabel: subLabel,
+                    currentZones: currentZones,
+                    enteredZones: enteredZones
+                )
+            }
+
+        } catch {
+            Log.error(
+                page: "EventStorage",
+                fn: "insertIfNone",
+                "SQLite error in insertIfNone for id \(id): \(error.localizedDescription)"
+            )
+        }
+    }
+
+    
+//    func insertIfNone(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) {
+//           
+//        //TODO is this needed DispatchQueue.main.async
+//        DispatchQueue.main.async { [self] in
+//             
+//            //let dataset = self.getEventByFrameTime(frameTime3: frameTime)
+//            let dataset = self.getEventById(id3: id)
+//              
+//            if dataset.isEmpty {
+//                guard let database = db else { return }
+//                 
+//                let insert = events.insert(
+//                   self.id <- id,
+//                   self.frameTime <- frameTime,
+//                   self.score <- score,
+//                   self.type <- type,
+//                   self.cameraName <- cameraName,
+//                   self.label <- label,
+//                   self.thumbnail <- thumbnail,
+//                   self.snapshot <- snapshot,
+//                   self.m3u8 <- m3u8,
+//                   self.mp4 <- mp4,
+//                   self.camera <- camera,
+//                   self.debug <- debug,
+//                   self.image <- image,
+//                   self.transportType <- transportType,
+//                   self.sub_label <- subLabel,                  //5/26
+//                   self.current_zones <- currentZones,
+//                   self.entered_zones <- enteredZones
+//                )
+//                do {
+//                    let rowID = try database.run(insert)
+//                    if rowID > -1 {
+//                        EventStorage.shared.readAll3(completion: { res in
+//                            self.epsSup3 = res!
+//                            self.epsSuper.list3 = res!
+//                            return
+//                        })
+//                    }
+//                    
+//                } catch (let error){
+//                    Log.error(page: "EventStorage", fn: "insertIfNone", "\(error)")
+//                    return
+//                }
+//            } else {
+//                Log.debug(page: "EventStorage", fn: "insertIfNone", "No Rows Returned")
+//                return
+//            }
+//        }
+//    }
+     
+    func insert(
+        id: String,
+        frameTime: Double,
+        score: Double,
+        type: String,
+        cameraName: String,
+        label: String,
+        thumbnail: String,
+        snapshot: String,
+        m3u8: String,
+        mp4: String,
+        camera: String,
+        debug: String,
+        image: String,
+        transportType: String,
+        subLabel: String,
+        currentZones: String,
+        enteredZones: String
+    ) -> Int64? {
+
+        guard let database = db else {
+            Log.error(
+                page: "EventStorage",
+                fn: "insert",
+                "Database not initialized"
+            )
+            return nil
+        }
+
+        let insert = events.insert(
+            self.id            <- id,
+            self.frameTime     <- frameTime,
+            self.score         <- score,
+            self.type          <- type,
+            self.cameraName    <- cameraName,
+            self.label         <- label,
+            self.thumbnail     <- thumbnail,
+            self.snapshot      <- snapshot,
+            self.m3u8          <- m3u8,
+            self.mp4           <- mp4,
+            self.camera        <- camera,
+            self.debug         <- debug,
+            self.image         <- image,
+            self.transportType <- transportType,
+            self.sub_label     <- subLabel,
+            self.current_zones <- currentZones,
+            self.entered_zones <- enteredZones
         )
+
         do {
             let rowID = try database.run(insert)
-            
-            //TODO
-            EventStorage.shared.readAll3(completion: { res in
-                self.epsSup3 = res!
-                return
-            })
-              
+
+            Log.debug(
+                page: "EventStorage",
+                fn: "insert",
+                "Inserted event id=\(id), rowID=\(rowID)"
+            )
+
+            // Incremental in-memory sync (no readAll3)
+            upsertInMemoryEvent3(
+                id: id,
+                frameTime: frameTime,
+                score: score,
+                type: type,
+                cameraName: cameraName,
+                label: label,
+                thumbnail: thumbnail,
+                snapshot: snapshot,
+                m3u8: m3u8,
+                mp4: mp4,
+                camera: camera,
+                debug: debug,
+                image: image,
+                transportType: transportType,
+                subLabel: subLabel,
+                currentZones: currentZones,
+                enteredZones: enteredZones
+            )
+
             return rowID
-        } catch (let error){
-            Log.error(page: "EventStorage", fn: "insert", "\(error)")
+        } catch {
+            Log.error(
+                page: "EventStorage",
+                fn: "insert",
+                "SQLite error in insert for id \(id): \(error.localizedDescription)"
+            )
             return nil
         }
     }
+
+//    func insert(id: String, frameTime: Double, score: Double, type: String, cameraName: String, label: String, thumbnail: String, snapshot: String, m3u8: String, mp4: String, camera: String, debug: String, image: String, transportType: String, subLabel: String, currentZones: String, enteredZones: String  ) -> Int64? {
+//        
+//        guard let database = db else { return nil }
+//
+//        let insert = events.insert(self.id <- id,
+//                                  self.frameTime <- frameTime,
+//                                  self.score <- score,
+//                                  self.type <- type,
+//                                  self.cameraName <- cameraName,
+//                                  self.label <- label,
+//                                  self.thumbnail <- thumbnail,
+//                                  self.snapshot <- snapshot,
+//                                  self.m3u8 <- m3u8,
+//                                  self.mp4 <- mp4,
+//                                  self.camera <- camera,
+//                                  self.debug <- debug,
+//                                  self.image <- image,
+//                                  self.transportType <- transportType,
+//                                  self.sub_label <- subLabel,      //5/26
+//                                  self.current_zones <- currentZones,
+//                                  self.entered_zones <- enteredZones
+//        )
+//        do {
+//            let rowID = try database.run(insert)
+//            
+//            //TODO
+//            EventStorage.shared.readAll3(completion: { res in
+//                self.epsSup3 = res!
+//                return
+//            })
+//              
+//            return rowID
+//        } catch (let error){
+//            Log.error(page: "EventStorage", fn: "insert", "\(error)")
+//            return nil
+//        }
+//    }
  
     private func createEventsTable() {
         guard let database = db else {

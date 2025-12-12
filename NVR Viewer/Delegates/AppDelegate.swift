@@ -237,11 +237,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                                                            enteredZones: eps.enteredZones!
                 )
           
-                EventStorage.shared.readAll3(completion: { res in
-                    self.epsSup3 = res!
-                    //TODO
-                    self.epsSup.list3 = res!
-                })
+                //Not needed any more. keep in here while testing.
+//                EventStorage.shared.readAll3(completion: { res in
+//                    self.epsSup3 = res!
+//                    //TODO
+//                    self.epsSup.list3 = res!
+//                })
                 
                 
                 //Navigation --> Send to ViewLive()
@@ -254,27 +255,3 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 

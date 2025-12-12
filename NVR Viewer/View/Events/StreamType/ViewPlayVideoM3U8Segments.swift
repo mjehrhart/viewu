@@ -402,9 +402,9 @@ final class MP4Downloader {
             break
         case .bearer, .frigate:
             req.setValue("Bearer \(jwtToken)", forHTTPHeaderField: "Authorization")
-        case .cloudflare:
-            req.setValue(clientId, forHTTPHeaderField: "CF-Access-Client-Id")
-            req.setValue(clientSecret, forHTTPHeaderField: "CF-Access-Client-Secret")
+        case .cloudflare: 
+            req.setValue(cloudFlareClientId, forHTTPHeaderField: "CF-Access-Client-Id")
+            req.setValue(cloudFlareSecret,   forHTTPHeaderField: "CF-Access-Client-Secret")
         case .custom:
             break
         }

@@ -21,12 +21,11 @@ struct ViewEventsHistory: View {
         VStack(spacing: 0) {
             List {
                 ForEach(epsSup3.list3, id: \.sid) { container in
-                    // Be safe with optionals
                     if let id = container.id,
                        !id.isEmpty,
-                       let frameTime = container.frameTime {
+                       container.frameTime != nil {
 
-                        ViewEventCard(frameTime: frameTime)
+                        ViewEventCard(meta: container)
                             .listRowInsets(.init(top: 6, leading: 10, bottom: 0, trailing: 10))
                             .listRowSeparator(.hidden)
                     }
