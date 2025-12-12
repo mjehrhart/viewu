@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ViewAuthJWTBearer: View {
     
+    let reloadConfig: () async -> Void
+    
     let widthMultiplier:CGFloat = 4/5.8
     let api = APIRequester()
     
@@ -111,25 +113,63 @@ struct ViewAuthJWTBearer: View {
                     
                     nvrManager.connectionState = .disconnected
                     
+//                    Task {
+//                        let url = nvr.getUrl()
+//                        let urlString = url
+//                        try await api.checkConnectionStatus(
+//                            urlString: urlString,
+//                            authType: nvr.getAuthType()
+//                        ) { (data, error) in
+//                            
+//                            if let error = error {
+//                                Log.shared().print(
+//                                    page: "ViewAuthJWTBearer",
+//                                    fn: "NVR Connection",
+//                                    type: "ERROR",
+//                                    text: "\(String(describing: error)) - \(urlString)"
+//                                )
+//                                nvrManager.connectionState = .disconnected
+//                                return
+//                            }
+//                            nvrManager.connectionState = .connected 
+//                        }
+//                    }
                     Task {
-                        let url = nvr.getUrl()
-                        let urlString = url
-                        try await api.checkConnectionStatus(
-                            urlString: urlString,
-                            authType: nvr.getAuthType()
-                        ) { (data, error) in
-                            
-                            if let error = error {
-                                Log.shared().print(
-                                    page: "ViewAuthJWTBearer",
-                                    fn: "NVR Connection",
-                                    type: "ERROR",
-                                    text: "\(String(describing: error)) - \(urlString)"
-                                )
-                                nvrManager.connectionState = .disconnected
-                                return
+                        let urlString = nvr.getUrl()
+
+                        do {
+                            try await api.checkConnectionStatus(
+                                urlString: urlString,
+                                authType: nvr.getAuthType()
+                            ) { data, error in
+
+                                if let error = error {
+                                    Log.shared().print(
+                                        page: "ViewAuthJWTBearer",
+                                        fn: "Bearer Connection",
+                                        type: "ERROR",
+                                        text: "\(String(describing: error)) - \(urlString)"
+                                    )
+                                    nvrManager.connectionState = .disconnected
+                                    return
+                                }
+
+                                // Success
+                                nvrManager.connectionState = .connected
+
+                                // Fire off the async reload without making this closure async
+                                Task {
+                                    await reloadConfig()
+                                }
                             }
-                            nvrManager.connectionState = .connected
+                        } catch {
+                            Log.shared().print(
+                                page: "ViewAuthJWTBearer",
+                                fn: "Bearer Connection",
+                                type: "ERROR",
+                                text: "checkConnectionStatus threw: \(error) - \(urlString)"
+                            )
+                            nvrManager.connectionState = .disconnected
                         }
                     }
                 }

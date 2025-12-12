@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ViewAuthNone: View {
     
+    let reloadConfig: () async -> Void
+    
     let widthMultiplier:CGFloat = 4/5.8
     let api = APIRequester()
     
@@ -70,34 +72,53 @@ struct ViewAuthNone: View {
                 Spacer()
                 Button("Save Connection") {
                     // Sync data across view and model
-                    nvrManager.setHttps(http: nvrIsHttps )
-                    nvrManager.setIP(ip: nvrIPAddress )
-                    nvrManager.setPort( ports: nvrPortAddress )
-                    
+                    nvrManager.setHttps(http: nvrIsHttps)
+                    nvrManager.setIP(ip: nvrIPAddress)
+                    nvrManager.setPort(ports: nvrPortAddress)
+
+                    // Reset connection state while we test
                     nvrManager.connectionState = .disconnected
-                    
+
                     Task {
-                        let url = nvr.getUrl()
-                        let urlString = url
-                        try await api.checkConnectionStatus(
-                            urlString: urlString,
-                            authType: nvr.getAuthType()
-                        ) { (data, error) in
-                            
-                            if let error = error {
-                                Log.shared().print(
-                                    page: "ViewAuthNone",
-                                    fn: "NVR Connection",
-                                    type: "ERROR",
-                                    text: "\(String(describing: error)) - \(urlString)"
-                                )
-                                nvrManager.connectionState = .disconnected
-                                return
+                        let urlString = nvr.getUrl()
+
+                        do {
+                            try await api.checkConnectionStatus(
+                                urlString: urlString,
+                                authType: nvr.getAuthType()
+                            ) { data, error in
+
+                                if let error = error {
+                                    Log.shared().print(
+                                        page: "ViewAuthNone",
+                                        fn: "NVR Connection",
+                                        type: "ERROR",
+                                        text: "\(String(describing: error)) - \(urlString)"
+                                    )
+                                    nvrManager.connectionState = .disconnected
+                                    return
+                                }
+
+                                // Success
+                                nvrManager.connectionState = .connected
+
+                                // Fire off the async reload without making this closure async
+                                Task {
+                                    await reloadConfig()
+                                }
                             }
-                            nvrManager.connectionState = .connected
+                        } catch {
+                            Log.shared().print(
+                                page: "ViewAuthNone",
+                                fn: "NVR Connection",
+                                type: "ERROR",
+                                text: "checkConnectionStatus threw: \(error) - \(urlString)"
+                            )
+                            nvrManager.connectionState = .disconnected
                         }
                     }
                 }
+
                 .buttonStyle(CustomPressEffectButtonStyle())
                 .tint(Color(white: 0.58))
                 .scaleEffect(scale)
@@ -136,14 +157,10 @@ struct ViewAuthNone: View {
                         nvrManager.connectionState = .disconnected
                         return
                     }
-                    nvrManager.connectionState = .connected
+                    nvrManager.connectionState = .connected 
                 }
             }
         }
     }
 }
-
-#Preview {
-    ViewAuthNone()
-}
-
+ 

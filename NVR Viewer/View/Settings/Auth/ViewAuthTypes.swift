@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ViewAuthTypes: View {
     
+    let reloadConfig: () async -> Void
+    
     let widthMultiplier:CGFloat = 4/5.8
     let api = APIRequester()
     let bColor = Color(red: 0.153, green: 0.69, blue: 1)
@@ -37,16 +39,16 @@ struct ViewAuthTypes: View {
             
             // Keep exactly the same logic for which settings view to show
             if nvr.getAuthType() == .none  {
-                ViewAuthNone()
+                ViewAuthNone(reloadConfig: reloadConfig)
             }
             if nvr.getAuthType() == .bearer  {
-                ViewAuthJWTBearer()
+                ViewAuthJWTBearer(reloadConfig: reloadConfig)
             }
             if nvr.getAuthType() == .cloudflare  {
-                ViewAuthCloudFlare()
+                ViewAuthCloudFlare(reloadConfig: reloadConfig)
             }
             if nvr.getAuthType() == .frigate {
-                ViewAuthFrigate()
+                ViewAuthFrigate(reloadConfig: reloadConfig)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,7 +91,4 @@ struct CoolControlGroupStyle: ControlGroupStyle {
             .padding()
     }
 }
-
-#Preview {
-    ViewAuthTypes()
-}
+ 

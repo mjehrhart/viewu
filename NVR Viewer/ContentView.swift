@@ -60,6 +60,8 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var path = NavigationPath()
     
+    @State private var hasLoadedConfigThisLaunch = false
+ 
     // MARK: - Init
     
     init() {
@@ -106,6 +108,10 @@ struct ContentView: View {
                 }
             }
             .task {
+                // Only do this once per process lifetime
+                guard !hasLoadedConfigThisLaunch else { return }
+                hasLoadedConfigThisLaunch = true
+
                 // Initial config + events load (off main where possible)
                 await loadInitialData()
             }
@@ -140,10 +146,15 @@ struct ContentView: View {
                 ViewNVRDetails()
             }
             .navigationDestination(isPresented: $showSettings) {
-                ViewSettings(title: "Settings")
-                    .environmentObject(nvr)
-                    .environmentObject(mqttManager)
-            }
+                ViewSettings(
+                    title: "Settings",
+                    reloadConfig: {
+                        await loadConfig()
+                    }
+                )
+                .environmentObject(nvr)
+                .environmentObject(mqttManager)
+            } 
             .navigationDestination(isPresented: $showConnection) {
                 ViewConnection(title: "Connection")
                     .environmentObject(nvr)
@@ -534,3 +545,47 @@ struct BottomBarItem: View {
     }
 }
 
+//func loadConfig() async {
+//    
+//    let nvr = NVRConfig.shared()
+//    let api = APIRequester()
+//    @AppStorage("developerModeIsOn") var developerModeIsOn = false
+//    
+//    let url = nvr.getUrl()
+//    
+//    await api.fetchNVRConfig(
+//        urlString: url,
+//        authType: nvr.getAuthType()
+//    ) { data, error in
+//        
+//        guard let data = data else { return }
+//        
+//        if developerModeIsOn {
+//            Log.shared().print(
+//                page: "ContentView",
+//                fn: "loadConfig",
+//                type: "INFO",
+//                text: readData(data)
+//            )
+//        }
+//        
+//        // Decode off the main actor so UI stays snappy
+//        Task.detached(priority: .userInitiated) {
+//            do {
+//                let configuration = try JSONDecoder().decode(
+//                    NVRConfigurationCall2.self,
+//                    from: data
+//                )
+//                
+//                await MainActor.run {
+//                    applyConfig(configuration)
+//                    cleanupSnapshots(using: configuration)
+//                }
+//            } catch {
+//                await MainActor.run {
+//                    logConfigDecodeError(data: data, error: error)
+//                }
+//            }
+//        }
+//    }
+//}

@@ -11,6 +11,7 @@ import TipKit
 struct ViewSettings: View {
     
     let title: String
+    let reloadConfig: () async -> Void
     
     @StateObject var notificationManager = NotificationManager()
     
@@ -132,7 +133,7 @@ struct ViewSettings: View {
                 
                 // MARK: NVR Settings (Auth Types)
                 Section {
-                    ViewAuthTypes()
+                    ViewAuthTypes(reloadConfig: reloadConfig)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                 } header: {
