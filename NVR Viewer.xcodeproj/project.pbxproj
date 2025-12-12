@@ -172,6 +172,7 @@
 		348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventCard.swift; sourceTree = "<group>"; };
 		348C50AB2BB1ED7900A15446 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		349E9F432B9BC5EC002F83C5 /* NVR Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "NVR Viewer.entitlements"; sourceTree = "<group>"; };
+		34A2CE572EEC85DE009EB7F4 /* NotificationExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationExtension.entitlements; sourceTree = "<group>"; };
 		34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVRConfigurationHTTP.swift; sourceTree = "<group>"; };
 		34BBA4772BAB45C300A6004E /* EventFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFilter.swift; sourceTree = "<group>"; };
 		34BBA4792BABC40C00A6004E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -207,6 +208,16 @@
 		BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NVR_Viewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		34A2CE5F2EECA845009EB7F4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				NotificationAuthShared.swift,
+			);
+			target = 340AAFED2BA0A5CB00EB69F4 /* NotificationExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		343C6E732ECA6A8C00D0A5D3 /* Tips */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tips; sourceTree = "<group>"; };
 		343ED0672EE7C63D00ED01CB /* StreamType */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = StreamType; sourceTree = "<group>"; };
@@ -215,6 +226,7 @@
 		343ED0712EE8A92E00ED01CB /* HLS */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = HLS; sourceTree = "<group>"; };
 		3444DF4A2EDF4DAA00D67D5A /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
 		3484EA2D2EDFC1D800B8C44D /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
+		34A2CE5A2EEC89EB009EB7F4 /* NotificationHelpers */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (34A2CE5F2EECA845009EB7F4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = NotificationHelpers; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +296,7 @@
 		340AAFEF2BA0A5CC00EB69F4 /* NotificationExtension */ = {
 			isa = PBXGroup;
 			children = (
+				34A2CE572EEC85DE009EB7F4 /* NotificationExtension.entitlements */,
 				340AAFF02BA0A5CC00EB69F4 /* NotificationService.swift */,
 				340AAFF22BA0A5CC00EB69F4 /* Info.plist */,
 			);
@@ -369,6 +382,7 @@
 				349E9F432B9BC5EC002F83C5 /* NVR Viewer.entitlements */,
 				34E545622B9ADA0800137F34 /* GoogleService-Info.plist */,
 				346542E52B9982D70037BA1D /* NVR-Viewer-Info.plist */,
+				34A2CE5A2EEC89EB009EB7F4 /* NotificationHelpers */,
 				348C50AD2BB2445A00A15446 /* Delegates */,
 				34D5F00A2B92B56E002A84B0 /* Enum */,
 				34D5EFEF2B92B190002A84B0 /* Extension */,
@@ -394,16 +408,16 @@
 		34D5EFE32B92AB29002A84B0 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				343C6E732ECA6A8C00D0A5D3 /* Tips */,
-				342103612C1B5C0100CBBF83 /* OnBoarding */,
-				342103502C11381000CBBF83 /* Notifications */,
-				342103472C0EA29000CBBF83 /* Log */,
-				348333D52BBB240900ED1DF2 /* NVR */,
 				34D5F00E2B940DFF002A84B0 /* Camera */,
 				34D5F0102B940E23002A84B0 /* Connection */,
-				343ED06F2EE8A1B600ED01CB /* Filter */,
 				34D5F0112B940E31002A84B0 /* Events */,
+				343ED06F2EE8A1B600ED01CB /* Filter */,
+				342103472C0EA29000CBBF83 /* Log */,
+				342103502C11381000CBBF83 /* Notifications */,
+				348333D52BBB240900ED1DF2 /* NVR */,
+				342103612C1B5C0100CBBF83 /* OnBoarding */,
 				34D5F00F2B940E0E002A84B0 /* Settings */,
+				343C6E732ECA6A8C00D0A5D3 /* Tips */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -581,6 +595,7 @@
 				343ED0712EE8A92E00ED01CB /* HLS */,
 				3444DF4A2EDF4DAA00D67D5A /* Auth */,
 				3484EA2D2EDFC1D800B8C44D /* Auth */,
+				34A2CE5A2EEC89EB009EB7F4 /* NotificationHelpers */,
 			);
 			name = "NVR Viewer";
 			packageProductDependencies = (
@@ -798,6 +813,7 @@
 		340AAFF72BA0A5CC00EB69F4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 71;
 				DEVELOPMENT_TEAM = VW686JVGR9;
@@ -825,6 +841,7 @@
 		340AAFF82BA0A5CC00EB69F4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 71;

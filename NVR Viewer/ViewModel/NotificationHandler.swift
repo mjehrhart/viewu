@@ -19,10 +19,7 @@ final class NotificationHandler {
                 // Permission granted – nothing else to do here for now.
             } else {
                 let message = error?.localizedDescription ?? "User denied notifications"
-                Log.warning(
-                    page: "NotificationHandler",
-                    fn: "askPermission", message
-                )
+                Log.warning(page: "NotificationHandler", fn: "askPermission", message)
             }
         }
     }
@@ -30,10 +27,15 @@ final class NotificationHandler {
     /// Sends a push-style local notification with an optional image attachment.
     ///
     /// - Parameters:
-    ///   - body: The body text of the notification.
-    ///   - urlString: URL string to an image to attach to the notification.
-    ///     If the image fails to load, a text-only notification is still delivered.
-    func sendNotificationMessage(body: String, urlString: String) {
+    ///   - body: Body text for the notification
+    ///   - urlString: Image URL to attach (if download succeeds)
+    ///   - authHeaders: Headers to use when downloading the image (e.g. from buildAuthHeaders()).
+    ///                 Pass [:] for none/public images.
+    func sendNotificationMessage(
+        body: String,
+        urlString: String,
+        authHeaders: [String: String] = [:]
+    ) {
 
         let center = UNUserNotificationCenter.current()
 
@@ -47,7 +49,6 @@ final class NotificationHandler {
         content.body = body
         content.sound = .default
 
-        // Helper to schedule a notification with the current content
         func scheduleNotification(with content: UNMutableNotificationContent) {
             let request = UNNotificationRequest(
                 identifier: UUID().uuidString,
@@ -58,7 +59,8 @@ final class NotificationHandler {
                 if let error = error {
                     Log.error(
                         page: "NotificationHandler",
-                        fn: "sendNotificationMessage", "Failed to schedule notification: \(error.localizedDescription)"
+                        fn: "sendNotificationMessage",
+                        "Failed to schedule notification: \(error.localizedDescription)"
                     )
                 }
             }
@@ -68,23 +70,56 @@ final class NotificationHandler {
         guard let url = URL(string: urlString) else {
             Log.warning(
                 page: "NotificationHandler",
-                fn: "sendNotificationMessage", "Invalid image URL, sending text-only notification"
+                fn: "sendNotificationMessage",
+                "Invalid image URL, sending text-only notification"
             )
             scheduleNotification(with: content)
             return
         }
 
-        let pathExtension = url.pathExtension
+        // Build URLRequest so we can apply auth headers (.bearer/.frigate/.cloudflare/etc.)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.timeoutInterval = 10
 
-        // Download the image and attach it to the notification
-        let task = URLSession.shared.downloadTask(with: url) { (tempURL, _, error) in
+        // Apply headers from your existing buildAuthHeaders() pattern
+        for (k, v) in authHeaders {
+            request.setValue(v, forHTTPHeaderField: k)
+        }
+
+        let task = URLSession.shared.downloadTask(with: request) { tempURL, response, error in
 
             if let error = error {
                 Log.error(
                     page: "NotificationHandler",
-                    fn: "sendNotificationMessage", "Image download failed: \(error.localizedDescription)"
+                    fn: "sendNotificationMessage",
+                    "Image download failed: \(error.localizedDescription)"
                 )
-                // Fallback to text-only notification
+                scheduleNotification(with: content)
+                return
+            }
+
+            // Validate HTTP status if available
+            if let http = response as? HTTPURLResponse {
+                if !(200...299).contains(http.statusCode) {
+                    Log.warning(
+                        page: "NotificationHandler",
+                        fn: "sendNotificationMessage",
+                        "Image fetch HTTP \(http.statusCode); sending text-only"
+                    )
+                    scheduleNotification(with: content)
+                    return
+                }
+            }
+
+            // Validate mime type (reject HTML, JSON, etc.)
+            let mime = response?.mimeType?.lowercased()
+            if let mime = mime, !mime.hasPrefix("image/") {
+                Log.warning(
+                    page: "NotificationHandler",
+                    fn: "sendNotificationMessage",
+                    "Image fetch returned mime=\(mime); sending text-only"
+                )
                 scheduleNotification(with: content)
                 return
             }
@@ -92,18 +127,37 @@ final class NotificationHandler {
             guard let tempURL = tempURL else {
                 Log.warning(
                     page: "NotificationHandler",
-                    fn: "sendNotificationMessage", "Image download returned no file URL"
+                    fn: "sendNotificationMessage",
+                    "Image download returned no file URL"
                 )
                 scheduleNotification(with: content)
                 return
             }
 
+            // Choose an extension: prefer URL extension, else infer from mime
+            let extFromURL = url.pathExtension
+            let ext: String = {
+                if !extFromURL.isEmpty { return extFromURL }
+                switch mime {
+                case "image/jpeg": return "jpg"
+                case "image/png":  return "png"
+                case "image/gif":  return "gif"
+                case "image/webp": return "webp"
+                case "image/heic": return "heic"
+                default:           return "jpg"
+                }
+            }()
+
             let identifier = ProcessInfo.processInfo.globallyUniqueString
             let targetURL = FileManager.default.temporaryDirectory
                 .appendingPathComponent(identifier)
-                .appendingPathExtension(pathExtension)
+                .appendingPathExtension(ext)
 
             do {
+                if FileManager.default.fileExists(atPath: targetURL.path) {
+                    try FileManager.default.removeItem(at: targetURL)
+                }
+
                 try FileManager.default.moveItem(at: tempURL, to: targetURL)
 
                 let attachment = try UNNotificationAttachment(
@@ -111,15 +165,16 @@ final class NotificationHandler {
                     url: targetURL,
                     options: nil
                 )
-                content.attachments = [attachment]
 
+                content.attachments = [attachment]
                 scheduleNotification(with: content)
+
             } catch {
                 Log.error(
                     page: "NotificationHandler",
-                    fn: "sendNotificationMessage", "Failed to create notification attachment: \(error.localizedDescription)"
+                    fn: "sendNotificationMessage",
+                    "Failed to create notification attachment: \(error.localizedDescription)"
                 )
-                // Still send a text-only notification
                 scheduleNotification(with: content)
             }
         }
@@ -127,3 +182,4 @@ final class NotificationHandler {
         task.resume()
     }
 }
+

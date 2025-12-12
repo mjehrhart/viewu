@@ -13,7 +13,6 @@ final class NVRConfig: ObservableObject {
     // MARK: - Singleton
 
     static let _shared = NVRConfig()
-    //static var shared: NVRConfig { _shared }
 
     class func shared() -> NVRConfig {
         return _shared
@@ -21,7 +20,6 @@ final class NVRConfig: ObservableObject {
 
     // MARK: - Storage keys
 
-    //@AppStorage("cloudFlareURLAddress") private var cloudFlareURLAddress: String = ""
     private enum Keys {
         static let nvrIsHttps        = "nvrIsHttps"
         static let nvrIPAddress      = "nvrIPAddress"
@@ -34,8 +32,10 @@ final class NVRConfig: ObservableObject {
         static let bearerIsHttps     = "bearerIsHttps"
         static let bearerIPAddress   = "bearerIPAddress"
         static let bearerPortAddress = "bearerPortAddress"
-        
+
         static let cloudFlareURLAddress = "cloudFlareURLAddress"
+        static let cloudFlareClientId   = "cloudFlareClientId"
+        static let cloudFlareSecret     = "cloudFlareSecret"
 
         static let authType          = "authType"
     }
@@ -55,6 +55,9 @@ final class NVRConfig: ObservableObject {
         didSet {
             storedAuthType = tmpAuthType
             loadProfile(for: tmpAuthType)
+
+            // Keep NotificationExtension in sync whenever authType is assigned.
+            syncNotificationExtensionAuthCache()
         }
     }
 
@@ -66,7 +69,47 @@ final class NVRConfig: ObservableObject {
     init() {
         // Load auth type from storage, then load that profile
         let initialType = storedAuthType
-        tmpAuthType = initialType      // triggers loadProfile(for:)
+        tmpAuthType = initialType      // triggers didSet (loadProfile + sync)
+    }
+
+    // MARK: - Public API
+
+    func getAuthType() -> AuthType {
+        tmpAuthType
+    }
+
+    /// Single entry point to change authType.
+    /// (We do NOT call sync here because tmpAuthType.didSet already handles it.)
+    func setAuthType(authType: AuthType) {
+        tmpAuthType = authType
+    }
+
+    func setHttps(http: Bool) {
+        https = http
+        saveProfile(for: tmpAuthType, https: https, url: url, port: port)
+    }
+
+    func setIP(ip: String) {
+        url = ip
+        saveProfile(for: tmpAuthType, https: https, url: url, port: port)
+    }
+
+    func setPort(ports: String) {
+        port = ports
+        saveProfile(for: tmpAuthType, https: https, url: url, port: port)
+    }
+
+    func getIP() -> String {
+        url
+    }
+
+    func getUrl() -> String {
+        let scheme = https ? "https://" : "http://"
+        return "\(scheme)\(url):\(port)"
+    }
+
+    func getConnectionState() -> Bool {
+        connectionState == .connected
     }
 
     // MARK: - Stored per-profile values
@@ -110,9 +153,8 @@ final class NVRConfig: ObservableObject {
             let url   = defaults.string(forKey: Keys.cloudFlareURLAddress) ?? "0.0.0.0"
             let port  = "443"
             return (https, url, port)
-            
+
         case .custom:
-            // Not yet implemented; keep these blank until you add specific behavior.
             return (true, "", "")
         }
     }
@@ -135,9 +177,10 @@ final class NVRConfig: ObservableObject {
             defaults.set(port,  forKey: Keys.bearerPortAddress)
 
         case .cloudflare:
-            defaults.set(url,   forKey: Keys.cloudFlareURLAddress) 
+            // Cloudflare uses a domain + always https/443 in your code.
+            defaults.set(url, forKey: Keys.cloudFlareURLAddress)
+
         case .custom:
-            // No-op for now
             break
         }
     }
@@ -149,41 +192,19 @@ final class NVRConfig: ObservableObject {
         port  = profile.port
     }
 
-    // MARK: - Public API (compatible with existing code)
+    // MARK: - NotificationExtension sync
 
-    func getAuthType() -> AuthType {
-        tmpAuthType
-    }
+    private func syncNotificationExtensionAuthCache() {
+        let cfId = defaults.string(forKey: Keys.cloudFlareClientId) ?? ""
+        let cfSecret = defaults.string(forKey: Keys.cloudFlareSecret) ?? ""
 
-    func setAuthType(authType: AuthType) {
-        tmpAuthType = authType       // this will persist and reload profile
-    }
-
-    func setHttps(http: Bool) {
-        https = http
-        saveProfile(for: tmpAuthType, https: https, url: url, port: port)
-    }
-
-    func setIP(ip: String) {
-        url = ip
-        saveProfile(for: tmpAuthType, https: https, url: url, port: port)
-    }
-
-    func setPort(ports: String) {
-        port = ports
-        saveProfile(for: tmpAuthType, https: https, url: url, port: port)
-    }
-
-    func getIP() -> String {
-        url
-    }
-
-    func getUrl() -> String {
-        let scheme = https ? "https://" : "http://"
-        return "\(scheme)\(url):\(port)"
-    }
-
-    func getConnectionState() -> Bool {
-        connectionState == .connected
+        // Do NOT pass jwtBearer/jwtFrigate here. If you add Option B tokens later,
+        // write them explicitly when you generate them (so you don't wipe them accidentally).
+        NotificationAuthShared.sync(  
+            authTypeRaw: tmpAuthType.rawValue,
+            cloudFlareClientId: cfId,
+            cloudFlareSecret: cfSecret
+        )
     }
 }
+

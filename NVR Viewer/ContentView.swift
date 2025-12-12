@@ -51,7 +51,10 @@ struct ContentView: View {
     @AppStorage("isOnboarding") private var isOnboarding: Bool = true
     @AppStorage("showTips") private var showTips: Bool = true
     
+    //Needed for sharing values with NotificationExtension
     @AppStorage("authType") private var authType: AuthType = .none
+    @AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
+    @AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
     
     // Prevent double-fetching events on startup / quick app switches
     @AppStorage("lastEventsFetchTime") private var lastEventsFetchTime: TimeInterval = 0
@@ -123,6 +126,7 @@ struct ContentView: View {
                 handleScenePhaseChange(newScenePhase)
             }
             .onAppear {
+                  
                 Task {
                     // Give the first frame a moment so launch feels snappier
                     try? await Task.sleep(nanoseconds: 200_000_000) // 0.2s

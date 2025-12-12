@@ -17,12 +17,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     @AppStorage("fcm") private var fcmID: String = ""
     weak var notificationManager: NotificationManager?
     @ObservedObject var epsSup = EndpointOptionsSuper.shared()
-    
-    @Published var epsSup2 = EndpointOptionsSuper.shared().list2 {
-        willSet {
-            objectWillChange.send()
-        }
-    }
+ 
     @Published var epsSup3 = EndpointOptionsSuper.shared().list3 {
         willSet {
             objectWillChange.send()
@@ -36,7 +31,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
-         
+
+        // ensure NotificationServiceExtension has the latest auth/cache in App Group
+        NotificationAuthShared.syncFromStandardDefaults()
+
         return true
     }
     
@@ -58,8 +56,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
- 
-        //TODO verify this doesnt work correctly
+  
         parseUserInfo(userInfo: userInfo, transportType: "didReceiveRemoteNotification", newPage: 1, applicationState: "active")
         
         
@@ -94,127 +91,82 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             if let _ = userInfo["aps"] as? Dictionary<String, AnyObject> {
   
                 var eps = EndpointOptions()
-                var eps2 = EndpointOptionsSuper.EventMeta()
-                let eps3 = EndpointOptionsSuper.EventMeta3()
                 
                 eps.transportType = "didReceiveRemoteNotification"
-                eps2.transportType = "didReceiveRemoteNotification"
-                eps3.transportType = "didReceiveRemoteNotification"
                 
                 if let msg = userInfo["id"] as? String {
                     eps.id = msg
-                    eps2.id = msg
-                    eps3.id = msg
                 }
                 if let msg = userInfo["cameraName"] as? String {
                     eps.cameraName = msg
-                    eps2.cameraName = msg
-                    eps3.cameraName = msg
                 }
                 if let msg = userInfo["types"] as? String {
                     eps.type = msg
-                    eps2.type = msg
-                    eps3.type = msg
                 }
                 
                 if let msg = userInfo["frameTime"] as? String { 
                     eps.frameTime = Double(msg)
-                    eps2.frameTime = Double(msg)
-                    eps3.frameTime = Double(msg)
                 }
                 if let msg = userInfo["score"] as? String {
                     eps.score = Double(msg)
-                    eps2.score = Double(msg)
-                    eps3.score = Double(msg)
                 }
                 if let msg = userInfo["label"] as? String {
                     eps.label = msg
-                    eps2.label = msg
-                    eps3.label = msg
                 }
                 if let msg = userInfo["camera"] as? String {
                     eps.camera = msg
-                    eps2.camera = msg
-                    eps3.camera = msg
                 }
                 if let msg = userInfo["m3u8"] as? String {
                     eps.m3u8 = msg
-                    eps2.m3u8 = msg
-                    eps3.m3u8 = msg
                 }
                 if let msg = userInfo["mp4"] as? String {
                     eps.mp4 = msg
-                    eps2.mp4 = msg
-                    eps3.mp4 = msg
                 }
                 if let msg = userInfo["snapshot"] as? String {
                     eps.snapshot = msg
-                    eps2.snapshot = msg
-                    eps3.snapshot = msg
                 }
                 if let msg = userInfo["thumbnail"] as? String {
                     eps.thumbnail = msg
-                    eps2.thumbnail = msg
-                    eps3.thumbnail = msg
                 }
                 if let msg = userInfo["debug"] as? String {
                     eps.debug = msg
-                    eps2.debug = msg
-                    eps3.debug = msg
                 }
                 if let msg = userInfo["image"] as? String {
                     eps.image = msg
-                    eps2.image = msg
-                    eps3.image = msg
                 }
                 
                 if let msg = userInfo["sub_label"] as? String? {
                     eps.sublabel = msg
-                    eps2.sublabel = msg
-                    eps3.sublabel = msg
                 }
                 
                 if let msg = userInfo["current_zones"] as? String? {
                     eps.currentZones = msg
-                    eps2.currentZones = msg
-                    eps3.currentZones = msg
                 }
                 
                 if let msg = userInfo["entered_zones"] as? String? {
                     eps.enteredZones = msg
-                    eps2.enteredZones = msg
-                    eps3.enteredZones = msg
                 }
                 
                 if let msg = userInfo["start_time"] as? String? { 
                     if (msg != nil) {
                         eps.frameTime = Double(msg!)
-                        eps2.frameTime = Double(msg!)
-                        eps3.frameTime = Double(msg!)
                     }
                 }
- 
-                //THIS USES EPS"3"
-                //using epsSup.list3 and not eps3
+                
                 if eps.sublabel == nil {
                     eps.sublabel = ""
-                    eps2.sublabel = ""
-                    eps3.sublabel = ""
                 }
+                
                 if eps.currentZones == nil {
                     eps.currentZones = ""
-                    eps2.currentZones = ""
-                    eps3.currentZones = ""
                 }
+                
                 if eps.enteredZones == nil {
                     eps.enteredZones = ""
-                    eps2.enteredZones = ""
-                    eps3.enteredZones = ""
                 }
+                
                 if eps.type == nil {
                     eps.type = "auto"
-                    eps2.enteredZones = "auto"
-                    eps3.enteredZones = "auto"
                 }
                 
                 //OPTION 3
@@ -236,16 +188,9 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
                                                            currentZones: eps.currentZones!,
                                                            enteredZones: eps.enteredZones!
                 )
-          
-                //Not needed any more. keep in here while testing.
-//                EventStorage.shared.readAll3(completion: { res in
-//                    self.epsSup3 = res!
-//                    //TODO
-//                    self.epsSup.list3 = res!
-//                })
                 
                 
-                //Navigation --> Send to ViewLive()
+                //TODO either remove this or revisit the flow
                 notificationManager?.newPage = newPage
                 notificationManager?.frameTime = eps.frameTime
                 notificationManager?.eps = eps

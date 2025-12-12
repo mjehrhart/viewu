@@ -11,8 +11,7 @@ import Foundation
 final class EndpointOptionsSuper: ObservableObject { // Codable,
     
     var list: [EndpointOptions] = []
-    
-    @Published var list2: [EventMeta] = []
+     
     @Published var list3: [EventMeta3] = []
     
     static let _shared = EndpointOptionsSuper()
@@ -70,34 +69,7 @@ final class EndpointOptionsSuper: ObservableObject { // Codable,
         var transportType: String?
         var sid: Int64?
         var frigatePlus: Bool?
-    }
-    
-    struct EventMeta: Identifiable, Equatable, Hashable {
-        //API Info
-        var thumbnail: String?
-        var snapshot: String?
-        var m3u8: String?
-        var mp4: String?
-        var camera: String?
-        var debug: String?
-        var image: String?
-        
-        //Meta Info
-        var id: String?
-        var type: String?
-        var cameraName: String?
-        var score: Double?
-        var frameTime: Double?
-        var label: String?
-        var sublabel: String?
-        var currentZones: String?
-        var enteredZones: String?
-        
-        //Misc
-        var transportType: String?
-        var sid: Int64?
-        var frigatePlus: Bool?
-    }
+    } 
 }
 
 

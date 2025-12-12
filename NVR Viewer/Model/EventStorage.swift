@@ -18,8 +18,7 @@ class EventStorage: ObservableObject {
             objectWillChange.send()
         }
     }
-    
-    @Published var epsSup = EndpointOptionsSuper.shared().list2
+     
     @Published var epsSup3 = EndpointOptionsSuper.shared().list3
     
     static let DIR_DB = "EventStorageDB"
@@ -420,122 +419,6 @@ class EventStorage: ObservableObject {
         //return eps3
     }
     
-    //Depreciated
-    func readAll2() -> [EndpointOptionsSuper.EventMeta] {
-    
-        var eps: [EndpointOptionsSuper.EventMeta] = []
-         
-        guard let database = db else { return [] }
-
-        do {
-            var filter = Table("events")
-            var startDate = filter2.startDate.timeIntervalSince1970
-            startDate = floor(startDate)
-            
-            var endDate = filter2.endDate.timeIntervalSince1970
-            endDate = ceil(endDate)
-            
-            if filter2.selectedCamera == "all" && filter2.selectedObject == "all"{
-                  
-                filter = self.events.filter( type != "-1"
-                                            //frameTime >= startDate &&
-                                            //frameTime <= endDate
-                                            ).order(frameTime.desc)
-                  
-            } else if filter2.selectedCamera == "all" && filter2.selectedObject != "all"{
-                
-                filter = self.events.filter(
-                                            label == filter2.selectedObject //&&
-                                            //frameTime >= startDate &&
-                                            //frameTime <= endDate
-                                            ).order(frameTime.desc)
-                
-            } else if filter2.selectedCamera != "all" && filter2.selectedObject == "all"{
-                 
-                filter = self.events.filter(
-                                            cameraName == filter2.selectedCamera //&&
-                                            //frameTime >= startDate &&
-                                            //frameTime <= endDate
-                                            ).order(frameTime.desc)
-            } else if filter2.selectedCamera != "all" && filter2.selectedObject != "all"{
-                 
-                filter = self.events.filter(
-                                            cameraName == filter2.selectedCamera &&
-                                            label == filter2.selectedObject //&&
-                                            //frameTime >= startDate &&
-                                            //frameTime <= endDate
-                                            ).order(frameTime.desc)
-            }
-             
-            for events in try database.prepare(filter) {
-                   
-                eps.append( EndpointOptionsSuper.EventMeta(thumbnail: events[thumbnail],
-                                            snapshot: events[snapshot],
-                                            m3u8: events[m3u8],
-                                            mp4: events[mp4],
-                                            camera: events[camera],
-                                            debug: events[debug],
-                                            image: events[image],
-                                            id: events[id],
-                                            type: events[type],
-                                            cameraName: events[cameraName],
-                                            score: events[score],
-                                            frameTime: events[frameTime],
-                                            label: events[label],
-                                            sublabel: events[sub_label], //ADDED 5/26
-                                            currentZones: events[current_zones],
-                                            enteredZones:events[entered_zones],
-                                            transportType: events[transportType]
-                                           ) )
-             
-                 
-            }
-        } catch (let error){
-            Log.error(page: "EventStorage", fn: "readAll2", "\(error)")
-        }
-        
-        epsSup = eps
-        return eps
-    }
-    
-    func readAll() -> [EndpointOptions] {
-    
-        var eps: [EndpointOptions] = []
-        guard let database = db else { return [] }
-
-        do {
-            //TODO remove "new"
-            let filter = self.events.filter(type != "-1").order(frameTime.desc)
-            
-            for events in try database.prepare(filter) { //self.events
-                 
-                eps.append( EndpointOptions(thumbnail: events[thumbnail],
-                                            snapshot: events[snapshot],
-                                            m3u8: events[m3u8],
-                                            mp4: events[mp4],
-                                            camera: events[camera],
-                                            debug: events[debug],
-                                            image: events[image],
-                                            id: events[id],
-                                            type: events[type],
-                                            cameraName: events[cameraName],
-                                            score: events[score],
-                                            frameTime: events[frameTime],
-                                            label: events[label],
-                                            sublabel: events[sub_label], //ADDED 5/26
-                                            currentZones: events[current_zones],
-                                            enteredZones:events[entered_zones],
-                                            transportType: events[transportType],
-                                            sid:events[sid],
-                                            frigatePlus: events[frigtePlus]
-                                           ) )
-            }
-        } catch(let error) {
-            Log.error(page: "EventStorage", fn: "readAll", "\(error)")
-        }
-        return eps
-    }
- 
     //TODO check this logic, something is off here
     func updateFrigatePlus(id: String, value: Bool) {
         guard let database = db else {
