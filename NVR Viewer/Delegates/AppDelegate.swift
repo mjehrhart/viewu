@@ -33,6 +33,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         UNUserNotificationCenter.current().delegate = self
 
         // ensure NotificationServiceExtension has the latest auth/cache in App Group
+        _ = NotificationAuthShared.syncFromStandardDefaults()
         NotificationAuthShared.syncFromStandardDefaults()
 
         return true

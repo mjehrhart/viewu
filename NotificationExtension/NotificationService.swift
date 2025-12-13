@@ -7,7 +7,7 @@ import UserNotifications
 import Foundation
 import OSLog
 
-final class NotificationService: UNNotificationServiceExtension {
+final class NotificationService: UNNotificationServiceExtension, URLSessionDelegate, URLSessionTaskDelegate {
 
     private let log = OSLog(subsystem: "NSE", category: "NSE")
 
@@ -16,6 +16,16 @@ final class NotificationService: UNNotificationServiceExtension {
 
     // Turn off once you're done testing
     private let prefixTitleForDebug = false
+
+    // Delegate-backed session so we can handle TLS challenges
+    private lazy var imageSession: URLSession = {
+        let cfg = URLSessionConfiguration.ephemeral
+        cfg.timeoutIntervalForRequest = 15
+        cfg.timeoutIntervalForResource = 15
+        return URLSession(configuration: cfg, delegate: self, delegateQueue: nil)
+    }()
+
+    // MARK: - UNNotificationServiceExtension
 
     override func didReceive(
         _ request: UNNotificationRequest,
@@ -52,6 +62,14 @@ final class NotificationService: UNNotificationServiceExtension {
 
         os_log("[ext] imageURL=%{public}@", log: log, type: .info, url.absoluteString)
 
+        // Debug visibility (fault so you see it)
+        let authRaw = NotificationAuthShared.load()?.authTypeRaw ?? "<nil>"
+        os_log("[ext] authTypeRaw=%{public}@", log: log, type: .fault, authRaw)
+        os_log("[ext] host=%{public}@ isLAN=%{public}d",
+               log: log, type: .fault,
+               url.host ?? "<nil>",
+               isPrivateLANIPv4(url.host) ? 1 : 0)
+
         var req = URLRequest(url: url)
         req.httpMethod = "GET"
         req.cachePolicy = .reloadIgnoringLocalCacheData
@@ -59,12 +77,12 @@ final class NotificationService: UNNotificationServiceExtension {
 
         applyAuthHeaders(to: &req)
 
-        let cfg = URLSessionConfiguration.ephemeral
-        cfg.timeoutIntervalForRequest = 15
-        cfg.timeoutIntervalForResource = 15
-
-        URLSession(configuration: cfg).dataTask(with: req) { [weak self] data, response, error in
+        imageSession.dataTask(with: req) { [weak self] data, response, error in
             guard let self else { return }
+
+            if let e = error as? URLError {
+                os_log("[ext] download URLError code=%{public}d", log: self.log, type: .fault, e.errorCode)
+            }
 
             if let error {
                 os_log("[ext] download error=%{public}@", log: self.log, type: .fault, error.localizedDescription)
@@ -84,7 +102,6 @@ final class NotificationService: UNNotificationServiceExtension {
                 return
             }
 
-            // If Cloudflare Access blocks you, you'll get HTML (login page)
             if !mime.lowercased().contains("image/") {
                 let snippet = String(data: data.prefix(200), encoding: .utf8) ?? "<non-utf8>"
                 os_log("[ext] NOT an image. First 200 bytes=%{public}@", log: self.log, type: .fault, snippet)
@@ -134,6 +151,68 @@ final class NotificationService: UNNotificationServiceExtension {
         }
     }
 
+    // MARK: - TLS challenge handling (self-signed for Frigate LAN only)
+
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        handleTLSChallenge(challenge, completionHandler: completionHandler)
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        handleTLSChallenge(challenge, completionHandler: completionHandler)
+    }
+
+    private func handleTLSChallenge(
+        _ challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+              let trust = challenge.protectionSpace.serverTrust
+        else {
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+
+        let host = challenge.protectionSpace.host
+        let authRaw = NotificationAuthShared.load()?.authTypeRaw ?? "none"
+
+        let authNorm = authRaw
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: " ", with: "")
+            .lowercased()
+
+        let bypass = authNorm.contains("frigate") && isPrivateLANIPv4(host)
+
+        os_log("[ext] TLS challenge host=%{public}@ bypass=%{public}d",
+               log: log, type: .fault, host, bypass ? 1 : 0)
+
+        if bypass {
+            completionHandler(.useCredential, URLCredential(trust: trust))
+        } else {
+            completionHandler(.performDefaultHandling, nil)
+        }
+    }
+
+    private func isPrivateLANIPv4(_ host: String?) -> Bool {
+        guard let host else { return false }
+        let parts = host.split(separator: ".").compactMap { Int($0) }
+        guard parts.count == 4 else { return false }
+
+        let a = parts[0], b = parts[1]
+        if a == 10 { return true }
+        if a == 192 && b == 168 { return true }
+        if a == 172 && (16...31).contains(b) { return true }
+        return false
+    }
+
     // MARK: - Auth
 
     private func applyAuthHeaders(to request: inout URLRequest) {
@@ -142,18 +221,21 @@ final class NotificationService: UNNotificationServiceExtension {
             return
         }
 
-        let auth = snap.authTypeRaw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let authNorm = snap.authTypeRaw
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: " ", with: "")
+            .lowercased()
 
-        os_log("[ext] authType=%{public}@ idLen=%{public}d secretLen=%{public}d bearerLen=%{public}d frigateLen=%{public}d",
+        os_log("[ext] authTypeNorm=%{public}@ idLen=%{public}d secretLen=%{public}d bearerLen=%{public}d frigateLen=%{public}d",
                log: log, type: .info,
-               auth,
+               authNorm,
                snap.cloudFlareClientId.count,
                snap.cloudFlareSecret.count,
                snap.jwtBearer.count,
                snap.jwtFrigate.count)
 
-        switch auth {
-        case "cloudflare":
+        switch true {
+        case authNorm.contains("cloudflare"):
             if !snap.cloudFlareClientId.isEmpty && !snap.cloudFlareSecret.isEmpty {
                 request.setValue(snap.cloudFlareClientId, forHTTPHeaderField: "CF-Access-Client-Id")
                 request.setValue(snap.cloudFlareSecret, forHTTPHeaderField: "CF-Access-Client-Secret")
@@ -162,7 +244,7 @@ final class NotificationService: UNNotificationServiceExtension {
                 os_log("[ext] Cloudflare selected but CF creds empty", log: log, type: .fault)
             }
 
-        case "bearer":
+        case authNorm.contains("bearer"):
             let token = snap.jwtBearer.trimmingCharacters(in: .whitespacesAndNewlines)
             if !token.isEmpty {
                 request.setValue(normalizedBearer(token), forHTTPHeaderField: "Authorization")
@@ -171,7 +253,7 @@ final class NotificationService: UNNotificationServiceExtension {
                 os_log("[ext] Bearer selected but jwtBearer empty", log: log, type: .fault)
             }
 
-        case "frigate":
+        case authNorm.contains("frigate"):
             let token = snap.jwtFrigate.trimmingCharacters(in: .whitespacesAndNewlines)
             if !token.isEmpty {
                 request.setValue(normalizedBearer(token), forHTTPHeaderField: "Authorization")
@@ -181,7 +263,7 @@ final class NotificationService: UNNotificationServiceExtension {
             }
 
         default:
-            os_log("[ext] No auth headers added (authType=%{public}@)", log: log, type: .info, auth)
+            os_log("[ext] No auth headers added (authTypeNorm=%{public}@)", log: log, type: .info, authNorm)
         }
     }
 

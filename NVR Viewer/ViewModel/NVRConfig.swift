@@ -2,23 +2,14 @@
 //  NVRConfig.swift
 //  NVR Viewer
 //
-//  Created by Matthew Ehrhart on 3/3/24.
-//
 
 import Foundation
 import Combine
 
 final class NVRConfig: ObservableObject {
 
-    // MARK: - Singleton
-
     static let _shared = NVRConfig()
-
-    class func shared() -> NVRConfig {
-        return _shared
-    }
-
-    // MARK: - Storage keys
+    class func shared() -> NVRConfig { _shared }
 
     private enum Keys {
         static let nvrIsHttps        = "nvrIsHttps"
@@ -38,19 +29,19 @@ final class NVRConfig: ObservableObject {
         static let cloudFlareSecret     = "cloudFlareSecret"
 
         static let authType          = "authType"
+
+        // If you store these in standard defaults:
+        static let jwtBearer  = "jwtBearer"
+        static let jwtFrigate = "jwtFrigate"
     }
 
     private let defaults = UserDefaults.standard
-
     let api = APIRequester()
-
-    // MARK: - Active connection values (for current authType)
 
     @Published var https: Bool = false
     @Published var url: String = "0.0.0.1"
     @Published var port: String = "5000"
 
-    // Currently selected auth type (for UI and behavior)
     @Published var tmpAuthType: AuthType = .none {
         didSet {
             storedAuthType = tmpAuthType
@@ -61,25 +52,23 @@ final class NVRConfig: ObservableObject {
         }
     }
 
-    // Connection state for UI
     @Published var connectionState: NVRConnectionState = .disconnected
 
-    // MARK: - Init
+    // MARK: - Init (FIXED)
 
     init() {
-        // Load auth type from storage, then load that profile
         let initialType = storedAuthType
-        tmpAuthType = initialType      // triggers didSet (loadProfile + sync)
+        tmpAuthType = initialType   // didSet does NOT fire during init
+
+        // Manually do what didSet would have done
+        loadProfile(for: initialType)
+        syncNotificationExtensionAuthCache()
     }
 
     // MARK: - Public API
 
-    func getAuthType() -> AuthType {
-        tmpAuthType
-    }
+    func getAuthType() -> AuthType { tmpAuthType }
 
-    /// Single entry point to change authType.
-    /// (We do NOT call sync here because tmpAuthType.didSet already handles it.)
     func setAuthType(authType: AuthType) {
         tmpAuthType = authType
     }
@@ -99,9 +88,7 @@ final class NVRConfig: ObservableObject {
         saveProfile(for: tmpAuthType, https: https, url: url, port: port)
     }
 
-    func getIP() -> String {
-        url
-    }
+    func getIP() -> String { url }
 
     func getUrl() -> String {
         let scheme = https ? "https://" : "http://"
@@ -114,7 +101,6 @@ final class NVRConfig: ObservableObject {
 
     // MARK: - Stored per-profile values
 
-    /// The persisted "real" authType in UserDefaults.
     private var storedAuthType: AuthType {
         get {
             if let raw = defaults.string(forKey: Keys.authType),
@@ -177,7 +163,6 @@ final class NVRConfig: ObservableObject {
             defaults.set(port,  forKey: Keys.bearerPortAddress)
 
         case .cloudflare:
-            // Cloudflare uses a domain + always https/443 in your code.
             defaults.set(url, forKey: Keys.cloudFlareURLAddress)
 
         case .custom:
@@ -192,19 +177,22 @@ final class NVRConfig: ObservableObject {
         port  = profile.port
     }
 
-    // MARK: - NotificationExtension sync
+    // MARK: - NotificationExtension sync (FIXED)
 
     private func syncNotificationExtensionAuthCache() {
         let cfId = defaults.string(forKey: Keys.cloudFlareClientId) ?? ""
         let cfSecret = defaults.string(forKey: Keys.cloudFlareSecret) ?? ""
 
-        // Do NOT pass jwtBearer/jwtFrigate here. If you add Option B tokens later,
-        // write them explicitly when you generate them (so you don't wipe them accidentally).
-        NotificationAuthShared.sync(  
+        // Only pass JWTs if you actually have values (prevents clobbering App Group with "")
+        let bearer = (defaults.string(forKey: Keys.jwtBearer) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let frigate = (defaults.string(forKey: Keys.jwtFrigate) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+
+        _ = NotificationAuthShared.sync(
             authTypeRaw: tmpAuthType.rawValue,
             cloudFlareClientId: cfId,
-            cloudFlareSecret: cfSecret
+            cloudFlareSecret: cfSecret,
+            jwtBearer: bearer.isEmpty ? nil : bearer,
+            jwtFrigate: frigate.isEmpty ? nil : frigate
         )
     }
 }
-

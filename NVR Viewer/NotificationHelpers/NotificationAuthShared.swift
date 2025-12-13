@@ -10,19 +10,16 @@ enum NotificationAuthShared {
     // MUST match App Group exactly in BOTH targets
     static let suiteName = "group.com.viewu.app"
 
-    // Keys stored in UserDefaults.standard / @AppStorage (APP)
     enum StandardKey {
         static let authType = "authType"
 
         static let cloudFlareClientId = "cloudFlareClientId"
         static let cloudFlareSecret   = "cloudFlareSecret"
 
-        // Cache tokens for extension use
         static let jwtBearer  = "jwtBearer"
         static let jwtFrigate = "jwtFrigate"
     }
 
-    // Keys stored inside the App Group UserDefaults (EXT reads these)
     enum GroupKey {
         static let authType = StandardKey.authType
 
@@ -41,7 +38,6 @@ enum NotificationAuthShared {
         let jwtFrigate: String
     }
 
-    /// Call at app launch and whenever settings/tokens change.
     @discardableResult
     static func syncFromStandardDefaults() -> Bool {
         let standard = UserDefaults.standard
@@ -49,11 +45,9 @@ enum NotificationAuthShared {
         let authTypeRaw = standard.string(forKey: StandardKey.authType) ?? "none"
         let cfId = standard.string(forKey: StandardKey.cloudFlareClientId) ?? ""
         let cfSecret = standard.string(forKey: StandardKey.cloudFlareSecret) ?? ""
-
         let jwtBearer = standard.string(forKey: StandardKey.jwtBearer) ?? ""
         let jwtFrigate = standard.string(forKey: StandardKey.jwtFrigate) ?? ""
 
-        // Here we DO pass the JWTs because this function is the "copy everything" sync point.
         return sync(
             authTypeRaw: authTypeRaw,
             cloudFlareClientId: cfId,
@@ -63,7 +57,7 @@ enum NotificationAuthShared {
         )
     }
 
-    /// Writes to the App Group defaults so the NotificationServiceExtension can read.
+    /// Writes to the App Group defaults so the extension can read.
     /// JWTs are optional so callers that don't "own" the tokens won't overwrite them.
     @discardableResult
     static func sync(
@@ -73,14 +67,12 @@ enum NotificationAuthShared {
         jwtBearer: String? = nil,
         jwtFrigate: String? = nil
     ) -> Bool {
-
         guard let shared = UserDefaults(suiteName: suiteName) else { return false }
 
         shared.set(authTypeRaw, forKey: GroupKey.authType)
         shared.set(cloudFlareClientId, forKey: GroupKey.cloudFlareClientId)
         shared.set(cloudFlareSecret, forKey: GroupKey.cloudFlareSecret)
 
-        // Only write JWTs if explicitly provided (prevents clobbering)
         if let jwtBearer = jwtBearer {
             shared.set(jwtBearer, forKey: GroupKey.jwtBearer)
         }
@@ -88,13 +80,10 @@ enum NotificationAuthShared {
             shared.set(jwtFrigate, forKey: GroupKey.jwtFrigate)
         }
 
-        // Optional; usually not needed, but fine if you want faster visibility for the extension.
         shared.synchronize()
-
         return true
     }
 
-    /// Extension uses this.
     static func load() -> Snapshot? {
         guard let shared = UserDefaults(suiteName: suiteName) else { return nil }
 
