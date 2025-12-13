@@ -56,6 +56,7 @@
 		348333D92BBCAF9300ED1DF2 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333D82BBCAF9300ED1DF2 /* Helpers.swift */; };
 		348AB7B82BA54B33001ADE6C /* ViewEventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */; };
 		348C50AC2BB1ED7900A15446 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 348C50AB2BB1ED7900A15446 /* .gitignore */; };
+		34A2CE8B2EED22D1009EB7F4 /* LocalNotificationTemplateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A2CE8A2EED22CD009EB7F4 /* LocalNotificationTemplateStore.swift */; };
 		34A4F4B02C066F0D0052B08A /* NVRConfigurationHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */; };
 		34A5DE732EDE69E3002A299E /* JWTKit in Frameworks */ = {isa = PBXBuildFile; productRef = 34A5DE722EDE69E3002A299E /* JWTKit */; };
 		34BBA4782BAB45C300A6004E /* EventFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4772BAB45C300A6004E /* EventFilter.swift */; };
@@ -173,6 +174,7 @@
 		348C50AB2BB1ED7900A15446 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		349E9F432B9BC5EC002F83C5 /* NVR Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "NVR Viewer.entitlements"; sourceTree = "<group>"; };
 		34A2CE572EEC85DE009EB7F4 /* NotificationExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationExtension.entitlements; sourceTree = "<group>"; };
+		34A2CE8A2EED22CD009EB7F4 /* LocalNotificationTemplateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationTemplateStore.swift; sourceTree = "<group>"; };
 		34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVRConfigurationHTTP.swift; sourceTree = "<group>"; };
 		34BBA4772BAB45C300A6004E /* EventFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFilter.swift; sourceTree = "<group>"; };
 		34BBA4792BABC40C00A6004E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -489,6 +491,7 @@
 		34D5F00F2B940E0E002A84B0 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				34A2CE8A2EED22CD009EB7F4 /* LocalNotificationTemplateStore.swift */,
 				3444DF4A2EDF4DAA00D67D5A /* Auth */,
 				34D5EFEA2B92ABDC002A84B0 /* ViewSettings.swift */,
 			);
@@ -776,6 +779,7 @@
 				3421034F2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift in Sources */,
 				34D5F0072B92B4C3002A84B0 /* TopicFrigateEvent.swift in Sources */,
 				34D5EFF92B92B374002A84B0 /* Extension.swift in Sources */,
+				34A2CE8B2EED22D1009EB7F4 /* LocalNotificationTemplateStore.swift in Sources */,
 				34E544F32B9ABD8C00137F34 /* NotificationManager.swift in Sources */,
 				342103652C1B5CFE00CBBF83 /* ViewInstructions.swift in Sources */,
 				34D5EFED2B92AC0C002A84B0 /* ViewConnection.swift in Sources */,
@@ -815,7 +819,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 72;
+				CURRENT_PROJECT_VERSION = 74;
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -844,7 +848,7 @@
 				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 72;
+				CURRENT_PROJECT_VERSION = 74;
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1001,7 +1005,7 @@
 				ASSETCATALOG_WARNINGS = NO;
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 72;
+				CURRENT_PROJECT_VERSION = 74;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1045,7 +1049,7 @@
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 72;
+				CURRENT_PROJECT_VERSION = 74;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;

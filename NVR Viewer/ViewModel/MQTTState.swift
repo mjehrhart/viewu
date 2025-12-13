@@ -71,65 +71,59 @@ final class MQTTAppState: ObservableObject {
 
         // Device event callback from server
         if text.starts(with: "viewu_device_event_back") {
-            // format: viewu_device_event_back:<field>:<status>:<value>
             let parts = text.components(separatedBy: ":#:")
-
-            guard parts.count >= 4 else {
-                return
-            }
+            guard parts.count >= 4 else { return }
 
             let field = parts[1]
             let status = parts[2]
             let payload = parts[3]
+            let ok = (status == "200")
 
             switch field {
             case "title":
                 nts.apnTitle = payload
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                    self.nts.flagTitle = true
+                    self.nts.flagTitle = ok
                 }
 
             case "domain":
                 nts.apnDomain = payload
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                    self.nts.flagDomain = true
+                    self.nts.flagDomain = ok
                 }
 
             case "template":
                 nts.templateString = payload
 
-                let templateParts = payload.split(separator: "::")
+                // Your current split looks suspicious (split(separator: "::") doesn't compile in Swift).
+                // Prefer:
+                let templateParts = payload.components(separatedBy: "::")
                 nts.templates.removeAll()
-
                 for template in templateParts {
-                    let item = Item(
-                        id: UUID(),
-                        template: String(template).trimmingCharacters(in: .whitespaces)
-                    )
-                    nts.templates.append(item)
+                    nts.templates.append(Item(id: UUID(),
+                                              template: template.trimmingCharacters(in: .whitespaces)))
                 }
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                    self.nts.flagTemplate = true
+                    self.nts.flagTemplate = ok
                 }
 
             case "paused":
-                nts.notificationPaused = Bool(payload) ?? false
+                nts.notificationPaused = (payload == "true" || payload == "1")
 
             default:
                 break
             }
 
-            // Status == "200" triggers alert
-            if status == "200" {
+            if ok {
                 nts.alert = true
                 nts.delayText()
             } else {
                 nts.alert = false
             }
-
             return
         }
+
 
         // Events originating from this app – ignore
         if text.starts(with: "viewu_device_event") {
