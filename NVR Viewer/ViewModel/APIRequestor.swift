@@ -126,7 +126,7 @@ final class APIRequester: NSObject {
             }
             
         case .cloudflare:
-            await connectWithCloudflareAccess(
+            await AuthCloudFlare.shared().connectWithCloudflareAccess(
                 host: urlString,
                 endpoint: endpoint
             ) { data, error in
@@ -354,7 +354,7 @@ final class APIRequester: NSObject {
             
         case .cloudflare:
             // IMPORTANT: use `endpoint` here as well
-            await connectWithCloudflareAccess(
+            await AuthCloudFlare.shared().connectWithCloudflareAccess(
                 host: urlString,
                 endpoint: endpoint
             ) { data, error in
@@ -511,7 +511,7 @@ final class APIRequester: NSObject {
             }
             
         case .cloudflare:
-            await connectWithCloudflareAccess(
+            await AuthCloudFlare.shared().connectWithCloudflareAccess(
                 host: urlString,
                 endpoint: ""
             ) { data, error in
@@ -619,7 +619,7 @@ final class APIRequester: NSObject {
             }
             
         case .cloudflare:
-            await connectWithCloudflareAccess(
+            await AuthCloudFlare.shared().connectWithCloudflareAccess(
                 host: urlString,
                 endpoint: "/api/config"
             ) { data, error in
@@ -868,7 +868,7 @@ final class APIRequester: NSObject {
             }
 
         case .cloudflare:
-            await connectWithCloudflareAccess(
+            await AuthCloudFlare.shared().connectWithCloudflareAccess(
                 host: urlString,
                 endpoint: "/api/version"
             ) { data, error in

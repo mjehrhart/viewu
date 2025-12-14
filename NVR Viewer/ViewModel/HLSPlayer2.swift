@@ -1,6 +1,8 @@
 import SwiftUI
 import WebKit
 
+private let appGroupDefaults: UserDefaults = UserDefaults(suiteName: "group.com.viewu.app") ?? .standard
+
 struct HLSPlayer2: View {
 
     let urlString: String
@@ -12,8 +14,10 @@ struct HLSPlayer2: View {
 
     // 🔐 Same auth config you use elsewhere
     @AppStorage("authType") private var authType: AuthType = .none
-    @AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
-    @AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    //@AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
+    @AppStorage("cloudFlareClientId", store: appGroupDefaults)  private var cloudFlareClientId: String = ""
+    //@AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    @AppStorage("cloudFlareClientSecret", store: appGroupDefaults) private var cloudFlareSecret: String = ""
 
     var isNotIPOnHTTPS: Bool {
         !isHttpsLanURL(urlString)

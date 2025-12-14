@@ -9,6 +9,8 @@ import SwiftUI
 import AVKit
 import AVFoundation
 
+private let appGroupDefaults: UserDefaults = UserDefaults(suiteName: "group.com.viewu.app") ?? .standard
+
 struct ViewVideoPlayStreamM3U8: View {
     let urlString: String
     let urlMp4String: String
@@ -33,7 +35,8 @@ struct ViewVideoPlayStreamM3U8: View {
     // 🔐 Auth configuration (mirror MP4 view / downloader)
     @AppStorage("authType") private var authType: AuthType = .none
     @AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
-    @AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    //@AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    @AppStorage("cloudFlareClientSecret", store: appGroupDefaults) private var cloudFlareSecret: String = ""
 
     var body: some View {
         VStack(spacing: 0) {

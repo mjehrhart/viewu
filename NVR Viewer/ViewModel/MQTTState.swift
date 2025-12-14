@@ -48,6 +48,7 @@ final class MQTTAppState: ObservableObject {
 
     func setReceivedMessage(text: String) {
 
+        print("[MJE] Received message: \(text)")
         // Ignore this specific "response" message (magic length 163)
         if text.count == 163 {
             return

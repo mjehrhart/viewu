@@ -14,7 +14,7 @@ struct APIBuilder {
     var dataSet: TopicFrigateEventHeader
     private let nvr: NVRConfig
     
-    init(dataSet: TopicFrigateEventHeader, nvr: NVRConfig = .shared()) {
+    init(dataSet: TopicFrigateEventHeader, nvr: NVRConfig = .shared()) { 
         self.dataSet = dataSet
         self.nvr = nvr
     }

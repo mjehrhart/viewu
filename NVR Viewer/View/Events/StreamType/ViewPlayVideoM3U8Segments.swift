@@ -2,6 +2,8 @@ import SwiftUI
 import AVKit
 import AVFoundation 
 
+private let appGroupDefaults: UserDefaults = UserDefaults(suiteName: "group.com.viewu.app") ?? .standard
+
 struct ViewPlayVideoM3U8Segments: View {
     let urlString: String          // original m3u8 URL (unused now)
     let urlMp4String: String       // DIRECT MP4 URL from Frigate
@@ -359,8 +361,10 @@ struct PlayerViewController: UIViewControllerRepresentable {
 final class MP4Downloader {
 
     @AppStorage("authType") var authType: AuthType = .none
-    @AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
-    @AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    //@AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
+    @AppStorage("cloudFlareClientId", store: appGroupDefaults)  private var cloudFlareClientId: String = ""
+    //@AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    @AppStorage("cloudFlareClientSecret", store: appGroupDefaults) private var cloudFlareSecret: String = ""
     
     struct Result {
         let localFile: URL

@@ -51,12 +51,19 @@
 		342554BE2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */; };
 		3444DF492EDE6E9000D67D5A /* JWTKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3444DF482EDE6E9000D67D5A /* JWTKit */; };
 		346542E02B9783860037BA1D /* ViewEventsHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346542DF2B9783860037BA1D /* ViewEventsHistory.swift */; };
+		347107AC2EEE418B00769707 /* CloudflareAccessStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347107AB2EEE418700769707 /* CloudflareAccessStore.swift */; };
+		347107AE2EEE420400769707 /* DefaultChallengeURLSessionDelegate..swift in Sources */ = {isa = PBXBuildFile; fileRef = 347107AD2EEE41FE00769707 /* DefaultChallengeURLSessionDelegate..swift */; };
+		347107B02EEE423E00769707 /* WSSProbeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347107AF2EEE423C00769707 /* WSSProbeDelegate.swift */; };
+		347107B12EEE429600769707 /* CloudflareAccessStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347107AB2EEE418700769707 /* CloudflareAccessStore.swift */; };
+		347107B22EEE69BC00769707 /* WSSProbeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347107AF2EEE423C00769707 /* WSSProbeDelegate.swift */; };
 		348333A22BB8AB9700ED1DF2 /* RTSPPlayer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333A12BB8AB9700ED1DF2 /* RTSPPlayer2.swift */; };
 		348333D72BBB241E00ED1DF2 /* ViewNVRDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333D62BBB241E00ED1DF2 /* ViewNVRDetails.swift */; };
 		348333D92BBCAF9300ED1DF2 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348333D82BBCAF9300ED1DF2 /* Helpers.swift */; };
 		348AB7B82BA54B33001ADE6C /* ViewEventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348AB7B72BA54B33001ADE6C /* ViewEventCard.swift */; };
 		348C50AC2BB1ED7900A15446 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 348C50AB2BB1ED7900A15446 /* .gitignore */; };
 		34A2CE8B2EED22D1009EB7F4 /* LocalNotificationTemplateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A2CE8A2EED22CD009EB7F4 /* LocalNotificationTemplateStore.swift */; };
+		34A2CE8E2EEDD372009EB7F4 /* NotificationAuthShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A2CE8C2EEDD372009EB7F4 /* NotificationAuthShared.swift */; };
+		34A2CE8F2EEDD372009EB7F4 /* NotificationAuthShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A2CE8C2EEDD372009EB7F4 /* NotificationAuthShared.swift */; };
 		34A4F4B02C066F0D0052B08A /* NVRConfigurationHTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */; };
 		34A5DE732EDE69E3002A299E /* JWTKit in Frameworks */ = {isa = PBXBuildFile; productRef = 34A5DE722EDE69E3002A299E /* JWTKit */; };
 		34BBA4782BAB45C300A6004E /* EventFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BBA4772BAB45C300A6004E /* EventFilter.swift */; };
@@ -167,6 +174,9 @@
 		342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUIImageFull2.swift; sourceTree = "<group>"; };
 		346542DF2B9783860037BA1D /* ViewEventsHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEventsHistory.swift; sourceTree = "<group>"; };
 		346542E52B9982D70037BA1D /* NVR-Viewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "NVR-Viewer-Info.plist"; sourceTree = SOURCE_ROOT; };
+		347107AB2EEE418700769707 /* CloudflareAccessStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudflareAccessStore.swift; sourceTree = "<group>"; };
+		347107AD2EEE41FE00769707 /* DefaultChallengeURLSessionDelegate..swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultChallengeURLSessionDelegate..swift; sourceTree = "<group>"; };
+		347107AF2EEE423C00769707 /* WSSProbeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSSProbeDelegate.swift; sourceTree = "<group>"; };
 		348333A12BB8AB9700ED1DF2 /* RTSPPlayer2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTSPPlayer2.swift; sourceTree = "<group>"; };
 		348333D62BBB241E00ED1DF2 /* ViewNVRDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewNVRDetails.swift; sourceTree = "<group>"; };
 		348333D82BBCAF9300ED1DF2 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
@@ -175,6 +185,7 @@
 		349E9F432B9BC5EC002F83C5 /* NVR Viewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "NVR Viewer.entitlements"; sourceTree = "<group>"; };
 		34A2CE572EEC85DE009EB7F4 /* NotificationExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationExtension.entitlements; sourceTree = "<group>"; };
 		34A2CE8A2EED22CD009EB7F4 /* LocalNotificationTemplateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationTemplateStore.swift; sourceTree = "<group>"; };
+		34A2CE8C2EEDD372009EB7F4 /* NotificationAuthShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationAuthShared.swift; sourceTree = "<group>"; };
 		34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVRConfigurationHTTP.swift; sourceTree = "<group>"; };
 		34BBA4772BAB45C300A6004E /* EventFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFilter.swift; sourceTree = "<group>"; };
 		34BBA4792BABC40C00A6004E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -210,16 +221,6 @@
 		BFE41FBD095732829C6ACFE8 /* Pods_NVR_Viewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NVR_Viewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		34A2CE5F2EECA845009EB7F4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				NotificationAuthShared.swift,
-			);
-			target = 340AAFED2BA0A5CB00EB69F4 /* NotificationExtension */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		343C6E732ECA6A8C00D0A5D3 /* Tips */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tips; sourceTree = "<group>"; };
 		343ED0672EE7C63D00ED01CB /* StreamType */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = StreamType; sourceTree = "<group>"; };
@@ -228,7 +229,6 @@
 		343ED0712EE8A92E00ED01CB /* HLS */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = HLS; sourceTree = "<group>"; };
 		3444DF4A2EDF4DAA00D67D5A /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
 		3484EA2D2EDFC1D800B8C44D /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
-		34A2CE5A2EEC89EB009EB7F4 /* NotificationHelpers */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (34A2CE5F2EECA845009EB7F4 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = NotificationHelpers; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -330,6 +330,16 @@
 			path = OnBoarding;
 			sourceTree = "<group>";
 		};
+		347107AA2EEE417700769707 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				347107AB2EEE418700769707 /* CloudflareAccessStore.swift */,
+				347107AD2EEE41FE00769707 /* DefaultChallengeURLSessionDelegate..swift */,
+				347107AF2EEE423C00769707 /* WSSProbeDelegate.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		348333D52BBB240900ED1DF2 /* NVR */ = {
 			isa = PBXGroup;
 			children = (
@@ -355,6 +365,14 @@
 				342554BD2EDBD0D000C9B0F4 /* ViewUIImageFull2.swift */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		34A2CE8D2EEDD372009EB7F4 /* NotificationHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				34A2CE8C2EEDD372009EB7F4 /* NotificationAuthShared.swift */,
+			);
+			path = NotificationHelpers;
 			sourceTree = "<group>";
 		};
 		34D5EFC92B92AB1F002A84B0 = {
@@ -384,7 +402,8 @@
 				349E9F432B9BC5EC002F83C5 /* NVR Viewer.entitlements */,
 				34E545622B9ADA0800137F34 /* GoogleService-Info.plist */,
 				346542E52B9982D70037BA1D /* NVR-Viewer-Info.plist */,
-				34A2CE5A2EEC89EB009EB7F4 /* NotificationHelpers */,
+				347107AA2EEE417700769707 /* Shared */,
+				34A2CE8D2EEDD372009EB7F4 /* NotificationHelpers */,
 				348C50AD2BB2445A00A15446 /* Delegates */,
 				34D5F00A2B92B56E002A84B0 /* Enum */,
 				34D5EFEF2B92B190002A84B0 /* Extension */,
@@ -598,7 +617,6 @@
 				343ED0712EE8A92E00ED01CB /* HLS */,
 				3444DF4A2EDF4DAA00D67D5A /* Auth */,
 				3484EA2D2EDFC1D800B8C44D /* Auth */,
-				34A2CE5A2EEC89EB009EB7F4 /* NotificationHelpers */,
 			);
 			name = "NVR Viewer";
 			packageProductDependencies = (
@@ -747,7 +765,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				347107B12EEE429600769707 /* CloudflareAccessStore.swift in Sources */,
+				347107B22EEE69BC00769707 /* WSSProbeDelegate.swift in Sources */,
 				340AAFF12BA0A5CC00EB69F4 /* NotificationService.swift in Sources */,
+				34A2CE8F2EEDD372009EB7F4 /* NotificationAuthShared.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -770,7 +791,9 @@
 				348333A22BB8AB9700ED1DF2 /* RTSPPlayer2.swift in Sources */,
 				348333D92BBCAF9300ED1DF2 /* Helpers.swift in Sources */,
 				34BBA47A2BABC40C00A6004E /* AppDelegate.swift in Sources */,
+				347107AE2EEE420400769707 /* DefaultChallengeURLSessionDelegate..swift in Sources */,
 				34D5EFF32B92B1DF002A84B0 /* MQTTState.swift in Sources */,
+				347107AC2EEE418B00769707 /* CloudflareAccessStore.swift in Sources */,
 				348AB7B82BA54B33001ADE6C /* ViewEventCard.swift in Sources */,
 				342103542C11645600CBBF83 /* NotificationTemplate.swift in Sources */,
 				34A4F4B02C066F0D0052B08A /* NVRConfigurationHTTP.swift in Sources */,
@@ -793,7 +816,9 @@
 				34CF05102ED7DCE100B8B494 /* ViewEventImage.swift in Sources */,
 				34BBA47F2BAE164400A6004E /* DataController.swift in Sources */,
 				34D5EFE92B92ABA4002A84B0 /* ViewCamerasList.swift in Sources */,
+				34A2CE8E2EEDD372009EB7F4 /* NotificationAuthShared.swift in Sources */,
 				34D5EFF12B92B1CB002A84B0 /* MQTTManager.swift in Sources */,
+				347107B02EEE423E00769707 /* WSSProbeDelegate.swift in Sources */,
 				34BBA4812BAE3A9000A6004E /* EventStorage.swift in Sources */,
 				34D5F0032B92B453002A84B0 /* ViewUIImageFull.swift in Sources */,
 				34D5F0172B963F07002A84B0 /* ImageContainer.swift in Sources */,

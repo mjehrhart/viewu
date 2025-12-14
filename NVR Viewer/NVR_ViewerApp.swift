@@ -62,29 +62,48 @@ struct NVR_ViewerApp: App {
     }
 
     /// Keep App Group values fresh so NotificationExtension can always read creds.
-    private func syncNotificationAuthToAppGroup(reason: String) {
-        NotificationAuthShared.syncFromStandardDefaults()
+    @MainActor
+    func syncNotificationAuthToAppGroup() {
+        let suite = "group.com.viewu.app"
+        guard let group = UserDefaults(suiteName: suite) else { return }
+        let standard = UserDefaults.standard
 
-        #if DEBUG
-        // Safe readback (lengths only)
-        if let snap = NotificationAuthShared.load() {
-            Log.debug(
-                page: "NVR_ViewerApp",
-                fn: "syncNotificationAuthToAppGroup",
-                "[app] synced (\(reason)) suite=\(NotificationAuthShared.suiteName) idLen=\(snap.cloudFlareClientId.count) secretLen=\(snap.cloudFlareSecret.count)"
-            )
-        } else {
-            Log.warning(
-                page: "NVR_ViewerApp",
-                fn: "syncNotificationAuthToAppGroup",
-                "[app] App Group unavailable (\(reason)) suite=\(NotificationAuthShared.suiteName)"
-            )
+        let idKey = "cloudFlareClientId"
+        let secretKey = "cloudFlareClientSecret"
+
+        // Read current canonical app-group values
+        let groupId = (group.string(forKey: idKey) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let groupSecret = (group.string(forKey: secretKey) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // If app-group already has values, DO NOT overwrite them.
+        if !groupId.isEmpty && !groupSecret.isEmpty {
+            Log.debug(page: "NVR_ViewerApp", fn: "syncNotificationAuthToAppGroup",
+                      "[app] sync skipped (app group already set) suite=\(suite) idLen=\(groupId.count) secretLen=\(groupSecret.count)")
+            return
         }
-        #endif
+
+        // Otherwise migrate from standard / legacy keys
+        func firstNonEmpty(_ ud: UserDefaults, _ keys: [String]) -> String {
+            for k in keys {
+                let v = (ud.string(forKey: k) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+                if !v.isEmpty { return v }
+            }
+            return ""
+        }
+
+        let id = firstNonEmpty(standard, [idKey, "cloudflareClientId", "cloudflareClientid", "cloudflareClientID"])
+        let secret = firstNonEmpty(standard, [secretKey, "cloudflareClientSecret", "clouflareClientSecret", "cloudFlareSecret"])
+
+        if !id.isEmpty { group.set(id, forKey: idKey) }
+        if !secret.isEmpty { group.set(secret, forKey: secretKey) }
+
+        Log.debug(page: "NVR_ViewerApp", fn: "syncNotificationAuthToAppGroup",
+                  "[app] synced (migrate) suite=\(suite) idLen=\(id.count) secretLen=\(secret.count)")
     }
 
+
     init() {
-        syncNotificationAuthToAppGroup(reason: "app init")
+        syncNotificationAuthToAppGroup()
     }
 
     // MARK: - Body
@@ -119,7 +138,7 @@ struct NVR_ViewerApp: App {
             switch newPhase {
             case .background:
                 // Optional but recommended: ensure latest creds are in App Group
-                syncNotificationAuthToAppGroup(reason: "scenePhase background")
+                syncNotificationAuthToAppGroup()
                 scheduleAppRefresh()
             default:
                 break

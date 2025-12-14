@@ -10,7 +10,9 @@ import CocoaMQTT
 import SwiftData
 import TipKit
 import BackgroundTasks
-import JWTKit
+import JWTKit 
+
+private let appGroupDefaults: UserDefaults = UserDefaults(suiteName: "group.com.viewu.app") ?? .standard
 
 @MainActor
 struct ContentView: View {
@@ -53,8 +55,10 @@ struct ContentView: View {
     
     //Needed for sharing values with NotificationExtension
     @AppStorage("authType") private var authType: AuthType = .none
-    @AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
-    @AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    //@AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
+    @AppStorage("cloudFlareClientId", store: appGroupDefaults)  private var cloudFlareClientId: String = ""
+    //@AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    @AppStorage("cloudFlareClientSecret", store: appGroupDefaults) private var cloudFlareSecret: String = ""
     
     // Prevent double-fetching events on startup / quick app switches
     @AppStorage("lastEventsFetchTime") private var lastEventsFetchTime: TimeInterval = 0
@@ -127,6 +131,7 @@ struct ContentView: View {
             }
             .onAppear {
                   
+                migrateLegacyCloudflareSecretIfNeeded()
                 Task {
                     // Give the first frame a moment so launch feels snappier
                     try? await Task.sleep(nanoseconds: 200_000_000) // 0.2s
@@ -536,6 +541,19 @@ struct BottomBarItem: View {
         )
     }
 }
+
+private func migrateLegacyCloudflareSecretIfNeeded() {
+    let legacy = (appGroupDefaults.string(forKey: "cloudFlareSecret") ?? "")
+        .trimmingCharacters(in: .whitespacesAndNewlines)
+
+    let canonical = (appGroupDefaults.string(forKey: "cloudFlareClientSecret") ?? "")
+        .trimmingCharacters(in: .whitespacesAndNewlines)
+
+    if canonical.isEmpty, !legacy.isEmpty {
+        appGroupDefaults.set(legacy, forKey: "cloudFlareClientSecret")
+    }
+}
+
 
 //func loadConfig() async {
 //    

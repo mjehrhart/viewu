@@ -461,12 +461,15 @@ struct PlayerViewControllerMP4: UIViewControllerRepresentable {
 // =======================================================
 // MARK: - MP4Downloader2
 // =======================================================
+private let appGroupDefaults: UserDefaults = UserDefaults(suiteName: "group.com.viewu.app") ?? .standard
 
 final class MP4Downloader2 {
 
     @AppStorage("authType") var authType: AuthType = .none
-    @AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
-    @AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    //@AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
+    @AppStorage("cloudFlareClientId", store: appGroupDefaults)  private var cloudFlareClientId: String = ""
+    //@AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    @AppStorage("cloudFlareClientSecret", store: appGroupDefaults) private var cloudFlareSecret: String = ""
     
     struct Result {
         let localFile: URL

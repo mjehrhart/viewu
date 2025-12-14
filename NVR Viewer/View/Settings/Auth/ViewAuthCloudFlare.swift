@@ -1,11 +1,6 @@
-//
-//  ViewAuthCloudFlare.swift
-//  NVR Viewer
-//
-//  Created by Matthew Ehrhart on 12/10/25.
-//
-
 import SwiftUI
+
+private let appGroupDefaults: UserDefaults = UserDefaults(suiteName: "group.com.viewu.app") ?? .standard
 
 struct ViewAuthCloudFlare: View {
 
@@ -19,11 +14,20 @@ struct ViewAuthCloudFlare: View {
 
     @StateObject var nvrManager = NVRConfig.shared()
 
-    @AppStorage("tipsSettingsNVR") private var tipsSettingsNVR: Bool = true
+    @AppStorage("tipsSettingsNVR")
+    private var tipsSettingsNVR: Bool = true
 
-    @AppStorage("cloudFlareURLAddress") private var cloudFlareURLAddress: String = ""
-    @AppStorage("cloudFlareClientId") private var cloudFlareClientId: String = ""
-    @AppStorage("cloudFlareSecret") private var cloudFlareSecret: String = ""
+    @AppStorage("cloudFlareURLAddress")
+    private var cloudFlareURLAddress: String = ""
+
+    @AppStorage("cloudFlareClientId")
+    private var cloudFlareClientId: String = ""
+
+    @AppStorage("cloudFlareClientSecret")
+    private var cloudFlareClientSecret: String = ""
+
+    @AppStorage("cloudFlareSecret")
+    private var legacyCloudFlareSecret: String = ""
 
     @Environment(\.colorScheme) var colorScheme
 
@@ -31,7 +35,6 @@ struct ViewAuthCloudFlare: View {
 
         VStack(spacing: 14) {
 
-            // MARK: Address
             HStack {
                 Text("Address")
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -45,7 +48,6 @@ struct ViewAuthCloudFlare: View {
 
             Divider()
 
-            // MARK: Client ID
             HStack(spacing: 8) {
                 Text("Client ID")
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -58,18 +60,17 @@ struct ViewAuthCloudFlare: View {
 
             Divider()
 
-            // MARK: Secret
             HStack(spacing: 8) {
                 Text("Secret")
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 ZStack {
                     if !showSecret {
-                        SecureField("", text: $cloudFlareSecret)
+                        SecureField("", text: $cloudFlareClientSecret)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
                         ScrollView(.horizontal, showsIndicators: false) {
-                            TextField("secret goes here", text: $cloudFlareSecret)
+                            TextField("secret goes here", text: $cloudFlareClientSecret)
                                 .autocapitalization(.none)
                                 .autocorrectionDisabled()
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -86,7 +87,6 @@ struct ViewAuthCloudFlare: View {
 
             Divider()
 
-            // MARK: Connection status
             Label(
                 nvrManager.getConnectionState() ? "Connected" : "Disconnected",
                 systemImage: "cable.connector"
@@ -98,37 +98,55 @@ struct ViewAuthCloudFlare: View {
                 : .red
             )
 
-            // MARK: Save button
             HStack {
                 Spacer()
 
                 Button("Save Connection") {
-                    // Normalize "Address" into a host (prevents accidental "https://https://..." issues)
+
                     let hostOnly = normalizedHost(cloudFlareURLAddress)
+                    if hostOnly.isEmpty {
+                        Log.error(
+                            page: "ViewAuthCloudFlare",
+                            fn: "Save Connection",
+                            "Refusing to save: Cloudflare host is empty. (This would produce https://:443 and break connection)"
+                        )
+                        return
+                    }
+
+                    // ✅ Persist normalized host
                     cloudFlareURLAddress = hostOnly
 
-                    // Activate Cloudflare profile first
-                    nvrManager.setAuthType(authType: .cloudflare)
+                    // ✅ NEW: Mirror host into App Group too (prevents https://:443 in early/background readers)
+                    appGroupDefaults.set(hostOnly, forKey: "cloudFlareURLAddress")
 
-                    // Save profile values into the Cloudflare profile
+                    let idTrim = cloudFlareClientId.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let secretTrim = cloudFlareClientSecret.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                    nvrManager.setAuthType(authType: .cloudflare)
                     nvrManager.setHttps(http: true)
                     nvrManager.setIP(ip: hostOnly)
                     nvrManager.setPort(ports: "443")
 
-                    // Sync to App Group explicitly so NotificationExtension can fetch images
+                    // Keep your existing sync behavior
+                    CloudflareAccessCreds.set(clientId: idTrim, clientSecret: secretTrim)
+                    appGroupDefaults.set(idTrim, forKey: "cloudFlareClientId")
+                    appGroupDefaults.set(secretTrim, forKey: "cloudFlareClientSecret")
+
                     _ = NotificationAuthShared.sync(
                         authTypeRaw: "cloudflare",
-                        cloudFlareClientId: cloudFlareClientId.trimmingCharacters(in: .whitespacesAndNewlines),
-                        cloudFlareSecret: cloudFlareSecret.trimmingCharacters(in: .whitespacesAndNewlines)
+                        cloudFlareClientId: idTrim,
+                        cloudFlareSecret: secretTrim
                     )
 
+                    let rbHost = (appGroupDefaults.string(forKey: "cloudFlareURLAddress") ?? "")
+                    let rbId = (appGroupDefaults.string(forKey: "cloudFlareClientId") ?? "")
+                    let rbSecret = (appGroupDefaults.string(forKey: "cloudFlareClientSecret") ?? "")
                     Log.debug(
                         page: "ViewAuthCloudFlare",
                         fn: "Save Connection",
-                        "[app] synced App Group \(NotificationAuthShared.suiteName) idLen=\(cloudFlareClientId.count) secretLen=\(cloudFlareSecret.count)"
+                        "[app] AppGroup readback suite=group.com.viewu.app hostLen=\(rbHost.count) idLen=\(rbId.count) secretLen=\(rbSecret.count)"
                     )
 
-                    // Clear previous status so you don't see stale "Connected"
                     nvrManager.connectionState = .disconnected
 
                     Task {
@@ -175,11 +193,33 @@ struct ViewAuthCloudFlare: View {
         .background(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
         .cornerRadius(25)
         .onAppear {
-            // Do not write profile values here — it can save into the wrong profile.
             nvrManager.connectionState = .disconnected
 
-            // Optional: auto-check if user has a host configured
+            // ✅ NEW: Restore host from App Group if Standard is empty (prevents https://:443)
+            if cloudFlareURLAddress.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                let agHost = (appGroupDefaults.string(forKey: "cloudFlareURLAddress") ?? "")
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                if !agHost.isEmpty {
+                    cloudFlareURLAddress = agHost
+                    Log.debug(page: "ViewAuthCloudFlare", fn: "onAppear", "Restored cloudFlareURLAddress from App Group")
+                }
+            }
+
+            if cloudFlareClientSecret.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+               !legacyCloudFlareSecret.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                cloudFlareClientSecret = legacyCloudFlareSecret
+                Log.debug(page: "ViewAuthCloudFlare", fn: "onAppear", "Migrated legacy cloudFlareSecret -> cloudFlareClientSecret (standard)")
+            }
+
+            let idTrim = cloudFlareClientId.trimmingCharacters(in: .whitespacesAndNewlines)
+            let secretTrim = cloudFlareClientSecret.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !idTrim.isEmpty { appGroupDefaults.set(idTrim, forKey: "cloudFlareClientId") }
+            if !secretTrim.isEmpty { appGroupDefaults.set(secretTrim, forKey: "cloudFlareClientSecret") }
+
+            // ✅ Mirror host too
             let hostOnly = normalizedHost(cloudFlareURLAddress)
+            if !hostOnly.isEmpty { appGroupDefaults.set(hostOnly, forKey: "cloudFlareURLAddress") }
+
             guard !hostOnly.isEmpty else { return }
 
             Task {
@@ -212,25 +252,17 @@ struct ViewAuthCloudFlare: View {
         }
     }
 
-    /// Converts anything the user pastes into a clean host:
-    /// - "https://example.com" -> "example.com"
-    /// - "example.com:443/path" -> "example.com"
-    /// - "example.com" -> "example.com"
     private func normalizedHost(_ raw: String) -> String {
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return "" }
 
-        // If it's a full URL, parse host.
         if let url = URL(string: trimmed), let host = url.host, !host.isEmpty {
             return host
         }
-
-        // If it has no scheme, try adding https://
         if let url = URL(string: "https://\(trimmed)"), let host = url.host, !host.isEmpty {
             return host
         }
 
-        // Fallback: strip scheme manually, strip path, strip port
         let noScheme = trimmed
             .replacingOccurrences(of: "https://", with: "", options: [.caseInsensitive])
             .replacingOccurrences(of: "http://", with: "", options: [.caseInsensitive])
@@ -240,4 +272,3 @@ struct ViewAuthCloudFlare: View {
         return hostOnly
     }
 }
-
