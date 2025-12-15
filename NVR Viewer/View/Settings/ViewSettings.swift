@@ -99,17 +99,20 @@ struct ViewSettings: View {
 
                 // MARK: Camera Stream
                 Section {
-                    Toggle("RTSP", isOn: $camerGo2Rtc)
-                        .onChange(of: camerGo2Rtc) {
-                            if camerGo2Rtc == true {
-                                cameraRTSPPath = false
-                                cameraHLS = false
-                            } else {
-                                cameraHLS = true
+                    
+                    let authtype = nvrManager.getAuthType()
+                    if  authtype != .cloudflare{
+                        Toggle("RTSP", isOn: $camerGo2Rtc)
+                            .onChange(of: camerGo2Rtc) {
+                                if camerGo2Rtc == true {
+                                    cameraRTSPPath = false
+                                    cameraHLS = false
+                                } else {
+                                    cameraHLS = true
+                                }
                             }
-                        }
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
-
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    }
                     Toggle("HLS", isOn: $cameraHLS)
                         .onChange(of: cameraHLS) {
                             if cameraHLS == true {
@@ -121,15 +124,16 @@ struct ViewSettings: View {
                             }
                         }
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
-
-                    Toggle("Use Sub Stream", isOn: $cameraSubStream)
-                        .onChange(of: cameraSubStream) {
-                            if cameraSubStream == true {
-                                cameraHLS = false
-                                camerGo2Rtc = true
+                    if  authtype != .cloudflare{
+                        Toggle("Use Sub Stream", isOn: $cameraSubStream)
+                            .onChange(of: cameraSubStream) {
+                                if cameraSubStream == true {
+                                    cameraHLS = false
+                                    camerGo2Rtc = true
+                                }
                             }
-                        }
-                        .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
+                    }
                 } header: {
                     Text("Camera Stream")
                         .font(.caption)

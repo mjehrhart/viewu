@@ -79,7 +79,7 @@ final class PlayerUIView2: UIView, VLCMediaPlayerDelegate {
 
 // MARK: - SwiftUI wrapper for streaming view
 
-struct StreamRTSP2: View {
+struct ViewRTSPTile: View {
 
     let urlString: String
     let cameraName: String
@@ -230,7 +230,23 @@ struct StreamRTSP2: View {
         .padding(.horizontal, 10)
         .padding(.bottom, 10)
         .navigationDestination(isPresented: $flagFull) {
+            
             ViewCameraRTSPFullScreen(urlString: urlString, cameraName: cameraName)
+            
+//            VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
+//                .padding(0)
+//                .aspectRatio(16 / 9, contentMode: .fit)
+//                .background(Color.black.opacity(0.8))
+//                .onAppear {
+//                    mediaPlayer.audio?.isMuted = flagMute
+//                    mediaPlayer.play()
+//                    // TODO: consider flipping `isLoading` to false via a delegate
+//                    // when VLC actually starts playing, instead of here.
+//                }
+//                .onDisappear {
+//                    mediaPlayer.stop()
+//                }
+            
         }
     }
 

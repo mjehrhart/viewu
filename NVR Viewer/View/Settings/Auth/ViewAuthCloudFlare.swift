@@ -29,6 +29,9 @@ struct ViewAuthCloudFlare: View {
     @AppStorage("cloudFlareSecret")
     private var legacyCloudFlareSecret: String = ""
 
+    @AppStorage("cameraHLS")
+    private var cameraHLS: Bool = false
+    
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
@@ -169,6 +172,7 @@ struct ViewAuthCloudFlare: View {
                                 }
 
                                 nvrManager.connectionState = .connected
+                                cameraHLS = true
                                 Task { await reloadConfig() }
                             }
                         } catch {

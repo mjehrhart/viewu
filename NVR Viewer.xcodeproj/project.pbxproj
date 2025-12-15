@@ -447,18 +447,18 @@
 			isa = PBXGroup;
 			children = (
 				3484EA2D2EDFC1D800B8C44D /* Auth */,
-				34BBA4772BAB45C300A6004E /* EventFilter.swift */,
-				34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */,
-				3421034E2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift */,
-				34D5F0082B92B4FA002A84B0 /* EndpointOptions.swift */,
-				34D5F0162B963F06002A84B0 /* ImageContainer.swift */,
 				34BBA47E2BAE164400A6004E /* DataController.swift */,
+				34D5F0082B92B4FA002A84B0 /* EndpointOptions.swift */,
+				34BBA4772BAB45C300A6004E /* EventFilter.swift */,
 				34BBA4802BAE3A9000A6004E /* EventStorage.swift */,
+				34D5F0162B963F06002A84B0 /* ImageContainer.swift */,
+				342103452C0EA08F00CBBF83 /* Log.swift */,
 				34045AE22EBFD25F00D90B7F /* NVRConfigurationCall2.swift */,
 				34A4F4AF2C066F0D0052B08A /* NVRConfigurationHTTP.swift */,
-				342103452C0EA08F00CBBF83 /* Log.swift */,
 				342103532C11645600CBBF83 /* NotificationTemplate.swift */,
 				342103622C1B5C6000CBBF83 /* OnBoarding.swift */,
+				34D5F0062B92B4C3002A84B0 /* TopicFrigateEvent.swift */,
+				3421034E2C100B4800CBBF83 /* TopicFrigateEventMQTT.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

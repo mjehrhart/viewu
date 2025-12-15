@@ -188,7 +188,8 @@ struct ViewCamerasList: View {
     @ViewBuilder
     private func cameraStreamView(url: String, cameraName: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            StreamRTSP2(
+             
+            ViewRTSPTile(
                 urlString: url,
                 cameraName: cameraName
             )
