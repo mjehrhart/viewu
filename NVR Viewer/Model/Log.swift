@@ -43,8 +43,22 @@ struct LogItem: Identifiable, Equatable, Hashable {
     let level: LogLevel
     let message: String
 
+    // User-readable timestamp (uses the device locale + current time zone)
+    private static let displayTimestampStyle: Date.FormatStyle =
+        .dateTime
+        .year()
+        .month(.abbreviated)
+        .day()
+        .hour()
+        .minute()
+        .second()
+
+    var timestampText: String {
+        timestamp.formatted(date: .abbreviated, time: .standard)
+    }
+
     var formatted: String {
-        "[\(level.label)] page=\(page), fn=\(fn), text=\(message)"
+        "[\(timestampText)] [\(level.label)] page=\(page), fn=\(fn), text=\(message)"
     }
 }
 

@@ -407,8 +407,8 @@
 				348C50AD2BB2445A00A15446 /* Delegates */,
 				34D5F00A2B92B56E002A84B0 /* Enum */,
 				34D5EFEF2B92B190002A84B0 /* Extension */,
-				34D5EFE52B92AB33002A84B0 /* ViewModel */,
 				34D5EFE42B92AB2D002A84B0 /* Model */,
+				34D5EFE52B92AB33002A84B0 /* ViewModel */,
 				34D5EFE32B92AB29002A84B0 /* View */,
 				34D5EFD52B92AB1F002A84B0 /* NVR_ViewerApp.swift */,
 				34D5EFD72B92AB1F002A84B0 /* ContentView.swift */,
@@ -844,7 +844,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 74;
+				CURRENT_PROJECT_VERSION = 75;
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -857,7 +857,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.22;
+				MARKETING_VERSION = 2.23;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer.NotificationExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -873,7 +873,7 @@
 				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 74;
+				CURRENT_PROJECT_VERSION = 75;
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -886,7 +886,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.22;
+				MARKETING_VERSION = 2.23;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer.NotificationExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1030,7 +1030,7 @@
 				ASSETCATALOG_WARNINGS = NO;
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 74;
+				CURRENT_PROJECT_VERSION = 75;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1052,7 +1052,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.22;
+				MARKETING_VERSION = 2.23;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1074,7 +1074,7 @@
 				CODE_SIGN_ENTITLEMENTS = "NVR Viewer/NVR Viewer.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 74;
+				CURRENT_PROJECT_VERSION = 75;
 				DEVELOPMENT_ASSET_PATHS = "\"NVR Viewer/Preview Content\"";
 				DEVELOPMENT_TEAM = VW686JVGR9;
 				ENABLE_PREVIEWS = YES;
@@ -1096,7 +1096,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.22;
+				MARKETING_VERSION = 2.23;
 				PRODUCT_BUNDLE_IDENTIFIER = "Matthew-John.NVR-Viewer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -20,7 +20,8 @@ struct ViewEventsHistory: View {
     var body: some View {
         VStack(spacing: 0) {
             List {
-                ForEach(epsSup3.list3, id: \.sid) { container in
+                //ForEach(epsSup3.list3, id: \.sid) { container in
+                ForEach(epsSup3.list3, id: \.id) { container in
                     if let id = container.id,
                        !id.isEmpty,
                        container.frameTime != nil {

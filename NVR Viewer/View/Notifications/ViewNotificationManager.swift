@@ -1226,7 +1226,7 @@ struct PopupMiddle: View {
             VStack(spacing: 14) {
 
                 // Update "ViewuLogo" to your actual asset name.
-                Image("ViewuLogo")
+                Image("viewuLogoTransparent")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 72)
