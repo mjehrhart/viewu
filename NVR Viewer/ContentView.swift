@@ -32,6 +32,7 @@ struct ContentView: View {
     
     @StateObject private var nts = NotificationTemplateString.shared()
     @StateObject private var mqttManager = MQTTManager.shared()
+    //@StateObject private var filter2 = EventFilter.shared()
     
     @State private var showFilter = false
     @State private var showEventList = false
@@ -379,7 +380,7 @@ struct ContentView: View {
     private func applyConfig(_ configuration: NVRConfigurationCall2) {
         config.item = configuration
         
-        filter2.setCameras(items: configuration.cameras)
+        filter2.setCameras(items: configuration.cameras) 
         filter2.setObject(items: configuration.cameras)
         filter2.setZones(items: configuration.cameras)
         
