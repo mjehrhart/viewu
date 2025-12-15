@@ -41,6 +41,7 @@ struct ViewCameraRTSPFullScreen: View {
                     // RTSP Video
                     VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .aspectRatio(contentMode: .fill)    //remove this for a better look but then change the .bottom padding to 14.
                         .clipped()
 
                     // Bottom overlay bar (covers bottom of the stream)
@@ -48,8 +49,8 @@ struct ViewCameraRTSPFullScreen: View {
                         name: cameraName,
                         mediaPlayer: mediaPlayer
                     )
-                    .padding(.horizontal, 14)
-                    .padding(.bottom, 14)      // keeps it off the very edge
+                    .padding(.horizontal, 150)
+                    .padding(.bottom, 214)      // keeps it off the very edge
                     .zIndex(999)               // force above VLC
                 }
                 // Important: size swap when rotated, so it stays centered and fills
@@ -120,169 +121,3 @@ private struct CameraOverlayBar: View {
 }
 
 
-
-
-////
-////  ViewCameraFullScreen.swift
-////  NVR Viewer
-////
-////  Created by Matthew Ehrhart on 5/7/24.
-////
-// 
-//import SwiftUI
-//import MobileVLCKit
-// 
-//@MainActor
-//struct ViewCameraRTSPFullScreen: View {
-//    
-//    let urlString: String 
-//    let cameraName: String
-//    
-//    let cBlue = Color(red: 0.153, green: 0.69, blue: 1)
-//    let menuTextColor = Color.white
-//    
-//    //@State var orientation = UIDevice.current.orientation
-//    @State var mediaPlayer : VLCMediaPlayer = VLCMediaPlayer()
-//    @State private var isLandscape: Bool = UIDevice.current.orientation.isLandscape
-//    
-//    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-//    @Environment(\.verticalSizeClass) var verticalSizeClass
-// 
-//    var body: some View {
-//        
-//        
-//        VStack{
-//            
-//            ZStack{
-//                
-//                LinearGradient(
-//                    colors: [cBlue.opacity(0.6), .orange.opacity(0.6), cBlue.opacity(0.6)],
-//                    startPoint: .topLeading,
-//                    endPoint: .bottomTrailing
-//                )
-//                
-//                Text("Loading: \(urlString)")
-//                    .rotationEffect( isLandscape ? .degrees(0) : .degrees(90))
-//                    .labelStyle(VerticalLabelStyle(show: false))
-//                    .foregroundStyle(menuTextColor)
-//                    .onRotate { orientation in
-//                        if orientation.isValidInterfaceOrientation {
-//                            isLandscape = orientation.isLandscape
-//                        }
-//                    }
-//                
-//                VlcPlayeyRTSP2(urlString: urlString, mediaPlayer: mediaPlayer)
-//                    .rotationEffect( isLandscape ? .degrees(0) : .degrees(90))
-//                    //.aspectRatio(16/9, contentMode: .fill)
-//                    .aspectRatio(contentMode: .fill)
-//                    //.edgesIgnoringSafeArea(.all)
-//                    .onAppear(){
-//                        mediaPlayer.audio?.isMuted = false
-//                        mediaPlayer.play()
-//                    }
-//                    .onDisappear(){
-//                        mediaPlayer.stop()
-//                    }
-//                    //.overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .bottomTrailing)
-//                    //.overlay(CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer), alignment: .top)
-//                    .safeAreaInset(edge: .top) {
-//                        CameraOverlay(name: cameraName, mediaPlayer: mediaPlayer)
-//                    }
-//                    .onRotate { orientation in
-//                        if orientation.isValidInterfaceOrientation {
-//                            isLandscape = orientation.isLandscape
-//                        }
-//                    }
-//            }
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            
-//        }
-//    }
-//    
-//    struct CameraOverlay: View {
-//        let name: String
-//        let mediaPlayer: VLCMediaPlayer
-//
-//        @State private var isMuted = false
-//
-//        private func toggleMute() {
-//            isMuted.toggle()
-//            mediaPlayer.audio?.isMuted = isMuted
-//        }
-//
-//        var body: some View {
-//            HStack(spacing: 12) {
-//                Text(name)
-//                    .font(.headline)
-//                    .fontWeight(.semibold)
-//                    .foregroundStyle(.white)
-//                    .lineLimit(1)
-//
-//                Spacer()
-//
-//                Button(action: toggleMute) {
-//                    Image(systemName: isMuted ? "speaker.slash" : "speaker")
-//                        .font(.title3)
-//                        .foregroundStyle(.white)
-//                        .padding(.vertical, 8)
-//                        .padding(.horizontal, 12)
-//                        .background(.black.opacity(0.35), in: Capsule())
-//                }
-//            }
-//            .padding(.horizontal, 16)
-//            .padding(.vertical, 10)
-//            .background(.black.opacity(0.25))
-//            .contentShape(Rectangle())
-//        }
-//    }
-//
-//    
-////        struct CameraOverlay: View {
-////            let name: String
-////            let mediaPlayer: VLCMediaPlayer
-////    
-////            @State private var isMuted = false
-////    
-////            private func toggleMute() {
-////                isMuted.toggle()
-////                mediaPlayer.audio?.isMuted = isMuted
-////            }
-////    
-////            var body: some View {
-////                VStack {
-////                    Spacer()
-////    
-////                    HStack {
-////                        Button(action: toggleMute) {
-////                            Text(name)
-////                                .font(.title)
-////                                .fontWeight(.bold)
-////                                .foregroundColor(.white)
-////                        }
-////                        .frame(maxWidth: .infinity, alignment: .bottomLeading)
-////                        .padding(.bottom, 30)
-////                        .padding(.leading, 30)
-////                        
-////                        Button(action: toggleMute) {
-////                            Image(systemName: isMuted ? "speaker.slash" : "speaker")
-////                                .font(.title)
-////                                .fontWeight(.bold)
-////                                .foregroundColor(.white)
-////                        }
-////                        .padding(.trailing, 230)
-////                        .padding(.bottom, 30)
-////                    }
-////                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-////                    .background(.orange.opacity(0.4))
-////                }
-////                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-////                .contentShape(Rectangle())
-////                .background(false ? .blue.opacity(0.9) : .green.opacity(0.9))
-////                //.rotationEffect( false ? .degrees(0) : .degrees(90))
-////                .onTapGesture {
-////                    toggleMute()
-////                }
-////            }
-////        }
-//}
-// 
