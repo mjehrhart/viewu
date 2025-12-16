@@ -133,7 +133,7 @@ struct ViewCamerasList: View {
     }
 
     // MARK: - Render helpers
-
+     
     /// Render RTSP streams from go2rtc.streams dictionary.
     private func renderRTSPFromStreams(key: String, streams: [String]) -> some View {
         Group {
@@ -184,6 +184,7 @@ struct ViewCamerasList: View {
         }
     }
 
+    /// RTSP Tiles (main rtsp view)
     /// Shared stream renderer with optional debug URL text.
     @ViewBuilder
     private func cameraStreamView(url: String, cameraName: String) -> some View {
