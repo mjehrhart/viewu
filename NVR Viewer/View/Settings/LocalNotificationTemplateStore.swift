@@ -90,5 +90,5 @@ final class LocalNotificationTemplateStore: ObservableObject {
         templates[idx].lastSentAt = Date()
         templates[idx].updatedAt = Date()
         persist()
-    }
+    } 
 }

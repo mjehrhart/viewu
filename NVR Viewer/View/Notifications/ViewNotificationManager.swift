@@ -9,24 +9,7 @@ import SwiftUI
 import TipKit
 import PopupView
 import UIKit
-
-// MARK: - Shared Button Style
-
-struct PrimaryActionButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.system(size: 15, weight: .semibold))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(configuration.isPressed
-                          ? Color.gray.opacity(0.55)
-                          : Color.orange.opacity(0.85))
-            )
-            .foregroundColor(.white)
-    }
-}
+ 
 
 // MARK: - APN View
 
@@ -86,7 +69,7 @@ struct ViewAPN: View {
     @State private var renameCandidateTemplate: ViewuLocalNotificationTemplate? = nil
 
     // UI
-    private let savedTemplateCarouselHeight: CGFloat = 292
+    private let savedTemplateCarouselHeight: CGFloat = 355// 292
     private let builderCornerRadius: CGFloat = 18
     @State private var suppressTemplateDotUpdates: Bool = false
     
@@ -171,7 +154,7 @@ struct ViewAPN: View {
     private func friendlyTime(_ date: Date?) -> String {
         guard let date else { return "Never" }
         let f = DateFormatter()
-        f.dateStyle = .none
+        f.dateStyle = .medium
         f.timeStyle = .short
         return f.string(from: date)
     }
@@ -289,6 +272,7 @@ struct ViewAPN: View {
                 titleVisibility: .visible
             ) {
                 Button("Delete", role: .destructive) {
+                    print("[MJE] - pressed delete")
                     if let t = deleteCandidateTemplate {
                         localTemplateStore.delete(id: t.id)
                         if editingTemplateID == t.id {
@@ -297,6 +281,20 @@ struct ViewAPN: View {
                         }
                     }
                     deleteCandidateTemplate = nil
+                    
+                    //Synv with Viewu Server
+                    let allRaw = buildAllSavedRawTemplatesForServer()
+                    let msg = "viewu_device_event::::template::::\(allRaw)"
+                    print("[MJE] - Sync with Viewu Server: \(msg)")
+                    publishAPN(message: msg)
+                    
+                    let t = nts.templates
+                    let ts = nts.templateString
+                    let tl = nts.templateList
+                    
+                    print("[MJE] Delete nts.templates = \(t)")
+                    print("[MJE] Delete nts.templateString = \(ts)")
+                    print("[MJE] Delete nts.templateList = \(tl)")
                 }
                 Button("Cancel", role: .cancel) {
                     deleteCandidateTemplate = nil
@@ -533,23 +531,23 @@ struct ViewAPN: View {
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .padding(.leading, 10)
-//                    Button("Clear") {
-//                        editingTemplateID = nil
-//                        resetBuilder(preset: nil)
-//                    }
-//                    .font(.callout.weight(.semibold))
-//                    .foregroundStyle(.secondary)
-//                    .padding(.leading, 10)
-
+                    
                     Spacer()
 
                     Button(editingTemplateID == nil ? "Save Template" : "Update Template") {
+                         
                         let raw = canonicalTemplate(builderDraftRaw)
+                         
                         guard !raw.isEmpty else { return }
 
-                        let msg = "viewu_device_event::::template::::\(raw)"
+                        let allRaw = buildAllRawTemplatesForServer(currentRaw: raw, updatingID: editingTemplateID)
+                        //print("[MJE] allRaw = \(allRaw)")
+                        
+                        //Synv with Viewu Server
+                        let msg = "viewu_device_event::::template::::\(allRaw)"
                         publishAPN(message: msg)
-
+                         
+                        ///
                         if var existing = editingTemplate {
                             existing.rawTemplate = raw
                             existing.updatedAt = Date()
@@ -563,7 +561,7 @@ struct ViewAPN: View {
                         }
 
                         // Baseline becomes what we just sent; the dot will stay green until user changes toggles.
-                        resetBuilder(preset: raw)
+                        resetBuilder(preset: nil)
                         nts.flagTemplate = true
                         editingTemplateID = nil
                     }
@@ -610,11 +608,11 @@ struct ViewAPN: View {
 
             // Status row
             HStack(spacing: 8) {
-                Text("Saved on device")
+                Text("Templates Saved")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Text("\(localTemplateStore.templates.count) saved")
+                Text("\(localTemplateStore.templates.count)")
                     .font(.caption2.weight(.semibold))
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
@@ -670,6 +668,7 @@ struct ViewAPN: View {
                                         renameCandidateTemplate = t
                                     },
                                     onDelete: {
+                                        
                                         deleteCandidateTemplate = t
                                     }
                                 )
@@ -831,7 +830,7 @@ struct ViewAPN: View {
                     } label: {
                         Image(systemName: "trash")
                             .font(.callout.weight(.semibold))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.red.opacity(0.67))
                             .padding(10)
                             .background(Circle().fill(Color.secondary.opacity(0.10)))
                     }
@@ -876,10 +875,59 @@ struct ViewAPN: View {
             )
             .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
             .contentShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
-            .onTapGesture { onOpenRaw() }
+            .onTapGesture {
+                //onOpenRaw()
+            }
         }
     }
 
+    /// Builds a single string containing all templates currently saved on this device.
+    /// Uses a safe delimiter that won't collide with your template syntax.
+    private func buildAllSavedRawTemplatesForServer() -> String {
+
+        var raws: [String] = []
+
+        for t in localTemplateStore.templates {
+            let r = canonicalTemplate(t.rawTemplate)
+            if !r.isEmpty { raws.append(r) }
+        }
+
+        // De-dupe while preserving order
+        var seen = Set<String>()
+        let orderedUnique = raws.filter { seen.insert($0).inserted }
+
+        //return orderedUnique.joined(separator: ";;;")
+        return orderedUnique.joined(separator: "::")
+    }
+
+    
+    /// Builds a single string containing ALL raw templates for the server.
+    /// - currentRaw: the template being saved/updated right now
+    /// - updatingID: if editing an existing template, pass its id so we replace (not duplicate) it
+    private func buildAllRawTemplatesForServer(currentRaw: String, updatingID: UUID?) -> String {
+        let current = canonicalTemplate(currentRaw)
+
+        // Start with existing templates (excluding the one being updated, if any)
+        var raws: [String] = []
+        for t in localTemplateStore.templates {
+            if let updatingID, t.id == updatingID { continue }
+            let r = canonicalTemplate(t.rawTemplate)
+            if !r.isEmpty { raws.append(r) }
+        }
+
+        // Put the current template first (so the updated value wins)
+        if !current.isEmpty { raws.insert(current, at: 0) }
+
+        // De-dupe while preserving order
+        var seen = Set<String>()
+        let orderedUnique = raws.filter { seen.insert($0).inserted }
+
+        // Concatenate with a delimiter that will NOT collide with your syntax (commas, ==, |)
+        // Choose whatever your server expects; this is a safe default.
+        return orderedUnique.joined(separator: "::")
+    }
+
+    
     private struct TemplatePreviewLine: View {
         let rules: [TemplateRule]
 
@@ -1205,73 +1253,6 @@ struct ViewAPN: View {
     }
 }
 
-// MARK: - Popup Overlay (modern)
-
-struct PopupMiddle: View {
-
-    var onClose: () -> Void
-
-    private var brandBlue: Color {
-        if let ui = UIColor(named: "ViewuBlue") {
-            return Color(uiColor: ui)
-        }
-        return Color(red: 0.20, green: 0.67, blue: 1.00)
-    }
-
-    var body: some View {
-        ZStack {
-            Color.black.opacity(0.45)
-                .ignoresSafeArea()
-
-            VStack(spacing: 14) {
-
-                // Update "ViewuLogo" to your actual asset name.
-                Image("viewuLogoTransparent")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 72)
-                    .padding(10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
-                            .fill(brandBlue)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
-                            .stroke(Color.white.opacity(0.22), lineWidth: 1)
-                    )
-                    .shadow(color: .black.opacity(0.18), radius: 12, x: 0, y: 8)
-
-                Text("Syncing with Viewu Server")
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(.primary)
-                    .multilineTextAlignment(.center)
-
-                Text("Your notification settings have been updated.")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-
-                ProgressView()
-
-                Text("Tap anywhere to dismiss")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-            }
-            .padding(22)
-            .frame(maxWidth: 440)
-            .background(
-                RoundedRectangle(cornerRadius: 26, style: .continuous)
-                    .fill(Color(uiColor: .secondarySystemBackground))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 26, style: .continuous)
-                    .stroke(brandBlue.opacity(0.22), lineWidth: 1)
-            )
-            .padding(.horizontal, 18)
-        }
-        .onTapGesture { onClose() }
-    }
-}
 
 // MARK: - Template Builder View (NO publishing during body; NO disclosure animations)
 
@@ -1316,6 +1297,7 @@ struct ViewNotificationManager: View {
         return out
     }
 
+    // Template String 1
     private func rebuildTemplateString() {
         func build(forKey key: String, from items: [(String, Bool)]) -> String {
             var tmp = ""
@@ -1477,22 +1459,27 @@ struct ViewNotificationManager: View {
 
             NoAnimExpander(title: "Camera", isExpanded: $expandCameras) {
                 toggleList(items: $nt.cameras, name: \.name, state: \.state)
+                    .padding(.horizontal, 20)
             }
 
             NoAnimExpander(title: "Label", isExpanded: $expandLabels) {
                 toggleList(items: $nt.labels, name: \.name, state: \.state)
+                    .padding(.horizontal, 20)
             }
 
             NoAnimExpander(title: "Entered Zone", isExpanded: $expandEntered) {
                 toggleList(items: $nt.enteredZones, name: \.name, state: \.state)
+                    .padding(.horizontal, 20)
             }
 
             NoAnimExpander(title: "Current Zone", isExpanded: $expandCurrent) {
                 toggleList(items: $nt.currentZones, name: \.name, state: \.state)
+                    .padding(.horizontal, 20)
             }
 
             NoAnimExpander(title: "Type", isExpanded: $expandTypes) {
                 toggleList(items: $nt.types, name: \.name, state: \.state)
+                    .padding(.horizontal, 20)
             }
 
         }
@@ -1598,5 +1585,110 @@ final class ViewuLocalNotificationTemplateStore: ObservableObject {
         templates[idx].lastSentAt = Date()
         templates[idx].updatedAt = Date()
         persist()
+    }
+    
+    func applyTemplatesFromMQTT(newTemplateString: String) {
+
+        // If MQTTState passes the full message, strip prefix; otherwise treat it as payload.
+        let prefix = "viewu_device_event::::template::::"
+        let payload = newTemplateString.hasPrefix(prefix)
+            ? String(newTemplateString.dropFirst(prefix.count))
+            : newTemplateString
+
+        let trimmed = payload.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Empty payload => clear local templates
+        guard !trimmed.isEmpty else {
+            templates = []
+            persist()
+            return
+        }
+
+        // Split using preferred delimiter "::" (robust to whitespace)
+        let parts = trimmed
+            .components(separatedBy: "::")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+
+        // Canonicalize to stabilize comparisons
+        func canonical(_ raw: String) -> String {
+            raw.split(separator: ",")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+                .joined(separator: ",")
+        }
+
+        // De-dupe while preserving order
+        var seen = Set<String>()
+        let incoming = parts
+            .map(canonical)
+            .filter { !$0.isEmpty }
+            .filter { seen.insert($0).inserted }
+
+        // Index existing by canonical raw so we preserve ids/names/lastSentAt
+        var existingByRaw: [String: ViewuLocalNotificationTemplate] = [:]
+        for t in templates {
+            let key = canonical(t.rawTemplate)
+            if !key.isEmpty { existingByRaw[key] = t }
+        }
+
+        // Build the new list (server becomes source of truth)
+        var next: [ViewuLocalNotificationTemplate] = []
+        next.reserveCapacity(incoming.count)
+
+        for raw in incoming {
+            if var existing = existingByRaw[raw] {
+                existing.rawTemplate = raw
+                // keep existing.name, createdAt, lastSentAt
+                existing.updatedAt = Date()
+                next.append(existing)
+            } else {
+                let name = suggestName(from: raw)
+                var t = ViewuLocalNotificationTemplate(name: name, rawTemplate: raw)
+                t.createdAt = Date()
+                t.updatedAt = Date()
+                t.lastSentAt = nil
+                next.append(t)
+            }
+        }
+
+        templates = next
+        templates.sort { $0.updatedAt > $1.updatedAt }
+        persist()
+    }
+
+    private func suggestName(from raw: String) -> String {
+        // Very lightweight naming: "Label • Person" etc.
+        let firstRule = raw.split(separator: ",").first.map(String.init) ?? ""
+        let parts = firstRule.components(separatedBy: "==")
+        guard parts.count == 2 else { return "Template" }
+
+        let key = parts[0].trimmingCharacters(in: .whitespacesAndNewlines)
+        let firstVal = parts[1]
+            .split(separator: "|")
+            .first
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) } ?? ""
+
+        if firstVal.isEmpty { return key.capitalized }
+        return "\(key.capitalized) • \(firstVal.replacingOccurrences(of: "_", with: " ").capitalized)"
+    }
+}
+
+
+// MARK: - Shared Button Style
+
+struct PrimaryActionButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 15, weight: .semibold))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(configuration.isPressed
+                          ? Color.gray.opacity(0.55)
+                          : Color.orange.opacity(0.85))
+            )
+            .foregroundColor(.white)
     }
 }

@@ -18,7 +18,8 @@ class NotificationTemplateString: ObservableObject {
     
     @Published var alert: Bool = false
     @Published var templates: [Item] = []
-    @Published var templateList:[ViewNotificationManager] = []
+    //@Published var templateList:[ViewNotificationManager] = []
+    @Published var templateList: [String] = []
     
     @AppStorage("notificationPaused") var notificationPaused: Bool = false
     @AppStorage("notificationTimePaused") var notificationTimePaused: Bool = false
@@ -88,6 +89,72 @@ class NotificationTemplateString: ObservableObject {
     
  
 }
+
+@MainActor
+extension NotificationTemplateString {
+
+    /// Call this from MQTTState.setReceivedMessage() when you receive a template payload.
+    /// Pass ONLY the payload portion (after "viewu_device_event::::template::::").
+    func applyTemplatePayloadFromMQTT(newTemplateString: String) {
+        let trimmed = newTemplateString.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Persist raw payload for debugging/back-compat
+        self.templateString = trimmed
+
+        // Empty payload => clear
+        guard !trimmed.isEmpty else {
+            self.templateList = []
+            self.templates = []
+            return
+        }
+
+        // Split into individual templates (support both delimiters you’ve used)
+        let pieces: [String]
+        if trimmed.contains(";;;") {
+            pieces = trimmed.components(separatedBy: ";;;")
+        } else if trimmed.contains("::") {
+            pieces = trimmed.components(separatedBy: "::")
+        } else {
+            pieces = [trimmed]
+        }
+
+        // Canonicalize + de-dupe (preserve order)
+        func canonical(_ raw: String) -> String {
+            raw.split(separator: ",")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+                .joined(separator: ",")
+        }
+
+        var seen = Set<String>()
+        let list = pieces
+            .map { canonical($0) }
+            .filter { !$0.isEmpty }
+            .filter { seen.insert($0).inserted }
+
+        // Update the list of raw template strings
+        self.templateList = list
+
+        // OPTIONAL but recommended: keep `templates: [Item]` in sync too
+        // (so your existing buildTemplateString()/pushTemplate() logic doesn’t drift)
+        self.templates = list.map { Item(id: UUID(), template: $0) }
+
+        // If the server just told us the current set, the UI “synced” state is true
+        self.flagTemplate = true
+    }
+}
+ 
+
+@MainActor
+extension NotificationTemplateString {
+    func clearTemplateList() {
+        templateList = []
+        templates = []          // optional, if you want `templates` cleared too
+        templateString = ""     // optional, if you want storage cleared too
+        //flagTemplate = false    // optional, depending on your UI semantics
+    }
+}
+
 
 struct Item {
     let id: UUID

@@ -94,17 +94,16 @@ final class MQTTAppState: ObservableObject {
                 }
 
             case "template":
-                nts.templateString = payload
-
-                // Your current split looks suspicious (split(separator: "::") doesn't compile in Swift).
-                // Prefer:
-                let templateParts = payload.components(separatedBy: "::")
-                nts.templates.removeAll()
-                for template in templateParts {
-                    nts.templates.append(Item(id: UUID(),
-                                              template: template.trimmingCharacters(in: .whitespaces)))
+                 
+                let prefix = "viewu_device_event_back:#:template:#:200:#:"
+                if text.hasPrefix(prefix) {
+                    let payload = String(text.dropFirst(prefix.count))
+                     
+                    Task { @MainActor in 
+                        NotificationTemplateString.shared().clearTemplateList()
+                        ViewuLocalNotificationTemplateStore.shared.applyTemplatesFromMQTT(newTemplateString: payload)
+                    }
                 }
-
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     self.nts.flagTemplate = ok
                 }
@@ -244,4 +243,6 @@ final class MQTTAppState: ObservableObject {
     func setAppConnectionState(state: MQTTAppConnectionState) {
         appConnectionState = state
     }
+    
+    
 }
