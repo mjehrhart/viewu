@@ -203,28 +203,11 @@ struct ViewSettings: View {
                         set: { newValue in
                             mqttManager.setUseCloudflareMQTT(newValue)
 
-                            if newValue {
-                                // Cloudflare Access MQTT should be WSS (WebSockets + TLS).
-                                mqttManager.useWebSockets = true
-                                mqttManager.webSocketUseTLS = true
-                                mqttManager.webSocketPath = "/mqtt"
-
-                                // If user left the default MQTT port, route to the Cloudflare edge default.
-                                let trimmed = mqttPortAddress.trimmingCharacters(in: .whitespacesAndNewlines)
-                                if trimmed.isEmpty || trimmed == "1883" {
-                                    mqttPortAddress = "443"     // keep UI + model in sync
-                                    mqttManager.port = "443"
-                                }
-                            } else {
-                                // Direct/VPN/LAN: default to plain MQTT TCP (prevents wss://<ip>:1883/mqtt).
-                                mqttManager.useWebSockets = false
-                                mqttManager.webSocketUseTLS = false
-                                mqttManager.webSocketPath = "/mqtt"
-                            }
-
-                            // Drop current connection; user must Save to reconnect with new routing.
+                            // Force the current connection to drop immediately.
+                            // User must press "Save Connection" to reconnect in the new mode.
                             mqttManager.disconnect()
                         }
+                       
                     ))
                     .tint(Color(red: 0.153, green: 0.69, blue: 1))
 
@@ -232,8 +215,8 @@ struct ViewSettings: View {
                     Toggle("Anonymous", isOn: $mqttIsAnonUser)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
 
-                    /*
-                    if !mqttIsAnonUser {
+                   
+                   if !mqttIsAnonUser {
                         VStack(alignment: .leading, spacing: 16) {
 
                             HStack(spacing: 8) {
@@ -247,23 +230,6 @@ struct ViewSettings: View {
                                     .frame(maxWidth: .infinity, alignment: .trailing)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Divider()
-
-                            // IMPORTANT:
-                            // This toggle only changes the "selected mode".
-                            // The active mode displayed below comes from mqttManager.activeMode after a successful connect.
-                            Toggle("Cloudflare Tunnel", isOn: Binding(
-                                get: { mqttManager.useCloudflareMQTT },
-                                set: { newValue in
-                                    mqttManager.setUseCloudflareMQTT(newValue)
-
-                                    // Force the current connection to drop immediately.
-                                    // User must press "Save Connection" to reconnect in the new mode.
-                                    mqttManager.disconnect()
-                                }
-                            ))
-                            .tint(Color(red: 0.153, green: 0.69, blue: 1))
 
                             Divider()
 
@@ -299,16 +265,16 @@ struct ViewSettings: View {
 
                             Divider()
                         }
-                    }
-                    */
+                   }
+                    
 
                     // Connection status: uses *activeMode* (what the client is actually using),
                     // NOT the toggle value.
-                    if mqttConnected {
-                        Text("Connected (\(mqttManager.activeMode.rawValue.capitalized))")
-                    } else {
-                        Text("Disconnected")
-                    }
+//                    if mqttConnected {
+//                        Text("Connected (\(mqttManager.activeMode.rawValue.capitalized))")
+//                    } else {
+//                        Text("Disconnected")
+//                    }
 
                     Label(mqttConnected ? "Connected" : "Disconnected",
                           systemImage: "cable.connector")
