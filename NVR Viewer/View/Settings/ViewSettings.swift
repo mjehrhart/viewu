@@ -196,10 +196,43 @@ struct ViewSettings: View {
                             Text("") // spacer label
                         }
                     }
+                    
+                    // Cloudflare Tunnel toggle (always visible; independent of MQTT username/password)
+                    Toggle("Cloudflare Tunnel", isOn: Binding(
+                        get: { mqttManager.useCloudflareMQTT },
+                        set: { newValue in
+                            mqttManager.setUseCloudflareMQTT(newValue)
+
+                            if newValue {
+                                // Cloudflare Access MQTT should be WSS (WebSockets + TLS).
+                                mqttManager.useWebSockets = true
+                                mqttManager.webSocketUseTLS = true
+                                mqttManager.webSocketPath = "/mqtt"
+
+                                // If user left the default MQTT port, route to the Cloudflare edge default.
+                                let trimmed = mqttPortAddress.trimmingCharacters(in: .whitespacesAndNewlines)
+                                if trimmed.isEmpty || trimmed == "1883" {
+                                    mqttPortAddress = "443"     // keep UI + model in sync
+                                    mqttManager.port = "443"
+                                }
+                            } else {
+                                // Direct/VPN/LAN: default to plain MQTT TCP (prevents wss://<ip>:1883/mqtt).
+                                mqttManager.useWebSockets = false
+                                mqttManager.webSocketUseTLS = false
+                                mqttManager.webSocketPath = "/mqtt"
+                            }
+
+                            // Drop current connection; user must Save to reconnect with new routing.
+                            mqttManager.disconnect()
+                        }
+                    ))
+                    .tint(Color(red: 0.153, green: 0.69, blue: 1))
+
 
                     Toggle("Anonymous", isOn: $mqttIsAnonUser)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
 
+                    /*
                     if !mqttIsAnonUser {
                         VStack(alignment: .leading, spacing: 16) {
 
@@ -267,6 +300,7 @@ struct ViewSettings: View {
                             Divider()
                         }
                     }
+                    */
 
                     // Connection status: uses *activeMode* (what the client is actually using),
                     // NOT the toggle value.
@@ -286,16 +320,34 @@ struct ViewSettings: View {
                         )
 
                     Button("Save Connection") {
-                        // Push AppStorage values into MQTTManager, then reconnect.
-                        mqttManager.isAnonymous = mqttIsAnonUser
-                        mqttManager.ip = mqttIPAddress
-                        mqttManager.port = mqttPortAddress
-                        mqttManager.user = mqttUser
-                        mqttManager.password = mqttPassword
-                        mqttManager.topic = "viewu/pairing"
+                            // Push AppStorage values into MQTTManager, then reconnect.
+                            mqttManager.isAnonymous = mqttIsAnonUser
+                            mqttManager.ip = mqttIPAddress
 
-                        // This will rebuild the client and connect.
-                        mqttManager.applySettingsAndReconnect()
+                            // Enforce correct routing every time Save is pressed
+                            if mqttManager.useCloudflareMQTT {
+                                mqttManager.useWebSockets = true
+                                mqttManager.webSocketUseTLS = true
+                                mqttManager.webSocketPath = "/mqtt"
+
+                                let trimmed = mqttPortAddress.trimmingCharacters(in: .whitespacesAndNewlines)
+                                if trimmed.isEmpty || trimmed == "1883" {
+                                    mqttPortAddress = "443"    // keep UI in sync
+                                }
+                            } else {
+                                // Default direct connections to TCP (prevents -1200 from wss://<ip>:1883/mqtt)
+                                mqttManager.useWebSockets = false
+                                mqttManager.webSocketUseTLS = false
+                                mqttManager.webSocketPath = "/mqtt"
+                            }
+
+                            mqttManager.port = mqttPortAddress
+                            mqttManager.user = mqttUser
+                            mqttManager.password = mqttPassword
+                            mqttManager.topic = "viewu/pairing"
+
+                            // This will rebuild the client and connect.
+                            mqttManager.applySettingsAndReconnect()
                     }
                     .buttonStyle(CustomPressEffectButtonStyle())
                     .tint(Color(white: 0.58))
