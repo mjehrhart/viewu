@@ -72,6 +72,16 @@ struct ViewAPN: View {
     private let savedTemplateCarouselHeight: CGFloat = 355// 292
     private let builderCornerRadius: CGFloat = 18
     @State private var suppressTemplateDotUpdates: Bool = false
+     
+//    private var apnCustomDomainState: String {
+//        apnCustomDomain
+//    }
+    private let apnCustomDomainState: String
+    
+    init(title: String) {
+        self.title = title
+        self.apnCustomDomainState = UserDefaults.standard.string(forKey: "apnCustomDomain") ?? ""
+    }
     
     // Hide the bottom preview “filters” pills for now (future release)
     private let showTemplatePreviewPills: Bool = false
@@ -152,7 +162,16 @@ struct ViewAPN: View {
     }
 
     private func friendlyTime(_ date: Date?) -> String {
-        guard let date else { return "Never" }
+        guard let date
+        else {
+            let d = Date.now
+            let f = DateFormatter()
+            f.dateStyle = .medium
+            f.timeStyle = .short
+            return f.string(from: d)
+            //return "Never"
+        }
+        
         let f = DateFormatter()
         f.dateStyle = .medium
         f.timeStyle = .short
@@ -272,7 +291,6 @@ struct ViewAPN: View {
                 titleVisibility: .visible
             ) {
                 Button("Delete", role: .destructive) {
-                    print("[MJE] - pressed delete")
                     if let t = deleteCandidateTemplate {
                         localTemplateStore.delete(id: t.id)
                         if editingTemplateID == t.id {
@@ -285,16 +303,8 @@ struct ViewAPN: View {
                     //Synv with Viewu Server
                     let allRaw = buildAllSavedRawTemplatesForServer()
                     let msg = "viewu_device_event::::template::::\(allRaw)"
-                    print("[MJE] - Sync with Viewu Server: \(msg)")
                     publishAPN(message: msg)
                     
-                    let t = nts.templates
-                    let ts = nts.templateString
-                    let tl = nts.templateList
-                    
-                    print("[MJE] Delete nts.templates = \(t)")
-                    print("[MJE] Delete nts.templateString = \(ts)")
-                    print("[MJE] Delete nts.templateList = \(tl)")
                 }
                 Button("Cancel", role: .cancel) {
                     deleteCandidateTemplate = nil
@@ -354,7 +364,11 @@ struct ViewAPN: View {
             }
             .pickerStyle(.segmented)
             .onChange(of: apnDomainMode) { _ in
-                nts.flagDomain = false
+                //nts.flagDomain = false
+                if apnCustomDomain != apnCustomDomainState {
+                    nts.flagDomain = false
+                }
+                
 
                 if isCustomDomainMode,
                    apnCustomDomain.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -386,7 +400,14 @@ struct ViewAPN: View {
                         .keyboardType(.URL)
                         .textContentType(.URL)
                         .onChange(of: apnCustomDomain) { _ in
-                            nts.flagDomain = false
+                            
+                            print("[MJE] apnCustomDomain changed \(apnCustomDomain)")
+                            print("[MJE] apnCustomDomainState value \(apnCustomDomainState)")
+                            if apnCustomDomain != apnCustomDomainState {
+                                nts.flagDomain = false
+                            }
+                            
+                            
                             apnDomain = effectiveAPNDomain
                         }
 
@@ -818,7 +839,7 @@ struct ViewAPN: View {
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(.primary)
 
-                        Text("Last sent: \(lastSentText)")
+                        Text("Last Saved: \(lastSentText)")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }

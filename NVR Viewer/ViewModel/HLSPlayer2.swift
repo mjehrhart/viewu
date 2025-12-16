@@ -201,31 +201,70 @@ struct HLSPlayer2: View {
 
 // MARK: - Webview with headers
 
-struct Webview: UIViewRepresentable {
-
-    var url: String
-    var headers: [String: String] = [:]
-
-    func makeUIView(context: Context) -> WKWebView {
-        let wkWebview = WKWebView()
-
-        guard let url = URL(string: self.url) else {
-            return wkWebview
-        }
-
-        var request = URLRequest(url: url)
-        headers.forEach { key, value in
-            request.setValue(value, forHTTPHeaderField: key)
-        }
-
-        wkWebview.load(request)
-        return wkWebview
-    }
-
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        // If you ever need to reload on URL/header changes, do it here.
+final class BlackWKWebView: WKWebView {
+    override var isOpaque: Bool {
+        get { false }
+        set { /* ignore */ }
     }
 }
+
+struct Webview: UIViewRepresentable {
+    let url: String
+    let headers: [String: String]
+
+    func makeUIView(context: Context) -> WKWebView {
+        let config = WKWebViewConfiguration()
+        config.allowsInlineMediaPlayback = true
+
+        let webView = WKWebView(frame: .zero, configuration: config)
+        webView.isOpaque = false
+        webView.backgroundColor = .black
+        webView.scrollView.backgroundColor = .black
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.scrollView.bounces = false
+
+        load(webView)
+        return webView
+    }
+
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        // optionally reload only if url/headers changed
+    }
+
+    private func load(_ webView: WKWebView) {
+        guard let u = URL(string: url) else { return }
+        var req = URLRequest(url: u)
+        headers.forEach { req.setValue($1, forHTTPHeaderField: $0) }
+        webView.load(req)
+    }
+}
+
+
+//struct Webview: UIViewRepresentable {
+//
+//    var url: String
+//    var headers: [String: String] = [:]
+//
+//    func makeUIView(context: Context) -> WKWebView {
+//        let wkWebview = WKWebView()
+//
+//        guard let url = URL(string: self.url) else {
+//            return wkWebview
+//        }
+//
+//        var request = URLRequest(url: url)
+//        headers.forEach { key, value in
+//            request.setValue(value, forHTTPHeaderField: key)
+//        }
+//
+//        wkWebview.load(request)
+//        return wkWebview
+//    }
+//
+//    func updateUIView(_ uiView: WKWebView, context: Context) {
+//        // If you ever need to reload on URL/header changes, do it here.
+//    }
+//}
 
 // MARK: - Helper: LAN HTTPS detection
 

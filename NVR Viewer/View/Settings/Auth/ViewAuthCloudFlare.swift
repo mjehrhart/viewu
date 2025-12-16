@@ -170,7 +170,6 @@ struct ViewAuthCloudFlare: View {
                                     nvrManager.connectionState = .disconnected
                                     return
                                 }
-
                                 nvrManager.connectionState = .connected
                                 cameraHLS = true
                                 Task { await reloadConfig() }
@@ -181,7 +180,11 @@ struct ViewAuthCloudFlare: View {
                                 fn: "CloudFlare Connection",
                                 "checkConnectionStatus threw: \(error) - \(urlString)"
                             )
-                            nvrManager.connectionState = .disconnected
+                            
+                            await MainActor.run {
+                                nvrManager.connectionState = .disconnected
+                            }
+                            //nvrManager.connectionState = .disconnected
                         }
                     }
                 }
@@ -227,22 +230,30 @@ struct ViewAuthCloudFlare: View {
             guard !hostOnly.isEmpty else { return }
 
             Task {
-                let urlString = "https://\(hostOnly):443"
+                let urlString = nvrManager.getUrl()
+
                 do {
                     try await api.checkConnectionStatus(
                         urlString: urlString,
-                        authType: .cloudflare
+                        authType: nvrManager.getAuthType()
                     ) { _, error in
-                        if let error = error {
-                            Log.error(
-                                page: "ViewAuthCloudFlare",
-                                fn: "CloudFlare Connection",
-                                "\(String(describing: error)) - \(urlString)"
-                            )
-                            nvrManager.connectionState = .disconnected
-                            return
+
+                        Task { @MainActor in
+                            if let error = error {
+                                Log.error(
+                                    page: "ViewAuthCloudFlare",
+                                    fn: "CloudFlare Connection",
+                                    "\(String(describing: error)) - \(urlString)"
+                                )
+                                nvrManager.connectionState = .disconnected
+                                return
+                            }
+
+                            nvrManager.connectionState = .connected
+                            cameraHLS = true
+
+                            Task { await reloadConfig() }
                         }
-                        nvrManager.connectionState = .connected
                     }
                 } catch {
                     Log.error(
@@ -250,9 +261,41 @@ struct ViewAuthCloudFlare: View {
                         fn: "CloudFlare Connection",
                         "checkConnectionStatus threw: \(error) - \(urlString)"
                     )
-                    nvrManager.connectionState = .disconnected
+
+                    await MainActor.run {
+                        nvrManager.connectionState = .disconnected
+                    }
                 }
             }
+
+//            Task {
+//                let urlString = "https://\(hostOnly):443"
+//                do {
+//                    try await api.checkConnectionStatus(
+//                        urlString: urlString,
+//                        authType: .cloudflare
+//                    ) { _, error in
+//                        if let error = error {
+//                            Log.error(
+//                                page: "ViewAuthCloudFlare",
+//                                fn: "CloudFlare Connection",
+//                                "\(String(describing: error)) - \(urlString)"
+//                            )
+//                            nvrManager.connectionState = .disconnected
+//                            return
+//                        }
+//                        
+//                        nvrManager.connectionState = .connected
+//                    }
+//                } catch {
+//                    Log.error(
+//                        page: "ViewAuthCloudFlare",
+//                        fn: "CloudFlare Connection",
+//                        "checkConnectionStatus threw: \(error) - \(urlString)"
+//                    )
+//                    nvrManager.connectionState = .disconnected
+//                }
+//            }
         }
     }
 
