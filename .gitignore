@@ -108,4 +108,5 @@ iOSInjectionProject/
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,cocoapods,xcode
 
+.DS_Store
 GoogleService-Info.plist
