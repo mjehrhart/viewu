@@ -9,7 +9,9 @@ struct ViewAuthFrigate: View {
 
     @State private var scale = 1.0
     @State private var showBearer = false
-
+    @FocusState private var isFocused: Bool
+    @FocusState private var isAddressFocused: Bool
+    
     @ObservedObject var nvrManager = NVRConfig.shared()
 
     @AppStorage("tipsSettingsNVR") private var tipsSettingsNVR: Bool = true
@@ -34,6 +36,13 @@ struct ViewAuthFrigate: View {
                     .autocapitalization(.none)
                     .autocorrectionDisabled()
                     .multilineTextAlignment(.leading)
+//                    .focused($isAddressFocused)
+//                    .toolbar {
+//                        ToolbarItemGroup(placement: .keyboard) {
+//                            Spacer()
+//                            Button("Done") { isAddressFocused = false }
+//                        }
+//                    }
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
 
@@ -46,6 +55,13 @@ struct ViewAuthFrigate: View {
 
                 TextField("8971", text: $nvrPortAddress)
                     .keyboardType(.numberPad)
+//                    .focused($isFocused)
+//                    .toolbar {
+//                        ToolbarItemGroup(placement: .keyboard) {
+//                            Spacer()
+//                            Button("Done") { isFocused = false }
+//                        }
+//                    }
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
 
