@@ -356,24 +356,47 @@ struct ContentView: View {
     
     private func checkConnection() async {
         let urlString = nvr.getUrl()
-        
+
         do {
             try await api.checkConnectionStatus(
                 urlString: urlString,
                 authType: authType
             ) { _, error in
-                if let error = error {
-                    nvr.connectionState = .disconnected
-                } else {
-                    nvr.connectionState = .connected
+                Task { @MainActor in
+                    nvr.connectionState = (error == nil) ? .connected : .disconnected
                 }
             }
         } catch {
             Log.error(page: "ContentView",
-                               fn: "checkConnection", "checkConnection error: \(error)")
-            nvr.connectionState = .disconnected
+                      fn: "checkConnection",
+                      "checkConnection error: \(error)")
+
+            await MainActor.run {
+                nvr.connectionState = .disconnected
+            }
         }
     }
+    
+//    private func checkConnection() async {
+//        let urlString = nvr.getUrl()
+//        
+//        do {
+//            try await api.checkConnectionStatus(
+//                urlString: urlString,
+//                authType: authType
+//            ) { _, error in
+//                if let error = error {
+//                    nvr.connectionState = .disconnected
+//                } else {
+//                    nvr.connectionState = .connected 
+//                }
+//            }
+//        } catch {
+//            Log.error(page: "ContentView",
+//                               fn: "checkConnection", "checkConnection error: \(error)")
+//            nvr.connectionState = .disconnected
+//        }
+//    }
     
     // MARK: - Config helpers
     
@@ -407,7 +430,7 @@ struct ContentView: View {
                 with: data,
                 options: .fragmentsAllowed
             ) as? [String: Any] {
-                Log.debug(
+                Log.warning(
                     page: "ContentView",
                     fn: "logConfigDecodeError", "\(json)"
                 )
@@ -554,49 +577,3 @@ private func migrateLegacyCloudflareSecretIfNeeded() {
         appGroupDefaults.set(legacy, forKey: "cloudFlareClientSecret")
     }
 }
-
-
-//func loadConfig() async {
-//    
-//    let nvr = NVRConfig.shared()
-//    let api = APIRequester()
-//    @AppStorage("developerModeIsOn") var developerModeIsOn = false
-//    
-//    let url = nvr.getUrl()
-//    
-//    await api.fetchNVRConfig(
-//        urlString: url,
-//        authType: nvr.getAuthType()
-//    ) { data, error in
-//        
-//        guard let data = data else { return }
-//        
-//        if developerModeIsOn {
-//            Log.shared().print(
-//                page: "ContentView",
-//                fn: "loadConfig",
-//                type: "INFO",
-//                text: readData(data)
-//            )
-//        }
-//        
-//        // Decode off the main actor so UI stays snappy
-//        Task.detached(priority: .userInitiated) {
-//            do {
-//                let configuration = try JSONDecoder().decode(
-//                    NVRConfigurationCall2.self,
-//                    from: data
-//                )
-//                
-//                await MainActor.run {
-//                    applyConfig(configuration)
-//                    cleanupSnapshots(using: configuration)
-//                }
-//            } catch {
-//                await MainActor.run {
-//                    logConfigDecodeError(data: data, error: error)
-//                }
-//            }
-//        }
-//    }
-//}

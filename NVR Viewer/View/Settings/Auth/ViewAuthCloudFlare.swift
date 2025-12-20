@@ -161,18 +161,52 @@ struct ViewAuthCloudFlare: View {
                                 authType: nvrManager.getAuthType()
                             ) { _, error in
 
-                                if let error = error {
-                                    Log.error(
-                                        page: "ViewAuthCloudFlare",
-                                        fn: "CloudFlare Connection",
-                                        "\(String(describing: error)) - \(urlString)"
-                                    )
-                                    nvrManager.connectionState = .disconnected
-                                    return
-                                }
-                                nvrManager.connectionState = .connected
-                                cameraHLS = true
-                                Task { await reloadConfig() }
+                                DispatchQueue.main.async {
+                                        if let error = error {
+                                            Log.error(
+                                                page: "ViewAuthCloudFlare",
+                                                fn: "CloudFlare Connection",
+                                                "\(error) - \(urlString)"
+                                            )
+                                            nvrManager.connectionState = .disconnected
+                                            return
+                                        }
+
+                                        nvrManager.connectionState = .connected
+                                        cameraHLS = true
+
+                                        Task { await reloadConfig() }
+                                    }
+                                
+//                                Task { @MainActor in
+//                                    if let error = error {
+//                                        Log.error(
+//                                            page: "ViewAuthCloudFlare",
+//                                            fn: "CloudFlare Connection",
+//                                            "\(String(describing: error)) - \(urlString)"
+//                                        )
+//                                        nvrManager.connectionState = .disconnected
+//                                        return
+//                                    }
+//
+//                                    nvrManager.connectionState = .connected
+//                                    cameraHLS = true
+//
+//                                    Task { await reloadConfig() }
+//                                }
+                                
+//                                if let error = error {
+//                                    Log.error(
+//                                        page: "ViewAuthCloudFlare",
+//                                        fn: "CloudFlare Connection",
+//                                        "\(String(describing: error)) - \(urlString)"
+//                                    )
+//                                    nvrManager.connectionState = .disconnected
+//                                    return
+//                                }
+//                                nvrManager.connectionState = .connected
+//                                cameraHLS = true
+//                                Task { await reloadConfig() }
                             }
                         } catch {
                             Log.error(
@@ -200,7 +234,7 @@ struct ViewAuthCloudFlare: View {
         .background(colorScheme == .dark ? Color(.secondarySystemBackground) : .white)
         .cornerRadius(25)
         .onAppear {
-            nvrManager.connectionState = .disconnected
+            //nvrManager.connectionState = .disconnected
 
             // ✅ NEW: Restore host from App Group if Standard is empty (prevents https://:443)
             if cloudFlareURLAddress.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -227,6 +261,7 @@ struct ViewAuthCloudFlare: View {
             let hostOnly = normalizedHost(cloudFlareURLAddress)
             if !hostOnly.isEmpty { appGroupDefaults.set(hostOnly, forKey: "cloudFlareURLAddress") }
 
+            /*
             guard !hostOnly.isEmpty else { return }
 
             Task {
@@ -267,35 +302,7 @@ struct ViewAuthCloudFlare: View {
                     }
                 }
             }
-
-//            Task {
-//                let urlString = "https://\(hostOnly):443"
-//                do {
-//                    try await api.checkConnectionStatus(
-//                        urlString: urlString,
-//                        authType: .cloudflare
-//                    ) { _, error in
-//                        if let error = error {
-//                            Log.error(
-//                                page: "ViewAuthCloudFlare",
-//                                fn: "CloudFlare Connection",
-//                                "\(String(describing: error)) - \(urlString)"
-//                            )
-//                            nvrManager.connectionState = .disconnected
-//                            return
-//                        }
-//                        
-//                        nvrManager.connectionState = .connected
-//                    }
-//                } catch {
-//                    Log.error(
-//                        page: "ViewAuthCloudFlare",
-//                        fn: "CloudFlare Connection",
-//                        "checkConnectionStatus threw: \(error) - \(urlString)"
-//                    )
-//                    nvrManager.connectionState = .disconnected
-//                }
-//            }
+             */
         }
     }
 

@@ -25,14 +25,26 @@ struct ViewAuthTypes: View {
             HStack(spacing: 2) {
                 
                 authButton(title: "None", type: .none)
+                    .onTapGesture {
+                        print("NONE")
+                    }
                 authButton(title: "Bearer", type: .bearer)
-                authButton(title: isLandscape ? "CloudFlare" : "CF", type: .cloudflare) 
+                    .onTapGesture {
+                        print("Bearer")
+                    }
+                authButton(title: isLandscape ? "CloudFlare" : "CF", type: .cloudflare)
+                    .onTapGesture {
+                        print("CloudFlare")
+                    }
                     .onRotate { orientation in
                         if orientation.isValidInterfaceOrientation {
                             isLandscape = orientation.isLandscape
                         }
                     }
                 authButton(title: "Frigate", type: .frigate)
+                    .onTapGesture {
+                        print("Frigate")
+                    }
             }
             // Let the form/section handle most of the padding
             .padding(.top, 4)
@@ -59,6 +71,8 @@ struct ViewAuthTypes: View {
     @ViewBuilder
     private func authButton(title: String, type: AuthType) -> some View {
         Button(action: {
+            nvrManager.connectionState = .disconnected
+            
             nvr.setAuthType(authType: type)
             authType = type
         }) {

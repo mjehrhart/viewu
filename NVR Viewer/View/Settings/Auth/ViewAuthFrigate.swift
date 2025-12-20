@@ -160,8 +160,9 @@ struct ViewAuthFrigate: View {
         .cornerRadius(25)
         .onAppear {
             // Do NOT write into NVRConfig here (it can save into the wrong profile).
-            nvrManager.connectionState = .disconnected
+            //nvrManager.connectionState = .disconnected
 
+            /*
             let host = normalizedHost(nvrIPAddress)
             guard !host.isEmpty else { return }
 
@@ -193,6 +194,7 @@ struct ViewAuthFrigate: View {
                     nvrManager.connectionState = .disconnected
                 }
             }
+            */
         }
     }
 

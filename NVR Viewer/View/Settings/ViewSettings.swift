@@ -22,6 +22,7 @@ struct ViewSettings: View {
     @State private var scale = 1.0
     @State private var showingAlert = false
     @State private var showPassword = false
+    @FocusState private var isFocused: Bool
 
     let nvr = NVRConfig.shared()
     let api = APIRequester()
@@ -180,6 +181,13 @@ struct ViewSettings: View {
                         Spacer()
                         TextField("1883", text: $mqttPortAddress)
                             .keyboardType(.numberPad)
+                            .focused($isFocused)
+                            .toolbar {
+                                ToolbarItemGroup(placement: .keyboard) {
+                                    Spacer()
+                                    Button("Done") { isFocused = false }
+                                }
+                            }
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
 
