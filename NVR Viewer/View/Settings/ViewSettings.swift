@@ -432,7 +432,7 @@ struct ViewSettings: View {
                     Toggle("Show Log", isOn: $showLogView)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
 
-                    Toggle("Show View", isOn: $showNVRView)
+                    Toggle("Show NVR", isOn: $showNVRView)
                         .tint(Color(red: 0.153, green: 0.69, blue: 1))
 
                     Toggle("Debug", isOn: $developerModeIsOn)

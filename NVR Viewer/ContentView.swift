@@ -133,6 +133,9 @@ struct ContentView: View {
             .onAppear {
                   
                 migrateLegacyCloudflareSecretIfNeeded()
+                
+                EventFilter.shared().resetDateRangeToDefault()
+                
                 Task {
                     // Give the first frame a moment so launch feels snappier
                     try? await Task.sleep(nanoseconds: 200_000_000) // 0.2s
@@ -376,28 +379,7 @@ struct ContentView: View {
             }
         }
     }
-    
-//    private func checkConnection() async {
-//        let urlString = nvr.getUrl()
-//        
-//        do {
-//            try await api.checkConnectionStatus(
-//                urlString: urlString,
-//                authType: authType
-//            ) { _, error in
-//                if let error = error {
-//                    nvr.connectionState = .disconnected
-//                } else {
-//                    nvr.connectionState = .connected 
-//                }
-//            }
-//        } catch {
-//            Log.error(page: "ContentView",
-//                               fn: "checkConnection", "checkConnection error: \(error)")
-//            nvr.connectionState = .disconnected
-//        }
-//    }
-    
+ 
     // MARK: - Config helpers
     
     private func applyConfig(_ configuration: NVRConfigurationCall2) {

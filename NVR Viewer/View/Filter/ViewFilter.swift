@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ViewFilter: View {
 
-    @ObservedObject private var filter2 = EventFilter.shared()
+    //@ObservedObject private var filter2 = EventFilter.shared()
     @ObservedObject private var epsSuper = EndpointOptionsSuper.shared()
-
+    @StateObject private var filter = EventFilter.shared()
+    
     // You can tweak this accent if you ever want to centralize it
     private let accentBlue = Color(red: 0.153, green: 0.69, blue: 1)
 
@@ -26,32 +27,32 @@ struct ViewFilter: View {
                         systemImage: "web.camera",
                         tint: accentBlue,
                         title: "Camera",
-                        selection: $filter2.selectedCamera,
-                        options: filter2.cameras
+                        selection: $filter.selectedCamera,
+                        options: filter.cameras
                     )
 
                     FilterPickerRow(
                         systemImage: "figure.walk.motion",
                         tint: accentBlue,
                         title: "Object",
-                        selection: $filter2.selectedObject,
-                        options: filter2.objects
+                        selection: $filter.selectedObject,
+                        options: filter.objects
                     )
 
                     FilterPickerRow(
                         systemImage: "square.stack.3d.down.right.fill",
                         tint: accentBlue,
                         title: "Zones",
-                        selection: $filter2.selectedZone,
-                        options: filter2.zones
+                        selection: $filter.selectedZone,
+                        options: filter.zones
                     )
 
                     FilterPickerRow(
                         systemImage: "lineweight",
                         tint: accentBlue,
                         title: "Type",
-                        selection: $filter2.selectedType,
-                        options: filter2.types
+                        selection: $filter.selectedType,
+                        options: filter.types
                     )
 
                 } header: {
@@ -63,7 +64,7 @@ struct ViewFilter: View {
                 Section {
                     DatePicker(
                         "Start Date",
-                        selection: $filter2.startDate,
+                        selection: $filter.startDate,
                         in: ...Date.now,
                         displayedComponents: [.date]
                     )
@@ -71,7 +72,7 @@ struct ViewFilter: View {
 
                     DatePicker(
                         "End Date",
-                        selection: $filter2.endDate,
+                        selection: $filter.endDate,
                         in: ...Date.now,
                         displayedComponents: [.date]
                     )
@@ -84,10 +85,23 @@ struct ViewFilter: View {
 
                 // MARK: - Reset
                 Button("Reset") {
-                    filter2.reset()
+                    filter.reset() 
                 }
                 .buttonStyle(CustomPressEffectButtonStyle())
                 .frame(width: UIScreen.screenWidth - 50, alignment: .trailing)
+                
+                Section {
+                    Toggle("Keep Filters Persistent", isOn: $filter.persistPickerValues)
+                        .tint(accentBlue)
+
+                    Text("Date range always resets when the app opens")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } header: {
+                    Text("")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .onDisappear {
@@ -106,14 +120,14 @@ struct ViewFilter: View {
             }
         }
         // Optional nice-to-have: keep start <= end
-        .onChange(of: filter2.startDate) { _, newStart in
-            if newStart > filter2.endDate {
-                filter2.endDate = newStart
+        .onChange(of: filter.startDate) { _, newStart in
+            if newStart > filter.endDate {
+                filter.endDate = newStart
             }
         }
-        .onChange(of: filter2.endDate) { _, newEnd in
-            if newEnd < filter2.startDate {
-                filter2.startDate = newEnd
+        .onChange(of: filter.endDate) { _, newEnd in
+            if newEnd < filter.startDate {
+                filter.startDate = newEnd
             }
         }
     }
@@ -147,6 +161,6 @@ private struct FilterPickerRow: View {
 
  
 
-#Preview {
-    ViewFilter()
-}
+//#Preview {
+//    ViewFilter()
+//}
