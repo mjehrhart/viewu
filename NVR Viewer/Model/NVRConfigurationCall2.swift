@@ -77,7 +77,7 @@ final class NVRConfigurationSuper2: ObservableObject { // Codable,
             ),
             go2rtc: Go2RTC2(
                 streams: [
-                    "": []
+                    "": .many([""])
                 ]
             )
         )
@@ -116,8 +116,61 @@ struct RetainClips2: Codable, Hashable {
     let mode: String
 }
 
+//struct Go2RTC2: Codable, Hashable {
+//    let streams: [String: [String]]?    //?
+//}
+
+enum StringOrArray: Codable, Hashable {
+    case one(String)
+    case many([String])
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.singleValueContainer()
+
+        if let s = try? c.decode(String.self) {
+            self = .one(s)
+            return
+        }
+
+        if let a = try? c.decode([String].self) {
+            self = .many(a)
+            return
+        }
+
+        throw DecodingError.typeMismatch(
+            StringOrArray.self,
+            .init(codingPath: decoder.codingPath,
+                  debugDescription: "Expected String or [String].")
+        )
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.singleValueContainer()
+        switch self {
+        case .one(let s):
+            try c.encode(s)
+        case .many(let a):
+            try c.encode(a)
+        }
+    }
+
+    /// Convenience if your app logic just wants arrays.
+    var arrayValue: [String] {
+        switch self {
+        case .one(let s): return [s]
+        case .many(let a): return a
+        }
+    }
+}
+
 struct Go2RTC2: Codable, Hashable {
-    let streams: [String: [String]]?    //?
+    let streams: [String: StringOrArray]?
+}
+
+extension Go2RTC2 {
+    static func from(_ dict: [String: [String]]) -> Go2RTC2 {
+        .init(streams: dict.mapValues { .many($0) })
+    }
 }
 
 struct Cameras2: Codable, Hashable {
@@ -226,6 +279,7 @@ struct Retain2: Codable, Hashable {
     //let objects: [Unknown Type]
 }
 
+//TODO STRINGORARRAY - Not Used
 struct AutoTracking2: Codable, Hashable {
     let calibrate_on_startup: Bool
     let enabled: Bool
@@ -282,19 +336,23 @@ struct StreamName2: Codable, Hashable {
     //let value: String
 }
 
+//TODO STRINGORARRAY - Not Used
 struct FFMPEGCommands2: Codable, Hashable {
     let cmd: String
     let roles: [String]
 }
 
+//TODO STRINGORARRAY - Used
 struct CameraInputs2: Codable, Hashable {
     //let global_args: [String]
     //let hwaccel_args: [String]
     //let input_args: String
     let path: String
-    let roles: [String]
+    //let roles: [String]
+    let roles: StringOrArray
 }
 
+//TODO STRINGORARRAY - Not Used
 struct CameraOutputArgs2: Codable, Hashable {
     let detect: [String]
     let record: String
@@ -317,6 +375,7 @@ struct Birdseye2: Codable, Hashable {
     let order: Int
 }
 
+//TODO STRINGORARRAY - Not Used
 struct Audio2: Codable, Hashable {
     let enabled: Bool
     let enabled_in_config: Bool?            // 6/2

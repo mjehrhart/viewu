@@ -75,17 +75,28 @@ struct ViewCamerasList: View {
                     .cornerRadius(12) 
                 }
 
+//                // MARK: - go2rtc.streams (explicit streams dictionary)
+//                if let streams = config.item.go2rtc.streams,
+//                   cameraRTSPPath {
+//                    ForEach(streams.keys.sorted(), id: \.self) { key in
+//                        // Only show enabled cameras
+//                        if config.item.cameras[key]?.enabled == true {
+//                            renderRTSPFromStreams(key: key, streams: streams[key] ?? [])
+//                        }
+//                    }
+//                }
                 // MARK: - go2rtc.streams (explicit streams dictionary)
-                if let streams = config.item.go2rtc.streams,
-                   cameraRTSPPath {
+                if let streams = config.item.go2rtc.streams, cameraRTSPPath {
                     ForEach(streams.keys.sorted(), id: \.self) { key in
                         // Only show enabled cameras
                         if config.item.cameras[key]?.enabled == true {
-                            renderRTSPFromStreams(key: key, streams: streams[key] ?? [])
+                            let urls = streams[key]?.arrayValue ?? []
+                            renderRTSPFromStreams(key: key, streams: urls)
                         }
                     }
                 }
 
+//
                 // MARK: - go2rtc from camera ffmpeg inputs
                 if camerGo2Rtc {
                     ForEach(config.item.cameras.keys.sorted(), id: \.self) { cameraName in

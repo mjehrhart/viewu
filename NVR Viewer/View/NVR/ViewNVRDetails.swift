@@ -53,19 +53,22 @@ struct ViewNVRDetails: View {
             if let streams = config.item.go2rtc.streams {
                 Section {
                     ForEach(streams.keys.sorted(), id: \.self) { key in
-                        if !key.isEmpty, let urls = streams[key] {
-                            Text(key)
-                                .frame(width: UIScreen.screenWidth,
-                                       alignment: .leading)
-                                .padding(.leading, 75)
+                        if !key.isEmpty {
+                            let urls = streams[key]?.arrayValue ?? []
+                            if !urls.isEmpty {
+                                Text(key)
+                                    .frame(width: UIScreen.screenWidth,
+                                           alignment: .leading)
+                                    .padding(.leading, 75)
 
-                            ForEach(urls, id: \.self) { item in
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    Text(item)
-                                        .textSelection(.enabled)
-                                        .foregroundStyle(.secondary)
-                                        .frame(width: UIScreen.screenWidth,
-                                               alignment: .leading)
+                                ForEach(urls, id: \.self) { item in
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        Text(item)
+                                            .textSelection(.enabled)
+                                            .foregroundStyle(.secondary)
+                                            .frame(width: UIScreen.screenWidth,
+                                                   alignment: .leading)
+                                    }
                                 }
                             }
                         }
@@ -76,6 +79,33 @@ struct ViewNVRDetails: View {
                         .foregroundColor(.orange)
                 }
             }
+
+//            if let streams = config.item.go2rtc.streams {
+//                Section {
+//                    ForEach(streams.keys.sorted(), id: \.self) { key in
+//                        if !key.isEmpty, let urls = streams[key] {
+//                            Text(key)
+//                                .frame(width: UIScreen.screenWidth,
+//                                       alignment: .leading)
+//                                .padding(.leading, 75)
+//
+//                            ForEach(urls, id: \.self) { item in
+//                                ScrollView(.horizontal, showsIndicators: false) {
+//                                    Text(item)
+//                                        .textSelection(.enabled)
+//                                        .foregroundStyle(.secondary)
+//                                        .frame(width: UIScreen.screenWidth,
+//                                               alignment: .leading)
+//                                }
+//                            }
+//                        }
+//                    }
+//                } header: {
+//                    Text("Go2RTC")
+//                        .font(.caption)
+//                        .foregroundColor(.orange)
+//                }
+//            }
         }
         .background(Color(UIColor.secondarySystemBackground)) // very light gray
         .toolbar(.hidden, for: .bottomBar)
