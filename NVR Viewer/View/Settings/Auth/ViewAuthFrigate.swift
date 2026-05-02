@@ -20,6 +20,9 @@ struct ViewAuthFrigate: View {
     @AppStorage("frigatePortAddress") private var nvrPortAddress: String = "8971"
     @AppStorage("frigateIsHttps") private var nvrIsHttps: Bool = true
     @AppStorage("frigateBearerSecret") private var frigateBearerSecret: String = ""
+    @AppStorage("frigateUser") private var frigateUser: String = "admin"
+    @AppStorage("frigatePassword") private var frigatePassword: String = ""
+    @State private var showPassword = false
 
     @Environment(\.colorScheme) var colorScheme
 
@@ -70,33 +73,48 @@ struct ViewAuthFrigate: View {
             // MARK: HTTPS toggle
             Toggle("Https", isOn: $nvrIsHttps)
                 .tint(Color(red: 0.153, green: 0.69, blue: 1))
+            
+            // CJ: Removed bearer to allow for username and password.
 
             Divider()
 
-            // MARK: Secret (JWT)
             HStack(spacing: 8) {
-                Text("Secret")
+                Text("Username")
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                ZStack {
-                    if !showBearer {
-                        SecureField("", text: $frigateBearerSecret)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("Username", text: $frigateUser)
+                    .autocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+
+            Divider()
+
+            HStack(spacing: 8) {
+                Text("Password")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Group {
+                    if showPassword {
+                        TextField("Password", text: $frigatePassword)
+                            .autocapitalization(.never)
+                            .autocorrectionDisabled()
                     } else {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            TextField("secret goes here", text: $frigateBearerSecret)
-                                .autocapitalization(.none)
-                                .autocorrectionDisabled()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+                        SecureField("Password", text: $frigatePassword)
+                            .autocapitalization(.never)
+                            .autocorrectionDisabled()
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-                Button("", systemImage: showBearer ? "eye.slash" : "eye") {
-                    showBearer.toggle()
+                Button {
+                    showPassword.toggle()
+                } label: {
+                    Image(systemName: showPassword ? "eye.slash" : "eye")
                 }
                 .buttonStyle(.borderless)
                 .foregroundStyle(Color(red: 0.153, green: 0.69, blue: 1))
+                .accessibilityLabel(showPassword ? "Hide password" : "Show password")
             }
 
             Divider()
@@ -114,13 +132,17 @@ struct ViewAuthFrigate: View {
             )
 
             // MARK: Save button
+            // CJ: Updated to clear cached token and to save credentials.
             HStack {
                 Spacer()
 
                 Button("Save Connection") {
-
                     let host = normalizedHost(nvrIPAddress)
+                    let username = frigateUser.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let password = frigatePassword
+
                     nvrIPAddress = host
+                    frigateUser = username
 
                     // IMPORTANT: set profile first so subsequent setIP/setPort save to the Frigate keys
                     nvrManager.setAuthType(authType: .frigate)
@@ -129,17 +151,28 @@ struct ViewAuthFrigate: View {
                     nvrManager.setIP(ip: host)
                     nvrManager.setPort(ports: nvrPortAddress)
 
+                    // Clear any old cached token so this save actually tests the new credentials
+                    AuthFrigateLogin.shared.clearStoredToken()
+                    AuthFrigateLogin.shared.saveCredentials(
+                        username: username,
+                        password: password
+                    )
+
                     nvrManager.connectionState = .disconnected
+                    // If you have a .connecting state, use that instead.
 
                     Task {
-                        let urlString = buildURLString(isHttps: nvrIsHttps, host: host, port: nvrPortAddress)
+                        let urlString = buildURLString(
+                            isHttps: nvrIsHttps,
+                            host: host,
+                            port: nvrPortAddress
+                        )
 
                         do {
                             try await api.checkConnectionStatus(
                                 urlString: urlString,
                                 authType: .frigate
                             ) { _, error in
-
                                 if let error = error {
                                     Log.error(
                                         page: "ViewAuthFrigate",
@@ -214,9 +247,17 @@ struct ViewAuthFrigate: View {
         }
     }
 
+    // CJ: Updated to exclude ':' from URL when there is no port specified
     private func buildURLString(isHttps: Bool, host: String, port: String) -> String {
         let scheme = isHttps ? "https://" : "http://"
-        return "\(scheme)\(host):\(port)"
+        let trimmedHost = host.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedPort = port.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if trimmedPort.isEmpty {
+            return "\(scheme)\(trimmedHost)"
+        } else {
+            return "\(scheme)\(trimmedHost):\(trimmedPort)"
+        }
     }
 
     private func normalizedHost(_ raw: String) -> String {
